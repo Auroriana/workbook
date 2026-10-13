@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" style="--h: 207;"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ataraxia</title>
+<style>
+:root{--h:257;--p:hsl(var(--h) 34% 46%);--on-p:#fff;--pc:hsl(var(--h) 60% 91%);--on-pc:hsl(var(--h) 45% 15%);--bg:hsl(var(--h) 100% 99%);--surf:hsl(var(--h) 28% 95%);--card:#fff;--txt:#1d1b20;--mut:hsl(var(--h) 8% 38%);--line:hsl(var(--h) 18% 82%);--danger:#b3261e;--bar:rgba(255,255,255,.92)}
+html.dark{--p:hsl(var(--h) 75% 80%);--on-p:hsl(var(--h) 40% 18%);--pc:hsl(var(--h) 25% 28%);--on-pc:hsl(var(--h) 70% 91%);--bg:hsl(var(--h) 14% 10%);--surf:hsl(var(--h) 14% 15%);--card:hsl(var(--h) 14% 18%);--txt:#e6e0e9;--mut:hsl(var(--h) 10% 72%);--line:hsl(var(--h) 8% 30%);--danger:#f2b8b5;--bar:hsla(var(--h),14%,10%,.92)}
+html.black{--bg:#000;--surf:#0d0d0f;--card:#141416;--bar:rgba(0,0,0,.92)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--txt);display:flex;flex-direction:column;overflow:hidden;line-height:1.5}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.scroll-x{overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;scrollbar-color:var(--line) transparent;scroll-behavior:smooth}
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 22px;border-radius:999px;font-size:14px;font-weight:500;white-space:nowrap;border:1px solid transparent;text-decoration:none;transition:filter .15s,background .15s}
+.btn:hover{filter:brightness(.95)}.dark .btn:hover{filter:brightness(1.12)}
+.fill{background:var(--p);color:var(--on-p)}.tone{background:var(--pc);color:var(--on-pc)}
+.out{border-color:var(--mut);color:var(--p)}.out.danger{color:var(--danger);border-color:var(--danger)}
+.btn.sm{height:36px;padding:0 16px}
+.btn.xs{height:28px;padding:0 12px;gap:6px;font-size:12.5px}.btn.xs svg{width:14px;height:14px}
+.ib{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--mut)}.ib:hover{background:var(--pc);color:var(--on-pc)}
+.ib.sm{width:28px;height:28px}.ib.sm svg{width:16px;height:16px}
+:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+/* header */
+header{display:flex;align-items:center;gap:16px;height:64px;padding:0 24px;background:var(--bar);box-shadow:0 2px 0 var(--line);flex:none;position:relative;z-index:5}
+.brand{font-size:20px;font-weight:400;white-space:nowrap;max-width:260px;overflow:hidden;text-overflow:ellipsis}
+#books{flex:1;min-width:0;display:flex;gap:6px;padding:4px 2px}
+.tab{flex:none;display:flex;align-items:center;gap:4px;height:38px;padding:0 18px;border-radius:999px;font-size:14px;color:var(--mut);white-space:nowrap;cursor:pointer}
+.tab:hover{background:var(--surf)}.tab.on{background:var(--pc);color:var(--on-pc);font-weight:600;padding-right:8px}
+.tab.on .ib{width:28px;height:28px;color:inherit}.tab.on .ib svg{width:15px;height:15px}.tab:not(.on){padding-right:18px}
+/* chapter sidebar */
+.shell{flex:1;min-height:0;display:flex}
+.side{width:232px;flex:none;display:flex;flex-direction:column;gap:10px;min-height:0;padding:16px 12px 16px 20px;border-right:1px solid var(--line)}
+#chs{flex:1;min-height:0;position:relative;display:flex;flex-direction:column;gap:6px;overflow-y:auto;overflow-x:hidden;padding:2px 4px 2px 2px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.side-top{display:flex;align-items:center;gap:6px;flex:none}.side-top>.btn{flex:1;min-width:0}.side .menu{left:0;right:auto}
+.chip-ch{flex:none;width:100%;padding:9px 14px;border-radius:12px;border:1px solid var(--line);font-size:14px;line-height:1.35;text-align:left;overflow-wrap:anywhere;color:var(--txt)}
+.chip-ch:hover{background:var(--surf)}.chip-ch.on{background:var(--p);color:var(--on-p);border-color:var(--p)}
+.empty{color:var(--mut);font-size:14px;padding:8px 4px}
+/* main */
+main{flex:1;min-width:0;min-height:0;overflow-y:auto;padding:8px 24px 40px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.wrap{max-width:1200px;margin:0 auto}
+.hero{display:flex;align-items:flex-start;gap:12px;margin-top:8px;padding:14px 14px 14px 20px;border-radius:20px;background:radial-gradient(circle at 100% 0,hsl(var(--h) 40% 50%/.18),transparent 45%),radial-gradient(circle at 0 100%,hsl(var(--h) 40% 50%/.12),transparent 40%),var(--surf)}
+.hero-in{flex:1;min-width:0}
+.hero-top{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;min-height:28px}
+.hero h1{font-size:clamp(19px,2.2vw,22px);font-weight:400;line-height:1.25;overflow-wrap:anywhere}
+.chip{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 10px;border-radius:999px;background:var(--pc);color:var(--on-pc);font-size:11.5px;white-space:nowrap}
+.chip b{width:5px;height:5px;border-radius:50%;background:var(--p)}
+.hero p{margin-top:2px;font-size:13.5px;color:var(--mut);white-space:pre-wrap;overflow-wrap:anywhere}
+.acts{display:flex;align-items:center;gap:6px;flex:none;min-height:28px}
+.hero .menu{top:32px}
+.ph{position:sticky;top:-8px;z-index:3;display:flex;align-items:center;gap:12px;padding:22px 0 14px;margin-top:0;background:var(--bg)}
+.ph h2{flex:1;min-width:0;font-size:22px;font-weight:400}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:16px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:16px 12px 20px 20px;min-width:0}
+.ch{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ct{flex:1;min-width:0;font-size:17px;font-weight:600;overflow-wrap:anywhere}
+.ca{display:flex;align-items:center;gap:2px;flex:none}
+.ca .btn{height:34px;padding:0 14px;margin-right:4px}
+.cc{padding-right:8px;color:var(--mut);white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px}
+/* fill-in variables */
+.var{display:inline-block;max-width:100%;margin:0 1px;padding:0 9px;border:1.5px dashed var(--p);border-radius:12px;color:var(--p);font-weight:600;line-height:1.3;white-space:pre-wrap;overflow-wrap:anywhere;vertical-align:baseline;cursor:text;outline:none;transition:background .12s}
+.var:empty:before{content:"\200b"}
+.var:hover{background:var(--pc)}
+.var.filled{border-style:solid;background:var(--pc);color:var(--on-pc)}
+.var:focus{border-style:solid;background:var(--pc);color:var(--on-pc);box-shadow:0 0 0 2px var(--p)}
+.dd{position:relative}
+.menu{display:none;position:absolute;right:0;top:40px;min-width:180px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.18);z-index:10}
+.menu.show{display:block}
+.mi{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:10px;font-size:14px;text-align:left}
+.mi:hover{background:var(--surf)}.mi.del{color:var(--danger)}
+/* modal */
+.ov{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:16px}
+.ov.open{display:flex}
+.modal{width:100%;max-width:560px;max-height:calc(100dvh - 32px);display:flex;flex-direction:column;background:var(--bg);border-radius:28px;box-shadow:0 12px 48px rgba(0,0,0,.35);animation:pop .15s ease-out}
+@keyframes pop{from{transform:scale(.96);opacity:0}}
+.mh{display:flex;align-items:center;gap:8px;padding:22px 24px 8px;font-size:24px}.mh span{flex:1;min-width:0}
+.mb{padding:8px 24px;overflow-y:auto;min-height:0;display:flex;flex-direction:column;gap:16px}
+.mf{display:flex;justify-content:flex-end;gap:8px;padding:16px 24px 22px;flex-wrap:wrap}
+label{display:block;font-size:13px;color:var(--mut);margin-bottom:6px;font-weight:500}
+input[type=text],input[type=url],textarea{width:100%;background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:15px;outline:none}
+input:focus,textarea:focus{border-color:var(--p);box-shadow:0 0 0 1px var(--p)}
+textarea{resize:none;overflow:hidden;min-height:96px;display:block}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{height:36px;padding:0 18px;border-radius:999px;border:1px solid var(--line);font-size:14px}
+.seg button.on{background:var(--pc);color:var(--on-pc);border-color:var(--p);font-weight:600}
+.sw{display:flex;flex-wrap:wrap;gap:12px}
+.sw button{width:40px;height:40px;border-radius:50%;background:hsl(var(--c) 45% 48%);border:3px solid var(--bg);box-shadow:0 0 0 1px var(--line)}
+.sw button.on{box-shadow:0 0 0 3px var(--p)}
+.hint{font-size:12.5px;color:var(--mut);margin-top:6px}
+.credit{font-size:11px;color:var(--mut);text-align:center;opacity:.8;margin-top:4px}
+.vbar{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px}.vbar label{margin:0 auto 0 0}.vbar .vl{font-size:12.5px;color:var(--mut)}
+#toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--txt);color:var(--bg);padding:12px 22px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:100;max-width:calc(100% - 32px);text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:600px){header{padding:0 12px;gap:8px;height:58px}.brand{display:none}.side{width:128px;gap:8px;padding:10px 6px 10px 10px}.side .btn{padding:0 8px}.side-top{gap:4px}.side-top .ib{width:28px;height:28px}.chip-ch{padding:8px 10px;font-size:13px}.hero{flex-direction:column;gap:8px}.acts{flex-wrap:wrap}main{padding:8px 12px 32px}.btn{padding:0 16px}.mb,.mh,.mf{padding-left:18px;padding-right:18px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style></head>
+<body>
+<div id="toast" role="status" class="">Chapter pasted.</div>
+<header>
+ <button class="ib tone" style="background:var(--pc);color:var(--on-pc)" onclick="openModal('settings-modal')" title="Settings" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></button>
+ <span class="brand" id="brand" title="Ataraxia">Ataraxia</span>
+ <nav id="books" class="scroll-x" aria-label="Books"><div class="tab on" tabindex="0"><span>ASC</span><button class="ib" title="Edit book"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button></div><div class="tab" tabindex="0"><span>Legacy</span></div><div class="tab" tabindex="0"><span>Notes</span></div></nav>
+ <button class="btn fill" onclick="openAddBookModal()">+ Book</button>
+</header>
+<div class="shell">
+ <aside class="side">
+  <div class="side-top">
+   <button class="btn tone sm" onclick="openAddChapterModal()">+ Chapter</button>
+   <div class="dd">
+    <button class="ib" onclick="event.stopPropagation();toggleDropdown('side')" title="More" aria-label="More chapter actions"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button>
+    <div class="menu" id="menu-side"><button class="mi" onclick="startPaste('chapter')"><svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>Paste chapter</button></div>
+   </div>
+  </div>
+  <nav id="chs" aria-label="Chapters"><button class="chip-ch on" title="General">General</button><button class="chip-ch" title="Billing">Billing</button></nav>
+ </aside>
+ <main><div class="wrap">
+  <section class="hero">
+   <div class="hero-in">
+    <div class="hero-top"><h1 id="ht">General</h1><span class="chip"><b></b><span id="hc">2 pages</span></span></div>
+    <p id="hd" style="">General customer greetings and standard responses.</p>
+   </div>
+   <div class="acts" id="hacts"><button class="btn xs fill">Edit info</button><div class="dd"><button class="ib sm" title="More" aria-label="More chapter actions"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-ch"><button class="mi" title="Paste a copied page into this chapter"><svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>Paste page</button><button class="mi" title="Copy this chapter and its pages so you can paste it into any book"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy chapter</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate chapter</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete chapter</button></div></div></div>
+  </section>
+  <div class="ph"><h2>Pages</h2><button class="btn fill" onclick="openAddPageModal()">+ Add</button></div>
+  <div class="grid" id="grid"><div class="card"><div class="ch"><span class="ct">Opening</span><div class="ca"><button class="btn tone"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy</button><button class="ib" title="Edit page"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button><div class="dd"><button class="ib" title="More"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-p_asc_1"><button class="mi" title="Copy this page so you can paste it into another chapter"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy page</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate page</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete page</button></div></div></div></div><div class="cc">Thank you for contacting Allstate where you're in good hands. This is Gabriel and I'll be assisting you for today.</div></div><div class="card"><div class="ch"><span class="ct">Recap</span><div class="ca"><button class="btn tone"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy</button><button class="ib" title="Edit page"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button><div class="dd"><button class="ib" title="More"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-p_1791901074458"><button class="mi" title="Copy this page so you can paste it into another chapter"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy page</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate page</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete page</button></div></div></div></div><div class="cc">Aside from <span class="var" contenteditable="plaintext-only" spellcheck="false" data-k="text" data-ph="XXX" data-pid="p_1791901074458" data-i="0" role="textbox" aria-label="Fill in text" autocapitalize="off" autocorrect="off">XXX</span> is there anything else I can help you with for today?</div></div></div>
+ </div></main>
+</div>
+
+<div class="ov open" id="settings-modal"><div class="modal">
+ <div class="mh"><span>Settings</span><button class="ib" onclick="closeModal('settings-modal')" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"></path></svg></button></div>
+ <div class="mb">
+  <div><label for="site-name-input">Website name</label><input type="text" id="site-name-input" maxlength="40" autocomplete="off"><p class="hint">Shown at the top left and used as the file name when you save.</p></div>
+  <div><label>Appearance</label><div class="seg" id="modes"><button>Auto</button><button class="on">Light</button><button>Dark</button><button>Black</button></div></div>
+  <div><label>Accent color</label><div class="sw" id="accents"><button style="--c: 358;" title="Red" aria-label="Red"></button><button style="--c: 8;" title="Coral" aria-label="Coral"></button><button style="--c: 18;" title="Orange" aria-label="Orange"></button><button style="--c: 30;" title="Amber" aria-label="Amber"></button><button style="--c: 42;" title="Gold" aria-label="Gold"></button><button style="--c: 56;" title="Yellow" aria-label="Yellow"></button><button style="--c: 75;" title="Olive" aria-label="Olive"></button><button style="--c: 100;" title="Lime" aria-label="Lime"></button><button style="--c: 140;" title="Green" aria-label="Green"></button><button style="--c: 158;" title="Mint" aria-label="Mint"></button><button style="--c: 174;" title="Teal" aria-label="Teal"></button><button style="--c: 188;" title="Cyan" aria-label="Cyan"></button><button style="--c: 198;" title="Sky" aria-label="Sky"></button><button class="on" style="--c: 207;" title="Blue" aria-label="Blue"></button><button style="--c: 232;" title="Indigo" aria-label="Indigo"></button><button style="--c: 257;" title="Purple" aria-label="Purple"></button><button style="--c: 275;" title="Violet" aria-label="Violet"></button><button style="--c: 300;" title="Magenta" aria-label="Magenta"></button><button style="--c: 322;" title="Pink" aria-label="Pink"></button><button style="--c: 340;" title="Rose" aria-label="Rose"></button></div></div>
+  <div><label>Save your changes</label><div class="seg"><button class="btn fill" onclick="saveDirectToFile()">Save</button></div></div>
+  <p class="credit">ataraxia</p>
+ </div>
+ <div class="mf"><button class="btn tone" onclick="closeModal('settings-modal')">Close</button></div>
+</div></div>
+
+<div class="ov" id="book-modal"><div class="modal">
+ <div class="mh"><span id="book-modal-title">Edit Book</span></div>
+ <div class="mb"><input type="hidden" id="book-id-input" value="b_1791896094260"><div><label for="book-title-input">Book title</label><input type="text" id="book-title-input" placeholder="e.g. ASC, Legacy..."></div></div>
+ <div class="mf"><button class="btn out danger" id="book-del" onclick="deleteBook()" style="margin-right:auto">Delete</button><button class="btn out" onclick="closeModal('book-modal')">Cancel</button><button class="btn fill" onclick="saveBook()">Save Book</button></div>
+</div></div>
+
+<div class="ov" id="chapter-modal"><div class="modal">
+ <div class="mh"><span id="chapter-modal-title">Add Chapter</span></div>
+ <div class="mb"><input type="hidden" id="chapter-id-input">
+  <div><label for="chapter-name-input">Chapter title</label><input type="text" id="chapter-name-input" placeholder="e.g. Refunds, Billing..."></div>
+  <div><label for="chapter-desc-input">Description</label><textarea id="chapter-desc-input" placeholder="Overview or quick guidance for this chapter..."></textarea></div>
+  <div><label for="chapter-link-input">Reference link</label><input type="text" id="chapter-link-input" placeholder="https://..."></div>
+ </div>
+ <div class="mf"><button class="btn out" onclick="closeModal('chapter-modal')">Cancel</button><button class="btn fill" onclick="saveChapter()">Save</button></div>
+</div></div>
+
+<div class="ov" id="page-modal"><div class="modal">
+ <div class="mh"><span id="page-modal-title">Add Page</span></div>
+ <div class="mb"><input type="hidden" id="page-id-input">
+  <div><label for="page-title-input">Title</label><input type="text" id="page-title-input" placeholder="e.g. Opening, Hold spiel..."></div>
+  <div>
+   <div class="vbar"><label for="page-content-input">Content</label><span class="vl">Insert</span>
+    <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('XXX')" title="Adds XXX, fill it in with anything">XXX</button>
+    <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('DATE')" title="Adds XX/XX/XXXX, fill it in with a date">DATE</button>
+    <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('AMT')" title="Adds $XXX, fill it in with an amount">AMT</button>
+   </div>
+   <textarea id="page-content-input" placeholder="Type or paste your text here..."></textarea>
+  </div>
+ </div>
+ <div class="mf"><button class="btn out" onclick="closeModal('page-modal')">Cancel</button><button class="btn fill" onclick="savePage()">Save Page</button></div>
+</div></div>
+
+<div class="ov" id="paste-modal"><div class="modal">
+ <div class="mh"><span id="paste-modal-title">Paste</span></div>
+ <div class="mb">
+  <p class="hint" style="margin:0">Your browser didn't allow automatic clipboard access. Press Ctrl+V (or long-press and Paste) in the box below, then click Paste.</p>
+  <textarea id="paste-input" placeholder="Paste the copied data here..."></textarea>
+ </div>
+ <div class="mf"><button class="btn out" onclick="closeModal('paste-modal')">Cancel</button><button class="btn fill" onclick="confirmPaste()">Paste</button></div>
+</div></div>
+
+<script id="data-script">const INITIAL_DATA = /*DATA_START*/{
+  "activeBookId": "b_asc",
+  "activeChapterId": "c_asc_gen",
+  "books": [
+    {
+      "id": "b_asc",
+      "name": "ASC"
+    },
+    {
+      "id": "b_legacy",
+      "name": "Legacy"
+    },
+    {
+      "id": "b_notes",
+      "name": "Notes"
+    }
+  ],
+  "chapters": [
+    {
+      "id": "c_asc_gen",
+      "bookId": "b_asc",
+      "name": "General",
+      "description": "General customer greetings and standard responses.",
+      "referenceLink": ""
+    },
+    {
+      "id": "c_leg_gen",
+      "bookId": "b_legacy",
+      "name": "General",
+      "description": "General customer greetings for Legacy accounts.",
+      "referenceLink": ""
+    },
+    {
+      "id": "c_1791896042747",
+      "bookId": "b_asc",
+      "name": "Billing",
+      "description": "asdasd",
+      "referenceLink": "youtube.com"
+    },
+    {
+      "id": "c_1791901306253_7dv2",
+      "bookId": "b_legacy",
+      "name": "Billing",
+      "description": "asdasd",
+      "referenceLink": "youtube.com"
+    }
+  ],
+  "pages": [
+    {
+      "id": "p_asc_1",
+      "chapterId": "c_asc_gen",
+      "title": "Opening",
+      "content": "Thank you for contacting Allstate where you're in good hands. This is Gabriel and I'll be assisting you for today."
+    },
+    {
+      "id": "p_leg_1",
+      "chapterId": "c_leg_gen",
+      "title": "Opening",
+      "content": "Thank you for contacting Allstate where you're in good hands. This is Gabriel and I'll be assisting you for today."
+    },
+    {
+      "id": "p_1791896071640",
+      "chapterId": "c_1791896042747",
+      "title": "Recap",
+      "content": "Aside from your billing concern, is there anything else I can help you with?"
+    },
+    {
+      "id": "p_1791901074458",
+      "chapterId": "c_asc_gen",
+      "title": "Recap",
+      "content": "Aside from XXX is there anything else I can help you with for today?"
+    },
+    {
+      "id": "p_1791901306253_9gc0",
+      "chapterId": "c_1791901306253_7dv2",
+      "title": "Recap",
+      "content": "Aside from your billing concern, is there anything else I can help you with?"
+    }
+  ],
+  "settings": {
+    "mode": "light",
+    "accent": "Blue",
+    "title": "Ataraxia"
+  }
+}/*DATA_END*/;</script>
+<script>
+const $=id=>document.getElementById(id);
+const IC={pen:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',dots:'<circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>',link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',dup:'<path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>',trash:'<path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',paste:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>'};
+const ic=n=>'<svg viewBox="0 0 24 24">'+IC[n]+'</svg>';
+const ACCENTS={Red:358,Coral:8,Orange:18,Amber:30,Gold:42,Yellow:56,Olive:75,Lime:100,Green:140,Mint:158,Teal:174,Cyan:188,Sky:198,Blue:207,Indigo:232,Purple:257,Violet:275,Magenta:300,Pink:322,Rose:340};
+const MODES={auto:'Auto',light:'Light',dark:'Dark',black:'Black'};
+const DEF_NAME="Paano ba 'yan?";
+let appData,fileHandle=null,handleName='';
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+function showToast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200)}
+function persistLocal(){try{localStorage.setItem('paano_ba_yan_data',JSON.stringify(appData))}catch(e){}}
+function load(){let s=null;try{s=localStorage.getItem('paano_ba_yan_data')}catch(e){}
+ try{appData=s?JSON.parse(s):INITIAL_DATA}catch(e){appData=INITIAL_DATA}
+ appData.books=appData.books||[];appData.chapters=appData.chapters||[];appData.pages=appData.pages||[];
+ if(!appData.books.length)appData.books=[{id:'b_'+Date.now(),name:'Notes'}];
+ if(!appData.books.find(b=>b.id===appData.activeBookId))appData.activeBookId=appData.books[0].id;
+ appData.settings=Object.assign({mode:'auto',accent:'Purple',title:DEF_NAME},appData.settings||{})}
+/* website name */
+function siteName(){return String(appData.settings.title||'').trim()||DEF_NAME}
+function fileName(){return siteName().replace(/[\\/:*?"<>|]/g,'').replace(/\s+/g,' ').trim().replace(/[. ]+$/,'')||'paano_ba_yan'}
+function applySiteName(fill){const n=siteName();$('brand').textContent=n;$('brand').title=n;document.title=n;if(fill)$('site-name-input').value=n}
+/* theme */
+function applyTheme(){const s=appData.settings,r=document.documentElement;
+ const dark=s.mode==='dark'||s.mode==='black'||(s.mode==='auto'&&matchMedia('(prefers-color-scheme:dark)').matches);
+ r.classList.toggle('dark',dark);r.classList.toggle('black',s.mode==='black');r.style.setProperty('--h',ACCENTS[s.accent]||257);
+ $('modes').innerHTML='';for(const k in MODES){const b=el('button',k===s.mode?'on':'',MODES[k]);b.onclick=()=>{s.mode=k;persistLocal();applyTheme()};$('modes').appendChild(b)}
+ $('accents').innerHTML='';for(const k in ACCENTS){const b=el('button',k===s.accent?'on':'');b.style.setProperty('--c',ACCENTS[k]);b.title=k;b.setAttribute('aria-label',k);b.onclick=()=>{s.accent=k;persistLocal();applyTheme()};$('accents').appendChild(b)}}
+/* render */
+function renderAll(){renderBooks();renderChapters();renderHero();renderPages()}
+function keepVisible(box){const a=box.querySelector('.on');if(a)box.scrollLeft=a.offsetLeft-box.clientWidth/2+a.offsetWidth/2}
+function renderBooks(){const c=$('books');c.innerHTML='';
+ appData.books.forEach(b=>{const on=b.id===appData.activeBookId,t=el('div','tab'+(on?' on':''));t.tabIndex=0;t.append(el('span','',''));t.firstChild.textContent=b.name;
+  if(on){const e=el('button','ib',ic('pen'));e.title='Edit book';e.onclick=ev=>{ev.stopPropagation();openEditBookModal(b.id)};t.append(e)}
+  t.onclick=()=>selectBook(b.id);t.onkeydown=e=>{if(e.key==='Enter')selectBook(b.id)};c.append(t)});keepVisible(c)}
+function selectBook(id){appData.activeBookId=id;const ch=appData.chapters.filter(c=>c.bookId===id);appData.activeChapterId=ch.length?ch[0].id:'';persistLocal();renderAll()}
+function keepVisibleV(box){const a=box.querySelector('.on');if(!a)return;const t=a.offsetTop,b=t+a.offsetHeight;if(t<box.scrollTop)box.scrollTop=t-4;else if(b>box.scrollTop+box.clientHeight)box.scrollTop=b-box.clientHeight+4}
+function renderChapters(){const c=$('chs'),st=c.scrollTop;c.innerHTML='';
+ const list=appData.chapters.filter(x=>x.bookId===appData.activeBookId);
+ if(!list.length){c.append(el('div','empty','No chapters yet. Add one with + Chapter.'));return}
+ list.forEach(x=>{const b=el('button','chip-ch'+(x.id===appData.activeChapterId?' on':''));b.textContent=x.name;b.title=x.name;b.onclick=()=>{appData.activeChapterId=x.id;persistLocal();renderChapters();renderHero();renderPages()};c.append(b)});
+ c.scrollTop=st;keepVisibleV(c)}
+function curChap(){return appData.chapters.find(c=>c.id===appData.activeChapterId&&c.bookId===appData.activeBookId)}
+function renderHero(){const c=curChap(),a=$('hacts');a.innerHTML='';
+ if(!c){$('hc').textContent=(appData.books.find(b=>b.id===appData.activeBookId)||{}).name||'';$('ht').textContent='No chapter selected';$('hd').textContent='Add a chapter to start collecting your pages.';$('hd').style.display='';return}
+ const n=appData.pages.filter(p=>p.chapterId===c.id).length;
+ $('hc').textContent=n+(n===1?' page':' pages');$('ht').textContent=c.name;$('hd').textContent=c.description||'';$('hd').style.display=c.description?'':'none';
+ const e=el('button','btn xs fill','Edit info');e.onclick=openEditChapterModal;a.append(e);
+ if(c.referenceLink&&c.referenceLink.trim()){let u=c.referenceLink.trim();if(!/^https?:\/\//i.test(u))u='https://'+u;const l=el('a','btn xs out',ic('link')+'<span></span>');l.lastChild.textContent='Reference';l.href=u;l.target='_blank';l.rel='noopener';a.append(l)}
+ const dd=el('div','dd'),db=el('button','ib sm',ic('dots')),m=el('div','menu');m.id='menu-ch';db.title='More';db.setAttribute('aria-label','More chapter actions');db.onclick=ev=>{ev.stopPropagation();toggleDropdown('ch')};
+ const pp=el('button','mi',ic('paste')+'Paste page');pp.title='Paste a copied page into this chapter';pp.onclick=()=>startPaste('page');
+ const cc=el('button','mi',ic('copy')+'Copy chapter');cc.title='Copy this chapter and its pages so you can paste it into any book';cc.onclick=()=>copyChapterData(c.id);
+ const du=el('button','mi',ic('dup')+'Duplicate chapter');du.onclick=()=>duplicateChapter(c.id);const de=el('button','mi del',ic('trash')+'Delete chapter');de.onclick=()=>deleteChapter(c.id);
+ m.append(pp,cc,du,de);dd.append(db,m);a.append(dd)}
+function renderPages(){const g=$('grid');g.innerHTML='';
+ if(!curChap()){g.append(el('div','empty','Select or add a chapter to see its pages.'));return}
+ const list=appData.pages.filter(p=>p.chapterId===appData.activeChapterId);
+ if(!list.length){g.append(el('div','empty','No pages yet. Use + Add to create one.'));return}
+ list.forEach(p=>{const card=el('div','card'),h=el('div','ch'),t=el('span','ct'),a=el('div','ca');t.textContent=p.title;
+  const cp=el('button','btn tone',ic('copy')+'Copy');cp.onclick=()=>copyPage(p.id);
+  const ed=el('button','ib',ic('pen'));ed.title='Edit page';ed.onclick=()=>openEditPageModal(p.id);
+  const dd=el('div','dd'),db=el('button','ib',ic('dots')),m=el('div','menu');m.id='menu-'+p.id;db.title='More';db.onclick=e=>{e.stopPropagation();toggleDropdown(p.id)};
+  const cpd=el('button','mi',ic('copy')+'Copy page');cpd.title='Copy this page so you can paste it into another chapter';cpd.onclick=()=>copyPageData(p.id);
+  const du=el('button','mi',ic('dup')+'Duplicate page');du.onclick=()=>duplicatePage(p.id);const de=el('button','mi del',ic('trash')+'Delete page');de.onclick=()=>deletePage(p.id);
+  m.append(cpd,du,de);dd.append(db,m);a.append(cp,ed,dd);h.append(t,a);
+  const c=el('div','cc');buildSpiel(c,p);card.append(h,c);g.append(card)})}
+function toggleDropdown(id){document.querySelectorAll('.menu').forEach(m=>{if(m.id!=='menu-'+id)m.classList.remove('show')});const t=$('menu-'+id);if(t)t.classList.toggle('show')}
+document.addEventListener('click',()=>document.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show')));
+$('books').addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){e.preventDefault();e.currentTarget.scrollLeft+=e.deltaY}},{passive:false});
+/* modals */
+function autosize(t){t.style.height='auto';t.style.height=t.scrollHeight+'px'}
+function openModal(id){$(id).classList.add('open');document.querySelectorAll('#'+id+' textarea').forEach(autosize);const f=$(id).querySelector('input[type=text]');if(f&&!f.value)setTimeout(()=>f.focus(),30)}
+function closeModal(id){$(id).classList.remove('open')}
+document.querySelectorAll('textarea').forEach(t=>t.addEventListener('input',()=>autosize(t)));
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('mousedown',e=>{if(e.target===o)o.classList.remove('open')}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'))});
+/* books */
+function openAddBookModal(){$('book-modal-title').textContent='Add Book';$('book-id-input').value='';$('book-title-input').value='';$('book-del').style.display='none';openModal('book-modal')}
+function openEditBookModal(id){const b=appData.books.find(x=>x.id===id);if(!b)return;$('book-modal-title').textContent='Edit Book';$('book-id-input').value=b.id;$('book-title-input').value=b.name;$('book-del').style.display=appData.books.length>1?'':'none';openModal('book-modal')}
+function saveBook(){const id=$('book-id-input').value,t=$('book-title-input').value.trim();if(!t)return;
+ if(id){appData.books.find(b=>b.id===id).name=t}else{const b={id:'b_'+Date.now(),name:t};appData.books.push(b);appData.activeBookId=b.id;appData.activeChapterId=''}
+ persistLocal();closeModal('book-modal');renderAll();$('books').scrollLeft=1e6*(id?0:1)}
+function deleteBook(){const id=$('book-id-input').value;if(!confirm('Delete this book with all its chapters and pages?'))return;
+ const ch=appData.chapters.filter(c=>c.bookId===id).map(c=>c.id);appData.pages=appData.pages.filter(p=>!ch.includes(p.chapterId));appData.chapters=appData.chapters.filter(c=>c.bookId!==id);appData.books=appData.books.filter(b=>b.id!==id);
+ selectBook(appData.books[0].id);closeModal('book-modal');showToast('Book deleted.')}
+/* chapters */
+function openAddChapterModal(){$('chapter-modal-title').textContent='Add Chapter';['id','name','desc','link'].forEach(k=>$('chapter-'+k+'-input').value='');openModal('chapter-modal')}
+function openEditChapterModal(){const c=curChap();if(!c)return;$('chapter-modal-title').textContent='Edit Chapter';$('chapter-id-input').value=c.id;$('chapter-name-input').value=c.name;$('chapter-desc-input').value=c.description||'';$('chapter-link-input').value=c.referenceLink||'';openModal('chapter-modal')}
+function saveChapter(){const id=$('chapter-id-input').value,name=$('chapter-name-input').value.trim(),d=$('chapter-desc-input').value.trim(),l=$('chapter-link-input').value.trim();if(!name)return;
+ if(id){Object.assign(appData.chapters.find(c=>c.id===id),{name,description:d,referenceLink:l})}else{const c={id:'c_'+Date.now(),bookId:appData.activeBookId,name,description:d,referenceLink:l};appData.chapters.push(c);appData.activeChapterId=c.id}
+ persistLocal();closeModal('chapter-modal');renderAll()}
+function duplicateChapter(id){const s=appData.chapters.find(c=>c.id===id);if(!s)return;const nid='c_'+Date.now();
+ appData.chapters.push({id:nid,bookId:s.bookId,name:s.name+' (Copy)',description:s.description,referenceLink:s.referenceLink});
+ appData.pages.filter(p=>p.chapterId===id).forEach(p=>appData.pages.push({id:'p_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),chapterId:nid,title:p.title,content:p.content}));
+ appData.activeChapterId=nid;persistLocal();renderAll();showToast('Chapter duplicated.')}
+function deleteChapter(id){if(!confirm('Delete this chapter and its pages?'))return;
+ appData.chapters=appData.chapters.filter(c=>c.id!==id);appData.pages=appData.pages.filter(p=>p.chapterId!==id);
+ const r=appData.chapters.filter(c=>c.bookId===appData.activeBookId);appData.activeChapterId=r.length?r[0].id:'';persistLocal();renderAll();showToast('Chapter deleted.')}
+/* pages */
+function openAddPageModal(){if(!appData.activeChapterId){showToast('Select a chapter first.');return}
+ $('page-modal-title').textContent='Add Page';['id','title','content'].forEach(k=>$('page-'+k+'-input').value='');openModal('page-modal')}
+function openEditPageModal(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;$('page-modal-title').textContent='Edit Page';$('page-id-input').value=p.id;$('page-title-input').value=p.title;$('page-content-input').value=p.content;openModal('page-modal')}
+function savePage(){const id=$('page-id-input').value,title=$('page-title-input').value.trim(),content=$('page-content-input').value;if(!title)return;
+ if(id){const pg=appData.pages.find(p=>p.id===id);if(pg.content!==content)delete varVals[id];Object.assign(pg,{title,content})}else appData.pages.push({id:'p_'+Date.now(),chapterId:appData.activeChapterId,title,content});
+ persistLocal();closeModal('page-modal');renderHero();renderPages()}
+function duplicatePage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;appData.pages.push({id:'p_'+Date.now(),chapterId:p.chapterId,title:p.title+' (Copy)',content:p.content});persistLocal();renderHero();renderPages();showToast('Page duplicated.')}
+function deletePage(id){delete varVals[id];appData.pages=appData.pages.filter(p=>p.id!==id);persistLocal();renderHero();renderPages();showToast('Page deleted.')}
+/* variables: XXX / DATE / AMT */
+const TOK={XXX:'XXX',DATE:'XX/XX/XXXX',AMT:'$XXX'};
+const VKIND={'XXX':'text','XX/XX/XXXX':'date','$XXX':'amt'};
+const VLABEL={text:'Fill in text',date:'Fill in date',amt:'Fill in amount'};
+const VAR_RE=/(?<![A-Za-z0-9])(?:XX\/XX\/XXXX|\$XXX|XXX)(?![A-Za-z0-9])/g;
+const varVals={};/* what you type into variables lives for this session only: page id -> {nth variable -> text} */
+function insertVar(kind){const t=$('page-content-input');let s=TOK[kind];if(!s)return;
+ const v=t.value,a=t.selectionStart,b=t.selectionEnd;
+ if(a>0&&/[A-Za-z0-9.,;:!?)\]]/.test(v[a-1]))s=' '+s;
+ if(b<v.length&&/[A-Za-z0-9]/.test(v[b]))s+=' ';
+ t.focus();t.setSelectionRange(a,b);
+ let ok=false;try{ok=document.execCommand('insertText',false,s)}catch(e){}
+ if(!ok){t.setRangeText(s,a,b,'end');t.dispatchEvent(new Event('input',{bubbles:true}))}
+ autosize(t)}
+function makeVar(pid,i,tok){const k=VKIND[tok],v=el('span','var');
+ try{v.contentEditable='plaintext-only'}catch(e){}
+ if(v.contentEditable!=='plaintext-only')v.contentEditable='true';
+ v.spellcheck=false;v.dataset.k=k;v.dataset.ph=tok;v.dataset.pid=pid;v.dataset.i=i;
+ v.setAttribute('role','textbox');v.setAttribute('aria-label',VLABEL[k]);v.setAttribute('autocapitalize','off');v.setAttribute('autocorrect','off');
+ if(k==='amt')v.setAttribute('inputmode','decimal');
+ const saved=(varVals[pid]||{})[i];
+ if(saved){v.textContent=saved;v.classList.add('filled')}else v.textContent=tok;
+ return v}
+function buildSpiel(box,p){box.textContent='';const s=p.content||'';let last=0,i=0;
+ for(const m of s.matchAll(VAR_RE)){if(m.index>last)box.append(s.slice(last,m.index));box.append(makeVar(p.id,i++,m[0]));last=m.index+m[0].length}
+ if(last<s.length)box.append(s.slice(last))}
+function composeSpiel(p){const vals=varVals[p.id]||{};let i=0,blank=0;
+ const text=(p.content||'').replace(VAR_RE,m=>{const v=vals[i++];if(v)return v;blank++;return m});
+ return{text,blank}}
+function copyPage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;const r=composeSpiel(p);
+ copyText(r.text,r.blank?'Copied. '+r.blank+(r.blank>1?' variables are':' variable is')+' still blank.':'Copied to clipboard.')}
+function fmtDate(d){return d.length>4?d.slice(0,2)+'/'+d.slice(2,4)+'/'+d.slice(4):d.length>2?d.slice(0,2)+'/'+d.slice(2):d}
+function caretOff(v){const s=getSelection();if(!s.rangeCount||!v.contains(s.anchorNode))return null;const r=s.getRangeAt(0).cloneRange();r.selectNodeContents(v);r.setEnd(s.anchorNode,s.anchorOffset);return r.toString().length}
+function setCaret(v,n){const tn=v.firstChild;if(!tn)return;const r=document.createRange();r.setStart(tn,Math.min(n,tn.length));r.collapse(true);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+function selectAllIn(v){if(document.activeElement!==v)return;const r=document.createRange();r.selectNodeContents(v);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+function commitVar(v){const k=v.dataset.k,t=v.textContent.trim();
+ const filled=t!==''&&t!==v.dataset.ph&&!(k==='amt'&&!/\d/.test(t));
+ const m=varVals[v.dataset.pid]||(varVals[v.dataset.pid]={});
+ if(filled){m[v.dataset.i]=t;v.classList.add('filled')}else{delete m[v.dataset.i];v.classList.remove('filled')}
+ return filled}
+function finishVar(v){if(commitVar(v))v.textContent=v.textContent.trim();else v.textContent=v.dataset.ph}
+function insertIntoVar(v,t){v.focus();let ok=false;try{ok=document.execCommand('insertText',false,t)}catch(e){}
+ if(!ok){const s=getSelection();if(!s.rangeCount)return;const r=s.getRangeAt(0);r.deleteContents();const n=document.createTextNode(t);r.insertNode(n);r.setStartAfter(n);r.collapse(true);s.removeAllRanges();s.addRange(r);v.dispatchEvent(new Event('input',{bubbles:true}))}}
+function pasteIntoVar(v,raw){let t=String(raw||'').replace(/\s*[\r\n]+\s*/g,' ').trim();
+ if(v.dataset.k==='amt'){const m=t.match(/\d[\d,]*(?:\.\d+)?|\.\d+/);if(!m){showToast('No amount found in the pasted text.');return}t=m[0]}
+ else if(v.dataset.k==='date'&&/^\d{5,8}$/.test(t))t=fmtDate(t);
+ if(t)insertIntoVar(v,t)}
+function onVarInput(v,e){const k=v.dataset.k;
+ if(v.childElementCount||/[\r\n]/.test(v.textContent)){const c=caretOff(v);v.textContent=v.textContent.replace(/\s*[\r\n]+\s*/g,' ');setCaret(v,c==null?v.textContent.length:c)}
+ const t=v.textContent;
+ if(k==='amt'){const off=caretOff(v);let n=t.replace(/[^\d.,]/g,'');const d=n.indexOf('.');if(d>=0)n=n.slice(0,d+1)+n.slice(d+1).replace(/\./g,'');
+  const want='$'+n;
+  if(t!==want){const keep=t.slice(0,off==null?t.length:off).replace(/[^\d.,]/g,'').length;v.textContent=want;setCaret(v,1+Math.min(keep,n.length))}}
+ else if(k==='date'&&e.inputType&&e.inputType.indexOf('insert')===0&&/^\d+$/.test(e.data||'')&&/^[\d/]*$/.test(t)&&caretOff(v)===t.length){
+  const d=t.replace(/\D/g,'');
+  if(d.length<=8&&[...t].every((c,i)=>c!=='/'||i===2||i===5)){const f=fmtDate(d);if(f!==t){v.textContent=f;setCaret(v,f.length)}}}
+ commitVar(v)}
+(function(){const G=$('grid'),vOf=e=>e.target&&e.target.closest?e.target.closest('.var'):null;
+ G.addEventListener('focusin',e=>{const v=vOf(e);if(v)setTimeout(()=>selectAllIn(v),0)});
+ G.addEventListener('focusout',e=>{const v=vOf(e);if(v)finishVar(v)});
+ G.addEventListener('keydown',e=>{const v=vOf(e);if(v&&(e.key==='Enter'||e.key==='Escape')){e.preventDefault();v.blur()}});
+ G.addEventListener('paste',e=>{const v=vOf(e);if(!v)return;e.preventDefault();pasteIntoVar(v,(e.clipboardData||window.clipboardData).getData('text'))});
+ G.addEventListener('input',e=>{const v=vOf(e);if(v)onVarInput(v,e)})})();
+/* copy */
+function copyText(t,msg){msg=msg||'Copied to clipboard.';if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(()=>showToast(msg)).catch(()=>fallbackCopy(t,msg));else fallbackCopy(t,msg)}
+function fallbackCopy(t,msg){const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;left:-9999px';document.body.appendChild(a);a.select();try{document.execCommand('copy');showToast(msg||'Copied to clipboard.')}catch(e){showToast('Copy failed.')}a.remove()}
+/* copy / paste whole pages and chapters */
+const CLIP_TAG='paano-ba-yan';
+function rid(){return Date.now()+'_'+Math.random().toString(36).slice(2,6)}
+function copyPageData(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
+ copyText(JSON.stringify({app:CLIP_TAG,type:'page',title:p.title,content:p.content}),'Page copied. Use Paste page inside any chapter.')}
+function copyChapterData(id){const c=appData.chapters.find(x=>x.id===id);if(!c)return;
+ copyText(JSON.stringify({app:CLIP_TAG,type:'chapter',name:c.name,description:c.description||'',referenceLink:c.referenceLink||'',pages:appData.pages.filter(p=>p.chapterId===id).map(p=>({title:p.title,content:p.content}))}),'Chapter copied. Use Paste chapter in any book.')}
+function parseClip(t){try{const o=JSON.parse(t);return o&&o.app===CLIP_TAG?o:null}catch(e){return null}}
+let pasteKind='';
+async function startPaste(kind){
+ if(kind==='page'&&!curChap()){showToast('Select a chapter first.');return}
+ let t=null;
+ try{if(navigator.clipboard&&navigator.clipboard.readText&&window.isSecureContext)t=await navigator.clipboard.readText()}catch(e){t=null}
+ if(t===null){pasteKind=kind;$('paste-modal-title').textContent='Paste '+kind;$('paste-input').value='';openModal('paste-modal');setTimeout(()=>$('paste-input').focus(),30);return}
+ applyPaste(t,kind)}
+function confirmPaste(){const t=$('paste-input').value;if(applyPaste(t,pasteKind))closeModal('paste-modal')}
+function applyPaste(t,kind){const o=parseClip(t);
+ if(!o){showToast('Nothing to paste. Copy a '+kind+' first.');return false}
+ if(o.type!==kind){showToast(kind==='chapter'?'That is a copied page. Use Paste page inside a chapter.':'That is a copied chapter. Use Paste chapter next to + Chapter.');return false}
+ if(kind==='page'){if(!curChap()){showToast('Select a chapter first.');return false}
+  appData.pages.push({id:'p_'+rid(),chapterId:appData.activeChapterId,title:String(o.title||'Untitled'),content:String(o.content||'')});
+  persistLocal();renderHero();renderPages();showToast('Page pasted.');return true}
+ const nid='c_'+rid();
+ appData.chapters.push({id:nid,bookId:appData.activeBookId,name:String(o.name||'Untitled'),description:String(o.description||''),referenceLink:String(o.referenceLink||'')});
+ (Array.isArray(o.pages)?o.pages:[]).forEach(p=>appData.pages.push({id:'p_'+rid(),chapterId:nid,title:String(p.title||'Untitled'),content:String(p.content||'')}));
+ appData.activeChapterId=nid;persistLocal();renderAll();showToast('Chapter pasted.');return true}
+/* save */
+function generateUpdatedHtmlString(){return '<!DOCTYPE html>\n'+document.documentElement.outerHTML.replace(/\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//,()=>'/*DATA_START*/'+JSON.stringify(appData,null,2)+'/*DATA_END*/')}
+async function saveDirectToFile(){const h=generateUpdatedHtmlString(),fn=fileName()+'.html';
+ try{if('showSaveFilePicker' in window){if(!fileHandle||handleName!==fn){fileHandle=await showSaveFilePicker({suggestedName:fn,types:[{description:'HTML File',accept:{'text/html':['.html']}}]});handleName=fn}
+  const w=await fileHandle.createWritable();await w.write(h);await w.close();showToast('Saved to file.')}else exportUpdatedHtmlFile()}
+ catch(e){if(e.name!=='AbortError')exportUpdatedHtmlFile()}}
+function exportUpdatedHtmlFile(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([generateUpdatedHtmlString()],{type:'text/html;charset=utf-8'}));a.download=fileName()+'.html';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);showToast('Downloaded updated file.')}
+load();applyTheme();applySiteName(true);renderAll();
+$('site-name-input').addEventListener('input',e=>{appData.settings.title=e.target.value;persistLocal();applySiteName(false)});
+$('site-name-input').addEventListener('change',e=>{if(!e.target.value.trim()){appData.settings.title=DEF_NAME;persistLocal()}applySiteName(true)});
+matchMedia('(prefers-color-scheme:dark)').addEventListener('change',applyTheme);
+</script></body></html>
