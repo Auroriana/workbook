@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="--h: 207;"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en" style="--h: 232;" class=""><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ataraxia</title>
 <style>
 :root{--h:257;--p:hsl(var(--h) 34% 46%);--on-p:#fff;--pc:hsl(var(--h) 60% 91%);--on-pc:hsl(var(--h) 45% 15%);--bg:hsl(var(--h) 100% 99%);--surf:hsl(var(--h) 28% 95%);--card:#fff;--txt:#1d1b20;--mut:hsl(var(--h) 8% 38%);--line:hsl(var(--h) 18% 82%);--danger:#b3261e;--bar:rgba(255,255,255,.92)}
@@ -33,13 +33,13 @@ header{display:flex;align-items:center;gap:16px;height:64px;padding:0 24px;backg
 .shell{flex:1;min-height:0;display:flex}
 .side{width:232px;flex:none;display:flex;flex-direction:column;gap:10px;min-height:0;padding:16px 12px 16px 20px;border-right:1px solid var(--line)}
 #chs{flex:1;min-height:0;position:relative;display:flex;flex-direction:column;gap:6px;overflow-y:auto;overflow-x:hidden;padding:2px 4px 2px 2px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
-.side-top{display:flex;align-items:center;gap:6px;flex:none}.side-top>.btn{flex:1;min-width:0}.side .menu{left:0;right:auto}
+.side-top{display:flex;align-items:center;gap:6px;flex:none}.side-top>.btn{flex:1;min-width:0}
 .chip-ch{flex:none;width:100%;padding:9px 14px;border-radius:12px;border:1px solid var(--line);font-size:14px;line-height:1.35;text-align:left;overflow-wrap:anywhere;color:var(--txt)}
 .chip-ch:hover{background:var(--surf)}.chip-ch.on{background:var(--p);color:var(--on-p);border-color:var(--p)}
 .empty{color:var(--mut);font-size:14px;padding:8px 4px}
 /* main */
 main{flex:1;min-width:0;min-height:0;overflow-y:auto;padding:8px 24px 40px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
-.wrap{max-width:1200px;margin:0 auto}
+.wrap{margin:0 auto}
 .hero{display:flex;align-items:flex-start;gap:12px;margin-top:8px;padding:14px 14px 14px 20px;border-radius:20px;background:radial-gradient(circle at 100% 0,hsl(var(--h) 40% 50%/.18),transparent 45%),radial-gradient(circle at 0 100%,hsl(var(--h) 40% 50%/.12),transparent 40%),var(--surf)}
 .hero-in{flex:1;min-width:0}
 .hero-top{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;min-height:28px}
@@ -48,24 +48,92 @@ main{flex:1;min-width:0;min-height:0;overflow-y:auto;padding:8px 24px 40px;scrol
 .chip b{width:5px;height:5px;border-radius:50%;background:var(--p)}
 .hero p{margin-top:2px;font-size:13.5px;color:var(--mut);white-space:pre-wrap;overflow-wrap:anywhere}
 .acts{display:flex;align-items:center;gap:6px;flex:none;min-height:28px}
-.hero .menu{top:32px}
 .ph{position:sticky;top:-8px;z-index:3;display:flex;align-items:center;gap:12px;padding:22px 0 14px;margin-top:0;background:var(--bg)}
 .ph h2{flex:1;min-width:0;font-size:22px;font-weight:400}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:16px;align-items:start}
-.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:16px 12px 20px 20px;min-width:0}
-.ch{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.ct{flex:1;min-width:0;font-size:17px;font-weight:600;overflow-wrap:anywhere}
+/* freeform workspace: pages and boards share one fine grid (1 unit = 8px) */
+:root{--g:8px;--gn:hsl(var(--h) 25% 50%/.12);--gm:hsl(var(--h) 25% 50%/.26)}
+.ib.tg{background:var(--pc);color:var(--on-pc)}
+.ib.tg.on,.ib.tg.on:hover{background:var(--p);color:var(--on-p)}
+.edit-hint{display:inline-block;margin-left:12px;padding:3px 12px;border-radius:999px;background:var(--pc);color:var(--on-pc);font-size:12.5px;font-weight:500;vertical-align:middle;white-space:nowrap}
+.edit-hint[hidden]{display:none}
+#ws-empty{margin:0 0 10px}
+#ws{position:relative;overflow-x:auto;overflow-y:hidden;border-radius:14px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+#wsc{position:relative;min-width:100%;min-height:320px}
+#wsc.nt .fi{transition:none}
+.fi{position:absolute;scroll-margin:90px 0 24px;transition:left .16s ease,top .16s ease,width .16s ease,height .16s ease}
+.fi.rsz{transition:none}
+/* grid shows only while moving / editing */
+body.edit #ws{box-shadow:inset 0 0 0 1px var(--line)}
+body.edit #wsc,body.edit .bcan{background-image:linear-gradient(var(--gm) 1px,transparent 1px),linear-gradient(90deg,var(--gm) 1px,transparent 1px),linear-gradient(var(--gn) 1px,transparent 1px),linear-gradient(90deg,var(--gn) 1px,transparent 1px);background-size:calc(var(--g)*5) calc(var(--g)*5),calc(var(--g)*5) calc(var(--g)*5),var(--g) var(--g),var(--g) var(--g)}
+/* page card */
+.card{background:var(--card);color:var(--txt);border:1px solid var(--line);border-radius:24px;padding:14px 8px 12px 18px;display:flex;flex-direction:column;min-width:0;min-height:0}
+.ch{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex:none;min-height:34px}
+.ct{flex:1;min-width:0;font-size:17px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
 .ca{display:flex;align-items:center;gap:2px;flex:none}
 .ca .btn{height:34px;padding:0 14px;margin-right:4px}
-.cc{padding-right:8px;color:var(--mut);white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px}
+.cc{flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;padding-right:10px;color:var(--mut);white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.card.n1 .lbl{display:none}.card.n1 .ca .btn{padding:0 11px;gap:0;margin-right:0}
+.card.n2 .ed-btn{display:none}
+.grip{display:none;flex:none;width:26px;height:34px;margin:0 0 0 -10px;border-radius:9px;place-items:center;color:var(--mut);cursor:grab;user-select:none;-webkit-user-select:none}
+body.edit .grip{display:grid}
+.grip svg{width:16px;height:16px;fill:currentColor;stroke:none}
+.grip:hover,.grip:focus-visible{background:var(--pc);color:var(--on-pc)}
+/* edit mode */
+body.edit .fi{cursor:move;touch-action:none}
+body.edit .fi *{user-select:none;-webkit-user-select:none}
+body.edit .card{outline:1.5px dashed var(--p);outline-offset:2px}
+body.edit .cc{pointer-events:none}
+.card.ph-drag,.cbox.ph-drag{background:var(--pc);border:2px dashed var(--p);opacity:.55;outline:0}
+.ph-drag{pointer-events:none}
+.ph-drag>*{visibility:hidden}
+.ghost{position:fixed!important;left:0!important;top:0!important;z-index:70;margin:0;pointer-events:none;box-shadow:0 14px 36px rgba(0,0,0,.28);opacity:.96;will-change:transform;transition:none!important;outline:0!important}
+.ghost *{pointer-events:none!important}
+body.dragging-page,body.dragging-page *{cursor:grabbing!important;user-select:none!important;-webkit-user-select:none!important}
+body.rszing,body.rszing *{cursor:var(--rc,nwse-resize)!important;user-select:none!important;-webkit-user-select:none!important}
+.cbox.zone-on{outline:2px dashed var(--p);outline-offset:4px}
+#szbadge{display:none;position:fixed;z-index:80;pointer-events:none;background:var(--txt);color:var(--bg);font-size:12px;font-variant-numeric:tabular-nums;padding:3px 10px;border-radius:999px}
+/* board */
+.cbox,.cprev{border:2px solid var(--cb,var(--line));background:var(--cbg,var(--surf));color:var(--cfg,var(--txt))}
+.cbox{display:flex;flex-direction:column;border-radius:20px;min-width:0;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.cbar{display:flex;align-items:center;gap:6px;padding:6px 6px 6px 12px;flex:none;user-select:none;-webkit-user-select:none}
+.cgrip{display:none;place-items:center;flex:none;width:24px;height:24px;border-radius:8px;opacity:.7;cursor:grab}
+body.edit .cgrip{display:grid}
+.cgrip:hover,.cgrip:focus-visible{opacity:1;background:rgba(127,127,127,.22)}
+.cgrip svg{width:16px;height:16px}
+.cname{flex:1;min-width:0;font-weight:600;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ccount{font-size:12px;opacity:.7;white-space:nowrap}
+.cbar .ib{color:inherit;opacity:.85}.cbar .ib:hover{opacity:1;color:var(--on-pc)}
+.cin{flex:1;min-height:0;overflow:auto;border-radius:0 0 18px 18px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.bcan{position:relative;min-width:100%;min-height:100%}
+.bempty{position:absolute;inset:0;display:grid;place-items:center;padding:12px;text-align:center;font-size:14px;opacity:.7;pointer-events:none}
+.cin .card{border-radius:18px;padding:12px 6px 14px 14px}
+.cin .ct{font-size:15px}
+.cin .cc{font-size:14px;padding-right:6px}
+/* resize handles (edit mode only) */
+.rz{display:none;position:absolute;touch-action:none;z-index:3}
+body.edit .rz{display:block}
+.rz.n,.rz.s{left:16px;right:16px;height:10px}.rz.e,.rz.w{top:16px;bottom:16px;width:10px}
+.rz.n{top:-5px;cursor:ns-resize}.rz.s{bottom:-5px;cursor:ns-resize}.rz.e{right:-5px;cursor:ew-resize}.rz.w{left:-5px;cursor:ew-resize}
+.rz.ne,.rz.nw,.rz.se,.rz.sw{width:20px;height:20px}
+.rz.ne{top:-5px;right:-5px;cursor:nesw-resize}.rz.sw{bottom:-5px;left:-5px;cursor:nesw-resize}.rz.nw{top:-5px;left:-5px;cursor:nwse-resize}.rz.se{bottom:-5px;right:-5px;cursor:nwse-resize}
+.rz.se:after{content:"";position:absolute;right:8px;bottom:8px;width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;border-radius:0 0 4px 0;opacity:.6}
 /* fill-in variables */
 .var{display:inline-block;max-width:100%;margin:0 1px;padding:0 9px;border:1.5px dashed var(--p);border-radius:12px;color:var(--p);font-weight:600;line-height:1.3;white-space:pre-wrap;overflow-wrap:anywhere;vertical-align:baseline;cursor:text;outline:none;transition:background .12s}
 .var:empty:before{content:"\200b"}
 .var:hover{background:var(--pc)}
 .var.filled{border-style:solid;background:var(--pc);color:var(--on-pc)}
 .var:focus{border-style:solid;background:var(--pc);color:var(--on-pc);box-shadow:0 0 0 2px var(--p)}
+/* yes / no toggle variable */
+.var.bool{cursor:pointer;user-select:none;-webkit-user-select:none;white-space:nowrap;border-style:solid;min-width:3.6em;text-align:center}
+.var.bool:before{display:inline-block;margin-right:5px;font-weight:700}
+.var.bool.yes{background:var(--p);color:var(--on-p);border-color:var(--p)}
+.var.bool.yes:before{content:"\2713"}
+.var.bool.no{background:transparent;color:var(--mut);border-color:var(--mut)}
+.var.bool.no:before{content:"\2715"}
+.var.bool:hover{filter:brightness(.93)}.dark .var.bool:hover{filter:brightness(1.12)}
+.var.bool:focus-visible{outline:2px solid var(--p);outline-offset:2px;box-shadow:none}
 .dd{position:relative}
-.menu{display:none;position:absolute;right:0;top:40px;min-width:180px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.18);z-index:10}
+.menu{display:none;position:fixed;left:0;top:0;min-width:180px;background:var(--card);color:var(--txt);border:1px solid var(--line);border-radius:16px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.18);z-index:40}
 .menu.show{display:block}
 .mi{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:10px;font-size:14px;text-align:left}
 .mi:hover{background:var(--surf)}.mi.del{color:var(--danger)}
@@ -78,7 +146,7 @@ main{flex:1;min-width:0;min-height:0;overflow-y:auto;padding:8px 24px 40px;scrol
 .mb{padding:8px 24px;overflow-y:auto;min-height:0;display:flex;flex-direction:column;gap:16px}
 .mf{display:flex;justify-content:flex-end;gap:8px;padding:16px 24px 22px;flex-wrap:wrap}
 label{display:block;font-size:13px;color:var(--mut);margin-bottom:6px;font-weight:500}
-input[type=text],input[type=url],textarea{width:100%;background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:15px;outline:none}
+input[type=text],input[type=url],input[type=password],textarea{width:100%;background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:15px;outline:none}
 input:focus,textarea:focus{border-color:var(--p);box-shadow:0 0 0 1px var(--p)}
 textarea{resize:none;overflow:hidden;min-height:96px;display:block}
 .seg{display:flex;flex-wrap:wrap;gap:8px}
@@ -90,17 +158,70 @@ textarea{resize:none;overflow:hidden;min-height:96px;display:block}
 .hint{font-size:12.5px;color:var(--mut);margin-top:6px}
 .credit{font-size:11px;color:var(--mut);text-align:center;opacity:.8;margin-top:4px}
 .vbar{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px}.vbar label{margin:0 auto 0 0}.vbar .vl{font-size:12.5px;color:var(--mut)}
+/* container color pickers + preview */
+.cpick{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.csw{position:relative;width:30px;height:30px;border-radius:50%;border:2px solid var(--bg);box-shadow:0 0 0 1px var(--line);padding:0;flex:none;display:block;overflow:hidden}
+.csw.on{box-shadow:0 0 0 3px var(--p)}
+.csw.def{background:linear-gradient(to top right,transparent calc(50% - 1px),var(--mut) 50%,transparent calc(50% + 1px)),var(--surf)}
+.csw.custom{background:conic-gradient(red,yellow,lime,aqua,blue,magenta,red)}
+.csw.custom input{position:absolute;inset:-8px;width:calc(100% + 16px);height:calc(100% + 16px);opacity:0;cursor:pointer;border:0;padding:0}
+.cprev{border-radius:16px;padding:8px 10px 10px}
+.cprev b{display:block;font-size:14px;padding:2px 2px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cprev i{display:block;height:34px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
 #toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--txt);color:var(--bg);padding:12px 22px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:100;max-width:calc(100% - 32px);text-align:center}
 #toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:600px){header{padding:0 12px;gap:8px;height:58px}.brand{display:none}.side{width:128px;gap:8px;padding:10px 6px 10px 10px}.side .btn{padding:0 8px}.side-top{gap:4px}.side-top .ib{width:28px;height:28px}.chip-ch{padding:8px 10px;font-size:13px}.hero{flex-direction:column;gap:8px}.acts{flex-wrap:wrap}main{padding:8px 12px 32px}.btn{padding:0 16px}.mb,.mh,.mf{padding-left:18px;padding-right:18px}}
+@media(max-width:600px){header{padding:0 12px;gap:8px;height:58px}.brand{display:none}.side{width:128px;gap:8px;padding:10px 6px 10px 10px}.side .btn{padding:0 8px}.side-top{gap:4px}.side-top .ib{width:28px;height:28px}.chip-ch{padding:8px 10px;font-size:13px}.hero{flex-direction:column;gap:8px}.acts{flex-wrap:wrap}main{padding:8px 12px 32px}.btn{padding:0 16px}.ph .btn{padding:0 12px}.mb,.mh,.mf{padding-left:18px;padding-right:18px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* login screen */
+#lock{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;color:#fff;background:linear-gradient(160deg,hsl(var(--h) 55% 32%/.78),hsl(calc(var(--h) + 45) 55% 16%/.86));-webkit-backdrop-filter:blur(36px) saturate(1.5);backdrop-filter:blur(36px) saturate(1.5);transition:opacity .45s ease,visibility .45s,transform .45s ease}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){#lock{background:hsl(var(--h) 40% 20%)}}
+html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:scale(1.03)}
+.lk-time{position:absolute;top:8vh;left:0;right:0;text-align:center;text-shadow:0 2px 18px rgba(0,0,0,.25);pointer-events:none}
+.lk-date{font-size:clamp(15px,2.2vw,20px);font-weight:500;opacity:.88}
+.lk-clock{font-size:clamp(56px,10vw,92px);font-weight:600;letter-spacing:-.02em;line-height:1.05}
+@media (max-height:640px){.lk-time{display:none}}
+.lk-card{width:100%;max-width:290px;display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:6vh}
+.lk-card.err{animation:lk-shake .4s}
+@keyframes lk-shake{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
+.lk-av{width:104px;height:104px;border-radius:50%;background:#fff;display:grid;place-items:center;overflow:hidden;flex:none;box-shadow:0 8px 30px rgba(0,0,0,.3),0 0 0 3px rgba(255,255,255,.35)}
+.lk-av img{width:100%;height:100%;object-fit:cover;display:block}
+.lk-av svg{width:58%;height:58%;stroke:#a3a3ad;stroke-width:1.5}
+.lk-av.sm{width:72px;height:72px;box-shadow:0 0 0 1px var(--line)}
+.lk-card .lk-av{margin-bottom:10px}
+#lock .lk-in{width:100%;height:42px;border-radius:12px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.14);color:#fff;caret-color:#fff;padding:0 44px;font-size:15px;text-align:center;outline:none;box-shadow:none;transition:background .15s,border-color .15s,box-shadow .15s}
+#lock .lk-in::placeholder{color:rgba(255,255,255,.7)}
+#lock .lk-in:focus{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.75);box-shadow:0 0 0 3px rgba(255,255,255,.18)}
+#lock .lk-in:-webkit-autofill,#lock .lk-in:-webkit-autofill:focus{-webkit-text-fill-color:#fff;caret-color:#fff;box-shadow:0 0 0 1000px rgba(60,50,90,.9) inset;transition:background-color 9999s}
+.lk-pw2{position:relative;width:100%}
+.lk-go{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.22);color:#fff;display:grid;place-items:center;transition:background .15s}
+.lk-go:hover,.lk-go:focus-visible{background:rgba(255,255,255,.4);outline:none}
+.lk-go svg{width:16px;height:16px;stroke-width:2.4}
+.lk-msg{min-height:20px;font-size:13px;opacity:.85;text-align:center}
+.lk-msg.bad{color:#ffd6d6;opacity:1}
+@media (prefers-reduced-motion:reduce){#lock{transition:none}.lk-card.err{animation:none}}
+/* settings: login */
+.lk-row{display:flex;align-items:center;gap:16px}
+.lk-pwset{position:relative}.lk-pwset input{padding-right:48px}
+.lk-pwset .ib{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:32px;height:32px}
 </style></head>
-<body>
-<div id="toast" role="status" class="">Chapter pasted.</div>
+<body class="" style="--rc: nwse-resize;">
+<div id="lock" role="dialog" aria-modal="true" aria-label="Login">
+ <div class="lk-time"><div class="lk-date" id="lk-date">Wednesday, October 14</div><div class="lk-clock" id="lk-clock">9:18</div></div>
+ <form class="lk-card" id="lk-card" autocomplete="on">
+  <div class="lk-av" id="lk-av"></div>
+  <input class="lk-in" id="lk-user" type="text" name="username" placeholder="Username" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Username">
+  <div class="lk-pw2"><input class="lk-in" id="lk-pass" type="password" name="password" placeholder="Password" autocomplete="current-password" aria-label="Password"><button class="lk-go" type="submit" aria-label="Log in"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></div>
+  <div class="lk-msg" id="lk-msg" role="alert">Enter your login to continue</div>
+ </form>
+</div>
+<div id="toast" role="status" class=""></div>
+<div id="szbadge" style="display: none; left: 1325px; top: 612px;">280 × 216 px</div>
 <header>
  <button class="ib tone" style="background:var(--pc);color:var(--on-pc)" onclick="openModal('settings-modal')" title="Settings" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></button>
  <span class="brand" id="brand" title="Ataraxia">Ataraxia</span>
  <nav id="books" class="scroll-x" aria-label="Books"><div class="tab on" tabindex="0"><span>ASC</span><button class="ib" title="Edit book"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button></div><div class="tab" tabindex="0"><span>Legacy</span></div><div class="tab" tabindex="0"><span>Notes</span></div></nav>
+ <button class="ib tg" id="edit-toggle" onclick="setEdit(!editMode)" title="Move / edit layout" aria-label="Move or edit layout" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"></path></svg></button>
  <button class="btn fill" onclick="openAddBookModal()">+ Book</button>
 </header>
 <div class="shell">
@@ -108,8 +229,8 @@ textarea{resize:none;overflow:hidden;min-height:96px;display:block}
   <div class="side-top">
    <button class="btn tone sm" onclick="openAddChapterModal()">+ Chapter</button>
    <div class="dd">
-    <button class="ib" onclick="event.stopPropagation();toggleDropdown('side')" title="More" aria-label="More chapter actions"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button>
-    <div class="menu" id="menu-side"><button class="mi" onclick="startPaste('chapter')"><svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>Paste chapter</button></div>
+    <button class="ib" onclick="event.stopPropagation();toggleDropdown('side',this)" title="More" aria-label="More chapter actions"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button>
+    <div class="menu" id="menu-side" style="left: 39px; top: 122px;"><button class="mi" onclick="startPaste('chapter')"><svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>Paste chapter</button></div>
    </div>
   </div>
   <nav id="chs" aria-label="Chapters"><button class="chip-ch on" title="General">General</button><button class="chip-ch" title="Billing">Billing</button></nav>
@@ -118,22 +239,35 @@ textarea{resize:none;overflow:hidden;min-height:96px;display:block}
   <section class="hero">
    <div class="hero-in">
     <div class="hero-top"><h1 id="ht">General</h1><span class="chip"><b></b><span id="hc">2 pages</span></span></div>
-    <p id="hd" style="">General customer greetings and standard responses.</p>
+    <p id="hd">General customer greetings and standard responses.</p>
    </div>
    <div class="acts" id="hacts"><button class="btn xs fill">Edit info</button><div class="dd"><button class="ib sm" title="More" aria-label="More chapter actions"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-ch"><button class="mi" title="Paste a copied page into this chapter"><svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>Paste page</button><button class="mi" title="Copy this chapter and its pages so you can paste it into any book"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy chapter</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate chapter</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete chapter</button></div></div></div>
   </section>
-  <div class="ph"><h2>Pages</h2><button class="btn fill" onclick="openAddPageModal()">+ Add</button></div>
-  <div class="grid" id="grid"><div class="card"><div class="ch"><span class="ct">Opening</span><div class="ca"><button class="btn tone"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy</button><button class="ib" title="Edit page"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button><div class="dd"><button class="ib" title="More"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-p_asc_1"><button class="mi" title="Copy this page so you can paste it into another chapter"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy page</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate page</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete page</button></div></div></div></div><div class="cc">Thank you for contacting Allstate where you're in good hands. This is Gabriel and I'll be assisting you for today.</div></div><div class="card"><div class="ch"><span class="ct">Recap</span><div class="ca"><button class="btn tone"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy</button><button class="ib" title="Edit page"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button><div class="dd"><button class="ib" title="More"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-p_1791901074458"><button class="mi" title="Copy this page so you can paste it into another chapter"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy page</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate page</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete page</button></div></div></div></div><div class="cc">Aside from <span class="var" contenteditable="plaintext-only" spellcheck="false" data-k="text" data-ph="XXX" data-pid="p_1791901074458" data-i="0" role="textbox" aria-label="Fill in text" autocapitalize="off" autocorrect="off">XXX</span> is there anything else I can help you with for today?</div></div></div>
+  <div class="ph"><h2>Workspace<span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button class="btn tone" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" onclick="openAddPageModal()">+ Add</button></div>
+  <div class="empty" id="ws-empty" hidden="">No pages yet. Use + Add to create one, or + Board for a board.</div>
+  <div id="ws"><div id="wsc" data-zone="" class="" style="height: 400px; min-width: max(100%, 664px);"><div class="card fi" data-pid="p_asc_1" style="left: 16px; top: 16px; width: 320px; height: 144px;"><div class="ch"><span class="grip" tabindex="0" role="button" title="Drag anywhere on the card to move it. Arrow keys nudge, Alt + arrows resize." aria-label="Move page Opening"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.7"></circle><circle cx="15" cy="6" r="1.7"></circle><circle cx="9" cy="12" r="1.7"></circle><circle cx="15" cy="12" r="1.7"></circle><circle cx="9" cy="18" r="1.7"></circle><circle cx="15" cy="18" r="1.7"></circle></svg></span><span class="ct">Opening</span><div class="ca"><button class="btn tone" title="Copy" aria-label="Copy page text"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span class="lbl">Copy</span></button><button class="ib ed-btn" title="Edit page"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button><div class="dd"><button class="ib" title="More"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-p_asc_1"><button class="mi"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>Edit page</button><button class="mi" title="Resize this page so all of its text shows"><svg viewBox="0 0 24 24"><path d="M12 3v18M8 7l4-4 4 4M8 17l4 4 4-4"></path></svg>Fit height to text</button><button class="mi" title="Copy this page so you can paste it into another chapter"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy page</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate page</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete page</button></div></div></div></div><div class="cc">Thank you for contacting Allstate where you're in good hands. This is Gabriel and I'll be assisting you for today.</div><div class="rz n" data-d="n" aria-hidden="true"></div><div class="rz s" data-d="s" aria-hidden="true"></div><div class="rz e" data-d="e" aria-hidden="true"></div><div class="rz w" data-d="w" aria-hidden="true"></div><div class="rz ne" data-d="ne" aria-hidden="true"></div><div class="rz nw" data-d="nw" aria-hidden="true"></div><div class="rz se" data-d="se" aria-hidden="true"></div><div class="rz sw" data-d="sw" aria-hidden="true"></div></div><div class="card fi" data-pid="p_1791901074458" style="left: 352px; top: 16px; width: 296px; height: 120px;"><div class="ch"><span class="grip" tabindex="0" role="button" title="Drag anywhere on the card to move it. Arrow keys nudge, Alt + arrows resize." aria-label="Move page Recap"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.7"></circle><circle cx="15" cy="6" r="1.7"></circle><circle cx="9" cy="12" r="1.7"></circle><circle cx="15" cy="12" r="1.7"></circle><circle cx="9" cy="18" r="1.7"></circle><circle cx="15" cy="18" r="1.7"></circle></svg></span><span class="ct">Recap</span><div class="ca"><button class="btn tone" title="Copy" aria-label="Copy page text"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span class="lbl">Copy</span></button><button class="ib ed-btn" title="Edit page"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button><div class="dd"><button class="ib" title="More"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-p_1791901074458"><button class="mi"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>Edit page</button><button class="mi" title="Resize this page so all of its text shows"><svg viewBox="0 0 24 24"><path d="M12 3v18M8 7l4-4 4 4M8 17l4 4 4-4"></path></svg>Fit height to text</button><button class="mi" title="Copy this page so you can paste it into another chapter"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy page</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate page</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete page</button></div></div></div></div><div class="cc">Aside from <span class="var" contenteditable="plaintext-only" spellcheck="false" data-k="text" data-ph="XXX" data-pid="p_1791901074458" data-i="0" role="textbox" aria-label="Fill in text" autocapitalize="off" autocorrect="off">XXX</span> is there anything else I can help you with for today?</div><div class="rz n" data-d="n" aria-hidden="true"></div><div class="rz s" data-d="s" aria-hidden="true"></div><div class="rz e" data-d="e" aria-hidden="true"></div><div class="rz w" data-d="w" aria-hidden="true"></div><div class="rz ne" data-d="ne" aria-hidden="true"></div><div class="rz nw" data-d="nw" aria-hidden="true"></div><div class="rz se" data-d="se" aria-hidden="true"></div><div class="rz sw" data-d="sw" aria-hidden="true"></div></div></div></div>
  </div></main>
 </div>
 
-<div class="ov open" id="settings-modal"><div class="modal">
+<div class="ov" id="settings-modal"><div class="modal">
  <div class="mh"><span>Settings</span><button class="ib" onclick="closeModal('settings-modal')" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"></path></svg></button></div>
  <div class="mb">
   <div><label for="site-name-input">Website name</label><input type="text" id="site-name-input" maxlength="40" autocomplete="off"><p class="hint">Shown at the top left and used as the file name when you save.</p></div>
   <div><label>Appearance</label><div class="seg" id="modes"><button>Auto</button><button class="on">Light</button><button>Dark</button><button>Black</button></div></div>
-  <div><label>Accent color</label><div class="sw" id="accents"><button style="--c: 358;" title="Red" aria-label="Red"></button><button style="--c: 8;" title="Coral" aria-label="Coral"></button><button style="--c: 18;" title="Orange" aria-label="Orange"></button><button style="--c: 30;" title="Amber" aria-label="Amber"></button><button style="--c: 42;" title="Gold" aria-label="Gold"></button><button style="--c: 56;" title="Yellow" aria-label="Yellow"></button><button style="--c: 75;" title="Olive" aria-label="Olive"></button><button style="--c: 100;" title="Lime" aria-label="Lime"></button><button style="--c: 140;" title="Green" aria-label="Green"></button><button style="--c: 158;" title="Mint" aria-label="Mint"></button><button style="--c: 174;" title="Teal" aria-label="Teal"></button><button style="--c: 188;" title="Cyan" aria-label="Cyan"></button><button style="--c: 198;" title="Sky" aria-label="Sky"></button><button class="on" style="--c: 207;" title="Blue" aria-label="Blue"></button><button style="--c: 232;" title="Indigo" aria-label="Indigo"></button><button style="--c: 257;" title="Purple" aria-label="Purple"></button><button style="--c: 275;" title="Violet" aria-label="Violet"></button><button style="--c: 300;" title="Magenta" aria-label="Magenta"></button><button style="--c: 322;" title="Pink" aria-label="Pink"></button><button style="--c: 340;" title="Rose" aria-label="Rose"></button></div></div>
-  <div><label>Save your changes</label><div class="seg"><button class="btn fill" onclick="saveDirectToFile()">Save</button></div></div>
+  <div><label>Accent color</label><div class="sw" id="accents"><button style="--c: 358;" title="Red" aria-label="Red"></button><button style="--c: 8;" title="Coral" aria-label="Coral"></button><button style="--c: 18;" title="Orange" aria-label="Orange"></button><button style="--c: 30;" title="Amber" aria-label="Amber"></button><button style="--c: 42;" title="Gold" aria-label="Gold"></button><button style="--c: 56;" title="Yellow" aria-label="Yellow"></button><button style="--c: 75;" title="Olive" aria-label="Olive"></button><button style="--c: 100;" title="Lime" aria-label="Lime"></button><button style="--c: 140;" title="Green" aria-label="Green"></button><button style="--c: 158;" title="Mint" aria-label="Mint"></button><button style="--c: 174;" title="Teal" aria-label="Teal"></button><button style="--c: 188;" title="Cyan" aria-label="Cyan"></button><button style="--c: 198;" title="Sky" aria-label="Sky"></button><button style="--c: 207;" title="Blue" aria-label="Blue"></button><button class="on" style="--c: 232;" title="Indigo" aria-label="Indigo"></button><button style="--c: 257;" title="Purple" aria-label="Purple"></button><button style="--c: 275;" title="Violet" aria-label="Violet"></button><button style="--c: 300;" title="Magenta" aria-label="Magenta"></button><button style="--c: 322;" title="Pink" aria-label="Pink"></button><button style="--c: 340;" title="Rose" aria-label="Rose"></button></div></div>
+  <div><label>Profile picture</label><div class="lk-row"><div class="lk-av sm" id="set-av"></div><div class="seg"><button class="btn tone sm" id="av-up" type="button">Upload</button><button class="btn out sm" id="av-rm" type="button">Remove</button></div><input type="file" id="av-file" accept="image/*" hidden=""></div><p class="hint">Shown on the login screen. Saved inside the HTML file when you press Save. Please avoid uploading large images to avoid issues.</p></div>
+  <div><label for="set-user">Login username</label><input type="text" id="set-user" maxlength="40" placeholder="Custom username" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
+  <div><label for="set-pass">Login password</label><div class="lk-pwset"><input type="password" id="set-pass" maxlength="64" placeholder="New password (min 4 characters)" autocomplete="new-password"><button class="ib" id="set-eye" type="button" aria-label="Show password"><svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></div><p class="hint" id="set-status">Please set your own password.</p><div class="seg" style="margin-top:10px"><button class="btn fill sm" id="cred-save" type="button">Save login</button><button class="btn out danger sm" id="cred-clear" type="button">Remove custom</button><button class="btn tone sm" id="lock-now" type="button">Lock now</button></div></div>
+  <div>
+    <label>Backup &amp; Sync Data</label>
+    <div class="seg">
+      <button class="btn tone" onclick="exportAppData()">Export Data</button>
+      <button class="btn out" onclick="document.getElementById('import-data-file').click()">Import Data</button>
+    </div>
+    <input type="file" id="import-data-file" accept=".txt,.json" style="display: none;" onchange="importAppData(event)">
+    <p class="hint">Export your workspace data to continue on another device, then import it back.</p>
+  </div>
+  <div><label>Please save everytime you make a change.</label><div class="seg"><button class="btn fill" onclick="saveDirectToFile()">Save</button></div></div>
   <p class="credit">ataraxia</p>
  </div>
  <div class="mf"><button class="btn tone" onclick="closeModal('settings-modal')">Close</button></div>
@@ -141,7 +275,7 @@ textarea{resize:none;overflow:hidden;min-height:96px;display:block}
 
 <div class="ov" id="book-modal"><div class="modal">
  <div class="mh"><span id="book-modal-title">Edit Book</span></div>
- <div class="mb"><input type="hidden" id="book-id-input" value="b_1791896094260"><div><label for="book-title-input">Book title</label><input type="text" id="book-title-input" placeholder="e.g. ASC, Legacy..."></div></div>
+ <div class="mb"><input type="hidden" id="book-id-input"><div><label for="book-title-input">Book title</label><input type="text" id="book-title-input" placeholder="e.g. ASC, Legacy..."></div></div>
  <div class="mf"><button class="btn out danger" id="book-del" onclick="deleteBook()" style="margin-right:auto">Delete</button><button class="btn out" onclick="closeModal('book-modal')">Cancel</button><button class="btn fill" onclick="saveBook()">Save Book</button></div>
 </div></div>
 
@@ -156,19 +290,32 @@ textarea{resize:none;overflow:hidden;min-height:96px;display:block}
 </div></div>
 
 <div class="ov" id="page-modal"><div class="modal">
- <div class="mh"><span id="page-modal-title">Add Page</span></div>
- <div class="mb"><input type="hidden" id="page-id-input">
+ <div class="mh"><span id="page-modal-title">Edit Page</span></div>
+ <div class="mb"><input type="hidden" id="page-id-input" value="p_1791901074458"><input type="hidden" id="page-container-input" value="k_1791982868525_zoji">
   <div><label for="page-title-input">Title</label><input type="text" id="page-title-input" placeholder="e.g. Opening, Hold spiel..."></div>
   <div>
    <div class="vbar"><label for="page-content-input">Content</label><span class="vl">Insert</span>
     <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('XXX')" title="Adds XXX, fill it in with anything">XXX</button>
     <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('DATE')" title="Adds XX/XX/XXXX, fill it in with a date">DATE</button>
     <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('AMT')" title="Adds $XXX, fill it in with an amount">AMT</button>
+    <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('YN')" title="Adds [Yes], a Yes/No toggle. Write [No] instead to start on No">Y/N</button>
    </div>
-   <textarea id="page-content-input" placeholder="Type or paste your text here..."></textarea>
+   <textarea id="page-content-input" placeholder="Type or paste your text here..." style="height: 94px;"></textarea>
+   <p class="hint">Y/N adds a Yes/No toggle. It always shows Yes or No: [Yes] starts on Yes, [No] starts on No. Click it to switch.</p>
   </div>
  </div>
  <div class="mf"><button class="btn out" onclick="closeModal('page-modal')">Cancel</button><button class="btn fill" onclick="savePage()">Save Page</button></div>
+</div></div>
+
+<div class="ov" id="container-modal"><div class="modal">
+ <div class="mh"><span id="container-modal-title">Add Board</span></div>
+ <div class="mb"><input type="hidden" id="container-id-input" value="">
+  <div><label for="container-name-input">Board title</label><input type="text" id="container-name-input" maxlength="60" placeholder="e.g. Hold scripts, Refund flow..."></div>
+  <div><label>Border color</label><div class="cpick" id="cpick-border"><button class="csw def on" type="button" title="Default" aria-label="Default color"></button><button class="csw" type="button" style="background: rgb(229, 115, 115);" data-c="#e57373" title="#e57373" aria-label="Color #e57373"></button><button class="csw" type="button" style="background: rgb(240, 163, 94);" data-c="#f0a35e" title="#f0a35e" aria-label="Color #f0a35e"></button><button class="csw" type="button" style="background: rgb(230, 195, 74);" data-c="#e6c34a" title="#e6c34a" aria-label="Color #e6c34a"></button><button class="csw" type="button" style="background: rgb(127, 199, 127);" data-c="#7fc77f" title="#7fc77f" aria-label="Color #7fc77f"></button><button class="csw" type="button" style="background: rgb(77, 182, 172);" data-c="#4db6ac" title="#4db6ac" aria-label="Color #4db6ac"></button><button class="csw" type="button" style="background: rgb(100, 181, 246);" data-c="#64b5f6" title="#64b5f6" aria-label="Color #64b5f6"></button><button class="csw" type="button" style="background: rgb(149, 117, 205);" data-c="#9575cd" title="#9575cd" aria-label="Color #9575cd"></button><button class="csw" type="button" style="background: rgb(240, 98, 146);" data-c="#f06292" title="#f06292" aria-label="Color #f06292"></button><button class="csw" type="button" style="background: rgb(158, 158, 158);" data-c="#9e9e9e" title="#9e9e9e" aria-label="Color #9e9e9e"></button><button class="csw" type="button" style="background: rgb(43, 43, 43);" data-c="#2b2b2b" title="#2b2b2b" aria-label="Color #2b2b2b"></button><span class="csw custom" title="Custom color"><input type="color" aria-label="Custom color"></span></div></div>
+  <div><label>Background color</label><div class="cpick" id="cpick-bg"><button class="csw def on" type="button" title="Default" aria-label="Default color"></button><button class="csw" type="button" style="background: rgb(253, 236, 234);" data-c="#fdecea" title="#fdecea" aria-label="Color #fdecea"></button><button class="csw" type="button" style="background: rgb(255, 241, 224);" data-c="#fff1e0" title="#fff1e0" aria-label="Color #fff1e0"></button><button class="csw" type="button" style="background: rgb(255, 249, 219);" data-c="#fff9db" title="#fff9db" aria-label="Color #fff9db"></button><button class="csw" type="button" style="background: rgb(232, 245, 233);" data-c="#e8f5e9" title="#e8f5e9" aria-label="Color #e8f5e9"></button><button class="csw" type="button" style="background: rgb(224, 242, 241);" data-c="#e0f2f1" title="#e0f2f1" aria-label="Color #e0f2f1"></button><button class="csw" type="button" style="background: rgb(227, 242, 253);" data-c="#e3f2fd" title="#e3f2fd" aria-label="Color #e3f2fd"></button><button class="csw" type="button" style="background: rgb(237, 231, 246);" data-c="#ede7f6" title="#ede7f6" aria-label="Color #ede7f6"></button><button class="csw" type="button" style="background: rgb(252, 228, 236);" data-c="#fce4ec" title="#fce4ec" aria-label="Color #fce4ec"></button><button class="csw" type="button" style="background: rgb(238, 238, 238);" data-c="#eeeeee" title="#eeeeee" aria-label="Color #eeeeee"></button><button class="csw" type="button" style="background: rgb(37, 38, 43);" data-c="#25262b" title="#25262b" aria-label="Color #25262b"></button><span class="csw custom" title="Custom color"><input type="color" aria-label="Custom color"></span></div></div>
+  <div><label>Preview</label><div class="cprev" id="cprev" style=""><b id="cprev-name">test</b><i></i></div></div>
+ </div>
+ <div class="mf"><button class="btn out danger" id="container-del" onclick="deleteContainer($('container-id-input').value)" style="margin-right: auto; display: none;">Delete</button><button class="btn out" onclick="closeModal('container-modal')">Cancel</button><button class="btn fill" onclick="saveContainer()">Save</button></div>
 </div></div>
 
 <div class="ov" id="paste-modal"><div class="modal">
@@ -232,53 +379,101 @@ textarea{resize:none;overflow:hidden;min-height:96px;display:block}
       "id": "p_asc_1",
       "chapterId": "c_asc_gen",
       "title": "Opening",
-      "content": "Thank you for contacting Allstate where you're in good hands. This is Gabriel and I'll be assisting you for today."
+      "content": "Thank you for contacting Allstate where you're in good hands. This is Gabriel and I'll be assisting you for today.",
+      "x": 2,
+      "y": 2,
+      "w": 40,
+      "h": 18,
+      "containerId": ""
     },
     {
       "id": "p_leg_1",
       "chapterId": "c_leg_gen",
       "title": "Opening",
-      "content": "Thank you for contacting Allstate where you're in good hands. This is Gabriel and I'll be assisting you for today."
+      "content": "Thank you for contacting Allstate where you're in good hands. This is Gabriel and I'll be assisting you for today.",
+      "containerId": "",
+      "x": 2,
+      "y": 2,
+      "w": 40,
+      "h": 18
     },
     {
       "id": "p_1791896071640",
       "chapterId": "c_1791896042747",
       "title": "Recap",
-      "content": "Aside from your billing concern, is there anything else I can help you with?"
+      "content": "Aside from your billing concern, is there anything else I can help you with?",
+      "containerId": "",
+      "x": 2,
+      "y": 2,
+      "w": 40,
+      "h": 15
     },
     {
       "id": "p_1791901074458",
       "chapterId": "c_asc_gen",
       "title": "Recap",
-      "content": "Aside from XXX is there anything else I can help you with for today?"
+      "content": "Aside from XXX is there anything else I can help you with for today?",
+      "x": 44,
+      "y": 2,
+      "w": 37,
+      "h": 15,
+      "containerId": ""
     },
     {
       "id": "p_1791901306253_9gc0",
       "chapterId": "c_1791901306253_7dv2",
       "title": "Recap",
-      "content": "Aside from your billing concern, is there anything else I can help you with?"
+      "content": "Aside from your billing concern, is there anything else I can help you with?",
+      "containerId": "",
+      "x": 2,
+      "y": 2,
+      "w": 40,
+      "h": 15
+    },
+    {
+      "id": "p_1791983595234_5mxb",
+      "chapterId": "c_leg_gen",
+      "containerId": "",
+      "title": "Recap",
+      "content": "Aside from XXX is there anything else I can help you with for today?",
+      "w": 37,
+      "h": 15,
+      "y": 2,
+      "x": 44
     }
   ],
   "settings": {
     "mode": "light",
-    "accent": "Blue",
+    "accent": "Indigo",
     "title": "Ataraxia"
-  }
+  },
+  "containers": [],
+  "layoutVer": 3
 }/*DATA_END*/;</script>
 <script>
 const $=id=>document.getElementById(id);
-const IC={pen:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',dots:'<circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>',link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',dup:'<path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>',trash:'<path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',paste:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>'};
+const IC={pen:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',dots:'<circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>',link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',dup:'<path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>',trash:'<path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',paste:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',grip:'<circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/>',plus:'<path d="M12 5v14M5 12h14"/>',move:'<path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/>',fit:'<path d="M12 3v18M8 7l4-4 4 4M8 17l4 4 4-4"/>'};
 const ic=n=>'<svg viewBox="0 0 24 24">'+IC[n]+'</svg>';
 const ACCENTS={Red:358,Coral:8,Orange:18,Amber:30,Gold:42,Yellow:56,Olive:75,Lime:100,Green:140,Mint:158,Teal:174,Cyan:188,Sky:198,Blue:207,Indigo:232,Purple:257,Violet:275,Magenta:300,Pink:322,Rose:340};
 const MODES={auto:'Auto',light:'Light',dark:'Dark',black:'Black'};
 const DEF_NAME="Paano ba 'yan?";
+const GRID=8;/* px per grid unit. Positions and sizes are stored in grid units */
+const PAD=2,MIN_PW=20,MIN_PH=10,MIN_BW=30,MIN_BH=20,DEF_PW=40,DEF_BW=52,DEF_BH=38,DEF_MAXH=80,MAX_U=400,MIN_WS=50,PAD_B=12;
+const clamp=(v,a,b)=>Math.min(Math.max(v,a),b);
 let appData,fileHandle=null,handleName='';
 function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
 function showToast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200)}
 function persistLocal(){try{localStorage.setItem('paano_ba_yan_data',JSON.stringify(appData))}catch(e){}}
+function hex(v){return /^#[0-9a-f]{6}$/i.test(v||'')?String(v).toLowerCase():''}
 function load(){let s=null;try{s=localStorage.getItem('paano_ba_yan_data')}catch(e){}
  try{appData=s?JSON.parse(s):INITIAL_DATA}catch(e){appData=INITIAL_DATA}
  appData.books=appData.books||[];appData.chapters=appData.chapters||[];appData.pages=appData.pages||[];
+ appData.containers=Array.isArray(appData.containers)?appData.containers:[];/* older saves have none */
+ if((appData.layoutVer||0)<3){/* older saves kept board geometry in pixels */
+  appData.containers.forEach(c=>{c.x=(+c.x||0)/GRID;c.y=(+c.y||0)/GRID;c.w=(+c.w||420)/GRID;c.h=(+c.h||300)/GRID;c.mig=true})}
+ appData.containers.forEach(c=>{c.name=String(c.name||'Board');c.x=num(c.x);c.y=num(c.y);c.w=Math.max(MIN_BW,num(c.w)||DEF_BW);c.h=Math.max(MIN_BH,num(c.h)||DEF_BH);c.border=hex(c.border);c.bg=hex(c.bg)});
+ appData.pages.forEach(p=>{p.x=num(p.x);p.y=num(p.y);p.w=num(p.w);p.h=num(p.h);if(p.w!==undefined)p.w=Math.max(MIN_PW,p.w);if(p.h!==undefined)p.h=Math.max(MIN_PH,p.h);p.containerId=p.containerId||''});
+ appData.layoutVer=3;
  if(!appData.books.length)appData.books=[{id:'b_'+Date.now(),name:'Notes'}];
  if(!appData.books.find(b=>b.id===appData.activeBookId))appData.activeBookId=appData.books[0].id;
  appData.settings=Object.assign({mode:'auto',accent:'Purple',title:DEF_NAME},appData.settings||{})}
@@ -313,25 +508,48 @@ function renderHero(){const c=curChap(),a=$('hacts');a.innerHTML='';
  $('hc').textContent=n+(n===1?' page':' pages');$('ht').textContent=c.name;$('hd').textContent=c.description||'';$('hd').style.display=c.description?'':'none';
  const e=el('button','btn xs fill','Edit info');e.onclick=openEditChapterModal;a.append(e);
  if(c.referenceLink&&c.referenceLink.trim()){let u=c.referenceLink.trim();if(!/^https?:\/\//i.test(u))u='https://'+u;const l=el('a','btn xs out',ic('link')+'<span></span>');l.lastChild.textContent='Reference';l.href=u;l.target='_blank';l.rel='noopener';a.append(l)}
- const dd=el('div','dd'),db=el('button','ib sm',ic('dots')),m=el('div','menu');m.id='menu-ch';db.title='More';db.setAttribute('aria-label','More chapter actions');db.onclick=ev=>{ev.stopPropagation();toggleDropdown('ch')};
+ const dd=el('div','dd'),db=el('button','ib sm',ic('dots')),m=el('div','menu');m.id='menu-ch';db.title='More';db.setAttribute('aria-label','More chapter actions');db.onclick=ev=>{ev.stopPropagation();toggleDropdown('ch',db)};
  const pp=el('button','mi',ic('paste')+'Paste page');pp.title='Paste a copied page into this chapter';pp.onclick=()=>startPaste('page');
  const cc=el('button','mi',ic('copy')+'Copy chapter');cc.title='Copy this chapter and its pages so you can paste it into any book';cc.onclick=()=>copyChapterData(c.id);
  const du=el('button','mi',ic('dup')+'Duplicate chapter');du.onclick=()=>duplicateChapter(c.id);const de=el('button','mi del',ic('trash')+'Delete chapter');de.onclick=()=>deleteChapter(c.id);
  m.append(pp,cc,du,de);dd.append(db,m);a.append(dd)}
-function renderPages(){const g=$('grid');g.innerHTML='';
- if(!curChap()){g.append(el('div','empty','Select or add a chapter to see its pages.'));return}
- const list=appData.pages.filter(p=>p.chapterId===appData.activeChapterId);
- if(!list.length){g.append(el('div','empty','No pages yet. Use + Add to create one.'));return}
- list.forEach(p=>{const card=el('div','card'),h=el('div','ch'),t=el('span','ct'),a=el('div','ca');t.textContent=p.title;
-  const cp=el('button','btn tone',ic('copy')+'Copy');cp.onclick=()=>copyPage(p.id);
-  const ed=el('button','ib',ic('pen'));ed.title='Edit page';ed.onclick=()=>openEditPageModal(p.id);
-  const dd=el('div','dd'),db=el('button','ib',ic('dots')),m=el('div','menu');m.id='menu-'+p.id;db.title='More';db.onclick=e=>{e.stopPropagation();toggleDropdown(p.id)};
-  const cpd=el('button','mi',ic('copy')+'Copy page');cpd.title='Copy this page so you can paste it into another chapter';cpd.onclick=()=>copyPageData(p.id);
-  const du=el('button','mi',ic('dup')+'Duplicate page');du.onclick=()=>duplicatePage(p.id);const de=el('button','mi del',ic('trash')+'Delete page');de.onclick=()=>deletePage(p.id);
-  m.append(cpd,du,de);dd.append(db,m);a.append(cp,ed,dd);h.append(t,a);
-  const c=el('div','cc');buildSpiel(c,p);card.append(h,c);g.append(card)})}
-function toggleDropdown(id){document.querySelectorAll('.menu').forEach(m=>{if(m.id!=='menu-'+id)m.classList.remove('show')});const t=$('menu-'+id);if(t)t.classList.toggle('show')}
-document.addEventListener('click',()=>document.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show')));
+/* pages + board */
+function getCons(){return appData.containers.filter(c=>c.chapterId===appData.activeChapterId)}
+const RZ=['n','s','e','w','ne','nw','se','sw'];
+function addHandles(host){RZ.forEach(d=>{const r=el('div','rz '+d);r.dataset.d=d;r.setAttribute('aria-hidden','true');host.append(r)})}
+function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),t=el('span','ct'),a=el('div','ca');card.dataset.pid=p.id;t.textContent=p.title;
+ const gr=el('span','grip',ic('grip'));gr.tabIndex=0;gr.setAttribute('role','button');gr.title='Drag anywhere on the card to move it. Arrow keys nudge, Alt + arrows resize.';gr.setAttribute('aria-label','Move page '+p.title);
+ gr.addEventListener('keydown',e=>gripKey(e,p.id));
+ const cp=el('button','btn tone',ic('copy')+'<span class="lbl">Copy</span>');cp.title='Copy';cp.setAttribute('aria-label','Copy page text');cp.onclick=()=>copyPage(p.id);
+ const ed=el('button','ib ed-btn',ic('pen'));ed.title='Edit page';ed.onclick=()=>openEditPageModal(p.id);
+ const dd=el('div','dd'),db=el('button','ib',ic('dots')),m=el('div','menu');m.id='menu-'+p.id;db.title='More';db.onclick=e=>{e.stopPropagation();toggleDropdown(p.id,db)};
+ const edm=el('button','mi',ic('pen')+'Edit page');edm.onclick=()=>openEditPageModal(p.id);
+ const ft=el('button','mi',ic('fit')+'Fit height to text');ft.title='Resize this page so all of its text shows';ft.onclick=()=>fitPageHeight(p.id);
+ const cpd=el('button','mi',ic('copy')+'Copy page');cpd.title='Copy this page so you can paste it into another chapter';cpd.onclick=()=>copyPageData(p.id);
+ const du=el('button','mi',ic('dup')+'Duplicate page');du.onclick=()=>duplicatePage(p.id);const de=el('button','mi del',ic('trash')+'Delete page');de.onclick=()=>deletePage(p.id);
+ m.append(edm,ft,cpd,du,de);dd.append(db,m);a.append(cp,ed,dd);h.append(gr,t,a);
+ const c=el('div','cc');buildSpiel(c,p);card.append(h,c);addHandles(card);return card}
+function renderPages(){const ws=$('ws'),wsc=$('wsc'),em=$('ws-empty');wsc.classList.add('nt');wsc.innerHTML='';nodes.clear();
+ const ch=curChap();
+ if(!ch){ws.hidden=true;em.hidden=false;em.textContent='Select or add a chapter to see its pages.';wsc.classList.remove('nt');return}
+ ws.hidden=false;
+ const cons=getCons(),ids=new Set(cons.map(c=>c.id)),all=appData.pages.filter(p=>p.chapterId===ch.id);
+ all.forEach(p=>{if(p.containerId&&!ids.has(p.containerId)){p.containerId='';p.x=p.y=undefined}});
+ cons.forEach(c=>wsc.append(buildBox(c,all.filter(p=>p.containerId===c.id))));
+ all.filter(p=>!p.containerId).forEach(p=>{const n=buildCard(p);nodes.set(p.id,n);wsc.append(n)});
+ layoutDirty=false;ensureLayout();applyAll();fitAll();
+ em.hidden=!!(all.length||cons.length);em.textContent='No pages yet. Use + Add to create one, or + Board for a board.';
+ void wsc.offsetWidth;wsc.classList.remove('nt');
+ if(layoutDirty)persistLocal()}
+function closeMenus(){document.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show'))}
+function toggleDropdown(id,btn){document.querySelectorAll('.menu').forEach(m=>{if(m.id!=='menu-'+id)m.classList.remove('show')});const t=$('menu-'+id);if(!t)return;
+ const open=!t.classList.contains('show');t.classList.toggle('show',open);
+ if(open&&btn){const r=btn.getBoundingClientRect(),w=t.offsetWidth,h=t.offsetHeight;/* menus are fixed-position so scrolling containers never clip them */
+  const l=Math.min(Math.max(8,r.right-w),innerWidth-w-8);let tp=r.bottom+6;if(tp+h>innerHeight-8)tp=Math.max(8,r.top-h-6);
+  t.style.left=l+'px';t.style.top=tp+'px'}}
+document.addEventListener('click',closeMenus);
+addEventListener('scroll',closeMenus,true);
+addEventListener('resize',()=>{closeMenus();if(!$('ws').hidden)fitAll()});
 $('books').addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){e.preventDefault();e.currentTarget.scrollLeft+=e.deltaY}},{passive:false});
 /* modals */
 function autosize(t){t.style.height='auto';t.style.height=t.scrollHeight+'px'}
@@ -339,7 +557,7 @@ function openModal(id){$(id).classList.add('open');document.querySelectorAll('#'
 function closeModal(id){$(id).classList.remove('open')}
 document.querySelectorAll('textarea').forEach(t=>t.addEventListener('input',()=>autosize(t)));
 document.querySelectorAll('.ov').forEach(o=>o.addEventListener('mousedown',e=>{if(e.target===o)o.classList.remove('open')}));
-document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'))});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(ps){cancelPs();return}closeMenus();document.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'))}});
 /* books */
 function openAddBookModal(){$('book-modal-title').textContent='Add Book';$('book-id-input').value='';$('book-title-input').value='';$('book-del').style.display='none';openModal('book-modal')}
 function openEditBookModal(id){const b=appData.books.find(x=>x.id===id);if(!b)return;$('book-modal-title').textContent='Edit Book';$('book-id-input').value=b.id;$('book-title-input').value=b.name;$('book-del').style.display=appData.books.length>1?'':'none';openModal('book-modal')}
@@ -347,7 +565,7 @@ function saveBook(){const id=$('book-id-input').value,t=$('book-title-input').va
  if(id){appData.books.find(b=>b.id===id).name=t}else{const b={id:'b_'+Date.now(),name:t};appData.books.push(b);appData.activeBookId=b.id;appData.activeChapterId=''}
  persistLocal();closeModal('book-modal');renderAll();$('books').scrollLeft=1e6*(id?0:1)}
 function deleteBook(){const id=$('book-id-input').value;if(!confirm('Delete this book with all its chapters and pages?'))return;
- const ch=appData.chapters.filter(c=>c.bookId===id).map(c=>c.id);appData.pages=appData.pages.filter(p=>!ch.includes(p.chapterId));appData.chapters=appData.chapters.filter(c=>c.bookId!==id);appData.books=appData.books.filter(b=>b.id!==id);
+ const ch=appData.chapters.filter(c=>c.bookId===id).map(c=>c.id);appData.pages=appData.pages.filter(p=>!ch.includes(p.chapterId));appData.containers=appData.containers.filter(c=>!ch.includes(c.chapterId));appData.chapters=appData.chapters.filter(c=>c.bookId!==id);appData.books=appData.books.filter(b=>b.id!==id);
  selectBook(appData.books[0].id);closeModal('book-modal');showToast('Book deleted.')}
 /* chapters */
 function openAddChapterModal(){$('chapter-modal-title').textContent='Add Chapter';['id','name','desc','link'].forEach(k=>$('chapter-'+k+'-input').value='');openModal('chapter-modal')}
@@ -357,25 +575,206 @@ function saveChapter(){const id=$('chapter-id-input').value,name=$('chapter-name
  persistLocal();closeModal('chapter-modal');renderAll()}
 function duplicateChapter(id){const s=appData.chapters.find(c=>c.id===id);if(!s)return;const nid='c_'+Date.now();
  appData.chapters.push({id:nid,bookId:s.bookId,name:s.name+' (Copy)',description:s.description,referenceLink:s.referenceLink});
- appData.pages.filter(p=>p.chapterId===id).forEach(p=>appData.pages.push({id:'p_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),chapterId:nid,title:p.title,content:p.content}));
+ const map={};appData.containers.filter(c=>c.chapterId===id).forEach(c=>{const k='k_'+rid();map[c.id]=k;appData.containers.push(Object.assign({},c,{id:k,chapterId:nid}))});
+ appData.pages.filter(p=>p.chapterId===id).forEach(p=>appData.pages.push({id:'p_'+rid(),chapterId:nid,containerId:map[p.containerId]||'',title:p.title,content:p.content,x:p.x,y:p.y,w:p.w,h:p.h}));
  appData.activeChapterId=nid;persistLocal();renderAll();showToast('Chapter duplicated.')}
 function deleteChapter(id){if(!confirm('Delete this chapter and its pages?'))return;
- appData.chapters=appData.chapters.filter(c=>c.id!==id);appData.pages=appData.pages.filter(p=>p.chapterId!==id);
+ appData.chapters=appData.chapters.filter(c=>c.id!==id);appData.pages=appData.pages.filter(p=>p.chapterId!==id);appData.containers=appData.containers.filter(c=>c.chapterId!==id);
  const r=appData.chapters.filter(c=>c.bookId===appData.activeBookId);appData.activeChapterId=r.length?r[0].id:'';persistLocal();renderAll();showToast('Chapter deleted.')}
 /* pages */
-function openAddPageModal(){if(!appData.activeChapterId){showToast('Select a chapter first.');return}
- $('page-modal-title').textContent='Add Page';['id','title','content'].forEach(k=>$('page-'+k+'-input').value='');openModal('page-modal')}
-function openEditPageModal(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;$('page-modal-title').textContent='Edit Page';$('page-id-input').value=p.id;$('page-title-input').value=p.title;$('page-content-input').value=p.content;openModal('page-modal')}
-function savePage(){const id=$('page-id-input').value,title=$('page-title-input').value.trim(),content=$('page-content-input').value;if(!title)return;
- if(id){const pg=appData.pages.find(p=>p.id===id);if(pg.content!==content)delete varVals[id];Object.assign(pg,{title,content})}else appData.pages.push({id:'p_'+Date.now(),chapterId:appData.activeChapterId,title,content});
- persistLocal();closeModal('page-modal');renderHero();renderPages()}
-function duplicatePage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;appData.pages.push({id:'p_'+Date.now(),chapterId:p.chapterId,title:p.title+' (Copy)',content:p.content});persistLocal();renderHero();renderPages();showToast('Page duplicated.')}
+function openAddPageModal(z){if(!appData.activeChapterId){showToast('Select a chapter first.');return}
+ $('page-modal-title').textContent='Add Page';['id','title','content'].forEach(k=>$('page-'+k+'-input').value='');$('page-container-input').value=typeof z==='string'?z:'';openModal('page-modal')}
+function openEditPageModal(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;$('page-modal-title').textContent='Edit Page';$('page-id-input').value=p.id;$('page-container-input').value=p.containerId||'';$('page-title-input').value=p.title;$('page-content-input').value=p.content;openModal('page-modal')}
+function savePage(){const id=$('page-id-input').value,title=$('page-title-input').value.trim(),content=$('page-content-input').value;if(!title)return;let nid='';
+ if(id){const pg=appData.pages.find(p=>p.id===id);if(pg.content!==content)delete varVals[id];Object.assign(pg,{title,content})}
+ else{nid='p_'+Date.now();appData.pages.push({id:nid,chapterId:appData.activeChapterId,containerId:$('page-container-input').value||'',title,content})}
+ persistLocal();closeModal('page-modal');renderHero();renderPages();if(nid)revealNode(nid)}
+function duplicatePage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;const nid='p_'+Date.now();
+ appData.pages.push({id:nid,chapterId:p.chapterId,containerId:p.containerId||'',title:p.title+' (Copy)',content:p.content,w:p.w,h:p.h});
+ persistLocal();renderHero();renderPages();revealNode(nid);showToast('Page duplicated.')}
 function deletePage(id){delete varVals[id];appData.pages=appData.pages.filter(p=>p.id!==id);persistLocal();renderHero();renderPages();showToast('Page deleted.')}
-/* variables: XXX / DATE / AMT */
-const TOK={XXX:'XXX',DATE:'XX/XX/XXXX',AMT:'$XXX'};
-const VKIND={'XXX':'text','XX/XX/XXXX':'date','$XXX':'amt'};
-const VLABEL={text:'Fill in text',date:'Fill in date',amt:'Fill in amount'};
-const VAR_RE=/(?<![A-Za-z0-9])(?:XX\/XX\/XXXX|\$XXX|XXX)(?![A-Za-z0-9])/g;
+/* ---------- freeform layout: pages and boards share one fine grid ---------- */
+let layoutDirty=false,ps=null,editMode=false;/* ps = active drag / resize */
+const nodes=new Map();/* page / board id -> element */
+const reduceMotion=()=>matchMedia('(prefers-reduced-motion:reduce)').matches;
+const num=v=>(v===undefined||v===null||v===''||!isFinite(+v))?undefined:Math.round(+v);
+const hits=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
+const isPage=d=>'title' in d;
+const keyOf=d=>d.containerId||'';/* '' = the chapter workspace, otherwise a board id */
+const minsOf=d=>isPage(d)?[MIN_PW,MIN_PH]:[MIN_BW,MIN_BH];
+function findItem(id){return appData.pages.find(p=>p.id===id)||appData.containers.find(c=>c.id===id)}
+function areaItems(key){const cid=appData.activeChapterId;
+ if(key)return appData.pages.filter(p=>p.chapterId===cid&&p.containerId===key);
+ return appData.pages.filter(p=>p.chapterId===cid&&!p.containerId).concat(getCons())}
+function boardCols(c){return Math.max(8,Math.floor((c.w*GRID-4)/GRID))}
+function areaCols(key,ex){let m=0;areaItems(key).forEach(i=>{if(i!==ex&&i.x!==undefined)m=Math.max(m,i.x+i.w)});
+ let vw=0;if(key){const n=nodes.get(key),b=n&&n.querySelector('.cin');vw=b?b.clientWidth:0}else vw=$('ws').clientWidth;
+ return Math.max(Math.floor(vw/GRID),m,1)}
+/* nothing may overlap: whatever collides with the fixed item (or an item already settled) is pushed down */
+function settle(items,fixed,frozen){const fz=frozen||[];
+ const rest=items.filter(i=>i!==fixed&&!fz.includes(i)&&i.x!==undefined&&i.y!==undefined).sort((a,b)=>a.y-b.y||a.x-b.x),placed=(fixed?[fixed]:[]).concat(fz);
+ for(const o of rest){let n=0,hit;
+  while(n++<999&&(hit=placed.find(p=>hits(p,o)))){o.y=hit.y+hit.h;layoutDirty=true}
+  placed.push(o)}}
+/* soft = boards hold still (a page being dragged over them only moves them when dropped) */
+function placeItem(d,r,key,soft){d.x=r.x;d.y=r.y;d.w=r.w;d.h=r.h;const it=areaItems(key);settle(it,d,soft?it.filter(i=>!isPage(i)):null)}
+function findSpot(items,w,h,cols,pad){const L=items.filter(i=>i.x!==undefined&&i.y!==undefined),mx=Math.max(pad,cols-pad-w);
+ for(let y=pad;y<6000;y++)for(let x=pad;x<=mx;x++){const r={x:x-pad,y:y-pad,w:w+2*pad,h:h+2*pad};if(!L.some(i=>hits(r,i)))return{x,y}}
+ return{x:pad,y:pad}}
+function packItems(items,cols,pad){items.forEach(d=>{if(d.x!==undefined&&d.y!==undefined)return;d.x=d.y=undefined;const s=findSpot(items,d.w,d.h,cols,pad);d.x=s.x;d.y=s.y;layoutDirty=true})}
+function sizePages(pages,cols,pad){pages.forEach(p=>{const n=nodes.get(p.id);if(!n)return;
+ if(!(p.w>0)){p.w=Math.max(MIN_PW,Math.min(DEF_PW,cols-2*pad));layoutDirty=true}
+ n.classList.toggle('n1',p.w<34);n.classList.toggle('n2',p.w<27);
+ if(!(p.h>0)){n.style.width=p.w*GRID+'px';n.style.height='auto';n.style.left='0px';n.style.top='0px';/* measure the natural height once */
+  p.h=clamp(Math.ceil(n.offsetHeight/GRID),MIN_PH,DEF_MAXH);layoutDirty=true}})}
+function ensureLayout(){const cid=appData.activeChapterId,cons=getCons(),wc=Math.max(24,Math.floor($('ws').clientWidth/GRID));
+ const loose=appData.pages.filter(p=>p.chapterId===cid&&!p.containerId);
+ sizePages(loose,wc,PAD);
+ packItems(loose.concat(cons.filter(c=>!c.mig)),wc,PAD);
+ const old=cons.filter(c=>c.mig);/* boards from the old layout slot in below the loose pages */
+ if(old.length){const b=loose.reduce((m,p)=>Math.max(m,p.y+p.h),0);old.forEach(c=>{c.x=c.x||0;c.y=(c.y||0)+(b?b+PAD:0);delete c.mig});layoutDirty=true}
+ cons.forEach(c=>{const kids=appData.pages.filter(p=>p.chapterId===cid&&p.containerId===c.id),cols=boardCols(c);sizePages(kids,cols,1);packItems(kids,cols,1)});
+ settle(areaItems(''),null);cons.forEach(c=>settle(areaItems(c.id),null))}
+function applyRect(d,n){n.style.left=d.x*GRID+'px';n.style.top=d.y*GRID+'px';n.style.width=d.w*GRID+'px';n.style.height=d.h*GRID+'px';
+ if(isPage(d)){n.classList.toggle('n1',d.w<34);n.classList.toggle('n2',d.w<27)}}
+function applyAll(){const cid=appData.activeChapterId;
+ appData.pages.forEach(p=>{if(p.chapterId!==cid||p.x===undefined)return;const n=nodes.get(p.id);if(n)applyRect(p,n)});
+ getCons().forEach(c=>{const n=nodes.get(c.id);if(n&&c.x!==undefined)applyRect(c,n)})}
+function fitAll(){const wsc=$('wsc');let b=0,r=0;
+ areaItems('').forEach(d=>{if(d.x===undefined)return;b=Math.max(b,d.y+d.h);r=Math.max(r,d.x+d.w)});
+ wsc.style.height=Math.max(b+PAD_B,MIN_WS)*GRID+'px';wsc.style.minWidth='max(100%,'+(r+PAD)*GRID+'px)';
+ getCons().forEach(c=>{const n=nodes.get(c.id);if(!n)return;const can=n.querySelector('.bcan');let cb=0,cr=0;
+  areaItems(c.id).forEach(d=>{if(d.x===undefined)return;cb=Math.max(cb,d.y+d.h);cr=Math.max(cr,d.x+d.w)});
+  can.style.minHeight='max(100%,'+(cb+1)*GRID+'px)';can.style.minWidth='max(100%,'+(cr+1)*GRID+'px)'})}
+function revealNode(id){const n=nodes.get(id);if(n)setTimeout(()=>{try{n.scrollIntoView({block:'nearest',inline:'nearest',behavior:reduceMotion()?'auto':'smooth'})}catch(e){n.scrollIntoView()}},30)}
+/* global move / edit mode */
+function setEdit(on,quiet){if(ps)cancelPs();editMode=!!on;document.body.classList.toggle('edit',editMode);
+ const b=$('edit-toggle');b.classList.toggle('on',editMode);b.setAttribute('aria-pressed',editMode?'true':'false');
+ b.title=editMode?'Move mode is on. Click to lock the layout':'Move / edit layout';$('edit-hint').hidden=!editMode;closeMenus();
+ if(!quiet)showToast(editMode?'Move mode on. Drag pages and boards, drag their edges to resize.':'Layout locked.')}
+function fitPageHeight(id){const p=appData.pages.find(x=>x.id===id),n=nodes.get(id);if(!p||!n)return;
+ const prev=n.style.height;n.style.transition='none';n.style.height='auto';const px=n.offsetHeight;n.style.height=prev;n.style.transition='';
+ placeItem(p,{x:p.x,y:p.y,w:p.w,h:clamp(Math.ceil(px/GRID),MIN_PH,MAX_U)},keyOf(p));persistLocal();applyAll();fitAll()}
+function gripKey(e,id){const k={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[e.key];if(!k||!editMode)return;
+ const d=findItem(id);if(!d||d.x===undefined)return;e.preventDefault();
+ const s=e.shiftKey?5:1,m=minsOf(d),r={x:d.x,y:d.y,w:d.w,h:d.h};
+ if(e.altKey){r.w=clamp(r.w+k[0]*s,m[0],MAX_U);r.h=clamp(r.h+k[1]*s,m[1],MAX_U)}else{r.x=Math.max(0,r.x+k[0]*s);r.y=Math.max(0,r.y+k[1]*s)}
+ placeItem(d,r,keyOf(d));persistLocal();applyAll();fitAll()}
+/* pointer drag + resize (mouse, touch, pen). Only active in move mode */
+function snapshot(){const cid=appData.activeChapterId;
+ return appData.pages.filter(p=>p.chapterId===cid).map(p=>({d:p,pg:1,x:p.x,y:p.y,w:p.w,h:p.h,c:p.containerId||''})).concat(getCons().map(c=>({d:c,x:c.x,y:c.y,w:c.w,h:c.h})))}
+function restoreBase(){ps.base.forEach(s=>{const d=s.d;d.x=s.x;d.y=s.y;d.w=s.w;d.h=s.h;if(s.pg)d.containerId=s.c})}
+function layoutDown(e){if(!editMode||ps||e.button>0)return;const t=e.target;if(!t.closest||t.closest('button,a,.menu'))return;
+ const rz=t.closest('.rz'),host=rz?rz.parentElement:(t.closest('.card')||t.closest('.cbox'));if(!host)return;
+ if(!rz&&host.classList.contains('cbox')&&t.classList.contains('cin')&&(e.offsetX>t.clientWidth||e.offsetY>t.clientHeight))return;/* scrollbar */
+ const d=findItem(host.dataset.pid||host.dataset.cid);if(!d||d.x===undefined)return;
+ e.preventDefault();closeMenus();
+ ps={d,host,kind:isPage(d)?'page':'board',rz:rz?rz.dataset.d:'',sx:e.clientX,sy:e.clientY,x:e.clientX,y:e.clientY,pid:e.pointerId,on:false,raf:0,ghost:null,ox:0,oy:0,base:snapshot(),r0:{x:d.x,y:d.y,w:d.w,h:d.h}};
+ addEventListener('pointermove',psMove);addEventListener('pointerup',psUp);addEventListener('pointercancel',psCancel);
+ if(ps.rz)psBegin()}
+function psMove(e){if(!ps||e.pointerId!==ps.pid)return;ps.x=e.clientX;ps.y=e.clientY;
+ if(!ps.on&&Math.hypot(ps.x-ps.sx,ps.y-ps.sy)>=4)psBegin();
+ if(ps.ghost)placeGhost()}
+function psBegin(){const r=ps.host.getBoundingClientRect();ps.on=true;
+ if(ps.rz){document.body.classList.add('rszing');ps.host.classList.add('rsz');
+  document.body.style.setProperty('--rc',{n:'ns-resize',s:'ns-resize',e:'ew-resize',w:'ew-resize',ne:'nesw-resize',sw:'nesw-resize',nw:'nwse-resize',se:'nwse-resize'}[ps.rz])}
+ else{document.body.classList.add('dragging-page');ps.ox=ps.sx-r.left;ps.oy=ps.sy-r.top;
+  const g=ps.host.cloneNode(true);g.querySelectorAll('.menu,.rz').forEach(n=>n.remove());g.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));
+  g.removeAttribute('data-pid');g.removeAttribute('data-cid');g.classList.remove('fi','zone-on','ph-drag');g.classList.add('ghost');g.style.width=r.width+'px';g.style.height=r.height+'px';
+  document.body.append(g);ps.ghost=g;ps.host.classList.add('ph-drag');placeGhost()}
+ ps.raf=requestAnimationFrame(psTick)}
+function placeGhost(){ps.ghost.style.transform='translate('+(ps.x-ps.ox)+'px,'+(ps.y-ps.oy)+'px)'+(ps.kind==='page'?' rotate(1.2deg)':'')}
+function psTick(){if(!ps||!ps.on)return;autoScroll();preview();ps.raf=requestAnimationFrame(psTick)}
+function pickArea(){if(ps.kind!=='page')return '';const wr=$('wsc').getBoundingClientRect(),b0=ps.r0;
+ const cl=ps.x-ps.ox,ct=ps.y-ps.oy,cw=b0.w*GRID,chh=b0.h*GRID;let best='',bo=0;
+ for(const s of ps.base){if(s.pg)continue;/* boards, at their resting spots */
+  const l=wr.left+s.x*GRID,t=wr.top+s.y*GRID,r=l+s.w*GRID,b=t+s.h*GRID;
+  if(ps.x>=l&&ps.x<=r&&ps.y>=t&&ps.y<=b)return s.d.id;
+  const o=Math.max(0,Math.min(r,cl+cw)-Math.max(l,cl))*Math.max(0,Math.min(b,ct+chh)-Math.max(t,ct));
+  if(o>bo){bo=o;best=s.d.id}}
+ return bo>=cw*chh*.5?best:''}
+/* where the item would land, snapped to the grid; everything it overlaps is pushed down out of the way */
+function preview(final){const d=ps.d,b=ps.r0;restoreBase();let key,r;
+ if(ps.rz){key=keyOf(d);const z=ps.rz,m=minsOf(d),dx=Math.round((ps.x-ps.sx)/GRID),dy=Math.round((ps.y-ps.sy)/GRID);
+  let w=b.w,h=b.h,x=b.x,y=b.y;
+  if(z.includes('e'))w=b.w+dx;if(z.includes('w'))w=b.w-dx;if(z.includes('s'))h=b.h+dy;if(z.includes('n'))h=b.h-dy;
+  w=clamp(w,m[0],MAX_U);h=clamp(h,m[1],MAX_U);
+  if(z.includes('w')){x=b.x+b.w-w;if(x<0){x=0;w=b.x+b.w}}
+  if(z.includes('n')){y=b.y+b.h-h;if(y<0){y=0;h=b.y+b.h}}
+  if(z.includes('e'))w=Math.max(m[0],Math.min(w,Math.max(areaCols(key,d),b.x+b.w)-x));
+  r={x,y,w,h};
+  const bd=$('szbadge');bd.style.display='block';bd.textContent=w*GRID+' × '+h*GRID+' px';bd.style.left=(ps.x+16)+'px';bd.style.top=(ps.y+18)+'px'}
+ else{key=pickArea();const cv=key?nodes.get(key).querySelector('.bcan'):$('wsc');
+  if(ps.host.parentNode!==cv)cv.append(ps.host);
+  const cr=cv.getBoundingClientRect(),cols=areaCols(key,d);
+  const x=clamp(Math.round((ps.x-ps.ox-cr.left)/GRID),0,Math.max(0,cols-b.w)),y=Math.max(0,Math.round((ps.y-ps.oy-cr.top)/GRID));
+  r={x,y,w:b.w,h:b.h};if(isPage(d))d.containerId=key;
+  document.querySelectorAll('.cbox.zone-on').forEach(n=>{if(n.dataset.cid!==key)n.classList.remove('zone-on')});
+  if(ps.kind==='page'&&key)nodes.get(key).classList.add('zone-on')}
+ placeItem(d,r,key,!ps.rz&&ps.kind==='page'&&!final);applyAll();fitAll()}
+function autoScroll(){const M=document.querySelector('main'),mr=M.getBoundingClientRect(),W=$('ws'),wr=W.getBoundingClientRect(),step=14;
+ if(ps.y<mr.top+96&&M.scrollTop>0)M.scrollTop-=step;else if(ps.y>mr.bottom-56&&M.scrollTop<M.scrollHeight-M.clientHeight-1)M.scrollTop+=step;
+ if(W.scrollWidth>W.clientWidth+1){const L=Math.max(wr.left,mr.left),R=Math.min(wr.right,mr.right);
+  if(ps.x<L+48&&W.scrollLeft>0)W.scrollLeft-=step;else if(ps.x>R-48&&W.scrollLeft<W.scrollWidth-W.clientWidth-1)W.scrollLeft+=step}}
+function endPs(){const s=ps;removeEventListener('pointermove',psMove);removeEventListener('pointerup',psUp);removeEventListener('pointercancel',psCancel);
+ cancelAnimationFrame(s.raf);if(s.ghost)s.ghost.remove();s.host.classList.remove('ph-drag','rsz');
+ document.querySelectorAll('.cbox.zone-on').forEach(n=>n.classList.remove('zone-on'));
+ document.body.classList.remove('dragging-page','rszing');$('szbadge').style.display='none';ps=null;return s}
+function psUp(e){if(!ps||e.pointerId!==ps.pid)return;
+ if(ps.on&&ps.rz&&ps.x===ps.sx&&ps.y===ps.sy){endPs();return}/* just a click on a handle */
+ if(ps.on)preview(true);const s=endPs();if(!s.on)return;persistLocal();renderPages()}
+function psCancel(e){if(!ps||e.pointerId!==ps.pid)return;cancelPs()}
+function cancelPs(){if(!ps)return;if(ps.on)restoreBase();const s=endPs();if(s.on)renderPages()}
+/* ---------- containers (free-form board) ---------- */
+function inkFor(h){const n=parseInt(h.slice(1),16),r=n>>16,g=(n>>8)&255,b=n&255;return (r*299+g*587+b*114)/1000>150?'#1d1b20':'#f4f1f7'}
+function applyColors(n,border,bg){const s=n.style;
+ if(border)s.setProperty('--cb',border);else s.removeProperty('--cb');
+ if(bg){s.setProperty('--cbg',bg);s.setProperty('--cfg',inkFor(bg))}else{s.removeProperty('--cbg');s.removeProperty('--cfg')}}
+function buildBox(c,pages){const box=el('section','cbox fi'),bar=el('div','cbar'),body=el('div','cin'),can=el('div','bcan');
+ box.dataset.cid=c.id;box.setAttribute('aria-label',c.name);applyColors(box,c.border,c.bg);
+ const mv=el('span','cgrip',ic('move'));mv.tabIndex=0;mv.setAttribute('role','button');mv.title='Drag the board to move it. Arrow keys nudge, Alt + arrows resize.';mv.setAttribute('aria-label','Move board '+c.name);mv.addEventListener('keydown',e=>gripKey(e,c.id));
+ const nm=el('span','cname');nm.textContent=c.name;nm.title=c.name;
+ const cn=el('span','ccount',pages.length+(pages.length===1?' page':' pages'));
+ const ed=el('button','ib sm',ic('pen'));ed.title='Edit board';ed.setAttribute('aria-label','Edit board');ed.onclick=()=>openEditContainerModal(c.id);
+ const dd=el('div','dd'),db=el('button','ib sm',ic('dots')),m=el('div','menu');m.id='menu-'+c.id;db.title='More';db.setAttribute('aria-label','More board actions');db.onclick=e=>{e.stopPropagation();toggleDropdown(c.id,db)};
+ const ad=el('button','mi',ic('plus')+'Add page here');ad.onclick=()=>openAddPageModal(c.id);
+ const de=el('button','mi del',ic('trash')+'Delete board');de.onclick=()=>deleteContainer(c.id);
+ m.append(ad,de);dd.append(db,m);bar.append(mv,nm,cn,ed,dd);
+ can.dataset.zone=c.id;
+ if(!pages.length)can.append(el('div','bempty','Drag pages here, or use the menu to add one.'));
+ pages.forEach(p=>{const n=buildCard(p);nodes.set(p.id,n);can.append(n)});
+ body.append(can);box.append(bar,body);addHandles(box);nodes.set(c.id,box);return box}
+const cm={border:'',bg:''};
+const SWATCH={border:['#e57373','#f0a35e','#e6c34a','#7fc77f','#4db6ac','#64b5f6','#9575cd','#f06292','#9e9e9e','#2b2b2b'],bg:['#fdecea','#fff1e0','#fff9db','#e8f5e9','#e0f2f1','#e3f2fd','#ede7f6','#fce4ec','#eeeeee','#25262b']};
+function buildPick(key){const box=$('cpick-'+key);box.innerHTML='';
+ const def=el('button','csw def');def.type='button';def.title='Default';def.setAttribute('aria-label','Default color');def.onclick=()=>{cm[key]='';markPick(key);prevC()};box.append(def);
+ SWATCH[key].forEach(col=>{const b=el('button','csw');b.type='button';b.style.background=col;b.dataset.c=col;b.title=col;b.setAttribute('aria-label','Color '+col);b.onclick=()=>{cm[key]=col;markPick(key);prevC()};box.append(b)});
+ const cu=el('span','csw custom');cu.title='Custom color';const inp=document.createElement('input');inp.type='color';inp.setAttribute('aria-label','Custom color');inp.value=cm[key]||(key==='bg'?'#dddddd':'#888888');inp.oninput=()=>{cm[key]=inp.value;markPick(key);prevC()};cu.append(inp);box.append(cu);markPick(key)}
+function markPick(key){const v=cm[key],pre=SWATCH[key];
+ [...$('cpick-'+key).children].forEach(n=>{let on;
+  if(n.classList.contains('def'))on=!v;
+  else if(n.classList.contains('custom')){on=!!v&&!pre.includes(v);n.style.background=on?v:''}
+  else on=n.dataset.c===v;
+  n.classList.toggle('on',on)})}
+function prevC(){applyColors($('cprev'),cm.border,cm.bg);$('cprev-name').textContent=$('container-name-input').value.trim()||'Untitled board'}
+function openContainerModal(c){$('container-modal-title').textContent=c?'Edit Board':'Add Board';$('container-id-input').value=c?c.id:'';$('container-name-input').value=c?c.name:'';
+ cm.border=c?c.border:'';cm.bg=c?c.bg:'';buildPick('border');buildPick('bg');prevC();$('container-del').style.display=c?'':'none';openModal('container-modal')}
+function openAddContainerModal(){if(!curChap()){showToast('Select a chapter first.');return}openContainerModal(null)}
+function openEditContainerModal(id){const c=appData.containers.find(x=>x.id===id);if(c)openContainerModal(c)}
+$('container-name-input').addEventListener('input',prevC);
+function saveContainer(){const id=$('container-id-input').value,name=$('container-name-input').value.trim()||'Untitled board';let nid=id;
+ if(id){Object.assign(appData.containers.find(c=>c.id===id),{name,border:cm.border,bg:cm.bg})}
+ else{nid='k_'+rid();appData.containers.push({id:nid,chapterId:appData.activeChapterId,name,w:DEF_BW,h:DEF_BH,border:cm.border,bg:cm.bg})}
+ persistLocal();closeModal('container-modal');renderPages();if(!id)revealNode(nid)}
+function deleteContainer(id){const c=appData.containers.find(x=>x.id===id);if(!c)return;
+ if(!confirm('Delete the board "'+c.name+'"? Its pages move back into the workspace.'))return;
+ appData.pages.forEach(p=>{if(p.containerId===id){p.containerId='';p.x=c.x+(p.x||0);p.y=c.y+5+(p.y||0)}});appData.containers=appData.containers.filter(x=>x.id!==id);
+ persistLocal();closeModal('container-modal');renderPages();showToast('Board deleted.')}
+/* variables: XXX / DATE / AMT / Y/N */
+const TOK={XXX:'XXX',DATE:'XX/XX/XXXX',AMT:'$XXX',YN:'[Yes]'};
+const VKIND={'XXX':'text','XX/XX/XXXX':'date','$XXX':'amt','[Yes]':'bool','[No]':'bool'};
+const VLABEL={text:'Fill in text',date:'Fill in date',amt:'Fill in amount',bool:'Toggle yes or no'};
+const VAR_RE=/(?<![A-Za-z0-9])(?:XX\/XX\/XXXX|\$XXX|XXX|\[(?:Yes|No)\])(?![A-Za-z0-9])/g;
 const varVals={};/* what you type into variables lives for this session only: page id -> {nth variable -> text} */
 function insertVar(kind){const t=$('page-content-input');let s=TOK[kind];if(!s)return;
  const v=t.value,a=t.selectionStart,b=t.selectionEnd;
@@ -385,7 +784,15 @@ function insertVar(kind){const t=$('page-content-input');let s=TOK[kind];if(!s)r
  let ok=false;try{ok=document.execCommand('insertText',false,s)}catch(e){}
  if(!ok){t.setRangeText(s,a,b,'end');t.dispatchEvent(new Event('input',{bubbles:true}))}
  autosize(t)}
-function makeVar(pid,i,tok){const k=VKIND[tok],v=el('span','var');
+function boolDef(tok){return tok==='[No]'?'No':'Yes'}
+function setBool(v,val){v.dataset.v=val;v.textContent=val;v.setAttribute('aria-checked',val==='Yes'?'true':'false');v.classList.toggle('yes',val==='Yes');v.classList.toggle('no',val!=='Yes')}
+function toggleBool(v){const nv=v.dataset.v==='Yes'?'No':'Yes',m=varVals[v.dataset.pid]||(varVals[v.dataset.pid]={});
+ if(nv===boolDef(v.dataset.ph))delete m[v.dataset.i];else m[v.dataset.i]=nv;setBool(v,nv)}
+function makeBool(pid,i,tok){const v=el('span','var bool');v.dataset.k='bool';v.dataset.ph=tok;v.dataset.pid=pid;v.dataset.i=i;
+ v.tabIndex=0;v.setAttribute('role','switch');v.setAttribute('aria-label',VLABEL.bool);v.title='Click to switch between Yes and No';
+ setBool(v,(varVals[pid]||{})[i]||boolDef(tok));return v}
+function makeVar(pid,i,tok){const k=VKIND[tok];if(k==='bool')return makeBool(pid,i,tok);
+ const v=el('span','var');
  try{v.contentEditable='plaintext-only'}catch(e){}
  if(v.contentEditable!=='plaintext-only')v.contentEditable='true';
  v.spellcheck=false;v.dataset.k=k;v.dataset.ph=tok;v.dataset.pid=pid;v.dataset.i=i;
@@ -398,7 +805,7 @@ function buildSpiel(box,p){box.textContent='';const s=p.content||'';let last=0,i
  for(const m of s.matchAll(VAR_RE)){if(m.index>last)box.append(s.slice(last,m.index));box.append(makeVar(p.id,i++,m[0]));last=m.index+m[0].length}
  if(last<s.length)box.append(s.slice(last))}
 function composeSpiel(p){const vals=varVals[p.id]||{};let i=0,blank=0;
- const text=(p.content||'').replace(VAR_RE,m=>{const v=vals[i++];if(v)return v;blank++;return m});
+ const text=(p.content||'').replace(VAR_RE,m=>{const v=vals[i++];if(VKIND[m]==='bool')return v||boolDef(m);if(v)return v;blank++;return m});
  return{text,blank}}
 function copyPage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;const r=composeSpiel(p);
  copyText(r.text,r.blank?'Copied. '+r.blank+(r.blank>1?' variables are':' variable is')+' still blank.':'Copied to clipboard.')}
@@ -428,12 +835,16 @@ function onVarInput(v,e){const k=v.dataset.k;
   const d=t.replace(/\D/g,'');
   if(d.length<=8&&[...t].every((c,i)=>c!=='/'||i===2||i===5)){const f=fmtDate(d);if(f!==t){v.textContent=f;setCaret(v,f.length)}}}
  commitVar(v)}
-(function(){const G=$('grid'),vOf=e=>e.target&&e.target.closest?e.target.closest('.var'):null;
- G.addEventListener('focusin',e=>{const v=vOf(e);if(v)setTimeout(()=>selectAllIn(v),0)});
- G.addEventListener('focusout',e=>{const v=vOf(e);if(v)finishVar(v)});
- G.addEventListener('keydown',e=>{const v=vOf(e);if(v&&(e.key==='Enter'||e.key==='Escape')){e.preventDefault();v.blur()}});
- G.addEventListener('paste',e=>{const v=vOf(e);if(!v)return;e.preventDefault();pasteIntoVar(v,(e.clipboardData||window.clipboardData).getData('text'))});
- G.addEventListener('input',e=>{const v=vOf(e);if(v)onVarInput(v,e)})})();
+(function(){const M=document.querySelector('main'),
+  vOf=e=>e.target&&e.target.closest?e.target.closest('.var:not(.bool)'):null,
+  bOf=e=>e.target&&e.target.closest?e.target.closest('.var.bool'):null;
+ M.addEventListener('focusin',e=>{const v=vOf(e);if(v)setTimeout(()=>selectAllIn(v),0)});
+ M.addEventListener('focusout',e=>{const v=vOf(e);if(v)finishVar(v)});
+ M.addEventListener('click',e=>{const b=bOf(e);if(b)toggleBool(b)});
+ M.addEventListener('keydown',e=>{const b=bOf(e);if(b){if(e.key===' '||e.key==='Enter'){e.preventDefault();toggleBool(b)}return}
+  const v=vOf(e);if(v&&(e.key==='Enter'||e.key==='Escape')){e.preventDefault();v.blur()}});
+ M.addEventListener('paste',e=>{const v=vOf(e);if(!v)return;e.preventDefault();pasteIntoVar(v,(e.clipboardData||window.clipboardData).getData('text'))});
+ M.addEventListener('input',e=>{const v=vOf(e);if(v)onVarInput(v,e)})})();
 /* copy */
 function copyText(t,msg){msg=msg||'Copied to clipboard.';if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(()=>showToast(msg)).catch(()=>fallbackCopy(t,msg));else fallbackCopy(t,msg)}
 function fallbackCopy(t,msg){const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;left:-9999px';document.body.appendChild(a);a.select();try{document.execCommand('copy');showToast(msg||'Copied to clipboard.')}catch(e){showToast('Copy failed.')}a.remove()}
@@ -441,9 +852,12 @@ function fallbackCopy(t,msg){const a=document.createElement('textarea');a.value=
 const CLIP_TAG='paano-ba-yan';
 function rid(){return Date.now()+'_'+Math.random().toString(36).slice(2,6)}
 function copyPageData(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
- copyText(JSON.stringify({app:CLIP_TAG,type:'page',title:p.title,content:p.content}),'Page copied. Use Paste page inside any chapter.')}
+ copyText(JSON.stringify({app:CLIP_TAG,type:'page',title:p.title,content:p.content,w:p.w,h:p.h}),'Page copied. Use Paste page inside any chapter.')}
 function copyChapterData(id){const c=appData.chapters.find(x=>x.id===id);if(!c)return;
- copyText(JSON.stringify({app:CLIP_TAG,type:'chapter',name:c.name,description:c.description||'',referenceLink:c.referenceLink||'',pages:appData.pages.filter(p=>p.chapterId===id).map(p=>({title:p.title,content:p.content}))}),'Chapter copied. Use Paste chapter in any book.')}
+ const cons=appData.containers.filter(k=>k.chapterId===id);
+ copyText(JSON.stringify({app:CLIP_TAG,type:'chapter',ver:2,name:c.name,description:c.description||'',referenceLink:c.referenceLink||'',
+  containers:cons.map(k=>({name:k.name,x:k.x,y:k.y,w:k.w,h:k.h,border:k.border||'',bg:k.bg||''})),
+  pages:appData.pages.filter(p=>p.chapterId===id).map(p=>({title:p.title,content:p.content,x:p.x,y:p.y,w:p.w,h:p.h,container:cons.findIndex(k=>k.id===p.containerId)}))}),'Chapter copied. Use Paste chapter in any book.')}
 function parseClip(t){try{const o=JSON.parse(t);return o&&o.app===CLIP_TAG?o:null}catch(e){return null}}
 let pasteKind='';
 async function startPaste(kind){
@@ -457,21 +871,195 @@ function applyPaste(t,kind){const o=parseClip(t);
  if(!o){showToast('Nothing to paste. Copy a '+kind+' first.');return false}
  if(o.type!==kind){showToast(kind==='chapter'?'That is a copied page. Use Paste page inside a chapter.':'That is a copied chapter. Use Paste chapter next to + Chapter.');return false}
  if(kind==='page'){if(!curChap()){showToast('Select a chapter first.');return false}
-  appData.pages.push({id:'p_'+rid(),chapterId:appData.activeChapterId,title:String(o.title||'Untitled'),content:String(o.content||'')});
+  appData.pages.push({id:'p_'+rid(),chapterId:appData.activeChapterId,containerId:'',title:String(o.title||'Untitled'),content:String(o.content||''),w:num(o.w),h:num(o.h)});
   persistLocal();renderHero();renderPages();showToast('Page pasted.');return true}
  const nid='c_'+rid();
  appData.chapters.push({id:nid,bookId:appData.activeBookId,name:String(o.name||'Untitled'),description:String(o.description||''),referenceLink:String(o.referenceLink||'')});
- (Array.isArray(o.pages)?o.pages:[]).forEach(p=>appData.pages.push({id:'p_'+rid(),chapterId:nid,title:String(p.title||'Untitled'),content:String(p.content||'')}));
+ const v2=o.ver>=2,f=v2?1:1/GRID;/* older copies stored board geometry in pixels */
+ const kids=(Array.isArray(o.containers)?o.containers:[]).map(k=>{const n={id:'k_'+rid(),chapterId:nid,name:String(k.name||'Board'),x:num((+k.x||0)*f),y:num((+k.y||0)*f),w:Math.max(MIN_BW,num((+k.w||(v2?DEF_BW:420))*f)||DEF_BW),h:Math.max(MIN_BH,num((+k.h||(v2?DEF_BH:300))*f)||DEF_BH),border:hex(k.border),bg:hex(k.bg),mig:v2?undefined:true};appData.containers.push(n);return n.id});
+ (Array.isArray(o.pages)?o.pages:[]).forEach(p=>appData.pages.push({id:'p_'+rid(),chapterId:nid,containerId:kids[p.container]||'',title:String(p.title||'Untitled'),content:String(p.content||''),x:num(p.x),y:num(p.y),w:num(p.w),h:num(p.h)}));
  appData.activeChapterId=nid;persistLocal();renderAll();showToast('Chapter pasted.');return true}
 /* save */
-function generateUpdatedHtmlString(){return '<!DOCTYPE html>\n'+document.documentElement.outerHTML.replace(/\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//,()=>'/*DATA_START*/'+JSON.stringify(appData,null,2)+'/*DATA_END*/')}
+function generateUpdatedHtmlString(){const c=document.documentElement.cloneNode(true);if(window.lockClean)window.lockClean(c);/* strip transient UI so the saved file reopens clean */
+ c.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));c.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show'));c.querySelectorAll('.ghost').forEach(n=>n.remove());c.querySelector('body').classList.remove('edit','dragging-page','rszing');
+ const t=c.querySelector('#toast');if(t){t.className='';t.textContent=''}
+ return '<!DOCTYPE html>\n'+c.outerHTML.replace(/\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//,()=>'/*DATA_START*/'+JSON.stringify(appData,null,2)+'/*DATA_END*/')}
 async function saveDirectToFile(){const h=generateUpdatedHtmlString(),fn=fileName()+'.html';
  try{if('showSaveFilePicker' in window){if(!fileHandle||handleName!==fn){fileHandle=await showSaveFilePicker({suggestedName:fn,types:[{description:'HTML File',accept:{'text/html':['.html']}}]});handleName=fn}
   const w=await fileHandle.createWritable();await w.write(h);await w.close();showToast('Saved to file.')}else exportUpdatedHtmlFile()}
  catch(e){if(e.name!=='AbortError')exportUpdatedHtmlFile()}}
 function exportUpdatedHtmlFile(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([generateUpdatedHtmlString()],{type:'text/html;charset=utf-8'}));a.download=fileName()+'.html';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);showToast('Downloaded updated file.')}
-load();applyTheme();applySiteName(true);renderAll();
+load();applyTheme();applySiteName(true);renderAll();setEdit(false,true);$('ws').addEventListener('pointerdown',layoutDown);
 $('site-name-input').addEventListener('input',e=>{appData.settings.title=e.target.value;persistLocal();applySiteName(false)});
 $('site-name-input').addEventListener('change',e=>{if(!e.target.value.trim()){appData.settings.title=DEF_NAME;persistLocal()}applySiteName(true)});
 matchMedia('(prefers-color-scheme:dark)').addEventListener('change',applyTheme);
-</script></body></html>
+
+// --- Data Export & Import ---
+function exportAppData() {
+  // Retrieve active credentials and avatar from localStorage, or fallback to the script tag
+  const localCreds = localStorage.getItem('ataraxia_login');
+  const localAvatar = localStorage.getItem('ataraxia_avatar');
+  
+  let fallbackLockData = { c: null, a: "" };
+  try {
+    fallbackLockData = JSON.parse(document.getElementById('lock-data').textContent || '{}');
+  } catch (e) {}
+
+  const lockData = {
+    c: localCreds ? JSON.parse(localCreds) : fallbackLockData.c,
+    a: localAvatar !== null ? localAvatar : fallbackLockData.a
+  };
+
+  // Combine workspace data and lock data
+  const backupObj = {
+    appData: appData,
+    lockData: lockData
+  };
+
+  const dataStr = JSON.stringify(backupObj, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName() + "_backup.json"; 
+  document.body.appendChild(a);
+  a.click();
+  
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  
+  showToast("Data and credentials exported.");
+}
+
+function importAppData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const importedData = JSON.parse(e.target.result);
+      
+      // Check for the combined backup format
+      if (importedData.appData && importedData.lockData) {
+        appData = importedData.appData;
+        
+        // Restore credentials to localStorage
+        if (importedData.lockData.c) {
+          localStorage.setItem('ataraxia_login', JSON.stringify(importedData.lockData.c));
+        } else {
+          localStorage.removeItem('ataraxia_login');
+        }
+        
+        // Restore avatar to localStorage
+        if (importedData.lockData.a) {
+          localStorage.setItem('ataraxia_avatar', importedData.lockData.a);
+        } else {
+          localStorage.removeItem('ataraxia_avatar');
+        }
+        
+        // Inject back into the DOM so the next 'Save' writes it to the HTML file
+        document.getElementById('lock-data').textContent = JSON.stringify(importedData.lockData);
+        
+      } else if (importedData.books && importedData.pages) {
+        // Fallback for older backups that only contain appData
+        appData = importedData;
+      } else {
+        throw new Error("Invalid format");
+      }
+      
+      persistLocal(); 
+      applyTheme();
+      applySiteName(true);
+      renderAll();
+
+      // Refresh the avatar preview in the settings modal if it's open
+      const avatarEl = document.getElementById('set-av');
+      if (avatarEl) {
+        const avatarData = importedData.lockData?.a || localStorage.getItem('ataraxia_avatar');
+        if (avatarData) {
+          avatarEl.innerHTML = '<img src="' + avatarData + '" alt="">';
+        } else {
+          avatarEl.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>';
+        }
+      }
+      
+      showToast("Import successful!");
+    } catch (error) {
+      showToast("Error: Invalid backup file.");
+    }
+    
+    event.target.value = ""; 
+  };
+  
+  reader.readAsText(file);
+}
+
+</script>
+<script id="lock-data" type="application/json">{"c":null,"a":""}</script>
+<script id="lock-script">
+(function(){
+const G=id=>document.getElementById(id);
+const KC='ataraxia_login',KA='ataraxia_avatar';
+const EM=(()=>{try{return JSON.parse(G('lock-data').textContent)||{}}catch(e){return{}}})();
+const MU='YXVyb3JpYW5h',MP='QXRhcmF4aWFmdWxnb3ppZWw1Mzg3PyE/';
+const ob=s=>{let r='';new TextEncoder().encode(s).forEach(c=>r+=String.fromCharCode(c));return btoa(r)};
+const de=b=>{try{return new TextDecoder().decode(Uint8Array.from(atob(b),c=>c.charCodeAt(0)))}catch(e){return''}};
+const rd=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+const wr=(k,v)=>{try{localStorage.setItem(k,v);return true}catch(e){return false}};
+const rm=k=>{try{localStorage.removeItem(k)}catch(e){}};
+const toast=m=>{if(typeof showToast==='function')showToast(m)};
+const PERSON='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>';
+let timer=0;
+function cred(){const r=rd(KC);try{const o=r===null?EM.c:JSON.parse(r||'null');return o&&typeof o.u==='string'&&typeof o.p==='string'&&o.u&&o.p?o:null}catch(e){return null}}
+function avatar(){const r=rd(KA),a=r===null?EM.a:r;return typeof a==='string'&&/^data:image\//.test(a)?a:''}
+function paint(){const a=avatar();['lk-av','set-av'].forEach(id=>{const e=G(id);e.textContent='';if(a){const i=new Image();i.alt='';i.src=a;e.appendChild(i)}else e.innerHTML=PERSON})}
+function status(){const c=cred();G('set-status').textContent=c?'Custom login is active. Leave password blank to keep the current one.':'Please set your own password.'}
+function fillUser(){const c=cred();G('set-user').value=c?de(c.u):''}
+function msg(t,bad){const m=G('lk-msg');m.textContent=t;m.classList.toggle('bad',!!bad)}
+function tick(){const d=new Date();G('lk-clock').textContent=d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}).replace(/\s?[ap]\.?m\.?$/i,'');G('lk-date').textContent=d.toLocaleDateString([],{weekday:'long',month:'long',day:'numeric'})}
+function setLocked(on){
+ document.documentElement.classList.toggle('unlocked',!on);
+ [...document.body.children].forEach(n=>{if(n.id!=='lock'&&n.tagName!=='SCRIPT')n.toggleAttribute('inert',on)});
+ clearInterval(timer);
+ if(on){tick();timer=setInterval(tick,5000);G('lk-pass').value='';G('lk-user').value='';msg('Enter your login to continue');setTimeout(()=>G('lk-user').focus(),60)}
+ else if(document.activeElement)document.activeElement.blur()}
+function attempt(e){e.preventDefault();
+ const u=G('lk-user').value.trim(),p=G('lk-pass').value,eu=ob(u),ep=ob(p),c=cred();
+ if(u&&p&&((eu===MU&&ep===MP)||(c&&eu===c.u&&ep===c.p))){setLocked(false);return}
+ msg('Incorrect username or password',true);
+ const card=G('lk-card');card.classList.remove('err');void card.offsetWidth;card.classList.add('err');
+ G('lk-pass').value='';G('lk-pass').focus()}
+function fit(file){return new Promise((res,rej)=>{
+ if(!file||!/^image\//.test(file.type))return rej();
+ const url=URL.createObjectURL(file),img=new Image();
+ img.onload=()=>{try{const S=256,m=Math.min(img.naturalWidth,img.naturalHeight);if(!m)throw 0;
+  const c=document.createElement('canvas');c.width=c.height=S;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,S,S);
+  x.drawImage(img,(img.naturalWidth-m)/2,(img.naturalHeight-m)/2,m,m,0,0,S,S);res(c.toDataURL('image/jpeg',.88))}catch(e){rej()}finally{URL.revokeObjectURL(url)}};
+ img.onerror=()=>{URL.revokeObjectURL(url);rej()};img.src=url})}
+window.lockClean=c=>{const dd=c.querySelector('#lock-data');if(dd)dd.textContent=JSON.stringify({c:cred(),a:avatar()}).replace(/</g,'\\u003c');
+ c.classList.remove('unlocked');c.querySelectorAll('[inert]').forEach(n=>n.removeAttribute('inert'));
+ ['lk-av','set-av'].forEach(id=>{const n=c.querySelector('#'+id);if(n)n.textContent=''});
+ const m=c.querySelector('#lk-msg');if(m){m.textContent='Enter your login to continue';m.className='lk-msg'}
+ const k=c.querySelector('#lk-card');if(k)k.classList.remove('err')};
+G('lk-card').addEventListener('submit',attempt);
+G('av-up').onclick=()=>G('av-file').click();
+G('av-file').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
+ try{const d=await fit(f);if(wr(KA,d)){paint();toast('Profile picture updated.')}else toast('Could not store the picture (browser storage is full or blocked).')}
+ catch(x){toast('That file could not be read as an image.')}};
+G('av-rm').onclick=()=>{wr(KA,'');paint();toast('Profile picture removed.')};
+G('set-eye').onclick=()=>{const i=G('set-pass');i.type=i.type==='password'?'text':'password'};
+G('cred-save').onclick=()=>{
+ const u=G('set-user').value.trim(),p=G('set-pass').value,old=cred();
+ if(!u){toast('Enter a username.');return}
+ if(!p&&!old){toast('Enter a password (min 4 characters).');return}
+ if(p&&p.length<4){toast('Password must be at least 4 characters.');return}
+ if(wr(KC,JSON.stringify({u:ob(u),p:p?ob(p):old.p}))){G('set-pass').value='';G('set-pass').type='password';status();toast('Login saved.')}
+ else toast('Could not save (browser storage is full or blocked).')};
+G('cred-clear').onclick=()=>{wr(KC,'');G('set-pass').value='';fillUser();status();toast('Custom login removed. Master login only.')};
+G('lock-now').onclick=()=>{if(typeof closeModal==='function')closeModal('settings-modal');setLocked(true)};
+paint();fillUser();status();setLocked(true);
+})();
+</script>
+</body></html>
