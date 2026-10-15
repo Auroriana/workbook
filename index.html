@@ -672,7 +672,7 @@ function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),a=el('div'
     const m = $('menu-var-'+p.id);
     m.style.left = Math.max(8, e.clientX - 10) + 'px';
     m.style.top = (e.clientY + 15) + 'px';
-    toggleDropdown('var-'+p.id, null); // passing null bypasses auto-positioning
+    toggleDropdown('var-'+p.id, null); // bypass auto-positioning
    }
   };
   titleEl.append(tb);
@@ -794,30 +794,13 @@ function addVariantField(t='', c='') {
  $('variant-list').append(wrap);
  setTimeout(() => autosize(iC), 10);
 }
- const wrap = el('div', 'sec');
- wrap.style.padding = '12px'; wrap.style.position = 'relative';
- const delBtn = el('button', 'ib sm', ic('trash'));
- delBtn.style.position = 'absolute'; delBtn.style.right = '4px'; delBtn.style.top = '4px';
- delBtn.onclick = () => wrap.remove();
- 
- const lT = el('label'); lT.textContent = 'Variant Title';
- const iT = el('input', 'var-t'); iT.type = 'text'; iT.value = t; iT.placeholder = 'e.g. Removing vehicle';
- iT.style.width = '100%'; iT.style.marginBottom = '10px';
- 
- const lC = el('label'); lC.textContent = 'Variant Spiel';
- const iC = el('textarea', 'var-c'); iC.value = c; iC.placeholder = 'Type or paste the text for this variant...';
- iC.style.minHeight = '60px'; iC.style.width = '100%';
- iC.oninput = () => autosize(iC);
- 
- wrap.append(delBtn, lT, iT, lC, iC);
- $('variant-list').append(wrap);
- setTimeout(() => autosize(iC), 10);
-}
+
 function openAddPageModal(z){if(!appData.activeChapterId){showToast('Select a chapter first.');return}
  $('page-modal-title').textContent='Add Page';['id','title','content'].forEach(k=>$('page-'+k+'-input').value='');$('page-container-input').value=typeof z==='string'?z:'';
  $('page-variant-cb').checked = false; toggleVariantMode(false);
  $('variant-list').innerHTML = ''; addVariantField('',''); addVariantField('','');
  openModal('page-modal')}
+
 function openEditPageModal(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
  $('page-modal-title').textContent='Edit Page';$('page-id-input').value=p.id;$('page-container-input').value=p.containerId||'';$('page-title-input').value=p.title;$('page-content-input').value=p.content;
  const isVar = p.variants && p.variants.length > 0;
@@ -825,6 +808,7 @@ function openEditPageModal(id){const p=appData.pages.find(x=>x.id===id);if(!p)re
  $('variant-list').innerHTML = '';
  if (isVar) p.variants.forEach(v => addVariantField(v.title, v.content)); else { addVariantField('',''); addVariantField('',''); }
  openModal('page-modal')}
+
 function savePage(){const id=$('page-id-input').value, isVar = $('page-variant-cb').checked;
  let title=$('page-title-input').value.trim(), content=$('page-content-input').value, variants=null, activeVariant=0;
  if (isVar) {
@@ -1078,7 +1062,8 @@ function insertVar(kind){
  t.focus();t.setSelectionRange(a,b);
  let ok=false;try{ok=document.execCommand('insertText',false,s)}catch(e){}
  if(!ok){t.setRangeText(s,a,b,'end');t.dispatchEvent(new Event('input',{bubbles:true}))}
- autosize(t)}
+ autosize(t)
+}
 function boolDef(tok){return tok==='[No]'?'No':'Yes'}
 function setBool(v,val){v.dataset.v=val;v.textContent=val;v.setAttribute('aria-checked',val==='Yes'?'true':'false');v.classList.toggle('yes',val==='Yes');v.classList.toggle('no',val!=='Yes')}
 function toggleBool(v){const nv=v.dataset.v==='Yes'?'No':'Yes',m=varVals[v.dataset.pid]||(varVals[v.dataset.pid]={});
