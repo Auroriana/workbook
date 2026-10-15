@@ -218,6 +218,56 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
 .lk-lnk:hover,.lk-lnk:focus-visible{opacity:1;outline:none}.lk-lnk[hidden]{display:none}
 .btn[hidden]{display:none}
 .fs-row{margin-top:10px}.fs-n{font-size:13px;font-weight:600}.fs-row .hint{margin:2px 0 6px}
+/* sidebar footer: lock + sync status */
+.chip-ch{display:flex;align-items:center;gap:8px}
+.cgrip{flex:none;display:grid;place-items:center;width:20px;height:24px;margin-left:-6px;border-radius:6px;opacity:.5;cursor:grab;touch-action:none}
+.cgrip:hover{opacity:1;background:rgba(127,127,127,.18)}.cgrip svg{width:14px;height:14px;fill:currentColor;stroke:none}
+.chip-ch.drag{position:relative;z-index:3;transition:none;box-shadow:0 8px 24px rgba(0,0,0,.28);cursor:grabbing}
+#chs.dragging{user-select:none;-webkit-user-select:none}
+.side-foot{flex:none;display:flex;align-items:center;gap:8px;padding-top:10px;border-top:1px solid var(--line)}
+.side-foot .ib{flex:none;background:var(--pc);color:var(--on-pc)}.side-foot .ib[hidden]{display:none}
+#sync-ind{display:flex;align-items:center;gap:7px;min-width:0;font-size:12px;line-height:1.25;color:var(--mut)}
+#sync-ind .sd{flex:none;width:10px;height:10px;border-radius:50%;background:var(--mut)}
+#sync-ind[data-k=ok] .sd{background:#2e9e5b}
+#sync-ind[data-k=wait] .sd{background:#e0a100}
+#sync-ind[data-k=err] .sd{background:var(--danger)}
+#sync-ind[data-k=busy] .sd{background:none;border:2px solid var(--line);border-top-color:var(--p);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){#sync-ind[data-k=busy] .sd{animation-duration:2s}}
+/* workspace scrollbar: always visible when needed, sits under the visible part of the workspace */
+#ws{scrollbar-width:none}#ws::-webkit-scrollbar{display:none}
+#hbar{display:none;position:sticky;bottom:10px;z-index:4;height:14px;margin-top:8px;border-radius:8px;background:var(--surf);border:1px solid var(--line);touch-action:none}
+#hthumb{position:absolute;top:1px;bottom:1px;left:0;min-width:40px;border-radius:7px;background:var(--p);opacity:.75;cursor:grab}
+#hthumb:hover,#hthumb.on{opacity:1}
+/* lock while signed in */
+#lk-card.soft .lk-links,#lk-card.soft .lk-keep[data-for]{display:none}
+#lk-card.soft #lk-user{opacity:.7}
+/* settings tabs and sections */
+.stabs{display:flex;gap:6px;padding:6px 24px 12px;overflow-x:auto;flex:none;scrollbar-width:none}
+.stabs button{flex:none;height:34px;padding:0 16px;border-radius:999px;border:1px solid var(--line);font-size:13.5px;white-space:nowrap}
+.stabs button.on{background:var(--pc);color:var(--on-pc);border-color:var(--p);font-weight:600}
+.tp{display:none}.tp.on{display:contents}
+.sec{background:var(--surf);border-radius:18px;padding:14px 16px}
+.sec label{color:var(--txt);font-size:14px;font-weight:600}
+/* theme wheels */
+#thpanel{position:fixed;right:20px;top:76px;z-index:60;width:min(340px,calc(100vw - 16px));max-height:calc(100dvh - 92px);overflow:auto;background:var(--bg);color:var(--txt);border:1px solid var(--line);border-radius:24px;box-shadow:0 12px 48px rgba(0,0,0,.35);padding:18px}
+#thpanel[hidden]{display:none}
+#thpanel h3{font-size:18px;font-weight:500}#thpanel .hint{margin:2px 0 14px}
+.th-act{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+@media(max-width:700px){#thpanel{left:8px;right:8px;top:auto;bottom:8px;width:auto;max-height:72dvh}}
+.wheel{position:relative;margin:0 auto;touch-action:none;cursor:pointer;user-select:none;-webkit-user-select:none}
+.wr{position:absolute;border-radius:50%;-webkit-mask:radial-gradient(circle closest-side,transparent calc(100% - var(--t)),#000 calc(100% - var(--t) + 1px));mask:radial-gradient(circle closest-side,transparent calc(100% - var(--t)),#000 calc(100% - var(--t) + 1px))}
+.wk{position:absolute;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.35),0 2px 6px rgba(0,0,0,.4);pointer-events:none}
+.wc{position:absolute;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2);pointer-events:none}
+.wrows{display:grid;gap:12px;margin-top:16px}
+.wrow{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;align-items:end}
+.wrow b{grid-column:1/-1;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.wrow b i{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+.wrow label{font-size:11px;margin:0 0 3px;color:var(--mut);font-weight:500}
+.wrow input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:6px;outline:none;border:1px solid var(--line)}
+.wrow input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid rgba(0,0,0,.45)}
+.wrow input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid rgba(0,0,0,.45)}
+.cw{margin-top:12px;padding:14px;border-radius:18px;background:var(--surf)}.cw[hidden]{display:none}
 </style></head>
 <body class="" style="--rc: nwse-resize;">
 <div id="lock" role="dialog" aria-modal="true" aria-label="Login">
@@ -232,6 +282,7 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
   <button type="button" class="lk-in lk-btn" id="lk-codego" data-for="code">I've saved it. Continue</button>
   <div class="lk-pw2" id="w-pass" data-for="login signup reset"><input class="lk-in" id="lk-pass" type="password" name="password" placeholder="Password" autocomplete="current-password" aria-label="Password"><button class="lk-go" type="submit" aria-label="Continue"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></div>
   <div class="lk-pw2" data-for="signup reset"><input class="lk-in" id="lk-pass2" type="password" placeholder="Confirm password" autocomplete="new-password" aria-label="Confirm password"><button class="lk-go" type="submit" aria-label="Continue"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></div>
+  <label class="lk-keep" data-for="login signup reset"><input type="checkbox" id="lk-stay"> Stay signed in on this device</label>
   <label class="lk-keep" data-for="signup"><input type="checkbox" id="lk-keep"> Start with the data already on this device</label>
   <div class="lk-msg" id="lk-msg" role="alert"></div>
   <div class="lk-links">
@@ -241,6 +292,12 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
    <button type="button" class="lk-lnk" id="lk-off" hidden>Continue offline</button>
   </div>
  </form>
+</div>
+<div id="thpanel" hidden>
+ <h3>Theme colors</h3>
+ <p class="hint">Drag the dot around each ring to pick a color. The site updates live.</p>
+ <div id="thwheel"></div>
+ <div class="th-act"><button class="btn out" type="button" id="th-cancel">Cancel</button><button class="btn fill" type="button" id="th-save">Save</button></div>
 </div>
 <div id="toast" role="status" class=""></div>
 <div id="szbadge" style="display: none; left: 1325px; top: 612px;">280 × 216 px</div>
@@ -262,6 +319,10 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
    </div>
   </div>
   <nav id="chs" aria-label="Chapters"><button class="chip-ch on" title="General">General</button><button class="chip-ch" title="Billing">Billing</button></nav>
+  <div class="side-foot">
+   <button class="ib" id="lockbtn" type="button" title="Lock" aria-label="Lock" hidden><svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg></button>
+   <div id="sync-ind" data-k="none" role="status" aria-live="polite"><span class="sd"></span><span id="sync-txt">Not signed in</span></div>
+  </div>
  </aside>
  <main><div class="wrap">
   <section class="hero">
@@ -274,17 +335,28 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
   <div class="ph"><h2>Workspace<span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button class="btn tone" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" onclick="openAddPageModal()">+ Add</button></div>
   <div class="empty" id="ws-empty" hidden="">No pages yet. Use + Add to create one, or + Board for a board.</div>
   <div id="ws"><div id="wsc" data-zone="" class="" style="height: 400px; min-width: max(100%, 664px);"><div class="card fi" data-pid="p_asc_1" style="left: 16px; top: 16px; width: 320px; height: 144px;"><div class="ch"><span class="grip" tabindex="0" role="button" title="Drag anywhere on the card to move it. Arrow keys nudge, Alt + arrows resize." aria-label="Move page Opening"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.7"></circle><circle cx="15" cy="6" r="1.7"></circle><circle cx="9" cy="12" r="1.7"></circle><circle cx="15" cy="12" r="1.7"></circle><circle cx="9" cy="18" r="1.7"></circle><circle cx="15" cy="18" r="1.7"></circle></svg></span><span class="ct">Opening</span><div class="ca"><button class="btn tone" title="Copy" aria-label="Copy page text"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span class="lbl">Copy</span></button><button class="ib ed-btn" title="Edit page"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button><div class="dd"><button class="ib" title="More"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-p_asc_1"><button class="mi"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>Edit page</button><button class="mi" title="Resize this page so all of its text shows"><svg viewBox="0 0 24 24"><path d="M12 3v18M8 7l4-4 4 4M8 17l4 4 4-4"></path></svg>Fit height to text</button><button class="mi" title="Copy this page so you can paste it into another chapter"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy page</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate page</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete page</button></div></div></div></div><div class="cc">Thank you for contacting Allstate where you're in good hands. This is Gabriel and I'll be assisting you for today.</div><div class="rz n" data-d="n" aria-hidden="true"></div><div class="rz s" data-d="s" aria-hidden="true"></div><div class="rz e" data-d="e" aria-hidden="true"></div><div class="rz w" data-d="w" aria-hidden="true"></div><div class="rz ne" data-d="ne" aria-hidden="true"></div><div class="rz nw" data-d="nw" aria-hidden="true"></div><div class="rz se" data-d="se" aria-hidden="true"></div><div class="rz sw" data-d="sw" aria-hidden="true"></div></div><div class="card fi" data-pid="p_1791901074458" style="left: 352px; top: 16px; width: 296px; height: 120px;"><div class="ch"><span class="grip" tabindex="0" role="button" title="Drag anywhere on the card to move it. Arrow keys nudge, Alt + arrows resize." aria-label="Move page Recap"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.7"></circle><circle cx="15" cy="6" r="1.7"></circle><circle cx="9" cy="12" r="1.7"></circle><circle cx="15" cy="12" r="1.7"></circle><circle cx="9" cy="18" r="1.7"></circle><circle cx="15" cy="18" r="1.7"></circle></svg></span><span class="ct">Recap</span><div class="ca"><button class="btn tone" title="Copy" aria-label="Copy page text"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span class="lbl">Copy</span></button><button class="ib ed-btn" title="Edit page"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button><div class="dd"><button class="ib" title="More"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-p_1791901074458"><button class="mi"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>Edit page</button><button class="mi" title="Resize this page so all of its text shows"><svg viewBox="0 0 24 24"><path d="M12 3v18M8 7l4-4 4 4M8 17l4 4 4-4"></path></svg>Fit height to text</button><button class="mi" title="Copy this page so you can paste it into another chapter"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy page</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate page</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete page</button></div></div></div></div><div class="cc">Aside from <span class="var" contenteditable="plaintext-only" spellcheck="false" data-k="text" data-ph="XXX" data-pid="p_1791901074458" data-i="0" role="textbox" aria-label="Fill in text" autocapitalize="off" autocorrect="off">XXX</span> is there anything else I can help you with for today?</div><div class="rz n" data-d="n" aria-hidden="true"></div><div class="rz s" data-d="s" aria-hidden="true"></div><div class="rz e" data-d="e" aria-hidden="true"></div><div class="rz w" data-d="w" aria-hidden="true"></div><div class="rz ne" data-d="ne" aria-hidden="true"></div><div class="rz nw" data-d="nw" aria-hidden="true"></div><div class="rz se" data-d="se" aria-hidden="true"></div><div class="rz sw" data-d="sw" aria-hidden="true"></div></div></div></div>
+ <div id="hbar"><div id="hthumb"></div></div>
  </div></main>
 </div>
 
 <div class="ov" id="settings-modal"><div class="modal">
  <div class="mh"><span>Settings</span><button class="ib" onclick="closeModal('settings-modal')" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"></path></svg></button></div>
+ <div class="stabs" id="stabs" role="tablist"><button type="button" class="on" data-t="general">General</button><button type="button" data-t="look">Appearance</button><button type="button" data-t="account">Account</button><button type="button" data-t="data">Data &amp; files</button></div>
  <div class="mb">
-  <div><label for="site-name-input">Website name</label><input type="text" id="site-name-input" maxlength="40" autocomplete="off"><p class="hint">Shown at the top left and used as the file name when you save.</p></div>
-  <div><label>Appearance</label><div class="seg" id="modes"><button>Auto</button><button class="on">Light</button><button>Dark</button><button>Black</button></div></div>
-  <div><label>Accent color</label><div class="sw" id="accents"><button style="--c: 358;" title="Red" aria-label="Red"></button><button style="--c: 8;" title="Coral" aria-label="Coral"></button><button style="--c: 18;" title="Orange" aria-label="Orange"></button><button style="--c: 30;" title="Amber" aria-label="Amber"></button><button style="--c: 42;" title="Gold" aria-label="Gold"></button><button style="--c: 56;" title="Yellow" aria-label="Yellow"></button><button style="--c: 75;" title="Olive" aria-label="Olive"></button><button style="--c: 100;" title="Lime" aria-label="Lime"></button><button style="--c: 140;" title="Green" aria-label="Green"></button><button style="--c: 158;" title="Mint" aria-label="Mint"></button><button style="--c: 174;" title="Teal" aria-label="Teal"></button><button style="--c: 188;" title="Cyan" aria-label="Cyan"></button><button style="--c: 198;" title="Sky" aria-label="Sky"></button><button style="--c: 207;" title="Blue" aria-label="Blue"></button><button class="on" style="--c: 232;" title="Indigo" aria-label="Indigo"></button><button style="--c: 257;" title="Purple" aria-label="Purple"></button><button style="--c: 275;" title="Violet" aria-label="Violet"></button><button style="--c: 300;" title="Magenta" aria-label="Magenta"></button><button style="--c: 322;" title="Pink" aria-label="Pink"></button><button style="--c: 340;" title="Rose" aria-label="Rose"></button></div></div>
-  <div><label>Account</label><div class="lk-row"><div class="lk-av sm" id="set-av"></div><div class="seg"><button class="btn tone sm" id="av-up" type="button">Upload</button><button class="btn out sm" id="av-rm" type="button">Remove</button></div><input type="file" id="av-file" accept="image/*" hidden=""></div><p class="hint" id="acct-st">Not signed in.</p><p class="hint">Your profile picture is saved to your account (shrunk to 256 px) and shows on the login screen of the device you last used.</p><div class="seg" style="margin-top:6px"><button class="btn tone sm" id="recov" type="button" hidden>New recovery code</button><button class="btn out danger sm" id="logout" type="button" hidden>Log out</button></div><p class="hint">The recovery code lets you reset a forgotten password yourself. Making a new one replaces the old one.</p></div>
-<div>
+  <div class="tp on" data-t="general">
+   <section class="sec"><div><label for="site-name-input">Website name</label><input type="text" id="site-name-input" maxlength="40" autocomplete="off"><p class="hint">Shown at the top left and used as the file name when you save.</p></div></section>
+   <section class="sec"><div><label>Lock</label><p class="hint">Covers the screen until you type your password again. You stay signed in and syncing keeps running.</p><div class="seg" style="margin-top:8px"><button class="btn tone sm" type="button" id="set-lock">Lock now</button></div></div></section>
+  </div>
+  <div class="tp" data-t="look">
+   <section class="sec"><div><label>Appearance</label><div class="seg" id="modes"><button>Auto</button><button class="on">Light</button><button>Dark</button><button>Black</button></div></div></section>
+   <section class="sec"><div><label>Accent color</label><div class="sw" id="accents"><button style="--c: 358;" title="Red" aria-label="Red"></button><button style="--c: 8;" title="Coral" aria-label="Coral"></button><button style="--c: 18;" title="Orange" aria-label="Orange"></button><button style="--c: 30;" title="Amber" aria-label="Amber"></button><button style="--c: 42;" title="Gold" aria-label="Gold"></button><button style="--c: 56;" title="Yellow" aria-label="Yellow"></button><button style="--c: 75;" title="Olive" aria-label="Olive"></button><button style="--c: 100;" title="Lime" aria-label="Lime"></button><button style="--c: 140;" title="Green" aria-label="Green"></button><button style="--c: 158;" title="Mint" aria-label="Mint"></button><button style="--c: 174;" title="Teal" aria-label="Teal"></button><button style="--c: 188;" title="Cyan" aria-label="Cyan"></button><button style="--c: 198;" title="Sky" aria-label="Sky"></button><button style="--c: 207;" title="Blue" aria-label="Blue"></button><button class="on" style="--c: 232;" title="Indigo" aria-label="Indigo"></button><button style="--c: 257;" title="Purple" aria-label="Purple"></button><button style="--c: 275;" title="Violet" aria-label="Violet"></button><button style="--c: 300;" title="Magenta" aria-label="Magenta"></button><button style="--c: 322;" title="Pink" aria-label="Pink"></button><button style="--c: 340;" title="Rose" aria-label="Rose"></button></div></div></section>
+   <section class="sec"><div><label>Custom theme colors</label><p class="hint">Pick Main (background), Accent (buttons) and Secondary (highlights) on three color wheels. This sits on top of the options above and overrides Light and Dark while it is on.</p><div class="seg" style="margin-top:8px"><button class="btn tone sm" type="button" id="th-open">Edit theme colors</button><button class="btn out sm" type="button" id="th-reset">Turn off</button></div></div></section>
+  </div>
+  <div class="tp" data-t="account">
+   <section class="sec"><div><label>Account</label><div class="lk-row"><div class="lk-av sm" id="set-av"></div><div class="seg"><button class="btn tone sm" id="av-up" type="button">Upload</button><button class="btn out sm" id="av-rm" type="button">Remove</button></div><input type="file" id="av-file" accept="image/*" hidden=""></div><p class="hint" id="acct-st">Not signed in.</p><p class="hint">Your profile picture is saved to your account (shrunk to 256 px) and shows on the login screen of the device you last used.</p><div class="seg" style="margin-top:6px"><button class="btn tone sm" id="recov" type="button" hidden>New recovery code</button><button class="btn out danger sm" id="logout" type="button" hidden>Log out</button></div><p class="hint">The recovery code lets you reset a forgotten password yourself. Making a new one replaces the old one.</p></div></section>
+  </div>
+  <div class="tp" data-t="data">
+   <section class="sec"><div>
     <label>Backup &amp; Sync Data</label>
     <div class="seg">
       <button class="btn tone" onclick="exportAppData()">Export Data</button>
@@ -292,12 +364,13 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
     </div>
     <input type="file" id="import-data-file" accept=".txt,.json" style="display: none;" onchange="importAppData(event)">
     <p class="hint">Export your workspace data to continue on another device, then import it back.</p>
-  </div>
-  <div><label>Auto-save to this computer</label>
+  </div></section>
+   <section class="sec"><div><label>Auto-save to this computer</label>
    <div class="fs-row"><b class="fs-n">App file (.html)</b><p class="hint" id="fs-html-st"></p><div class="seg"><button class="btn tone sm" id="fs-html-pick" type="button">Choose file</button><button class="btn fill sm" id="fs-html-go" type="button" hidden>Reconnect</button><button class="btn out danger sm" id="fs-html-off" type="button" hidden>Stop</button></div></div>
    <div class="fs-row"><b class="fs-n">Backup (.json)</b><p class="hint" id="fs-json-st"></p><div class="seg"><button class="btn tone sm" id="fs-json-pick" type="button">Choose file</button><button class="btn fill sm" id="fs-json-go" type="button" hidden>Reconnect</button><button class="btn out danger sm" id="fs-json-off" type="button" hidden>Stop</button></div></div>
    <p class="hint">Pick each file once. It is then rewritten a few seconds after every change. Browsers cannot accept a typed path, and after restarting the browser you may need to press Reconnect. Chrome and Edge only.</p>
-   <div class="seg" style="margin-top:6px"><button class="btn fill sm" type="button" onclick="saveDirectToFile()">Save app file now</button></div></div>
+   <div class="seg" style="margin-top:6px"><button class="btn fill sm" type="button" onclick="saveDirectToFile()">Save app file now</button></div></div></section>
+  </div>
   <p class="credit">ataraxia</p>
  </div>
  <div class="mf"><button class="btn tone" onclick="closeModal('settings-modal')">Close</button></div>
@@ -516,7 +589,8 @@ function applyTheme(){const s=appData.settings,r=document.documentElement;
  const dark=s.mode==='dark'||s.mode==='black'||(s.mode==='auto'&&matchMedia('(prefers-color-scheme:dark)').matches);
  r.classList.toggle('dark',dark);r.classList.toggle('black',s.mode==='black');r.style.setProperty('--h',ACCENTS[s.accent]||257);
  $('modes').innerHTML='';for(const k in MODES){const b=el('button',k===s.mode?'on':'',MODES[k]);b.onclick=()=>{s.mode=k;persistLocal();applyTheme()};$('modes').appendChild(b)}
- $('accents').innerHTML='';for(const k in ACCENTS){const b=el('button',k===s.accent?'on':'');b.style.setProperty('--c',ACCENTS[k]);b.title=k;b.setAttribute('aria-label',k);b.onclick=()=>{s.accent=k;persistLocal();applyTheme()};$('accents').appendChild(b)}}
+ $('accents').innerHTML='';for(const k in ACCENTS){const b=el('button',k===s.accent?'on':'');b.style.setProperty('--c',ACCENTS[k]);b.title=k;b.setAttribute('aria-label',k);b.onclick=()=>{s.accent=k;persistLocal();applyTheme()};$('accents').appendChild(b)}
+ if(window.applyCustom)applyCustom(s.theme)}
 /* render */
 function renderAll(){renderBooks();renderChapters();renderHero();renderPages()}
 function keepVisible(box){const a=box.querySelector('.on');if(a)box.scrollLeft=a.offsetLeft-box.clientWidth/2+a.offsetWidth/2}
@@ -529,7 +603,7 @@ function keepVisibleV(box){const a=box.querySelector('.on');if(!a)return;const t
 function renderChapters(){const c=$('chs'),st=c.scrollTop;c.innerHTML='';
  const list=appData.chapters.filter(x=>x.bookId===appData.activeBookId);
  if(!list.length){c.append(el('div','empty','No chapters yet. Add one with + Chapter.'));return}
- list.forEach(x=>{const b=el('button','chip-ch'+(x.id===appData.activeChapterId?' on':''));b.textContent=x.name;b.title=x.name;b.onclick=()=>{appData.activeChapterId=x.id;persistLocal();renderChapters();renderHero();renderPages()};c.append(b)});
+ list.forEach(x=>{const b=el('button','chip-ch'+(x.id===appData.activeChapterId?' on':''));b.textContent=x.name;b.dataset.id=x.id;b.title=x.name;{const g=el('span','cgrip','<svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>');g.title='Drag to reorder';b.prepend(g)}b.onclick=()=>{appData.activeChapterId=x.id;persistLocal();renderChapters();renderHero();renderPages()};c.append(b)});
  c.scrollTop=st;keepVisibleV(c)}
 function curChap(){return appData.chapters.find(c=>c.id===appData.activeChapterId&&c.bookId===appData.activeBookId)}
 function renderHero(){const c=curChap(),a=$('hacts');a.innerHTML='';
@@ -799,7 +873,7 @@ const SWATCH={border:['#e57373','#f0a35e','#e6c34a','#7fc77f','#4db6ac','#64b5f6
 function buildPick(key){const box=$('cpick-'+key);box.innerHTML='';
  const def=el('button','csw def');def.type='button';def.title='Default';def.setAttribute('aria-label','Default color');def.onclick=()=>{cm[key]='';markPick(key);prevC()};box.append(def);
  SWATCH[key].forEach(col=>{const b=el('button','csw');b.type='button';b.style.background=col;b.dataset.c=col;b.title=col;b.setAttribute('aria-label','Color '+col);b.onclick=()=>{cm[key]=col;markPick(key);prevC()};box.append(b)});
- const cu=el('span','csw custom');cu.title='Custom color';const inp=document.createElement('input');inp.type='color';inp.setAttribute('aria-label','Custom color');inp.value=cm[key]||(key==='bg'?'#dddddd':'#888888');inp.oninput=()=>{cm[key]=inp.value;markPick(key);prevC()};cu.append(inp);box.append(cu);markPick(key)}
+ const old=box.parentElement.querySelector('.cw');if(old)old.remove();const cu=el('button','csw custom');cu.type='button';cu.title='Custom color';cu.setAttribute('aria-label','Custom color');cu.onclick=()=>window.toggleCW&&toggleCW(box,key);box.append(cu);markPick(key)}
 function markPick(key){const v=cm[key],pre=SWATCH[key];
  [...$('cpick-'+key).children].forEach(n=>{let on;
   if(n.classList.contains('def'))on=!v;
@@ -963,7 +1037,7 @@ function importAppData(event){const file=event.target.files[0];if(!file)return;c
 <script id="lock-script">
 (function(){
 const G=id=>document.getElementById(id);
-const KA='ataraxia_avatar',KD='ataraxia_dirty',KS='ataraxia_seen',KL='ataraxia_last',KDATA='paano_ba_yan_data';
+const KP='ataraxia_stay',KA='ataraxia_avatar',KD='ataraxia_dirty',KS='ataraxia_seen',KL='ataraxia_last',KDATA='paano_ba_yan_data';
 const API_ORIGIN='';/* leave empty when this page is served from the same Vercel project as /api. Fill in https://your-app.vercel.app if you open the file from disk */
 const CFG={apiKey:"AIzaSyDxEgrANR-Ccbz58hx3JzhLX-rcp2Soe2I",authDomain:"ataraxia-77692.firebaseapp.com",databaseURL:"https://ataraxia-77692-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"ataraxia-77692",storageBucket:"ataraxia-77692.firebasestorage.app",messagingSenderId:"131850691296",appId:"1:131850691296:web:7c4a3ce3660328474e6685"};
 const FB='https://www.gstatic.com/firebasejs/10.14.1/';
@@ -977,7 +1051,7 @@ const PERSON='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8"
 const mail=u=>u+'@ataraxia.app';
 const normUser=s=>{s=s.trim().toLowerCase();return /^[a-z0-9_-]{3,24}$/.test(s)?s:''};
 const pwCheck=(p,p2)=>p.length<4?'Password must be at least 4 characters':p!==p2?"Passwords don't match":'';
-let invKey='',pend=null,AU=null,DB=null,auth=null,db=null,uid=null,entered=null,name='',mode='login',purpose='signup',busy=false,manual=false,fresh=null,timer=0,offline=false,syncTxt='';
+let invKey='',pend=null,AU=null,DB=null,auth=null,db=null,uid=null,entered=null,name='',mode='login',purpose='signup',busy=false,manual=false,fresh=null,timer=0,offline=false,syncTxt='',softLock=false;
 let pushT=0,edits=0,lastSeen=0,pendV=null,applying=false,unsub=null,fsT=0;
 
 /* ---------- crypto: the Firebase password is derived from the real one, and a copy is sealed with the master key so it can be reset ---------- */
@@ -1016,20 +1090,21 @@ function errText(x){if(typeof x==='string')return x;const c=(x&&x.code)||'',t=(x
  if(c==='auth/operation-not-allowed')return 'Email/Password sign-in is not switched on in Firebase yet';
  if(/PERMISSION_DENIED/i.test(c+t))return 'The database rules blocked this. Publish the rules from the guide';
  return 'Something went wrong ('+(c||t||'unknown')+')'}
+async function setPersist(){const st=G('lk-stay').checked;wr(KP,st?'1':'0');try{await AU.setPersistence(auth,st?AU.browserLocalPersistence:AU.browserSessionPersistence)}catch(e){}}
 const needNet=()=>{if(!auth)throw 'Still connecting. Try again in a moment'};
 async function doKey(){const k=G('lk-key').value;if(!k)throw 'Enter the master key';msg('Checking…');await api('key',{key:k});invKey=k;setMode('signup')}
 async function doLogin(){needNet();const u=G('lk-user').value.trim().toLowerCase(),p=G('lk-pass').value;if(!u||!p)throw 'Enter your username and password';
- manual=true;msg('Signing in…');const fp=await fbPass(u,p);const c=await AU.signInWithEmailAndPassword(auth,mail(u),fp);await enter(c.user)}
+ manual=true;msg('Signing in…');const fp=await fbPass(u,p);await setPersist();const c=await AU.signInWithEmailAndPassword(auth,mail(u),fp);await enter(c.user)}
 async function doSignup(){needNet();const u=normUser(G('lk-user').value),p=G('lk-pass').value,bad=pwCheck(p,G('lk-pass2').value);
  if(!u)throw 'Username: 3 to 24 characters, letters, numbers, _ or -';if(bad)throw bad;if(!invKey)throw 'Enter the master key first';
  manual=true;msg('Creating account…');const keep=G('lk-keep').checked,fp=await fbPass(u,p);
  const r=await api('signup',{key:invKey,username:u,password:fp});invKey='';
- const c=await AU.signInWithEmailAndPassword(auth,mail(u),fp);showCode(r.code,c.user,keep)}
+ await setPersist();const c=await AU.signInWithEmailAndPassword(auth,mail(u),fp);showCode(r.code,c.user,keep)}
 async function doReset(){needNet();const u=normUser(G('lk-user').value),rc=G('lk-rc').value,p=G('lk-pass').value,bad=pwCheck(p,G('lk-pass2').value);
  if(!u)throw 'Enter the username of the account';if(!rc.trim())throw 'Enter your recovery code or the master key';if(bad)throw bad;
  manual=true;msg('Resetting…');const fp=await fbPass(u,p);
  const r=await api('reset',{username:u,code:rc,password:fp});
- const c=await AU.signInWithEmailAndPassword(auth,mail(u),fp);toast('Password updated.');showCode(r.code,c.user,false)}
+ await setPersist();const c=await AU.signInWithEmailAndPassword(auth,mail(u),fp);toast('Password updated.');showCode(r.code,c.user,false)}
 function showCode(code,user,keep){pend={user,keep};G('lk-codebox').textContent=code;setMode('code')}
 async function codeDone(){if(!pend||busy)return;const p=pend;pend=null;busy=true;manual=true;fresh={keep:p.keep};G('lk-codebox').textContent='';
  try{await enter(p.user)}catch(e){setLocked(false)}finally{busy=false;manual=false;fresh=null}}
@@ -1056,7 +1131,15 @@ window.setAvatar=saveAvatar;
 /* ---------- cloud sync (Realtime Database, one JSON string per account) ---------- */
 const uref=p=>DB.ref(db,'ataraxia/users/'+uid+(p?'/'+p:''));
 const calm=()=>!document.querySelector('.ov.open')&&!ps&&!editMode;/* never swap the data while you are editing or dragging */
-function paintAcct(){G('acct-st').textContent=uid?'Signed in as '+name+'. '+syncTxt:offline?'Offline mode. Changes are saved on this device only.':'Not signed in.';G('logout').hidden=!uid;G('recov').hidden=!uid}
+function paintInd(){const e=G('sync-ind');if(!e)return;let k,t;
+ if(!uid){k=offline?'off':'none';t=offline?'Saved on this device only':'Not signed in'}
+ else if(/^Synced/.test(syncTxt)){k='ok';t='All changes saved. Safe to leave'}
+ else if(/^Syncing/.test(syncTxt)){k='busy';t='Saving…'}
+ else if(/^Waiting/.test(syncTxt)){k='wait';t='Unsaved changes. Please wait'}
+ else if(/^Offline/.test(syncTxt)){k='err';t='Offline. Will save when back'}
+ else{k='err';t='Not saved yet. Will retry'}
+ e.dataset.k=k;G('sync-txt').textContent=t;G('lockbtn').hidden=!uid}
+function paintAcct(){paintInd();G('acct-st').textContent=uid?'Signed in as '+name+'. '+syncTxt:offline?'Offline mode. Changes are saved on this device only.':'Not signed in.';G('logout').hidden=!uid;G('recov').hidden=!uid}
 function setSync(t){syncTxt=t;paintAcct()}
 function adopt(o){applying=true;try{wr(KDATA,JSON.stringify(o));load();applyTheme();applySiteName(true);renderAll()}finally{applying=false}fsSoon()}
 window.adoptData=adopt;
@@ -1071,7 +1154,11 @@ async function reconcile(){const v=(await DB.get(uref())).val()||{};
  await push();if(avatar())await DB.set(uref('avatar'),avatar())}
 async function pull(){try{const v=(await DB.get(uref())).val();if(!v||!v.data||(v.updatedAt||0)<=lastSeen)return;if(calm())apply(v);else pendV=v}catch(e){}}
 function listen(){if(unsub)unsub();unsub=DB.onValue(uref('updatedAt'),s=>{const ts=s.val();if(ts&&ts>lastSeen&&rd(KD)!==uid)pull()})}
-async function enter(user){if(entered===user.uid)return;entered=user.uid;
+function unsoft(){softLock=false;G('lk-card').classList.remove('soft');G('lk-user').readOnly=false}
+function lockNow(){if(!uid||softLock)return;document.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));if(typeof closeMenus==='function')closeMenus();
+ softLock=true;G('lk-card').classList.add('soft');setMode('login');G('lk-user').value=name;G('lk-user').readOnly=true;paint();setLocked(true);msg('Locked. Enter your password to continue.');setTimeout(()=>G('lk-pass').focus(),80)}
+window.lockNow=lockNow;
+async function enter(user){if(entered===user.uid){unsoft();setLocked(false);return}entered=user.uid;
  uid=user.uid;name=(user.email||'').split('@')[0];wr(KS,'1');wr(KL,name);lastSeen=0;setSync('Syncing…');msg('Syncing…');
  try{await reconcile()}catch(e){setSync('Offline. Will sync when you are back online.')}
  listen();
@@ -1082,6 +1169,7 @@ async function logout(){if(!uid)return;if(rd(KD)===uid)await push();
  try{await AU.signOut(auth)}catch(e){}
  rm(KDATA);rm(KD);location.reload()}
 window.onPersist=()=>{if(uid&&!applying){edits++;wr(KD,uid);setSync('Waiting to sync…');clearTimeout(pushT);pushT=setTimeout(push,1500)}fsSoon()};
+addEventListener('beforeunload',e=>{if(uid&&rd(KD)===uid){e.preventDefault();e.returnValue=''}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&uid&&rd(KD)===uid)push()});
 addEventListener('online',()=>{if(uid&&rd(KD)===uid)push()});
 setInterval(()=>{if(pendV&&calm()&&rd(KD)!==uid){const v=pendV;pendV=null;apply(v)}},3000);
@@ -1115,7 +1203,7 @@ async function fsPick(k){const isH=k==='html',h=await showSaveFilePicker({sugges
 /* ---------- wiring ---------- */
 window.lockClean=c=>{c.classList.remove('unlocked');c.querySelectorAll('[inert]').forEach(n=>n.removeAttribute('inert'));
  ['lk-av','set-av'].forEach(id=>{const n=c.querySelector('#'+id);if(n)n.textContent=''});
- const k=c.querySelector('#lk-card');if(k){k.dataset.m='login';k.classList.remove('err','busy')}
+ const k=c.querySelector('#lk-card');if(k){k.dataset.m='login';k.classList.remove('err','busy','soft')}
  const m=c.querySelector('#lk-msg');if(m){m.textContent='';m.className='lk-msg'}
  const o=c.querySelector('#lk-off');if(o)o.hidden=true;
  const cb=c.querySelector('#lk-codebox');if(cb)cb.textContent='';
@@ -1134,14 +1222,116 @@ G('av-up').onclick=()=>G('av-file').click();
 G('av-file').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
  try{await saveAvatar(await fit(f));toast('Profile picture updated.')}catch(x){toast('That file could not be read as an image.')}};
 G('av-rm').onclick=async()=>{await saveAvatar('');toast('Profile picture removed.')};
+G('lockbtn').onclick=lockNow;G('set-lock').onclick=()=>{closeModal('settings-modal');lockNow()};
 G('logout').onclick=()=>{if(typeof closeModal==='function')closeModal('settings-modal');logout()};
 
-setMode(rd(KS)?'login':'key','signup');setLocked(true);paintAcct();fsPaint();
+G('lk-stay').checked=rd(KP)==='1';setMode(rd(KS)?'login':'key','signup');setLocked(true);paintAcct();fsPaint();
 (async()=>{
  try{const[fa,au,dbm]=await Promise.all([import(FB+'firebase-app.js'),import(FB+'firebase-auth.js'),import(FB+'firebase-database.js')]);
   const app=fa.initializeApp(CFG);AU=au;DB=dbm;auth=au.getAuth(app);db=dbm.getDatabase(app)}
  catch(e){offline=true;msg("Can't reach Firebase. You can still keep working offline on this device.",true);G('lk-off').hidden=false;return}
- AU.onAuthStateChanged(auth,u=>{if(manual)return;if(u)enter(u).catch(()=>setLocked(false));else if(uid){uid=null;entered=null;setLocked(true)}})})();
+ AU.onAuthStateChanged(auth,u=>{if(manual||softLock)return;if(u){if(rd(KP)===null){AU.signOut(auth).catch(()=>{});return}enter(u).catch(()=>setLocked(false))}else if(uid){uid=null;entered=null;paintAcct();setLocked(true)}})})();
+})();
+</script>
+<script id="ux-script">
+(function(){
+const $=id=>document.getElementById(id);
+function hsl2rgb(h,s,l){s/=100;l/=100;const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l),f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));return[f(0),f(8),f(4)].map(v=>Math.round(v*255))}
+function h2x(h,s,l){return'#'+hsl2rgb(h,s,l).map(v=>v.toString(16).padStart(2,'0')).join('')}
+function x2h(x){const m=/^#?([0-9a-f]{6})$/i.exec(x||'');if(!m)return null;const n=parseInt(m[1],16),r=(n>>16&255)/255,g=(n>>8&255)/255,b=(n&255)/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn,l=(mx+mn)/2;let h=0,s=0;
+ if(d){s=d/(1-Math.abs(2*l-1));h=mx===r?((g-b)/d+(g<b?6:0)):mx===g?(b-r)/d+2:(r-g)/d+4;h*=60}return{h:Math.round(h)%360,s:Math.round(s*100),l:Math.round(l*100)}}
+function lum(o){const[r,g,b]=hsl2rgb(o.h,o.s,o.l).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*r+.7152*g+.0722*b}
+
+/* ---------- color wheel: one ring per color, inner ring first ---------- */
+function makeWheel(host,defs,cb,opt){opt=opt||{};
+ const n=defs.length,T=n>1?28:34,GAP=6,hole=n>1?36:44,size=2*(hole+n*T+(n-1)*GAP),mid=size/2;
+ host.innerHTML='';
+ const w=document.createElement('div');w.className='wheel';w.style.width=w.style.height=size+'px';
+ const rings=defs.map((d,i)=>{const inner=hole+i*(T+GAP),outer=inner+T,r=document.createElement('div'),k=document.createElement('div');
+  r.className='wr';r.style.cssText='--t:'+T+'px;left:'+(mid-outer)+'px;top:'+(mid-outer)+'px;width:'+2*outer+'px;height:'+2*outer+'px';k.className='wk';w.append(r,k);
+  return{d,r,k,mid:(inner+outer)/2}});
+ const c=document.createElement('div'),cr=hole-8;c.className='wc';c.style.cssText='left:'+(mid-cr)+'px;top:'+(mid-cr)+'px;width:'+2*cr+'px;height:'+2*cr+'px';w.append(c);
+ const rows=document.createElement('div');rows.className='wrows';
+ const ctl=defs.map(d=>{const row=document.createElement('div');row.className='wrow';
+  row.innerHTML=(opt.hideName?'':'<b><i></i><span></span></b>')+'<div><label>Saturation</label><input type="range" min="0" max="100"></div><div><label>Lightness</label><input type="range" min="2" max="98"></div>';
+  const[sa,li]=row.querySelectorAll('input');if(!opt.hideName)row.querySelector('span').textContent=d.name;
+  sa.oninput=()=>{d.s=+sa.value;paint();cb()};li.oninput=()=>{d.l=+li.value;paint();cb()};rows.append(row);return{d,sa,li,dot:row.querySelector('i')}});
+ function paint(){
+  rings.forEach(o=>{const{h,s,l}=o.d,a=h*Math.PI/180;
+   o.r.style.background='conic-gradient('+[0,60,120,180,240,300,360].map(x=>'hsl('+x+' '+s+'% '+l+'%)').join(',')+')';
+   o.k.style.left=(mid+Math.sin(a)*o.mid)+'px';o.k.style.top=(mid-Math.cos(a)*o.mid)+'px';o.k.style.background='hsl('+h+' '+s+'% '+l+'%)'});
+  const d0=defs[0];c.style.background='hsl('+d0.h+' '+d0.s+'% '+d0.l+'%)';
+  ctl.forEach(x=>{const{h,s,l}=x.d;x.sa.value=s;x.li.value=l;
+   x.sa.style.background='linear-gradient(90deg,hsl('+h+' 0% '+l+'%),hsl('+h+' 100% '+l+'%))';
+   x.li.style.background='linear-gradient(90deg,#000,hsl('+h+' '+s+'% 50%),#fff)';if(x.dot)x.dot.style.background='hsl('+h+' '+s+'% '+l+'%)'})}
+ let act=null;
+ const move=e=>{const b=w.getBoundingClientRect();let h=Math.atan2(e.clientX-b.left-mid,-(e.clientY-b.top-mid))*180/Math.PI;if(h<0)h+=360;act.d.h=Math.round(h)%360;paint();cb()};
+ w.onpointerdown=e=>{const b=w.getBoundingClientRect(),r=Math.hypot(e.clientX-b.left-mid,e.clientY-b.top-mid);if(r<hole-6)return;
+  let best=rings[0];rings.forEach(o=>{if(Math.abs(r-o.mid)<Math.abs(r-best.mid))best=o});act=best;w.setPointerCapture(e.pointerId);move(e);e.preventDefault()};
+ w.onpointermove=e=>{if(act)move(e)};w.onpointerup=w.onpointercancel=()=>{act=null};
+ host.append(w,rows);paint()}
+
+/* ---------- website theme (Main = background, Accent = buttons, Secondary = highlights) ---------- */
+const TK=['--bg','--surf','--card','--line','--bar','--txt','--mut','--p','--on-p','--pc','--on-pc'];
+window.applyCustom=function(t,force){if(window.__themeEdit&&!force)return;const r=document.documentElement;
+ if(!t){TK.forEach(k=>r.style.removeProperty(k));return}
+ const m=t.main,a=t.accent,c=t.second,dark=m.l<50,sh=(o,d)=>'hsl('+o.h+' '+o.s+'% '+Math.max(0,Math.min(100,o.l+d))+'%)',on=o=>lum(o)>.38?'#1d1b20':'#ffffff',txt=dark?'#e6e0e9':'#1d1b20',set=(k,v)=>r.style.setProperty(k,v);
+ set('--bg',sh(m,0));set('--surf',sh(m,dark?5:-4));set('--card',sh(m,dark?8:4));set('--line',sh(m,dark?16:-14));set('--bar','hsl('+m.h+' '+m.s+'% '+m.l+'% / .92)');
+ set('--txt',txt);set('--mut','color-mix(in srgb,'+txt+' 62%,var(--bg))');
+ set('--p',sh(a,0));set('--on-p',on(a));set('--pc',sh(c,0));set('--on-pc',on(c));set('--h',a.h)};
+const clone=o=>o?JSON.parse(JSON.stringify(o)):null,pk=d=>({h:d.h,s:d.s,l:d.l});
+let prev=null,cur=null;
+function setTab(t){document.querySelectorAll('#stabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));document.querySelectorAll('.tp').forEach(p=>p.classList.toggle('on',p.dataset.t===t))}
+$('stabs').onclick=e=>{const b=e.target.closest('button');if(b)setTab(b.dataset.t)};
+function endTheme(){window.__themeEdit=false;$('thpanel').hidden=true;openModal('settings-modal');setTab('look')}
+$('th-open').onclick=()=>{const s=appData.settings,dark=document.documentElement.classList.contains('dark'),hue=ACCENTS[s.accent]||257;
+ prev=clone(s.theme);const t=clone(s.theme)||{main:{h:hue,s:30,l:dark?11:97},accent:{h:hue,s:45,l:dark?75:46},second:{h:hue,s:55,l:dark?28:91}};
+ const defs=[Object.assign({name:'Main · background'},t.main),Object.assign({name:'Accent · buttons'},t.accent),Object.assign({name:'Secondary · highlights'},t.second)];
+ const go=()=>{cur={main:pk(defs[0]),accent:pk(defs[1]),second:pk(defs[2])};applyCustom(cur,true)};
+ closeModal('settings-modal');window.__themeEdit=true;$('thpanel').hidden=false;makeWheel($('thwheel'),defs,go);go()};
+$('th-save').onclick=()=>{appData.settings.theme=cur;persistLocal();endTheme();applyTheme();showToast('Theme saved.')};
+$('th-cancel').onclick=()=>{applyCustom(prev,true);endTheme()};
+$('th-reset').onclick=()=>{delete appData.settings.theme;persistLocal();applyCustom(null);showToast('Custom theme turned off.')};
+
+/* ---------- board colors: custom swatch opens a wheel ---------- */
+window.toggleCW=function(box,key){const par=box.parentElement;let p=par.querySelector('.cw');
+ if(p){p.hidden=!p.hidden;if(p.hidden)return}else{p=document.createElement('div');p.className='cw';par.append(p)}
+ const d=Object.assign({name:'Color'},x2h(cm[key])||{h:210,s:60,l:key==='bg'?92:60});
+ makeWheel(p,[d],()=>{cm[key]=h2x(d.h,d.s,d.l);markPick(key);prevC()},{hideName:true})};
+
+/* ---------- drag chapters up and down ---------- */
+const chs=$('chs');
+chs.addEventListener('click',e=>{if(e.target.closest('.cgrip')){e.stopPropagation();e.preventDefault()}},true);
+function reorder(ids){const bid=appData.activeBookId,slots=[];appData.chapters.forEach((c,i)=>{if(c.bookId===bid)slots.push(i)});
+ const map=new Map(appData.chapters.filter(c=>c.bookId===bid).map(c=>[c.id,c])),list=ids.map(i=>map.get(i)).filter(Boolean);
+ if(list.length!==slots.length||slots.every((s,i)=>appData.chapters[s]===list[i])){renderChapters();return}
+ slots.forEach((s,i)=>appData.chapters[s]=list[i]);persistLocal();renderChapters()}
+chs.addEventListener('pointerdown',e=>{const g=e.target.closest('.cgrip');if(!g||e.button>0)return;const ch=g.closest('.chip-ch');if(!ch)return;e.preventDefault();
+ const grab=e.clientY-ch.getBoundingClientRect().top;ch.classList.add('drag');chs.classList.add('dragging');g.setPointerCapture(e.pointerId);
+ const place=y=>{const want=y-chs.getBoundingClientRect().top+chs.scrollTop-grab,ctr=want+ch.offsetHeight/2,
+   t=[...chs.querySelectorAll('.chip-ch')].filter(x=>x!==ch).find(x=>x.offsetTop+x.offsetHeight/2>ctr);
+  if(t){if(ch.nextElementSibling!==t)chs.insertBefore(ch,t)}else if(chs.lastElementChild!==ch)chs.append(ch);
+  ch.style.transform='translateY('+(want-ch.offsetTop)+'px)'};
+ const mv=ev=>{const r=chs.getBoundingClientRect();if(ev.clientY<r.top+28)chs.scrollTop-=10;else if(ev.clientY>r.bottom-28)chs.scrollTop+=10;place(ev.clientY)};
+ const end=()=>{g.removeEventListener('pointermove',mv);g.removeEventListener('pointerup',end);g.removeEventListener('pointercancel',end);
+  ch.classList.remove('drag');chs.classList.remove('dragging');ch.style.transform='';reorder([...chs.querySelectorAll('.chip-ch')].map(x=>x.dataset.id))};
+ g.addEventListener('pointermove',mv);g.addEventListener('pointerup',end);g.addEventListener('pointercancel',end);place(e.clientY)});
+
+/* ---------- workspace horizontal scrollbar ---------- */
+const ws=$('ws'),bar=$('hbar'),th=$('hthumb');
+function upd(){const sw=ws.scrollWidth,cw=ws.clientWidth;if(sw<=cw+1){bar.style.display='none';return}
+ bar.style.display='block';const tw=bar.clientWidth-2,tl=Math.max(40,tw*cw/sw);th.style.width=tl+'px';th.style.left=(ws.scrollLeft/(sw-cw))*(tw-tl)+'px'}
+ws.addEventListener('scroll',upd);addEventListener('resize',upd);
+if(window.ResizeObserver){const ro=new ResizeObserver(upd);ro.observe(ws);ro.observe($('wsc'))}
+new MutationObserver(upd).observe($('wsc'),{attributes:true,childList:true,attributeFilter:['style']});
+th.addEventListener('pointerdown',e=>{e.preventDefault();th.setPointerCapture(e.pointerId);th.classList.add('on');
+ const x0=e.clientX,l0=parseFloat(th.style.left)||0,tw=bar.clientWidth-2,tl=th.offsetWidth,sw=ws.scrollWidth,cw=ws.clientWidth;
+ const mv=ev=>{const l=Math.max(0,Math.min(tw-tl,l0+ev.clientX-x0));ws.scrollLeft=l/(tw-tl)*(sw-cw)};
+ const up=()=>{th.classList.remove('on');th.removeEventListener('pointermove',mv);th.removeEventListener('pointerup',up);th.removeEventListener('pointercancel',up)};
+ th.addEventListener('pointermove',mv);th.addEventListener('pointerup',up);th.addEventListener('pointercancel',up)});
+bar.addEventListener('pointerdown',e=>{if(e.target!==bar)return;const r=th.getBoundingClientRect();ws.scrollBy({left:(e.clientX<r.left?-1:1)*ws.clientWidth*.8,behavior:'smooth'})});
+upd();
+if(appData&&appData.settings&&appData.settings.theme)applyCustom(appData.settings.theme);
 })();
 </script>
 </body></html>
