@@ -240,7 +240,7 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
 #hthumb{position:absolute;top:1px;bottom:1px;left:0;min-width:40px;border-radius:7px;background:var(--p);opacity:.75;cursor:grab}
 #hthumb:hover,#hthumb.on{opacity:1}
 /* lock while signed in */
-#lk-card.soft .lk-links,#lk-card.soft .lk-keep[data-for]{display:none}
+#lk-card.soft .lk-keep[data-for]{display:none}
 #lk-card.soft #lk-user{opacity:.7}
 /* settings tabs and sections */
 .stabs{display:flex;gap:6px;padding:6px 24px 12px;overflow-x:auto;flex:none;scrollbar-width:none}
@@ -288,6 +288,7 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
   <div class="lk-links">
    <button type="button" class="lk-lnk" data-for="login" data-go="key:signup">Create account</button>
    <button type="button" class="lk-lnk" data-for="login" data-go="reset">Forgot password?</button>
+   <button type="button" class="lk-lnk" id="lk-switch" data-for="login">Switch accounts</button>
    <button type="button" class="lk-lnk" data-for="key signup reset" data-go="login">Back to login</button>
    <button type="button" class="lk-lnk" id="lk-off" hidden>Continue offline</button>
   </div>
@@ -334,7 +335,7 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
   </section>
   <div class="ph"><h2>Workspace<span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button class="btn tone" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" onclick="openAddPageModal()">+ Add</button></div>
   <div class="empty" id="ws-empty" hidden="">No pages yet. Use + Add to create one, or + Board for a board.</div>
-  <div id="ws"><div id="wsc" data-zone="" class="" style="height: 400px; min-width: max(100%, 664px);"><div class="card fi" data-pid="p_asc_1" style="left: 16px; top: 16px; width: 320px; height: 144px;"><div class="ch"><span class="grip" tabindex="0" role="button" title="Drag anywhere on the card to move it. Arrow keys nudge, Alt + arrows resize." aria-label="Move page Opening"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.7"></circle><circle cx="15" cy="6" r="1.7"></circle><circle cx="9" cy="12" r="1.7"></circle><circle cx="15" cy="12" r="1.7"></circle><circle cx="9" cy="18" r="1.7"></circle><circle cx="15" cy="18" r="1.7"></circle></svg></span><span class="ct">Opening</span><div class="ca"><button class="btn tone" title="Copy" aria-label="Copy page text"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span class="lbl">Copy</span></button><button class="ib ed-btn" title="Edit page"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button><div class="dd"><button class="ib" title="More"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-p_asc_1"><button class="mi"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>Edit page</button><button class="mi" title="Resize this page so all of its text shows"><svg viewBox="0 0 24 24"><path d="M12 3v18M8 7l4-4 4 4M8 17l4 4 4-4"></path></svg>Fit height to text</button><button class="mi" title="Copy this page so you can paste it into another chapter"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy page</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate page</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete page</button></div></div></div></div><div class="cc">Thank you for contacting Allstate where you're in good hands. This is Gabriel and I'll be assisting you for today.</div><div class="rz n" data-d="n" aria-hidden="true"></div><div class="rz s" data-d="s" aria-hidden="true"></div><div class="rz e" data-d="e" aria-hidden="true"></div><div class="rz w" data-d="w" aria-hidden="true"></div><div class="rz ne" data-d="ne" aria-hidden="true"></div><div class="rz nw" data-d="nw" aria-hidden="true"></div><div class="rz se" data-d="se" aria-hidden="true"></div><div class="rz sw" data-d="sw" aria-hidden="true"></div></div><div class="card fi" data-pid="p_1791901074458" style="left: 352px; top: 16px; width: 296px; height: 120px;"><div class="ch"><span class="grip" tabindex="0" role="button" title="Drag anywhere on the card to move it. Arrow keys nudge, Alt + arrows resize." aria-label="Move page Recap"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.7"></circle><circle cx="15" cy="6" r="1.7"></circle><circle cx="9" cy="12" r="1.7"></circle><circle cx="15" cy="12" r="1.7"></circle><circle cx="9" cy="18" r="1.7"></circle><circle cx="15" cy="18" r="1.7"></circle></svg></span><span class="ct">Recap</span><div class="ca"><button class="btn tone" title="Copy" aria-label="Copy page text"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span class="lbl">Copy</span></button><button class="ib ed-btn" title="Edit page"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button><div class="dd"><button class="ib" title="More"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-p_1791901074458"><button class="mi"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>Edit page</button><button class="mi" title="Resize this page so all of its text shows"><svg viewBox="0 0 24 24"><path d="M12 3v18M8 7l4-4 4 4M8 17l4 4 4-4"></path></svg>Fit height to text</button><button class="mi" title="Copy this page so you can paste it into another chapter"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy page</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate page</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete page</button></div></div></div></div><div class="cc">Aside from <span class="var" contenteditable="plaintext-only" spellcheck="false" data-k="text" data-ph="XXX" data-pid="p_1791901074458" data-i="0" role="textbox" aria-label="Fill in text" autocapitalize="off" autocorrect="off">XXX</span> is there anything else I can help you with for today?</div><div class="rz n" data-d="n" aria-hidden="true"></div><div class="rz s" data-d="s" aria-hidden="true"></div><div class="rz e" data-d="e" aria-hidden="true"></div><div class="rz w" data-d="w" aria-hidden="true"></div><div class="rz ne" data-d="ne" aria-hidden="true"></div><div class="rz nw" data-d="nw" aria-hidden="true"></div><div class="rz se" data-d="se" aria-hidden="true"></div><div class="rz sw" data-d="sw" aria-hidden="true"></div></div></div></div>
+  <div id="ws"><div id="wsc" data-zone="" class="" style="height: 400px; min-width: max(100%, 664px);"></div></div>
  <div id="hbar"><div id="hthumb"></div></div>
  </div></main>
 </div>
@@ -394,17 +395,25 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
 
 <div class="ov" id="page-modal"><div class="modal">
  <div class="mh"><span id="page-modal-title">Edit Page</span></div>
- <div class="mb"><input type="hidden" id="page-id-input" value="p_1791901074458"><input type="hidden" id="page-container-input" value="k_1791982868525_zoji">
-  <div><label for="page-title-input">Title</label><input type="text" id="page-title-input" placeholder="e.g. Opening, Hold spiel..."></div>
-  <div>
-   <div class="vbar"><label for="page-content-input">Content</label><span class="vl">Insert</span>
-    <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('XXX')" title="Adds XXX, fill it in with anything">XXX</button>
-    <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('DATE')" title="Adds XX/XX/XXXX, fill it in with a date">DATE</button>
-    <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('AMT')" title="Adds $XXX, fill it in with an amount">AMT</button>
-    <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('YN')" title="Adds [Yes], a Yes/No toggle. Write [No] instead to start on No">Y/N</button>
+ <div class="mb"><input type="hidden" id="page-id-input"><input type="hidden" id="page-container-input">
+  <div><label class="lk-keep" style="text-align:left;margin-bottom:12px;font-weight:600;display:flex;align-items:center;gap:6px"><input type="checkbox" id="page-variant-cb" onchange="toggleVariantMode(this.checked)"> Variant page</label></div>
+  <div id="page-normal-edit">
+   <div><label for="page-title-input">Title</label><input type="text" id="page-title-input" placeholder="e.g. Opening, Hold spiel..."></div>
+   <div>
+    <div class="vbar"><label for="page-content-input">Content</label><span class="vl">Insert</span>
+     <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('XXX')" title="Adds XXX, fill it in with anything">XXX</button>
+     <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('DATE')" title="Adds XX/XX/XXXX, fill it in with a date">DATE</button>
+     <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('AMT')" title="Adds $XXX, fill it in with an amount">AMT</button>
+     <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('ACCT')" title="Adds ACCT, fill it in to format account numbers">ACCT</button>
+     <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('YN')" title="Adds [Yes], a Yes/No toggle">Y/N</button>
+    </div>
+    <textarea id="page-content-input" placeholder="Type or paste your text here..."></textarea>
+    <p class="hint">Y/N adds a Yes/No toggle. You can also type [Opt1|Opt2] to create a switchable option, or [A|B|C] for a dropdown menu.</p>
    </div>
-   <textarea id="page-content-input" placeholder="Type or paste your text here..." style="height: 94px;"></textarea>
-   <p class="hint">Y/N adds a Yes/No toggle. It always shows Yes or No: [Yes] starts on Yes, [No] starts on No. Click it to switch.</p>
+  </div>
+  <div id="page-variant-edit" style="display:none; flex-direction:column; gap:12px">
+   <div id="variant-list" style="display:flex; flex-direction:column; gap:8px"></div>
+   <div><button type="button" class="btn tone sm" onclick="addVariantField()">+ Add Variant</button></div>
   </div>
  </div>
  <div class="mf"><button class="btn out" onclick="closeModal('page-modal')">Cancel</button><button class="btn fill" onclick="savePage()">Save Page</button></div>
@@ -514,8 +523,19 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
     {
       "id": "p_1791901074458",
       "chapterId": "c_asc_gen",
-      "title": "Recap",
-      "content": "Aside from XXX is there anything else I can help you with for today?",
+      "title": "Removing vehicle",
+      "content": "I understand the importance of removing this vehicle on your policy, rest assured I will help you with this. May I have the name of the year make and model of the vehicle being removed?",
+      "variants": [
+        {
+          "title": "Removing vehicle",
+          "content": "I understand the importance of removing this vehicle on your policy, rest assured I will help you with this. May I have the name of the year make and model of the vehicle being removed?"
+        },
+        {
+          "title": "Replacing vehicle",
+          "content": "I understand the importance of replacing a vehicle on your policy, rest assured I will help you with this. May I have the name of the year make and model of the vehicle being replaced as well as the year make and model of the new one?"
+        }
+      ],
+      "activeVariant": 0,
       "x": 44,
       "y": 2,
       "w": 37,
@@ -621,9 +641,42 @@ function renderHero(){const c=curChap(),a=$('hacts');a.innerHTML='';
 function getCons(){return appData.containers.filter(c=>c.chapterId===appData.activeChapterId)}
 const RZ=['n','s','e','w','ne','nw','se','sw'];
 function addHandles(host){RZ.forEach(d=>{const r=el('div','rz '+d);r.dataset.d=d;r.setAttribute('aria-hidden','true');host.append(r)})}
-function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),t=el('span','ct'),a=el('div','ca');card.dataset.pid=p.id;t.textContent=p.title;
- const gr=el('span','grip',ic('grip'));gr.tabIndex=0;gr.setAttribute('role','button');gr.title='Drag anywhere on the card to move it. Arrow keys nudge, Alt + arrows resize.';gr.setAttribute('aria-label','Move page '+p.title);
+function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),a=el('div','ca');card.dataset.pid=p.id;
+ const gr=el('span','grip',ic('grip'));gr.tabIndex=0;gr.setAttribute('role','button');gr.title='Drag anywhere on the card to move it. Alt + arrows resize.';gr.setAttribute('aria-label','Move page '+p.title);
  gr.addEventListener('keydown',e=>gripKey(e,p.id));
+ 
+ let titleEl;
+ if (p.variants && p.variants.length > 0) {
+  const av = p.activeVariant || 0;
+  p.title = p.variants[av].title;
+  p.content = p.variants[av].content;
+  titleEl = el('div', 'dd ct');
+  titleEl.style.display = 'inline-block'; titleEl.style.maxWidth = '100%'; titleEl.style.overflow = 'hidden'; titleEl.style.textOverflow = 'ellipsis'; titleEl.style.whiteSpace = 'nowrap';
+  const tb = el('div'); tb.innerHTML = p.title + ' <svg style="width:14px;height:14px;vertical-align:middle;margin-left:4px" viewBox="0 0 24 24"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>';
+  tb.style.cursor = 'pointer'; tb.title = 'Switch variant';
+  tb.onclick = (e) => {
+   if (p.variants.length === 2) {
+    p.activeVariant = 1 - av; persistLocal(); renderPages();
+   } else {
+    e.stopPropagation(); toggleDropdown('var-'+p.id, tb);
+   }
+  };
+  titleEl.append(tb);
+  if (p.variants.length > 2) {
+   const vm = el('div', 'menu'); vm.id = 'menu-var-'+p.id;
+   p.variants.forEach((v, i) => {
+    const mi = el('button', 'mi'); mi.textContent = v.title;
+    if (i === av) mi.style.background = 'var(--pc)';
+    mi.onclick = () => { p.activeVariant = i; persistLocal(); renderPages(); };
+    vm.append(mi);
+   });
+   titleEl.append(vm);
+  }
+ } else {
+  titleEl = el('span', 'ct');
+  titleEl.textContent = p.title;
+ }
+
  const cp=el('button','btn tone',ic('copy')+'<span class="lbl">Copy</span>');cp.title='Copy';cp.setAttribute('aria-label','Copy page text');cp.onclick=()=>copyPage(p.id);
  const ed=el('button','ib ed-btn',ic('pen'));ed.title='Edit page';ed.onclick=()=>openEditPageModal(p.id);
  const dd=el('div','dd'),db=el('button','ib',ic('dots')),m=el('div','menu');m.id='menu-'+p.id;db.title='More';db.onclick=e=>{e.stopPropagation();toggleDropdown(p.id,db)};
@@ -631,7 +684,7 @@ function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),t=el('span
  const ft=el('button','mi',ic('fit')+'Fit height to text');ft.title='Resize this page so all of its text shows';ft.onclick=()=>fitPageHeight(p.id);
  const cpd=el('button','mi',ic('copy')+'Copy page');cpd.title='Copy this page so you can paste it into another chapter';cpd.onclick=()=>copyPageData(p.id);
  const du=el('button','mi',ic('dup')+'Duplicate page');du.onclick=()=>duplicatePage(p.id);const de=el('button','mi del',ic('trash')+'Delete page');de.onclick=()=>deletePage(p.id);
- m.append(edm,ft,cpd,du,de);dd.append(db,m);a.append(cp,ed,dd);h.append(gr,t,a);
+ m.append(edm,ft,cpd,du,de);dd.append(db,m);a.append(cp,ed,dd);h.append(gr,titleEl,a);
  const c=el('div','cc');buildSpiel(c,p);card.append(h,c);addHandles(card);return card}
 function renderPages(){const ws=$('ws'),wsc=$('wsc'),em=$('ws-empty');wsc.classList.add('nt');wsc.innerHTML='';nodes.clear();
  const ch=curChap();
@@ -680,21 +733,77 @@ function saveChapter(){const id=$('chapter-id-input').value,name=$('chapter-name
 function duplicateChapter(id){const s=appData.chapters.find(c=>c.id===id);if(!s)return;const nid='c_'+Date.now();
  appData.chapters.push({id:nid,bookId:s.bookId,name:s.name+' (Copy)',description:s.description,referenceLink:s.referenceLink});
  const map={};appData.containers.filter(c=>c.chapterId===id).forEach(c=>{const k='k_'+rid();map[c.id]=k;appData.containers.push(Object.assign({},c,{id:k,chapterId:nid}))});
- appData.pages.filter(p=>p.chapterId===id).forEach(p=>appData.pages.push({id:'p_'+rid(),chapterId:nid,containerId:map[p.containerId]||'',title:p.title,content:p.content,x:p.x,y:p.y,w:p.w,h:p.h}));
+ appData.pages.filter(p=>p.chapterId===id).forEach(p=>appData.pages.push({id:'p_'+rid(),chapterId:nid,containerId:map[p.containerId]||'',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h}));
  appData.activeChapterId=nid;persistLocal();renderAll();showToast('Chapter duplicated.')}
 function deleteChapter(id){if(!confirm('Delete this chapter and its pages?'))return;
  appData.chapters=appData.chapters.filter(c=>c.id!==id);appData.pages=appData.pages.filter(p=>p.chapterId!==id);appData.containers=appData.containers.filter(c=>c.chapterId!==id);
  const r=appData.chapters.filter(c=>c.bookId===appData.activeBookId);appData.activeChapterId=r.length?r[0].id:'';persistLocal();renderAll();showToast('Chapter deleted.')}
 /* pages */
+function toggleVariantMode(on) {
+ $('page-normal-edit').style.display = on ? 'none' : 'block';
+ $('page-variant-edit').style.display = on ? 'flex' : 'none';
+}
+function addVariantField(t='', c='') {
+ const wrap = el('div', 'sec');
+ wrap.style.padding = '12px'; wrap.style.position = 'relative';
+ const delBtn = el('button', 'ib sm', ic('trash'));
+ delBtn.style.position = 'absolute'; delBtn.style.right = '4px'; delBtn.style.top = '4px';
+ delBtn.onclick = () => wrap.remove();
+ 
+ const lT = el('label'); lT.textContent = 'Variant Title';
+ const iT = el('input', 'var-t'); iT.type = 'text'; iT.value = t; iT.placeholder = 'e.g. Removing vehicle';
+ iT.style.width = '100%'; iT.style.marginBottom = '10px';
+ 
+ const lC = el('label'); lC.textContent = 'Variant Spiel';
+ const iC = el('textarea', 'var-c'); iC.value = c; iC.placeholder = 'Type or paste the text for this variant...';
+ iC.style.minHeight = '60px'; iC.style.width = '100%';
+ iC.oninput = () => autosize(iC);
+ 
+ wrap.append(delBtn, lT, iT, lC, iC);
+ $('variant-list').append(wrap);
+ setTimeout(() => autosize(iC), 10);
+}
 function openAddPageModal(z){if(!appData.activeChapterId){showToast('Select a chapter first.');return}
- $('page-modal-title').textContent='Add Page';['id','title','content'].forEach(k=>$('page-'+k+'-input').value='');$('page-container-input').value=typeof z==='string'?z:'';openModal('page-modal')}
-function openEditPageModal(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;$('page-modal-title').textContent='Edit Page';$('page-id-input').value=p.id;$('page-container-input').value=p.containerId||'';$('page-title-input').value=p.title;$('page-content-input').value=p.content;openModal('page-modal')}
-function savePage(){const id=$('page-id-input').value,title=$('page-title-input').value.trim(),content=$('page-content-input').value;if(!title)return;let nid='';
- if(id){const pg=appData.pages.find(p=>p.id===id);if(pg.content!==content)delete varVals[id];Object.assign(pg,{title,content})}
- else{nid='p_'+Date.now();appData.pages.push({id:nid,chapterId:appData.activeChapterId,containerId:$('page-container-input').value||'',title,content})}
+ $('page-modal-title').textContent='Add Page';['id','title','content'].forEach(k=>$('page-'+k+'-input').value='');$('page-container-input').value=typeof z==='string'?z:'';
+ $('page-variant-cb').checked = false; toggleVariantMode(false);
+ $('variant-list').innerHTML = ''; addVariantField('',''); addVariantField('','');
+ openModal('page-modal')}
+function openEditPageModal(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
+ $('page-modal-title').textContent='Edit Page';$('page-id-input').value=p.id;$('page-container-input').value=p.containerId||'';$('page-title-input').value=p.title;$('page-content-input').value=p.content;
+ const isVar = p.variants && p.variants.length > 0;
+ $('page-variant-cb').checked = isVar; toggleVariantMode(isVar);
+ $('variant-list').innerHTML = '';
+ if (isVar) p.variants.forEach(v => addVariantField(v.title, v.content)); else { addVariantField('',''); addVariantField('',''); }
+ openModal('page-modal')}
+function savePage(){const id=$('page-id-input').value, isVar = $('page-variant-cb').checked;
+ let title=$('page-title-input').value.trim(), content=$('page-content-input').value, variants=null, activeVariant=0;
+ if (isVar) {
+  variants = [];
+  $('variant-list').querySelectorAll('.sec').forEach(n => {
+   const t = n.querySelector('.var-t').value.trim(), c = n.querySelector('.var-c').value;
+   if (t) variants.push({title: t, content: c});
+  });
+  if (variants.length === 0) return;
+  title = variants[0].title; content = variants[0].content;
+ } else if (!title) return;
+
+ let nid='';
+ if(id){
+  const pg=appData.pages.find(p=>p.id===id);
+  if(pg.content!==content || pg.variants) delete varVals[id];
+  if(isVar){
+   activeVariant = pg.activeVariant || 0;
+   if (activeVariant >= variants.length) activeVariant = 0;
+   title = variants[activeVariant].title; content = variants[activeVariant].content;
+  }
+  Object.assign(pg,{title, content, variants, activeVariant});
+ } else {
+  nid='p_'+Date.now();
+  appData.pages.push({id:nid, chapterId:appData.activeChapterId, containerId:$('page-container-input').value||'', title, content, variants, activeVariant:0});
+ }
  persistLocal();closeModal('page-modal');renderHero();renderPages();if(nid)revealNode(nid)}
 function duplicatePage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;const nid='p_'+Date.now();
- appData.pages.push({id:nid,chapterId:p.chapterId,containerId:p.containerId||'',title:p.title+' (Copy)',content:p.content,w:p.w,h:p.h});
+ appData.pages.push({id:nid,chapterId:p.chapterId,containerId:p.containerId||'',title:p.title+' (Copy)',content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h});
  persistLocal();renderHero();renderPages();revealNode(nid);showToast('Page duplicated.')}
 function deletePage(id){delete varVals[id];appData.pages=appData.pages.filter(p=>p.id!==id);persistLocal();renderHero();renderPages();showToast('Page deleted.')}
 /* ---------- freeform layout: pages and boards share one fine grid ---------- */
@@ -856,7 +965,7 @@ function applyColors(n,border,bg){const s=n.style;
  if(bg){s.setProperty('--cbg',bg);s.setProperty('--cfg',inkFor(bg))}else{s.removeProperty('--cbg');s.removeProperty('--cfg')}}
 function buildBox(c,pages){const box=el('section','cbox fi'),bar=el('div','cbar'),body=el('div','cin'),can=el('div','bcan');
  box.dataset.cid=c.id;box.setAttribute('aria-label',c.name);applyColors(box,c.border,c.bg);
- const mv=el('span','cgrip',ic('move'));mv.tabIndex=0;mv.setAttribute('role','button');mv.title='Drag the board to move it. Arrow keys nudge, Alt + arrows resize.';mv.setAttribute('aria-label','Move board '+c.name);mv.addEventListener('keydown',e=>gripKey(e,c.id));
+ const mv=el('span','cgrip',ic('move'));mv.tabIndex=0;mv.setAttribute('role','button');mv.title='Drag the board to move it. Alt + arrows resize.';mv.setAttribute('aria-label','Move board '+c.name);mv.addEventListener('keydown',e=>gripKey(e,c.id));
  const nm=el('span','cname');nm.textContent=c.name;nm.title=c.name;
  const cn=el('span','ccount',pages.length+(pages.length===1?' page':' pages'));
  const ed=el('button','ib sm',ic('pen'));ed.title='Edit board';ed.setAttribute('aria-label','Edit board');ed.onclick=()=>openEditContainerModal(c.id);
@@ -894,12 +1003,17 @@ function deleteContainer(id){const c=appData.containers.find(x=>x.id===id);if(!c
  if(!confirm('Delete the board "'+c.name+'"? Its pages move back into the workspace.'))return;
  appData.pages.forEach(p=>{if(p.containerId===id){p.containerId='';p.x=c.x+(p.x||0);p.y=c.y+5+(p.y||0)}});appData.containers=appData.containers.filter(x=>x.id!==id);
  persistLocal();closeModal('container-modal');renderPages();showToast('Board deleted.')}
-/* variables: XXX / DATE / AMT / Y/N */
-const TOK={XXX:'XXX',DATE:'XX/XX/XXXX',AMT:'$XXX',YN:'[Yes]'};
-const VKIND={'XXX':'text','XX/XX/XXXX':'date','$XXX':'amt','[Yes]':'bool','[No]':'bool'};
-const VLABEL={text:'Fill in text',date:'Fill in date',amt:'Fill in amount',bool:'Toggle yes or no'};
-const VAR_RE=/(?<![A-Za-z0-9])(?:XX\/XX\/XXXX|\$XXX|XXX|\[(?:Yes|No)\])(?![A-Za-z0-9])/g;
+/* variables: XXX / DATE / AMT / Y/N / ACCT / OPT */
+const TOK={XXX:'XXX',DATE:'XX/XX/XXXX',AMT:'$XXX',YN:'[Yes]',ACCT:'ACCT'};
+const VKIND={'XXX':'text','XX/XX/XXXX':'date','$XXX':'amt','[Yes]':'bool','[No]':'bool', 'ACCT':'acct'};
+const VLABEL={text:'Fill in text',date:'Fill in date',amt:'Fill in amount',bool:'Toggle yes or no', acct:'Fill in account number', opt:'Select an option'};
+const VAR_RE=/(?<![A-Za-z0-9])(?:XX\/XX\/XXXX|\$XXX|XXX|ACCT|\[[^\]]+\])(?![A-Za-z0-9])/g;
 const varVals={};/* what you type into variables lives for this session only: page id -> {nth variable -> text} */
+function getVarKind(tok) {
+ if(VKIND[tok]) return VKIND[tok];
+ if(tok.startsWith('[') && tok.endsWith(']') && tok.includes('|')) return 'opt';
+ return 'text';
+}
 function insertVar(kind){const t=$('page-content-input');let s=TOK[kind];if(!s)return;
  const v=t.value,a=t.selectionStart,b=t.selectionEnd;
  if(a>0&&/[A-Za-z0-9.,;:!?)\]]/.test(v[a-1]))s=' '+s;
@@ -915,13 +1029,53 @@ function toggleBool(v){const nv=v.dataset.v==='Yes'?'No':'Yes',m=varVals[v.datas
 function makeBool(pid,i,tok){const v=el('span','var bool');v.dataset.k='bool';v.dataset.ph=tok;v.dataset.pid=pid;v.dataset.i=i;
  v.tabIndex=0;v.setAttribute('role','switch');v.setAttribute('aria-label',VLABEL.bool);v.title='Click to switch between Yes and No';
  setBool(v,(varVals[pid]||{})[i]||boolDef(tok));return v}
-function makeVar(pid,i,tok){const k=VKIND[tok];if(k==='bool')return makeBool(pid,i,tok);
+function makeOpt(pid, i, tok) {
+ const v = el('span', 'var opt dd');
+ v.dataset.k = 'opt'; v.dataset.ph = tok; v.dataset.pid = pid; v.dataset.i = i;
+ const opts = tok.slice(1, -1).split('|');
+ const saved = (varVals[pid]||{})[i];
+ const active = saved && opts.includes(saved) ? saved : opts[0];
+ const txt = el('span'); txt.textContent = active; v.append(txt);
+ v.tabIndex = 0; v.title = 'Click to change';
+ v.style.cursor = 'pointer'; v.style.userSelect = 'none'; v.style.borderStyle = 'solid'; v.classList.add('filled');
+ v.onclick = (e) => {
+  e.stopPropagation();
+  const map = varVals[pid] || (varVals[pid] = {});
+  if (opts.length === 2) {
+   const next = txt.textContent === opts[0] ? opts[1] : opts[0];
+   if (next === opts[0]) delete map[i]; else map[i] = next;
+   txt.textContent = next;
+  } else toggleDropdown(`opt-${pid}-${i}`, v);
+ };
+ if (opts.length > 2) {
+  const m = el('div', 'menu'); m.id = `menu-opt-${pid}-${i}`;
+  opts.forEach(opt => {
+   const mi = el('button', 'mi'); mi.textContent = opt;
+   if (opt === active) mi.style.background = 'var(--pc)';
+   mi.onclick = (e) => {
+    e.stopPropagation();
+    const map = varVals[pid] || (varVals[pid] = {});
+    if (opt === opts[0]) delete map[i]; else map[i] = opt;
+    txt.textContent = opt;
+    [...m.children].forEach(c => c.style.background = c.textContent === opt ? 'var(--pc)' : '');
+    closeMenus();
+   };
+   m.append(mi);
+  });
+  v.append(m);
+ }
+ return v;
+}
+function makeVar(pid,i,tok){
+ const k=getVarKind(tok);
+ if(k==='bool')return makeBool(pid,i,tok);
+ if(k==='opt')return makeOpt(pid,i,tok);
  const v=el('span','var');
  try{v.contentEditable='plaintext-only'}catch(e){}
  if(v.contentEditable!=='plaintext-only')v.contentEditable='true';
  v.spellcheck=false;v.dataset.k=k;v.dataset.ph=tok;v.dataset.pid=pid;v.dataset.i=i;
- v.setAttribute('role','textbox');v.setAttribute('aria-label',VLABEL[k]);v.setAttribute('autocapitalize','off');v.setAttribute('autocorrect','off');
- if(k==='amt')v.setAttribute('inputmode','decimal');
+ v.setAttribute('role','textbox');v.setAttribute('aria-label',VLABEL[k]||'Fill in');v.setAttribute('autocapitalize','off');v.setAttribute('autocorrect','off');
+ if(k==='amt'||k==='acct')v.setAttribute('inputmode','decimal');
  const saved=(varVals[pid]||{})[i];
  if(saved){v.textContent=saved;v.classList.add('filled')}else v.textContent=tok;
  return v}
@@ -929,7 +1083,11 @@ function buildSpiel(box,p){box.textContent='';const s=p.content||'';let last=0,i
  for(const m of s.matchAll(VAR_RE)){if(m.index>last)box.append(s.slice(last,m.index));box.append(makeVar(p.id,i++,m[0]));last=m.index+m[0].length}
  if(last<s.length)box.append(s.slice(last))}
 function composeSpiel(p){const vals=varVals[p.id]||{};let i=0,blank=0;
- const text=(p.content||'').replace(VAR_RE,m=>{const v=vals[i++];if(VKIND[m]==='bool')return v||boolDef(m);if(v)return v;blank++;return m});
+ const text=(p.content||'').replace(VAR_RE,m=>{
+  const v=vals[i++], k=getVarKind(m);
+  if(k==='bool')return v||boolDef(m);
+  if(k==='opt')return v||m.slice(1,-1).split('|')[0];
+  if(v)return v;blank++;return m});
  return{text,blank}}
 function copyPage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;const r=composeSpiel(p);
  copyText(r.text,r.blank?'Copied. '+r.blank+(r.blank>1?' variables are':' variable is')+' still blank.':'Copied to clipboard.')}
@@ -955,12 +1113,22 @@ function onVarInput(v,e){const k=v.dataset.k;
  if(k==='amt'){const off=caretOff(v);let n=t.replace(/[^\d.,]/g,'');const d=n.indexOf('.');if(d>=0)n=n.slice(0,d+1)+n.slice(d+1).replace(/\./g,'');
   const want='$'+n;
   if(t!==want){const keep=t.slice(0,off==null?t.length:off).replace(/[^\d.,]/g,'').length;v.textContent=want;setCaret(v,1+Math.min(keep,n.length))}}
+ else if(k==='acct'){
+  const off=caretOff(v);
+  let n=t.replace(/\D/g,''), want=n;
+  if(n.length>3) want = n.slice(0,3) + ' ' + n.slice(3);
+  if(t!==want){
+   const keep=t.slice(0,off==null?t.length:off).replace(/\D/g,'').length;
+   v.textContent=want;
+   let nc = keep; if(keep>3) nc += 1;
+   setCaret(v,nc)}
+ }
  else if(k==='date'&&e.inputType&&e.inputType.indexOf('insert')===0&&/^\d+$/.test(e.data||'')&&/^[\d/]*$/.test(t)&&caretOff(v)===t.length){
   const d=t.replace(/\D/g,'');
   if(d.length<=8&&[...t].every((c,i)=>c!=='/'||i===2||i===5)){const f=fmtDate(d);if(f!==t){v.textContent=f;setCaret(v,f.length)}}}
  commitVar(v)}
 (function(){const M=document.querySelector('main'),
-  vOf=e=>e.target&&e.target.closest?e.target.closest('.var:not(.bool)'):null,
+  vOf=e=>e.target&&e.target.closest?e.target.closest('.var:not(.bool):not(.opt)'):null,
   bOf=e=>e.target&&e.target.closest?e.target.closest('.var.bool'):null;
  M.addEventListener('focusin',e=>{const v=vOf(e);if(v)setTimeout(()=>selectAllIn(v),0)});
  M.addEventListener('focusout',e=>{const v=vOf(e);if(v)finishVar(v)});
@@ -976,12 +1144,12 @@ function fallbackCopy(t,msg){const a=document.createElement('textarea');a.value=
 const CLIP_TAG='paano-ba-yan';
 function rid(){return Date.now()+'_'+Math.random().toString(36).slice(2,6)}
 function copyPageData(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
- copyText(JSON.stringify({app:CLIP_TAG,type:'page',title:p.title,content:p.content,w:p.w,h:p.h}),'Page copied. Use Paste page inside any chapter.')}
+ copyText(JSON.stringify({app:CLIP_TAG,type:'page',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h}),'Page copied. Use Paste page inside any chapter.')}
 function copyChapterData(id){const c=appData.chapters.find(x=>x.id===id);if(!c)return;
  const cons=appData.containers.filter(k=>k.chapterId===id);
  copyText(JSON.stringify({app:CLIP_TAG,type:'chapter',ver:2,name:c.name,description:c.description||'',referenceLink:c.referenceLink||'',
   containers:cons.map(k=>({name:k.name,x:k.x,y:k.y,w:k.w,h:k.h,border:k.border||'',bg:k.bg||''})),
-  pages:appData.pages.filter(p=>p.chapterId===id).map(p=>({title:p.title,content:p.content,x:p.x,y:p.y,w:p.w,h:p.h,container:cons.findIndex(k=>k.id===p.containerId)}))}),'Chapter copied. Use Paste chapter in any book.')}
+  pages:appData.pages.filter(p=>p.chapterId===id).map(p=>({title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h,container:cons.findIndex(k=>k.id===p.containerId)}))}),'Chapter copied. Use Paste chapter in any book.')}
 function parseClip(t){try{const o=JSON.parse(t);return o&&o.app===CLIP_TAG?o:null}catch(e){return null}}
 let pasteKind='';
 async function startPaste(kind){
@@ -995,13 +1163,13 @@ function applyPaste(t,kind){const o=parseClip(t);
  if(!o){showToast('Nothing to paste. Copy a '+kind+' first.');return false}
  if(o.type!==kind){showToast(kind==='chapter'?'That is a copied page. Use Paste page inside a chapter.':'That is a copied chapter. Use Paste chapter next to + Chapter.');return false}
  if(kind==='page'){if(!curChap()){showToast('Select a chapter first.');return false}
-  appData.pages.push({id:'p_'+rid(),chapterId:appData.activeChapterId,containerId:'',title:String(o.title||'Untitled'),content:String(o.content||''),w:num(o.w),h:num(o.h)});
+  appData.pages.push({id:'p_'+rid(),chapterId:appData.activeChapterId,containerId:'',title:String(o.title||'Untitled'),content:String(o.content||''),variants:o.variants?JSON.parse(JSON.stringify(o.variants)):null,activeVariant:o.activeVariant||0,w:num(o.w),h:num(o.h)});
   persistLocal();renderHero();renderPages();showToast('Page pasted.');return true}
  const nid='c_'+rid();
  appData.chapters.push({id:nid,bookId:appData.activeBookId,name:String(o.name||'Untitled'),description:String(o.description||''),referenceLink:String(o.referenceLink||'')});
  const v2=o.ver>=2,f=v2?1:1/GRID;/* older copies stored board geometry in pixels */
  const kids=(Array.isArray(o.containers)?o.containers:[]).map(k=>{const n={id:'k_'+rid(),chapterId:nid,name:String(k.name||'Board'),x:num((+k.x||0)*f),y:num((+k.y||0)*f),w:Math.max(MIN_BW,num((+k.w||(v2?DEF_BW:420))*f)||DEF_BW),h:Math.max(MIN_BH,num((+k.h||(v2?DEF_BH:300))*f)||DEF_BH),border:hex(k.border),bg:hex(k.bg),mig:v2?undefined:true};appData.containers.push(n);return n.id});
- (Array.isArray(o.pages)?o.pages:[]).forEach(p=>appData.pages.push({id:'p_'+rid(),chapterId:nid,containerId:kids[p.container]||'',title:String(p.title||'Untitled'),content:String(p.content||''),x:num(p.x),y:num(p.y),w:num(p.w),h:num(p.h)}));
+ (Array.isArray(o.pages)?o.pages:[]).forEach(p=>appData.pages.push({id:'p_'+rid(),chapterId:nid,containerId:kids[p.container]||'',title:String(p.title||'Untitled'),content:String(p.content||''),variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:num(p.x),y:num(p.y),w:num(p.w),h:num(p.h)}));
  appData.activeChapterId=nid;persistLocal();renderAll();showToast('Chapter pasted.');return true}
 /* save */
 function generateUpdatedHtmlString(){const c=document.documentElement.cloneNode(true);if(window.lockClean)window.lockClean(c);/* strip transient UI so the saved file reopens clean */
@@ -1133,11 +1301,11 @@ const uref=p=>DB.ref(db,'ataraxia/users/'+uid+(p?'/'+p:''));
 const calm=()=>!document.querySelector('.ov.open')&&!ps&&!editMode;/* never swap the data while you are editing or dragging */
 function paintInd(){const e=G('sync-ind');if(!e)return;let k,t;
  if(!uid){k=offline?'off':'none';t=offline?'Saved on this device only':'Not signed in'}
- else if(/^Synced/.test(syncTxt)){k='ok';t='All changes saved. Safe to leave'}
- else if(/^Syncing/.test(syncTxt)){k='busy';t='Saving…'}
- else if(/^Waiting/.test(syncTxt)){k='wait';t='Unsaved changes. Please wait'}
- else if(/^Offline/.test(syncTxt)){k='err';t='Offline. Will save when back'}
- else{k='err';t='Not saved yet. Will retry'}
+ else if(/^Synced/.test(syncTxt)){k='ok';t=''}
+ else if(/^Syncing/.test(syncTxt)){k='busy';t=''}
+ else if(/^Waiting/.test(syncTxt)){k='wait';t=''}
+ else if(/^Offline/.test(syncTxt)){k='err';t='Offline'}
+ else{k='err';t='Will retry'}
  e.dataset.k=k;G('sync-txt').textContent=t;G('lockbtn').hidden=!uid}
 function paintAcct(){paintInd();G('acct-st').textContent=uid?'Signed in as '+name+'. '+syncTxt:offline?'Offline mode. Changes are saved on this device only.':'Not signed in.';G('logout').hidden=!uid;G('recov').hidden=!uid}
 function setSync(t){syncTxt=t;paintAcct()}
@@ -1215,7 +1383,8 @@ G('lk-codego').onclick=codeDone;
 G('recov').onclick=async()=>{if(!uid||!auth.currentUser)return;
  if(!confirm('Make a new recovery code? The old one stops working.'))return;
  try{const r=await api('recovery',{idToken:await auth.currentUser.getIdToken()});window.prompt('Your new recovery code. Copy it and keep it somewhere safe:',r.code)}catch(e){toast(typeof e==='string'?e:'Could not make a recovery code.')}};
-G('lk-card').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;const[m,p]=b.dataset.go.split(':');setMode(m,p)});
+G('lk-card').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;unsoft();const[m,p]=b.dataset.go.split(':');setMode(m,p)});
+G('lk-switch').onclick = () => {unsoft();G('lk-user').value = '';setMode('login');};
 G('lk-user').addEventListener('input',paint);
 G('lk-off').onclick=async()=>{await fsInit().catch(()=>{});paintAcct();setLocked(false)};
 G('av-up').onclick=()=>G('av-file').click();
