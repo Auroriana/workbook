@@ -396,23 +396,33 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
 <div class="ov" id="page-modal"><div class="modal">
  <div class="mh"><span id="page-modal-title">Edit Page</span></div>
  <div class="mb"><input type="hidden" id="page-id-input"><input type="hidden" id="page-container-input">
-  <div><label class="lk-keep" style="text-align:left;margin-bottom:12px;font-weight:600;display:flex;align-items:center;gap:6px"><input type="checkbox" id="page-variant-cb" onchange="toggleVariantMode(this.checked)"> Variant page</label></div>
+  
+  <div style="display:flex; align-items:center; margin-bottom:12px;">
+   <label class="lk-keep" style="margin:0; font-weight:600; font-size:14px; cursor:pointer; display:flex; align-items:center; gap:8px;">
+    <input type="checkbox" id="page-variant-cb" onchange="toggleVariantMode(this.checked)" style="width:16px; height:16px; accent-color:var(--p);"> Variant page
+   </label>
+  </div>
+
+  <div class="vbar" style="background:var(--surf); padding:8px 12px; border-radius:12px; margin-bottom:16px; border:1px solid var(--line); display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
+   <span class="vl" style="margin-right:auto; font-weight:600;">Insert Variable:</span>
+   <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('XXX')" title="Fill in anything">XXX</button>
+   <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('DATE')" title="Date format">DATE</button>
+   <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('AMT')" title="Dollar amount">AMT</button>
+   <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('FMT')" title="Formatted Number (e.g. Account)">[00 0000]</button>
+   <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('YN')" title="Yes/No toggle">Y/N</button>
+  </div>
+
   <div id="page-normal-edit">
-   <div><label for="page-title-input">Title</label><input type="text" id="page-title-input" placeholder="e.g. Opening, Hold spiel..."></div>
+   <div><label for="page-title-input">Title</label><input type="text" id="page-title-input" placeholder="e.g. Coverage - Renters/Homes"></div>
    <div>
-    <div class="vbar"><label for="page-content-input">Content</label><span class="vl">Insert</span>
-     <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('XXX')" title="Adds XXX, fill it in with anything">XXX</button>
-     <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('DATE')" title="Adds XX/XX/XXXX, fill it in with a date">DATE</button>
-     <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('AMT')" title="Adds $XXX, fill it in with an amount">AMT</button>
-     <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('ACCT')" title="Adds ACCT, fill it in to format account numbers">ACCT</button>
-     <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('YN')" title="Adds [Yes], a Yes/No toggle">Y/N</button>
-    </div>
-    <textarea id="page-content-input" placeholder="Type or paste your text here..."></textarea>
-    <p class="hint">Y/N adds a Yes/No toggle. You can also type [Opt1|Opt2] to create a switchable option, or [A|B|C] for a dropdown menu.</p>
+    <label for="page-content-input">Content</label>
+    <textarea id="page-content-input" placeholder="Type or paste your text here..." style="min-height:90px;"></textarea>
+    <p class="hint" style="margin-top:8px;">Y/N adds a Yes/No toggle. Type [Opt1|Opt2] for options, or [00 0000 000] to format numbers automatically.</p>
    </div>
   </div>
+
   <div id="page-variant-edit" style="display:none; flex-direction:column; gap:12px">
-   <div id="variant-list" style="display:flex; flex-direction:column; gap:8px"></div>
+   <div id="variant-list" style="display:flex; flex-direction:column; gap:12px"></div>
    <div><button type="button" class="btn tone sm" onclick="addVariantField()">+ Add Variant</button></div>
   </div>
  </div>
@@ -658,7 +668,11 @@ function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),a=el('div'
    if (p.variants.length === 2) {
     p.activeVariant = 1 - av; persistLocal(); renderPages();
    } else {
-    e.stopPropagation(); toggleDropdown('var-'+p.id, tb);
+    e.stopPropagation(); 
+    const m = $('menu-var-'+p.id);
+    m.style.left = Math.max(8, e.clientX - 10) + 'px';
+    m.style.top = (e.clientY + 15) + 'px';
+    toggleDropdown('var-'+p.id, null); // passing null bypasses auto-positioning
    }
   };
   titleEl.append(tb);
@@ -739,11 +753,47 @@ function deleteChapter(id){if(!confirm('Delete this chapter and its pages?'))ret
  appData.chapters=appData.chapters.filter(c=>c.id!==id);appData.pages=appData.pages.filter(p=>p.chapterId!==id);appData.containers=appData.containers.filter(c=>c.chapterId!==id);
  const r=appData.chapters.filter(c=>c.bookId===appData.activeBookId);appData.activeChapterId=r.length?r[0].id:'';persistLocal();renderAll();showToast('Chapter deleted.')}
 /* pages */
+let activeEditor = null;
+document.addEventListener('focusin', e => {
+ if(e.target.tagName === 'TEXTAREA' || e.target.type === 'text') activeEditor = e.target;
+});
+
 function toggleVariantMode(on) {
  $('page-normal-edit').style.display = on ? 'none' : 'block';
  $('page-variant-edit').style.display = on ? 'flex' : 'none';
+ if (on) {
+  const list = $('variant-list');
+  if (list.children.length > 0) {
+   const firstT = list.querySelector('.var-t'), firstC = list.querySelector('.var-c');
+   if (firstT && !firstT.value && firstC && !firstC.value) {
+    firstT.value = $('page-title-input').value;
+    firstC.value = $('page-content-input').value;
+    autosize(firstC);
+   }
+  }
+ }
 }
+
 function addVariantField(t='', c='') {
+ const wrap = el('div', 'sec');
+ wrap.style.padding = '14px 16px'; wrap.style.position = 'relative'; wrap.style.borderRadius = '12px'; wrap.style.marginBottom = '8px';
+ const delBtn = el('button', 'ib sm', ic('trash'));
+ delBtn.style.position = 'absolute'; delBtn.style.right = '8px'; delBtn.style.top = '8px';
+ delBtn.onclick = () => wrap.remove();
+ 
+ const lT = el('label'); lT.textContent = 'Variant Title';
+ const iT = el('input', 'var-t'); iT.type = 'text'; iT.value = t; iT.placeholder = 'e.g. Coverage - Auto';
+ iT.style.width = '100%'; iT.style.marginBottom = '12px'; iT.style.background = 'var(--bg)';
+ 
+ const lC = el('label'); lC.textContent = 'Variant Spiel';
+ const iC = el('textarea', 'var-c'); iC.value = c; iC.placeholder = 'Type or paste the text for this variant...';
+ iC.style.minHeight = '70px'; iC.style.width = '100%'; iC.style.background = 'var(--bg)';
+ iC.oninput = () => autosize(iC);
+ 
+ wrap.append(delBtn, lT, iT, lC, iC);
+ $('variant-list').append(wrap);
+ setTimeout(() => autosize(iC), 10);
+}
  const wrap = el('div', 'sec');
  wrap.style.padding = '12px'; wrap.style.position = 'relative';
  const delBtn = el('button', 'ib sm', ic('trash'));
@@ -1003,18 +1053,25 @@ function deleteContainer(id){const c=appData.containers.find(x=>x.id===id);if(!c
  if(!confirm('Delete the board "'+c.name+'"? Its pages move back into the workspace.'))return;
  appData.pages.forEach(p=>{if(p.containerId===id){p.containerId='';p.x=c.x+(p.x||0);p.y=c.y+5+(p.y||0)}});appData.containers=appData.containers.filter(x=>x.id!==id);
  persistLocal();closeModal('container-modal');renderPages();showToast('Board deleted.')}
-/* variables: XXX / DATE / AMT / Y/N / ACCT / OPT */
-const TOK={XXX:'XXX',DATE:'XX/XX/XXXX',AMT:'$XXX',YN:'[Yes]',ACCT:'ACCT'};
-const VKIND={'XXX':'text','XX/XX/XXXX':'date','$XXX':'amt','[Yes]':'bool','[No]':'bool', 'ACCT':'acct'};
-const VLABEL={text:'Fill in text',date:'Fill in date',amt:'Fill in amount',bool:'Toggle yes or no', acct:'Fill in account number', opt:'Select an option'};
-const VAR_RE=/(?<![A-Za-z0-9])(?:XX\/XX\/XXXX|\$XXX|XXX|ACCT|\[[^\]]+\])(?![A-Za-z0-9])/g;
-const varVals={};/* what you type into variables lives for this session only: page id -> {nth variable -> text} */
+/* variables: XXX / DATE / AMT / Y/N / FMT / OPT */
+const TOK={XXX:'XXX',DATE:'XX/XX/XXXX',AMT:'$XXX',YN:'[Yes]',FMT:'[00 0000 000]'};
+const VKIND={'XXX':'text','XX/XX/XXXX':'date','$XXX':'amt','[Yes]':'bool','[No]':'bool', '[00 0000 000]':'fmt'};
+const VLABEL={text:'Fill in text',date:'Fill in date',amt:'Fill in amount',bool:'Toggle yes or no', fmt:'Fill in number', opt:'Select an option'};
+const VAR_RE=/(?<![A-Za-z0-9])(?:XX\/XX\/XXXX|\$XXX|XXX|\[[^\]]+\])(?![A-Za-z0-9])/g;
+const varVals={};
+
 function getVarKind(tok) {
  if(VKIND[tok]) return VKIND[tok];
- if(tok.startsWith('[') && tok.endsWith(']') && tok.includes('|')) return 'opt';
+ if(tok.startsWith('[') && tok.endsWith(']')) {
+  if(tok.includes('|')) return 'opt';
+  if(/^[0-9 \[\]]+$/.test(tok)) return 'fmt';
+ }
  return 'text';
 }
-function insertVar(kind){const t=$('page-content-input');let s=TOK[kind];if(!s)return;
+
+function insertVar(kind){
+ const t = (activeEditor && activeEditor.closest('#page-modal')) ? activeEditor : $('page-content-input');
+ let s = TOK[kind] || kind; if(!s) return;
  const v=t.value,a=t.selectionStart,b=t.selectionEnd;
  if(a>0&&/[A-Za-z0-9.,;:!?)\]]/.test(v[a-1]))s=' '+s;
  if(b<v.length&&/[A-Za-z0-9]/.test(v[b]))s+=' ';
@@ -1075,7 +1132,7 @@ function makeVar(pid,i,tok){
  if(v.contentEditable!=='plaintext-only')v.contentEditable='true';
  v.spellcheck=false;v.dataset.k=k;v.dataset.ph=tok;v.dataset.pid=pid;v.dataset.i=i;
  v.setAttribute('role','textbox');v.setAttribute('aria-label',VLABEL[k]||'Fill in');v.setAttribute('autocapitalize','off');v.setAttribute('autocorrect','off');
- if(k==='amt'||k==='acct')v.setAttribute('inputmode','decimal');
+ if(k==='amt'||k==='fmt')v.setAttribute('inputmode','decimal');
  const saved=(varVals[pid]||{})[i];
  if(saved){v.textContent=saved;v.classList.add('filled')}else v.textContent=tok;
  return v}
@@ -1113,15 +1170,28 @@ function onVarInput(v,e){const k=v.dataset.k;
  if(k==='amt'){const off=caretOff(v);let n=t.replace(/[^\d.,]/g,'');const d=n.indexOf('.');if(d>=0)n=n.slice(0,d+1)+n.slice(d+1).replace(/\./g,'');
   const want='$'+n;
   if(t!==want){const keep=t.slice(0,off==null?t.length:off).replace(/[^\d.,]/g,'').length;v.textContent=want;setCaret(v,1+Math.min(keep,n.length))}}
- else if(k==='acct'){
+ else if(k==='fmt'){
   const off=caretOff(v);
-  let n=t.replace(/\D/g,''), want=n;
-  if(n.length>3) want = n.slice(0,3) + ' ' + n.slice(3);
+  const pattern = v.dataset.ph.slice(1, -1); 
+  let raw = t.replace(/\D/g, ''); 
+  let want = '';
+  let rIdx = 0;
+  for(let i=0; i<pattern.length; i++) {
+   if(rIdx >= raw.length) break;
+   if(pattern[i] === ' ') want += ' ';
+   else { want += raw[rIdx]; rIdx++; }
+  }
   if(t!==want){
    const keep=t.slice(0,off==null?t.length:off).replace(/\D/g,'').length;
    v.textContent=want;
-   let nc = keep; if(keep>3) nc += 1;
-   setCaret(v,nc)}
+   let nc = 0, kCount = 0;
+   for(let i=0; i<want.length; i++){
+    if(kCount === keep) break;
+    if(want[i] !== ' ') kCount++;
+    nc++;
+   }
+   setCaret(v,nc);
+  }
  }
  else if(k==='date'&&e.inputType&&e.inputType.indexOf('insert')===0&&/^\d+$/.test(e.data||'')&&/^[\d/]*$/.test(t)&&caretOff(v)===t.length){
   const d=t.replace(/\D/g,'');
