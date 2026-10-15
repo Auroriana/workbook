@@ -56,6 +56,7 @@ main{flex:1;min-width:0;min-height:0;overflow-y:auto;padding:8px 24px 40px;scrol
 .ib.tg.on,.ib.tg.on:hover{background:var(--p);color:var(--on-p)}
 .edit-hint{display:inline-block;margin-left:12px;padding:3px 12px;border-radius:999px;background:var(--pc);color:var(--on-pc);font-size:12.5px;font-weight:500;vertical-align:middle;white-space:nowrap}
 .edit-hint[hidden]{display:none}
+#save-layout[hidden]{display:none}
 #ws-empty{margin:0 0 10px}
 #ws{position:relative;overflow-x:auto;overflow-y:hidden;border-radius:14px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
 #wsc{position:relative;min-width:100%;min-height:320px}
@@ -204,15 +205,41 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
 .lk-row{display:flex;align-items:center;gap:16px}
 .lk-pwset{position:relative}.lk-pwset input{padding-right:48px}
 .lk-pwset .ib{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:32px;height:32px}
+#lk-card [data-for]{display:none}
+#lk-card[data-m=login] [data-for~=login],#lk-card[data-m=key] [data-for~=key],#lk-card[data-m=signup] [data-for~=signup],#lk-card[data-m=reset] [data-for~=reset]{display:block}
+#lk-card[data-m=signup] #w-pass .lk-go,#lk-card[data-m=reset] #w-pass .lk-go{display:none}
+#lk-card[data-m=code] [data-for~=code]{display:block}
+.lk-codebox{width:100%;font:600 15px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.06em;text-align:center;padding:12px 8px;border-radius:12px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);user-select:all;word-break:break-all}
+#lock .lk-btn{cursor:pointer;padding:0 12px}
+#lk-card.busy{opacity:.7;pointer-events:none}
+.lk-keep{width:100%;font-size:12.5px;opacity:.9;text-align:center;cursor:pointer}.lk-keep input{vertical-align:-2px;margin-right:4px}
+.lk-links{display:flex;flex-wrap:wrap;gap:2px 16px;justify-content:center}
+.lk-lnk{background:none;border:0;color:#fff;opacity:.8;font-size:12.5px;padding:4px 2px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.lk-lnk:hover,.lk-lnk:focus-visible{opacity:1;outline:none}.lk-lnk[hidden]{display:none}
+.btn[hidden]{display:none}
+.fs-row{margin-top:10px}.fs-n{font-size:13px;font-weight:600}.fs-row .hint{margin:2px 0 6px}
 </style></head>
 <body class="" style="--rc: nwse-resize;">
 <div id="lock" role="dialog" aria-modal="true" aria-label="Login">
  <div class="lk-time"><div class="lk-date" id="lk-date">Wednesday, October 14</div><div class="lk-clock" id="lk-clock">9:18</div></div>
- <form class="lk-card" id="lk-card" autocomplete="on">
+ <form class="lk-card" id="lk-card" data-m="login" autocomplete="on">
   <div class="lk-av" id="lk-av"></div>
-  <input class="lk-in" id="lk-user" type="text" name="username" placeholder="Username" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Username">
-  <div class="lk-pw2"><input class="lk-in" id="lk-pass" type="password" name="password" placeholder="Password" autocomplete="current-password" aria-label="Password"><button class="lk-go" type="submit" aria-label="Log in"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></div>
-  <div class="lk-msg" id="lk-msg" role="alert">Enter your login to continue</div>
+  <div class="lk-pw2" data-for="key"><input class="lk-in" id="lk-key" type="password" placeholder="Master key" autocomplete="off" aria-label="Master key"><button class="lk-go" type="submit" aria-label="Continue"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></div>
+  <input class="lk-in" id="lk-user" data-for="login signup reset" type="text" name="username" placeholder="Username" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Username">
+  <input class="lk-in" id="lk-rc" data-for="reset" type="password" placeholder="Recovery code or master key" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Recovery code or master key">
+  <div class="lk-codebox" id="lk-codebox" data-for="code"></div>
+  <button type="button" class="lk-in lk-btn" id="lk-copy" data-for="code">Copy code</button>
+  <button type="button" class="lk-in lk-btn" id="lk-codego" data-for="code">I've saved it. Continue</button>
+  <div class="lk-pw2" id="w-pass" data-for="login signup reset"><input class="lk-in" id="lk-pass" type="password" name="password" placeholder="Password" autocomplete="current-password" aria-label="Password"><button class="lk-go" type="submit" aria-label="Continue"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></div>
+  <div class="lk-pw2" data-for="signup reset"><input class="lk-in" id="lk-pass2" type="password" placeholder="Confirm password" autocomplete="new-password" aria-label="Confirm password"><button class="lk-go" type="submit" aria-label="Continue"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></div>
+  <label class="lk-keep" data-for="signup"><input type="checkbox" id="lk-keep"> Start with the data already on this device</label>
+  <div class="lk-msg" id="lk-msg" role="alert"></div>
+  <div class="lk-links">
+   <button type="button" class="lk-lnk" data-for="login" data-go="key:signup">Create account</button>
+   <button type="button" class="lk-lnk" data-for="login" data-go="reset">Forgot password?</button>
+   <button type="button" class="lk-lnk" data-for="key signup reset" data-go="login">Back to login</button>
+   <button type="button" class="lk-lnk" id="lk-off" hidden>Continue offline</button>
+  </div>
  </form>
 </div>
 <div id="toast" role="status" class=""></div>
@@ -222,6 +249,7 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
  <span class="brand" id="brand" title="Ataraxia">Ataraxia</span>
  <nav id="books" class="scroll-x" aria-label="Books"><div class="tab on" tabindex="0"><span>ASC</span><button class="ib" title="Edit book"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button></div><div class="tab" tabindex="0"><span>Legacy</span></div><div class="tab" tabindex="0"><span>Notes</span></div></nav>
  <button class="ib tg" id="edit-toggle" onclick="setEdit(!editMode)" title="Move / edit layout" aria-label="Move or edit layout" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"></path></svg></button>
+ <button class="btn fill xs" id="save-layout" onclick="saveLayout()" title="Save this layout and lock it" hidden>Save</button>
  <button class="btn fill" onclick="openAddBookModal()">+ Book</button>
 </header>
 <div class="shell">
@@ -255,10 +283,8 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
   <div><label for="site-name-input">Website name</label><input type="text" id="site-name-input" maxlength="40" autocomplete="off"><p class="hint">Shown at the top left and used as the file name when you save.</p></div>
   <div><label>Appearance</label><div class="seg" id="modes"><button>Auto</button><button class="on">Light</button><button>Dark</button><button>Black</button></div></div>
   <div><label>Accent color</label><div class="sw" id="accents"><button style="--c: 358;" title="Red" aria-label="Red"></button><button style="--c: 8;" title="Coral" aria-label="Coral"></button><button style="--c: 18;" title="Orange" aria-label="Orange"></button><button style="--c: 30;" title="Amber" aria-label="Amber"></button><button style="--c: 42;" title="Gold" aria-label="Gold"></button><button style="--c: 56;" title="Yellow" aria-label="Yellow"></button><button style="--c: 75;" title="Olive" aria-label="Olive"></button><button style="--c: 100;" title="Lime" aria-label="Lime"></button><button style="--c: 140;" title="Green" aria-label="Green"></button><button style="--c: 158;" title="Mint" aria-label="Mint"></button><button style="--c: 174;" title="Teal" aria-label="Teal"></button><button style="--c: 188;" title="Cyan" aria-label="Cyan"></button><button style="--c: 198;" title="Sky" aria-label="Sky"></button><button style="--c: 207;" title="Blue" aria-label="Blue"></button><button class="on" style="--c: 232;" title="Indigo" aria-label="Indigo"></button><button style="--c: 257;" title="Purple" aria-label="Purple"></button><button style="--c: 275;" title="Violet" aria-label="Violet"></button><button style="--c: 300;" title="Magenta" aria-label="Magenta"></button><button style="--c: 322;" title="Pink" aria-label="Pink"></button><button style="--c: 340;" title="Rose" aria-label="Rose"></button></div></div>
-  <div><label>Profile picture</label><div class="lk-row"><div class="lk-av sm" id="set-av"></div><div class="seg"><button class="btn tone sm" id="av-up" type="button">Upload</button><button class="btn out sm" id="av-rm" type="button">Remove</button></div><input type="file" id="av-file" accept="image/*" hidden=""></div><p class="hint">Shown on the login screen. Saved inside the HTML file when you press Save. Please avoid uploading large images to avoid issues.</p></div>
-  <div><label for="set-user">Login username</label><input type="text" id="set-user" maxlength="40" placeholder="Custom username" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
-  <div><label for="set-pass">Login password</label><div class="lk-pwset"><input type="password" id="set-pass" maxlength="64" placeholder="New password (min 4 characters)" autocomplete="new-password"><button class="ib" id="set-eye" type="button" aria-label="Show password"><svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></div><p class="hint" id="set-status">Please set your own password.</p><div class="seg" style="margin-top:10px"><button class="btn fill sm" id="cred-save" type="button">Save login</button><button class="btn out danger sm" id="cred-clear" type="button">Remove custom</button><button class="btn tone sm" id="lock-now" type="button">Lock now</button></div></div>
-  <div>
+  <div><label>Account</label><div class="lk-row"><div class="lk-av sm" id="set-av"></div><div class="seg"><button class="btn tone sm" id="av-up" type="button">Upload</button><button class="btn out sm" id="av-rm" type="button">Remove</button></div><input type="file" id="av-file" accept="image/*" hidden=""></div><p class="hint" id="acct-st">Not signed in.</p><p class="hint">Your profile picture is saved to your account (shrunk to 256 px) and shows on the login screen of the device you last used.</p><div class="seg" style="margin-top:6px"><button class="btn tone sm" id="recov" type="button" hidden>New recovery code</button><button class="btn out danger sm" id="logout" type="button" hidden>Log out</button></div><p class="hint">The recovery code lets you reset a forgotten password yourself. Making a new one replaces the old one.</p></div>
+<div>
     <label>Backup &amp; Sync Data</label>
     <div class="seg">
       <button class="btn tone" onclick="exportAppData()">Export Data</button>
@@ -267,7 +293,11 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
     <input type="file" id="import-data-file" accept=".txt,.json" style="display: none;" onchange="importAppData(event)">
     <p class="hint">Export your workspace data to continue on another device, then import it back.</p>
   </div>
-  <div><label>Please save everytime you make a change.</label><div class="seg"><button class="btn fill" onclick="saveDirectToFile()">Save</button></div></div>
+  <div><label>Auto-save to this computer</label>
+   <div class="fs-row"><b class="fs-n">App file (.html)</b><p class="hint" id="fs-html-st"></p><div class="seg"><button class="btn tone sm" id="fs-html-pick" type="button">Choose file</button><button class="btn fill sm" id="fs-html-go" type="button" hidden>Reconnect</button><button class="btn out danger sm" id="fs-html-off" type="button" hidden>Stop</button></div></div>
+   <div class="fs-row"><b class="fs-n">Backup (.json)</b><p class="hint" id="fs-json-st"></p><div class="seg"><button class="btn tone sm" id="fs-json-pick" type="button">Choose file</button><button class="btn fill sm" id="fs-json-go" type="button" hidden>Reconnect</button><button class="btn out danger sm" id="fs-json-off" type="button" hidden>Stop</button></div></div>
+   <p class="hint">Pick each file once. It is then rewritten a few seconds after every change. Browsers cannot accept a typed path, and after restarting the browser you may need to press Reconnect. Chrome and Edge only.</p>
+   <div class="seg" style="margin-top:6px"><button class="btn fill sm" type="button" onclick="saveDirectToFile()">Save app file now</button></div></div>
   <p class="credit">ataraxia</p>
  </div>
  <div class="mf"><button class="btn tone" onclick="closeModal('settings-modal')">Close</button></div>
@@ -463,7 +493,7 @@ const clamp=(v,a,b)=>Math.min(Math.max(v,a),b);
 let appData,fileHandle=null,handleName='';
 function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
 function showToast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200)}
-function persistLocal(){try{localStorage.setItem('paano_ba_yan_data',JSON.stringify(appData))}catch(e){}}
+function persistLocal(){try{localStorage.setItem('paano_ba_yan_data',JSON.stringify(appData))}catch(e){}if(window.onPersist)window.onPersist()}
 function hex(v){return /^#[0-9a-f]{6}$/i.test(v||'')?String(v).toLowerCase():''}
 function load(){let s=null;try{s=localStorage.getItem('paano_ba_yan_data')}catch(e){}
  try{appData=s?JSON.parse(s):INITIAL_DATA}catch(e){appData=INITIAL_DATA}
@@ -611,13 +641,28 @@ function areaCols(key,ex){let m=0;areaItems(key).forEach(i=>{if(i!==ex&&i.x!==un
  let vw=0;if(key){const n=nodes.get(key),b=n&&n.querySelector('.cin');vw=b?b.clientWidth:0}else vw=$('ws').clientWidth;
  return Math.max(Math.floor(vw/GRID),m,1)}
 /* nothing may overlap: whatever collides with the fixed item (or an item already settled) is pushed down */
-function settle(items,fixed,frozen){const fz=frozen||[];
- const rest=items.filter(i=>i!==fixed&&!fz.includes(i)&&i.x!==undefined&&i.y!==undefined).sort((a,b)=>a.y-b.y||a.x-b.x),placed=(fixed?[fixed]:[]).concat(fz);
+function settle(items,fixed,frozen,cmp){const fz=frozen||[];
+ const rest=items.filter(i=>i!==fixed&&!fz.includes(i)&&i.x!==undefined&&i.y!==undefined).sort(cmp||((a,b)=>a.y-b.y||a.x-b.x)),placed=(fixed?[fixed]:[]).concat(fz);
  for(const o of rest){let n=0,hit;
   while(n++<999&&(hit=placed.find(p=>hits(p,o)))){o.y=hit.y+hit.h;layoutDirty=true}
   placed.push(o)}}
 /* soft = boards hold still (a page being dragged over them only moves them when dropped) */
-function placeItem(d,r,key,soft){d.x=r.x;d.y=r.y;d.w=r.w;d.h=r.h;const it=areaItems(key);settle(it,d,soft?it.filter(i=>!isPage(i)):null)}
+function placeItem(d,r,key,soft){d.x=r.x;d.y=r.y;d.w=r.w;d.h=r.h;
+ if(homeMap){reflow(d,key,soft);return}
+ const it=areaItems(key);settle(it,d,soft?it.filter(i=>!isPage(i)):null)}
+/* Move mode remembers a "home" spot for every item (taken when it turns on, updated for whatever you place yourself).
+   Every move re-flows from those homes, so items you bumped snap back as soon as the intruder leaves. Most recently placed wins a contested spot. */
+let homeMap=null,savedSnap=null,homeSeq=0,movedF=false;
+const homeRank=i=>{const h=homeMap&&homeMap.get(i.id);return h?h.t:0};
+function homeStart(){const cid=appData.activeChapterId;homeMap=new Map();homeSeq=0;movedF=false;
+ appData.pages.filter(p=>p.chapterId===cid).concat(getCons()).forEach(i=>{if(i.x!==undefined&&i.y!==undefined)homeMap.set(i.id,{x:i.x,y:i.y,t:0})});savedSnap=snapshot()}
+function commitHome(d){if(!homeMap)return;homeMap.set(d.id,{x:d.x,y:d.y,t:++homeSeq});movedF=true;$('save-layout').hidden=false}
+function reflow(d,key,soft){const cid=appData.activeChapterId;
+ appData.pages.filter(p=>p.chapterId===cid).concat(getCons()).forEach(i=>{const h=homeMap.get(i.id);if(i!==d&&h){i.x=h.x;i.y=h.y}});
+ const cmp=(a,b)=>homeRank(b)-homeRank(a)||a.y-b.y||a.x-b.x;
+ [''].concat(getCons().map(c=>c.id)).forEach(k=>{const it=areaItems(k);
+  if(k===key)settle(it,d,soft?it.filter(i=>!isPage(i)):null,cmp);else settle(it,null,null,cmp)})}
+function saveLayout(){if(!editMode)return;persistLocal();setEdit(false,true,true);showToast('Layout saved.')}
 function findSpot(items,w,h,cols,pad){const L=items.filter(i=>i.x!==undefined&&i.y!==undefined),mx=Math.max(pad,cols-pad-w);
  for(let y=pad;y<6000;y++)for(let x=pad;x<=mx;x++){const r={x:x-pad,y:y-pad,w:w+2*pad,h:h+2*pad};if(!L.some(i=>hits(r,i)))return{x,y}}
  return{x:pad,y:pad}}
@@ -648,10 +693,15 @@ function fitAll(){const wsc=$('wsc');let b=0,r=0;
   can.style.minHeight='max(100%,'+(cb+1)*GRID+'px)';can.style.minWidth='max(100%,'+(cr+1)*GRID+'px)'})}
 function revealNode(id){const n=nodes.get(id);if(n)setTimeout(()=>{try{n.scrollIntoView({block:'nearest',inline:'nearest',behavior:reduceMotion()?'auto':'smooth'})}catch(e){n.scrollIntoView()}},30)}
 /* global move / edit mode */
-function setEdit(on,quiet){if(ps)cancelPs();editMode=!!on;document.body.classList.toggle('edit',editMode);
+function setEdit(on,quiet,keep){if(ps)cancelPs();on=!!on;let rv=false;
+ if(on&&!editMode)homeStart();
+ if(!on&&editMode&&movedF&&!keep&&savedSnap){restoreBase(savedSnap);rv=true}/* toggled off without Save: back to the last saved layout */
+ if(!on){homeMap=null;savedSnap=null;movedF=false}
+ editMode=on;document.body.classList.toggle('edit',editMode);$('save-layout').hidden=true;
  const b=$('edit-toggle');b.classList.toggle('on',editMode);b.setAttribute('aria-pressed',editMode?'true':'false');
  b.title=editMode?'Move mode is on. Click to lock the layout':'Move / edit layout';$('edit-hint').hidden=!editMode;closeMenus();
- if(!quiet)showToast(editMode?'Move mode on. Drag pages and boards, drag their edges to resize.':'Layout locked.')}
+ if(rv){persistLocal();renderPages()}
+ if(!quiet)showToast(rv?'Move mode off. Unsaved changes were discarded. Press Save to keep them.':editMode?'Move mode on. Drag pages and boards, drag their edges to resize.':'Layout locked.')}
 function fitPageHeight(id){const p=appData.pages.find(x=>x.id===id),n=nodes.get(id);if(!p||!n)return;
  const prev=n.style.height;n.style.transition='none';n.style.height='auto';const px=n.offsetHeight;n.style.height=prev;n.style.transition='';
  placeItem(p,{x:p.x,y:p.y,w:p.w,h:clamp(Math.ceil(px/GRID),MIN_PH,MAX_U)},keyOf(p));persistLocal();applyAll();fitAll()}
@@ -659,11 +709,11 @@ function gripKey(e,id){const k={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1]
  const d=findItem(id);if(!d||d.x===undefined)return;e.preventDefault();
  const s=e.shiftKey?5:1,m=minsOf(d),r={x:d.x,y:d.y,w:d.w,h:d.h};
  if(e.altKey){r.w=clamp(r.w+k[0]*s,m[0],MAX_U);r.h=clamp(r.h+k[1]*s,m[1],MAX_U)}else{r.x=Math.max(0,r.x+k[0]*s);r.y=Math.max(0,r.y+k[1]*s)}
- placeItem(d,r,keyOf(d));persistLocal();applyAll();fitAll()}
+ placeItem(d,r,keyOf(d));commitHome(d);persistLocal();applyAll();fitAll()}
 /* pointer drag + resize (mouse, touch, pen). Only active in move mode */
 function snapshot(){const cid=appData.activeChapterId;
  return appData.pages.filter(p=>p.chapterId===cid).map(p=>({d:p,pg:1,x:p.x,y:p.y,w:p.w,h:p.h,c:p.containerId||''})).concat(getCons().map(c=>({d:c,x:c.x,y:c.y,w:c.w,h:c.h})))}
-function restoreBase(){ps.base.forEach(s=>{const d=s.d;d.x=s.x;d.y=s.y;d.w=s.w;d.h=s.h;if(s.pg)d.containerId=s.c})}
+function restoreBase(b){(b||ps.base).forEach(s=>{const d=s.d;d.x=s.x;d.y=s.y;d.w=s.w;d.h=s.h;if(s.pg)d.containerId=s.c})}
 function layoutDown(e){if(!editMode||ps||e.button>0)return;const t=e.target;if(!t.closest||t.closest('button,a,.menu'))return;
  const rz=t.closest('.rz'),host=rz?rz.parentElement:(t.closest('.card')||t.closest('.cbox'));if(!host)return;
  if(!rz&&host.classList.contains('cbox')&&t.classList.contains('cin')&&(e.offsetX>t.clientWidth||e.offsetY>t.clientHeight))return;/* scrollbar */
@@ -722,7 +772,7 @@ function endPs(){const s=ps;removeEventListener('pointermove',psMove);removeEven
  document.body.classList.remove('dragging-page','rszing');$('szbadge').style.display='none';ps=null;return s}
 function psUp(e){if(!ps||e.pointerId!==ps.pid)return;
  if(ps.on&&ps.rz&&ps.x===ps.sx&&ps.y===ps.sy){endPs();return}/* just a click on a handle */
- if(ps.on)preview(true);const s=endPs();if(!s.on)return;persistLocal();renderPages()}
+ if(ps.on)preview(true);const s=endPs();if(!s.on)return;commitHome(s.d);persistLocal();renderPages()}
 function psCancel(e){if(!ps||e.pointerId!==ps.pid)return;cancelPs()}
 function cancelPs(){if(!ps)return;if(ps.on)restoreBase();const s=endPs();if(s.on)renderPages()}
 /* ---------- containers (free-form board) ---------- */
@@ -895,171 +945,203 @@ $('site-name-input').addEventListener('change',e=>{if(!e.target.value.trim()){ap
 matchMedia('(prefers-color-scheme:dark)').addEventListener('change',applyTheme);
 
 // --- Data Export & Import ---
-function exportAppData() {
-  // Retrieve active credentials and avatar from localStorage, or fallback to the script tag
-  const localCreds = localStorage.getItem('ataraxia_login');
-  const localAvatar = localStorage.getItem('ataraxia_avatar');
-  
-  let fallbackLockData = { c: null, a: "" };
-  try {
-    fallbackLockData = JSON.parse(document.getElementById('lock-data').textContent || '{}');
-  } catch (e) {}
-
-  const lockData = {
-    c: localCreds ? JSON.parse(localCreds) : fallbackLockData.c,
-    a: localAvatar !== null ? localAvatar : fallbackLockData.a
-  };
-
-  // Combine workspace data and lock data
-  const backupObj = {
-    appData: appData,
-    lockData: lockData
-  };
-
-  const dataStr = JSON.stringify(backupObj, null, 2);
-  const blob = new Blob([dataStr], { type: "application/json" });
-  
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = fileName() + "_backup.json"; 
-  document.body.appendChild(a);
-  a.click();
-  
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  
-  showToast("Data and credentials exported.");
-}
-
-function importAppData(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const importedData = JSON.parse(e.target.result);
-      
-      // Check for the combined backup format
-      if (importedData.appData && importedData.lockData) {
-        appData = importedData.appData;
-        
-        // Restore credentials to localStorage
-        if (importedData.lockData.c) {
-          localStorage.setItem('ataraxia_login', JSON.stringify(importedData.lockData.c));
-        } else {
-          localStorage.removeItem('ataraxia_login');
-        }
-        
-        // Restore avatar to localStorage
-        if (importedData.lockData.a) {
-          localStorage.setItem('ataraxia_avatar', importedData.lockData.a);
-        } else {
-          localStorage.removeItem('ataraxia_avatar');
-        }
-        
-        // Inject back into the DOM so the next 'Save' writes it to the HTML file
-        document.getElementById('lock-data').textContent = JSON.stringify(importedData.lockData);
-        
-      } else if (importedData.books && importedData.pages) {
-        // Fallback for older backups that only contain appData
-        appData = importedData;
-      } else {
-        throw new Error("Invalid format");
-      }
-      
-      persistLocal(); 
-      applyTheme();
-      applySiteName(true);
-      renderAll();
-
-      // Refresh the avatar preview in the settings modal if it's open
-      const avatarEl = document.getElementById('set-av');
-      if (avatarEl) {
-        const avatarData = importedData.lockData?.a || localStorage.getItem('ataraxia_avatar');
-        if (avatarData) {
-          avatarEl.innerHTML = '<img src="' + avatarData + '" alt="">';
-        } else {
-          avatarEl.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>';
-        }
-      }
-      
-      showToast("Import successful!");
-    } catch (error) {
-      showToast("Error: Invalid backup file.");
-    }
-    
-    event.target.value = ""; 
-  };
-  
-  reader.readAsText(file);
-}
+function backupJSON(){let a='';try{a=localStorage.getItem('ataraxia_avatar')||''}catch(e){}
+  return JSON.stringify({appData:appData,lockData:{c:null,a:a}},null,2)}
+function exportAppData(){const url=URL.createObjectURL(new Blob([backupJSON()],{type:'application/json'})),a=document.createElement('a');
+  a.href=url;a.download=fileName()+'_backup.json';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);showToast('Data exported.')}
+function importAppData(event){const file=event.target.files[0];if(!file)return;const reader=new FileReader();
+  reader.onload=function(e){try{const o=JSON.parse(e.target.result);let d,av='';
+      if(o.appData){d=o.appData;av=(o.lockData&&o.lockData.a)||''}else if(o.books&&o.pages){d=o}else throw new Error('Invalid format');
+      if(window.adoptData)window.adoptData(d);else{appData=d;applyTheme();applySiteName(true);renderAll()}
+      persistLocal();/* pushes the imported data to the cloud and the auto-save files */
+      if(av&&window.setAvatar)window.setAvatar(av);
+      showToast('Import successful!')}catch(error){showToast('Error: Invalid backup file.')}
+    event.target.value=''};
+  reader.readAsText(file)}
 
 </script>
-<script id="lock-data" type="application/json">{"c":null,"a":""}</script>
 <script id="lock-script">
 (function(){
 const G=id=>document.getElementById(id);
-const KC='ataraxia_login',KA='ataraxia_avatar';
-const EM=(()=>{try{return JSON.parse(G('lock-data').textContent)||{}}catch(e){return{}}})();
-const MU='YXVyb3JpYW5h',MP='QXRhcmF4aWFmdWxnb3ppZWw1Mzg3PyE/';
-const ob=s=>{let r='';new TextEncoder().encode(s).forEach(c=>r+=String.fromCharCode(c));return btoa(r)};
-const de=b=>{try{return new TextDecoder().decode(Uint8Array.from(atob(b),c=>c.charCodeAt(0)))}catch(e){return''}};
+const KA='ataraxia_avatar',KD='ataraxia_dirty',KS='ataraxia_seen',KL='ataraxia_last',KDATA='paano_ba_yan_data';
+const API_ORIGIN='';/* leave empty when this page is served from the same Vercel project as /api. Fill in https://your-app.vercel.app if you open the file from disk */
+const CFG={apiKey:"AIzaSyDxEgrANR-Ccbz58hx3JzhLX-rcp2Soe2I",authDomain:"ataraxia-77692.firebaseapp.com",databaseURL:"https://ataraxia-77692-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"ataraxia-77692",storageBucket:"ataraxia-77692.firebasestorage.app",messagingSenderId:"131850691296",appId:"1:131850691296:web:7c4a3ce3660328474e6685"};
+const FB='https://www.gstatic.com/firebasejs/10.14.1/';
+const DEV=Math.random().toString(36).slice(2,10);
+const BLANK=()=>({books:[],chapters:[],pages:[],containers:[],settings:{}});
 const rd=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
 const wr=(k,v)=>{try{localStorage.setItem(k,v);return true}catch(e){return false}};
 const rm=k=>{try{localStorage.removeItem(k)}catch(e){}};
 const toast=m=>{if(typeof showToast==='function')showToast(m)};
 const PERSON='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>';
-let timer=0;
-function cred(){const r=rd(KC);try{const o=r===null?EM.c:JSON.parse(r||'null');return o&&typeof o.u==='string'&&typeof o.p==='string'&&o.u&&o.p?o:null}catch(e){return null}}
-function avatar(){const r=rd(KA),a=r===null?EM.a:r;return typeof a==='string'&&/^data:image\//.test(a)?a:''}
-function paint(){const a=avatar();['lk-av','set-av'].forEach(id=>{const e=G(id);e.textContent='';if(a){const i=new Image();i.alt='';i.src=a;e.appendChild(i)}else e.innerHTML=PERSON})}
-function status(){const c=cred();G('set-status').textContent=c?'Custom login is active. Leave password blank to keep the current one.':'Please set your own password.'}
-function fillUser(){const c=cred();G('set-user').value=c?de(c.u):''}
+const mail=u=>u+'@ataraxia.app';
+const normUser=s=>{s=s.trim().toLowerCase();return /^[a-z0-9_-]{3,24}$/.test(s)?s:''};
+const pwCheck=(p,p2)=>p.length<4?'Password must be at least 4 characters':p!==p2?"Passwords don't match":'';
+let invKey='',pend=null,AU=null,DB=null,auth=null,db=null,uid=null,entered=null,name='',mode='login',purpose='signup',busy=false,manual=false,fresh=null,timer=0,offline=false,syncTxt='';
+let pushT=0,edits=0,lastSeen=0,pendV=null,applying=false,unsub=null,fsT=0;
+
+/* ---------- crypto: the Firebase password is derived from the real one, and a copy is sealed with the master key so it can be reset ---------- */
+const te=new TextEncoder();
+const b64=u=>{let r='';u.forEach(c=>r+=String.fromCharCode(c));return btoa(r)};
+async function pbkdf(secret,salt){const k=await crypto.subtle.importKey('raw',te.encode(secret),'PBKDF2',false,['deriveBits']);
+ return b64(new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:te.encode(salt),iterations:100000},k,256)))}
+const fbPass=(u,p)=>pbkdf(p,'ataraxia:'+u);
+async function api(path,body){
+ if(!API_ORIGIN&&location.protocol==='file:')throw 'Set API_ORIGIN in the file to your Vercel URL to use this from disk';
+ let r;try{r=await fetch(API_ORIGIN+'/api/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}catch(e){throw 'No connection to the server'}
+ let d={};try{d=await r.json()}catch(e){}
+ if(!r.ok)throw d.error||('Server error ('+r.status+')');return d}
+
+/* ---------- login screen ---------- */
+const DEFMSG={login:'Log in to your account',key:'Enter the master key to continue',signup:'Create your account',reset:'Reset with your recovery code or the master key',code:'Save this recovery code now. It is shown once and is how you reset your password yourself'};
 function msg(t,bad){const m=G('lk-msg');m.textContent=t;m.classList.toggle('bad',!!bad)}
 function tick(){const d=new Date();G('lk-clock').textContent=d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}).replace(/\s?[ap]\.?m\.?$/i,'');G('lk-date').textContent=d.toLocaleDateString([],{weekday:'long',month:'long',day:'numeric'})}
 function setLocked(on){
  document.documentElement.classList.toggle('unlocked',!on);
  [...document.body.children].forEach(n=>{if(n.id!=='lock'&&n.tagName!=='SCRIPT')n.toggleAttribute('inert',on)});
  clearInterval(timer);
- if(on){tick();timer=setInterval(tick,5000);G('lk-pass').value='';G('lk-user').value='';msg('Enter your login to continue');setTimeout(()=>G('lk-user').focus(),60)}
- else if(document.activeElement)document.activeElement.blur()}
-function attempt(e){e.preventDefault();
- const u=G('lk-user').value.trim(),p=G('lk-pass').value,eu=ob(u),ep=ob(p),c=cred();
- if(u&&p&&((eu===MU&&ep===MP)||(c&&eu===c.u&&ep===c.p))){setLocked(false);return}
- msg('Incorrect username or password',true);
- const card=G('lk-card');card.classList.remove('err');void card.offsetWidth;card.classList.add('err');
- G('lk-pass').value='';G('lk-pass').focus()}
+ if(on){tick();timer=setInterval(tick,5000)}else if(document.activeElement)document.activeElement.blur()}
+function setMode(m,p){mode=m;if(p)purpose=p;G('lk-card').dataset.m=m;
+ G('lk-pass').placeholder=m==='reset'?'New password':'Password';G('lk-pass').autocomplete=m==='login'?'current-password':'new-password';
+ ['lk-pass','lk-pass2','lk-key','lk-rc'].forEach(id=>G(id).value='');
+ if(m==='login'&&!G('lk-user').value)G('lk-user').value=rd(KL)||'';
+ msg(DEFMSG[m]);paint();
+ setTimeout(()=>{(m==='code'?G('lk-codego'):m==='key'?G('lk-key'):(m==='login'&&G('lk-user').value)?G('lk-pass'):G('lk-user')).focus()},60)}
+function fail(t){msg(t,true);const c=G('lk-card');c.classList.remove('err');void c.offsetWidth;c.classList.add('err');['lk-pass','lk-pass2','lk-key','lk-rc'].forEach(id=>G(id).value='')}
+function errText(x){if(typeof x==='string')return x;const c=(x&&x.code)||'',t=(x&&x.message)||'';
+ if(c==='auth/email-already-in-use')return 'That username is already taken';
+ if(/auth\/(invalid-credential|wrong-password|user-not-found|invalid-login-credentials|invalid-email)/.test(c))return 'Incorrect username or password';
+ if(c==='auth/too-many-requests')return 'Too many attempts. Try again in a few minutes';
+ if(c==='auth/network-request-failed')return 'No connection. Check your internet';
+ if(c==='auth/operation-not-allowed')return 'Email/Password sign-in is not switched on in Firebase yet';
+ if(/PERMISSION_DENIED/i.test(c+t))return 'The database rules blocked this. Publish the rules from the guide';
+ return 'Something went wrong ('+(c||t||'unknown')+')'}
+const needNet=()=>{if(!auth)throw 'Still connecting. Try again in a moment'};
+async function doKey(){const k=G('lk-key').value;if(!k)throw 'Enter the master key';msg('Checking…');await api('key',{key:k});invKey=k;setMode('signup')}
+async function doLogin(){needNet();const u=G('lk-user').value.trim().toLowerCase(),p=G('lk-pass').value;if(!u||!p)throw 'Enter your username and password';
+ manual=true;msg('Signing in…');const fp=await fbPass(u,p);const c=await AU.signInWithEmailAndPassword(auth,mail(u),fp);await enter(c.user)}
+async function doSignup(){needNet();const u=normUser(G('lk-user').value),p=G('lk-pass').value,bad=pwCheck(p,G('lk-pass2').value);
+ if(!u)throw 'Username: 3 to 24 characters, letters, numbers, _ or -';if(bad)throw bad;if(!invKey)throw 'Enter the master key first';
+ manual=true;msg('Creating account…');const keep=G('lk-keep').checked,fp=await fbPass(u,p);
+ const r=await api('signup',{key:invKey,username:u,password:fp});invKey='';
+ const c=await AU.signInWithEmailAndPassword(auth,mail(u),fp);showCode(r.code,c.user,keep)}
+async function doReset(){needNet();const u=normUser(G('lk-user').value),rc=G('lk-rc').value,p=G('lk-pass').value,bad=pwCheck(p,G('lk-pass2').value);
+ if(!u)throw 'Enter the username of the account';if(!rc.trim())throw 'Enter your recovery code or the master key';if(bad)throw bad;
+ manual=true;msg('Resetting…');const fp=await fbPass(u,p);
+ const r=await api('reset',{username:u,code:rc,password:fp});
+ const c=await AU.signInWithEmailAndPassword(auth,mail(u),fp);toast('Password updated.');showCode(r.code,c.user,false)}
+function showCode(code,user,keep){pend={user,keep};G('lk-codebox').textContent=code;setMode('code')}
+async function codeDone(){if(!pend||busy)return;const p=pend;pend=null;busy=true;manual=true;fresh={keep:p.keep};G('lk-codebox').textContent='';
+ try{await enter(p.user)}catch(e){setLocked(false)}finally{busy=false;manual=false;fresh=null}}
+async function attempt(e){e.preventDefault();if(busy)return;busy=true;G('lk-card').classList.add('busy');
+ try{await({login:doLogin,key:doKey,signup:doSignup,reset:doReset,code:async()=>{}})[mode]()}
+ catch(x){fail(errText(x))}
+ finally{busy=false;if(!pend){manual=false;fresh=null}G('lk-card').classList.remove('busy')}}
+
+/* ---------- avatar ---------- */
+function avatar(){const a=rd(KA);return typeof a==='string'&&/^data:image\//.test(a)?a:''}
+function setAv(id,a){const e=G(id);e.textContent='';if(a){const i=new Image();i.alt='';i.src=a;e.appendChild(i)}else e.innerHTML=PERSON}
+function paint(){const a=avatar(),u=G('lk-user').value.trim().toLowerCase();setAv('set-av',a);setAv('lk-av',(!u||u===rd(KL))?a:'')}
 function fit(file){return new Promise((res,rej)=>{
  if(!file||!/^image\//.test(file.type))return rej();
  const url=URL.createObjectURL(file),img=new Image();
  img.onload=()=>{try{const S=256,m=Math.min(img.naturalWidth,img.naturalHeight);if(!m)throw 0;
   const c=document.createElement('canvas');c.width=c.height=S;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,S,S);
-  x.drawImage(img,(img.naturalWidth-m)/2,(img.naturalHeight-m)/2,m,m,0,0,S,S);res(c.toDataURL('image/jpeg',.88))}catch(e){rej()}finally{URL.revokeObjectURL(url)}};
+  x.drawImage(img,(img.naturalWidth-m)/2,(img.naturalHeight-m)/2,m,m,0,0,S,S);res(c.toDataURL('image/jpeg',.82))}catch(e){rej()}finally{URL.revokeObjectURL(url)}};
  img.onerror=()=>{URL.revokeObjectURL(url);rej()};img.src=url})}
-window.lockClean=c=>{const dd=c.querySelector('#lock-data');if(dd)dd.textContent=JSON.stringify({c:cred(),a:avatar()}).replace(/</g,'\\u003c');
- c.classList.remove('unlocked');c.querySelectorAll('[inert]').forEach(n=>n.removeAttribute('inert'));
+async function saveAvatar(d){if(!wr(KA,d)){toast('Could not store the picture (browser storage is full or blocked).');return}paint();
+ if(uid){try{if(d)await DB.set(uref('avatar'),d);else await DB.remove(uref('avatar'))}catch(e){toast('Saved here, but it could not be uploaded yet.')}}}
+window.setAvatar=saveAvatar;
+
+/* ---------- cloud sync (Realtime Database, one JSON string per account) ---------- */
+const uref=p=>DB.ref(db,'ataraxia/users/'+uid+(p?'/'+p:''));
+const calm=()=>!document.querySelector('.ov.open')&&!ps&&!editMode;/* never swap the data while you are editing or dragging */
+function paintAcct(){G('acct-st').textContent=uid?'Signed in as '+name+'. '+syncTxt:offline?'Offline mode. Changes are saved on this device only.':'Not signed in.';G('logout').hidden=!uid;G('recov').hidden=!uid}
+function setSync(t){syncTxt=t;paintAcct()}
+function adopt(o){applying=true;try{wr(KDATA,JSON.stringify(o));load();applyTheme();applySiteName(true);renderAll()}finally{applying=false}fsSoon()}
+window.adoptData=adopt;
+function apply(v){try{adopt(JSON.parse(v.data))}catch(e){return}lastSeen=v.updatedAt||Date.now();rm(KD);if(typeof v.avatar==='string'){wr(KA,v.avatar);paint()}}
+async function push(){clearTimeout(pushT);if(!uid)return;const at=edits,ts=Date.now();lastSeen=ts;setSync('Syncing…');
+ try{await DB.update(uref(),{data:JSON.stringify(appData),updatedAt:ts,dev:DEV});if(edits===at)rm(KD);setSync('Synced')}
+ catch(e){setSync('Could not sync yet. Will retry.');if(/PERMISSION/i.test((e.code||'')+(e.message||'')))toast('Sync was blocked by your Firebase database rules.');pushT=setTimeout(push,15000)}}
+async function reconcile(){const v=(await DB.get(uref())).val()||{};
+ if(rd(KD)===uid){await push();return}/* edits made on this device that never reached the cloud win */
+ if(v.data){if((v.updatedAt||0)>lastSeen)apply(v);wr(KA,typeof v.avatar==='string'?v.avatar:'');paint();setSync('Synced');return}
+ if(!(fresh&&fresh.keep)){adopt(BLANK());wr(KA,'')}/* a new account starts empty unless you chose to bring this device's data */
+ await push();if(avatar())await DB.set(uref('avatar'),avatar())}
+async function pull(){try{const v=(await DB.get(uref())).val();if(!v||!v.data||(v.updatedAt||0)<=lastSeen)return;if(calm())apply(v);else pendV=v}catch(e){}}
+function listen(){if(unsub)unsub();unsub=DB.onValue(uref('updatedAt'),s=>{const ts=s.val();if(ts&&ts>lastSeen&&rd(KD)!==uid)pull()})}
+async function enter(user){if(entered===user.uid)return;entered=user.uid;
+ uid=user.uid;name=(user.email||'').split('@')[0];wr(KS,'1');wr(KL,name);lastSeen=0;setSync('Syncing…');msg('Syncing…');
+ try{await reconcile()}catch(e){setSync('Offline. Will sync when you are back online.')}
+ listen();
+ await fsInit().catch(()=>{});paint();paintAcct();setLocked(false);
+ if(fsPending())toast('Auto-save to file is paused. Open Settings and press Reconnect.')}
+async function logout(){if(!uid)return;if(rd(KD)===uid)await push();
+ if(rd(KD)===uid){toast('Your latest changes have not synced yet. Check your connection first.');return}
+ try{await AU.signOut(auth)}catch(e){}
+ rm(KDATA);rm(KD);location.reload()}
+window.onPersist=()=>{if(uid&&!applying){edits++;wr(KD,uid);setSync('Waiting to sync…');clearTimeout(pushT);pushT=setTimeout(push,1500)}fsSoon()};
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&uid&&rd(KD)===uid)push()});
+addEventListener('online',()=>{if(uid&&rd(KD)===uid)push()});
+setInterval(()=>{if(pendV&&calm()&&rd(KD)!==uid){const v=pendV;pendV=null;apply(v)}},3000);
+
+/* ---------- auto-save to files on this computer (File System Access API, Chrome / Edge) ---------- */
+const FS={html:{},json:{}},FK=k=>(uid||'local')+':'+k;
+const idb=()=>new Promise((res,rej)=>{const r=indexedDB.open('ataraxia_fs',1);r.onupgradeneeded=()=>r.result.createObjectStore('h');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
+const hget=async k=>{const d=await idb();return new Promise(r=>{const q=d.transaction('h').objectStore('h').get(k);q.onsuccess=()=>r(q.result||null);q.onerror=()=>r(null)})};
+const hset=async(k,v)=>{const d=await idb();return new Promise(r=>{const t=d.transaction('h','readwrite');if(v)t.objectStore('h').put(v,k);else t.objectStore('h').delete(k);t.oncomplete=()=>r();t.onerror=()=>r()})};
+async function perm(h,ask){try{let p=await h.queryPermission({mode:'readwrite'});if(p!=='granted'&&ask)p=await h.requestPermission({mode:'readwrite'});return p==='granted'}catch(e){return false}}
+const fsPending=()=>['html','json'].some(k=>FS[k].h&&!FS[k].ok);
+function fsPaint(){const sup=!!window.showSaveFilePicker;
+ ['html','json'].forEach(k=>{const f=FS[k],st=G('fs-'+k+'-st'),pk=G('fs-'+k+'-pick');
+  pk.disabled=!sup;pk.textContent=f.h?'Change file':'Choose file';G('fs-'+k+'-go').hidden=!(f.h&&!f.ok);G('fs-'+k+'-off').hidden=!f.h;
+  st.textContent=!sup?'Not supported in this browser. Use Chrome or Edge.':!f.h?'Not set':f.ok?'Auto-saving to '+f.h.name+(f.t?' (last saved '+new Date(f.t).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+')':''):f.h.name+' is paused. Press Reconnect.'})}
+async function fsInit(){if(window.showSaveFilePicker){for(const k of['html','json']){let h=null;try{h=await hget(FK(k))}catch(e){}FS[k]={h,ok:h?await perm(h,false):false}}
+  if(FS.html.ok){fileHandle=FS.html.h;handleName=fileName()+'.html'}}
+ fsPaint()}
+async function fsWrite(k){const f=FS[k];if(!f.h||!f.ok)return;if(f.busy){f.again=true;return}f.busy=true;
+ try{do{f.again=false;const w=await f.h.createWritable();await w.write(k==='html'?generateUpdatedHtmlString():backupJSON());await w.close();f.t=Date.now()}while(f.again)}
+ catch(e){f.ok=false;toast('Auto-save paused. Press Reconnect in Settings.')}
+ f.busy=false;fsPaint()}
+function fsSoon(){clearTimeout(fsT);fsT=setTimeout(()=>{fsWrite('html');fsWrite('json')},2500)}
+async function fsPick(k){const isH=k==='html',h=await showSaveFilePicker({suggestedName:fileName()+(isH?'.html':'_backup.json'),types:[isH?{description:'HTML file',accept:{'text/html':['.html']}}:{description:'JSON backup',accept:{'application/json':['.json']}}]});
+ FS[k]={h,ok:true};await hset(FK(k),h);if(isH){fileHandle=h;handleName=fileName()+'.html'}await fsWrite(k);fsPaint()}
+['html','json'].forEach(k=>{
+ G('fs-'+k+'-pick').onclick=()=>{fsPick(k).catch(e=>{if(e&&e.name!=='AbortError')toast('Could not use that file.')})};
+ G('fs-'+k+'-go').onclick=async()=>{const f=FS[k];if(f.h&&await perm(f.h,true)){f.ok=true;await fsWrite(k)}else toast('Permission was not granted.');fsPaint()};
+ G('fs-'+k+'-off').onclick=async()=>{FS[k]={};await hset(FK(k),null);fsPaint()}});
+
+/* ---------- wiring ---------- */
+window.lockClean=c=>{c.classList.remove('unlocked');c.querySelectorAll('[inert]').forEach(n=>n.removeAttribute('inert'));
  ['lk-av','set-av'].forEach(id=>{const n=c.querySelector('#'+id);if(n)n.textContent=''});
- const m=c.querySelector('#lk-msg');if(m){m.textContent='Enter your login to continue';m.className='lk-msg'}
- const k=c.querySelector('#lk-card');if(k)k.classList.remove('err')};
+ const k=c.querySelector('#lk-card');if(k){k.dataset.m='login';k.classList.remove('err','busy')}
+ const m=c.querySelector('#lk-msg');if(m){m.textContent='';m.className='lk-msg'}
+ const o=c.querySelector('#lk-off');if(o)o.hidden=true;
+ const cb=c.querySelector('#lk-codebox');if(cb)cb.textContent='';
+ ['acct-st','fs-html-st','fs-json-st'].forEach(id=>{const n=c.querySelector('#'+id);if(n)n.textContent=''});
+ c.querySelectorAll('#lk-card input').forEach(n=>{n.removeAttribute('value');n.removeAttribute('checked')})};
 G('lk-card').addEventListener('submit',attempt);
+G('lk-copy').onclick=()=>{const t=G('lk-codebox').textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>msg('Copied.')).catch(()=>msg('Select the code and copy it by hand.',true))};
+G('lk-codego').onclick=codeDone;
+G('recov').onclick=async()=>{if(!uid||!auth.currentUser)return;
+ if(!confirm('Make a new recovery code? The old one stops working.'))return;
+ try{const r=await api('recovery',{idToken:await auth.currentUser.getIdToken()});window.prompt('Your new recovery code. Copy it and keep it somewhere safe:',r.code)}catch(e){toast(typeof e==='string'?e:'Could not make a recovery code.')}};
+G('lk-card').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;const[m,p]=b.dataset.go.split(':');setMode(m,p)});
+G('lk-user').addEventListener('input',paint);
+G('lk-off').onclick=async()=>{await fsInit().catch(()=>{});paintAcct();setLocked(false)};
 G('av-up').onclick=()=>G('av-file').click();
 G('av-file').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
- try{const d=await fit(f);if(wr(KA,d)){paint();toast('Profile picture updated.')}else toast('Could not store the picture (browser storage is full or blocked).')}
- catch(x){toast('That file could not be read as an image.')}};
-G('av-rm').onclick=()=>{wr(KA,'');paint();toast('Profile picture removed.')};
-G('set-eye').onclick=()=>{const i=G('set-pass');i.type=i.type==='password'?'text':'password'};
-G('cred-save').onclick=()=>{
- const u=G('set-user').value.trim(),p=G('set-pass').value,old=cred();
- if(!u){toast('Enter a username.');return}
- if(!p&&!old){toast('Enter a password (min 4 characters).');return}
- if(p&&p.length<4){toast('Password must be at least 4 characters.');return}
- if(wr(KC,JSON.stringify({u:ob(u),p:p?ob(p):old.p}))){G('set-pass').value='';G('set-pass').type='password';status();toast('Login saved.')}
- else toast('Could not save (browser storage is full or blocked).')};
-G('cred-clear').onclick=()=>{wr(KC,'');G('set-pass').value='';fillUser();status();toast('Custom login removed. Master login only.')};
-G('lock-now').onclick=()=>{if(typeof closeModal==='function')closeModal('settings-modal');setLocked(true)};
-paint();fillUser();status();setLocked(true);
+ try{await saveAvatar(await fit(f));toast('Profile picture updated.')}catch(x){toast('That file could not be read as an image.')}};
+G('av-rm').onclick=async()=>{await saveAvatar('');toast('Profile picture removed.')};
+G('logout').onclick=()=>{if(typeof closeModal==='function')closeModal('settings-modal');logout()};
+
+setMode(rd(KS)?'login':'key','signup');setLocked(true);paintAcct();fsPaint();
+(async()=>{
+ try{const[fa,au,dbm]=await Promise.all([import(FB+'firebase-app.js'),import(FB+'firebase-auth.js'),import(FB+'firebase-database.js')]);
+  const app=fa.initializeApp(CFG);AU=au;DB=dbm;auth=au.getAuth(app);db=dbm.getDatabase(app)}
+ catch(e){offline=true;msg("Can't reach Firebase. You can still keep working offline on this device.",true);G('lk-off').hidden=false;return}
+ AU.onAuthStateChanged(auth,u=>{if(manual)return;if(u)enter(u).catch(()=>setLocked(false));else if(uid){uid=null;entered=null;setLocked(true)}})})();
 })();
 </script>
 </body></html>
