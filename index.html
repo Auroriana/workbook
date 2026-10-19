@@ -269,6 +269,72 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
 .wrow input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid rgba(0,0,0,.45)}
 .wrow input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid rgba(0,0,0,.45)}
 .cw{margin-top:12px;padding:14px;border-radius:18px;background:var(--surf)}.cw[hidden]{display:none}
+
+/* Widgets */
+.widget-gallery{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px 0}
+.feat-thumb{border:1px solid var(--line);border-radius:12px;padding:16px;cursor:pointer;text-align:center;background:var(--surf);transition:.15s}
+.feat-thumb:hover{border-color:var(--p);background:var(--pc)}
+.feat-thumb svg{width:32px;height:32px;margin-bottom:8px;color:var(--p)}
+.feat-thumb b{display:block;font-size:14px;margin-bottom:4px}
+.feat-thumb p{font-size:12px;color:var(--mut);line-height:1.3}
+/* page cards keep line breaks in text, widgets must not (their markup has indentation) */
+.widget-ui{display:flex;flex-direction:column;gap:12px;min-height:100%;white-space:normal;color:var(--txt);font-size:14px;line-height:1.4}
+.widget-ui .w-title{font-size:15px;font-weight:700;color:var(--txt)}
+.widget-ui .w-ok{color:#2e9e5b}
+.widget-ui .w-field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.widget-ui .w-label{margin:0;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.widget-ui .w-input{width:100%;min-width:0;background:var(--surf);color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:14px;outline:none}
+.widget-ui .w-input:focus{border-color:var(--p);box-shadow:0 0 0 1px var(--p)}
+.widget-ui textarea.w-input{flex:1 1 90px;min-height:90px;overflow:auto;resize:none;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap}
+.widget-ui .w-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.widget-ui .w-row.one{grid-template-columns:1fr}
+.widget-ui .w-sep{padding-top:12px;border-top:1px solid var(--line)}
+.widget-ui .w-list{display:flex;flex-direction:column;gap:8px}
+.widget-ui .w-time{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;background:var(--surf);font-size:13px}
+.widget-ui .w-time span{color:var(--mut)}
+.widget-ui .w-time b{font-weight:600;text-align:right}
+.btn.block{width:100%}
+.calc-output{background:var(--pc);color:var(--on-pc);padding:12px;border-radius:10px;font-size:14px;line-height:1.45}
+.widget-clock{white-space:nowrap;font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;text-align:center;margin:auto 0;padding:12px 0;transition:color .3s;color:var(--txt)}
+.widget-clock.text-red{color:var(--danger)}
+.widget-clock.text-muted{color:var(--mut)}
+/* chapter chip alert dot + break reminder panel */
+.status-dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--danger);margin-left:auto;box-shadow:0 0 4px var(--danger)}
+.chip-ch.on .status-dot{background:#fff;box-shadow:none}
+.notif-panel{position:fixed;right:24px;bottom:24px;width:320px;max-width:calc(100vw - 32px);z-index:90;display:flex;flex-direction:column;gap:12px;padding:16px;background:var(--card);color:var(--txt);border:1px solid var(--line);border-radius:20px;box-shadow:0 12px 48px rgba(0,0,0,.25);transform:translateY(160%);visibility:hidden;transition:transform .35s cubic-bezier(.175,.885,.32,1.275),visibility .35s}
+.notif-panel.show{transform:none;visibility:visible}
+.notif-head{display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:700;font-size:15px}
+.notif-body{font-size:14px;color:var(--mut)}
+.notif-act{display:flex;gap:8px}.notif-act .btn{flex:1}
+.notif-panel [hidden]{display:none!important}
+.notif-skip{align-self:flex-start;background:none;border:0;padding:0;font-size:13px;color:inherit;opacity:.75;text-decoration:underline;cursor:pointer}
+.notif-skip:hover{opacity:1}
+.notif-panel.warn{background:#fff4d1;color:#3b2f00;border-color:#e0a800}
+.notif-panel.warn .notif-body{color:#5c4a00}
+.notif-panel.late{background:#fde7e5;color:#410e0b;border-color:#b3261e;animation:notif-pulse 2s ease-in-out infinite}
+.notif-panel.late .notif-body{color:#6b1a15}
+html.dark .notif-panel.warn{background:#3a2f0a;color:#ffe9a6;border-color:#e0b400}
+html.dark .notif-panel.warn .notif-body{color:#f3d880}
+html.dark .notif-panel.late{background:#4a1512;color:#ffdad6;border-color:#f2b8b5}
+html.dark .notif-panel.late .notif-body{color:#f8c3be}
+@keyframes notif-pulse{0%,100%{box-shadow:0 12px 48px rgba(0,0,0,.25)}50%{box-shadow:0 0 0 4px rgba(179,38,30,.35),0 12px 48px rgba(0,0,0,.25)}}
+@media(prefers-reduced-motion:reduce){.notif-panel.late{animation:none}}
+.notif-ttl{display:flex;align-items:baseline;gap:8px;min-width:0}
+.notif-short{display:none;font-weight:600;font-variant-numeric:tabular-nums;opacity:.85}
+.notif-btns{display:flex;gap:2px;flex:none}
+.notif-bar{height:6px;border-radius:999px;background:rgba(127,127,127,.25);overflow:hidden}
+.notif-bar i{display:block;height:100%;width:0;border-radius:999px;background:var(--p);transition:width .9s linear,background .3s}
+.notif-panel.warn .notif-bar i{background:#e0a800}
+.notif-panel.late .notif-bar i{background:#b3261e}
+html.dark .notif-panel.warn .notif-bar i{background:#e0b400}
+html.dark .notif-panel.late .notif-bar i{background:#f2b8b5}
+.notif-panel.mini{width:auto;min-width:210px;padding:8px 8px 8px 14px;gap:0;border-radius:999px}
+.notif-panel.mini .notif-short{display:inline}
+.notif-panel.mini .notif-body,.notif-panel.mini .notif-bar,.notif-panel.mini .notif-act,.notif-panel.mini .notif-skip{display:none!important}
+.notif-panel.mini .notif-head{font-size:14px}
+.widget-clock.pulse{animation:clock-pulse 1.2s ease-in-out infinite;text-shadow:0 0 14px var(--danger)}
+@keyframes clock-pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@media(prefers-reduced-motion:reduce){.widget-clock.pulse{animation:none}}
 </style></head>
 <body class="" style="--rc: nwse-resize;">
 <div id="lock" role="dialog" aria-modal="true" aria-label="Login">
@@ -334,7 +400,7 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
    </div>
    <div class="acts" id="hacts"><button class="btn xs fill">Edit info</button><div class="dd"><button class="ib sm" title="More" aria-label="More chapter actions"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-ch"><button class="mi" title="Paste a copied page into this chapter"><svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>Paste page</button><button class="mi" title="Copy this chapter and its pages so you can paste it into any book"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy chapter</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate chapter</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete chapter</button></div></div></div>
   </section>
-  <div class="ph"><h2>Workspace<span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button class="btn tone" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" onclick="openAddPageModal()">+ Add</button></div>
+  <div class="ph"><h2>Workspace<span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button class="btn tone" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" onclick="openAddHubModal()">+ Add</button></div>
   <div class="empty" id="ws-empty" hidden="">No pages yet. Use + Add to create one, or + Board for a board.</div>
   <div id="ws"><div id="wsc" data-zone="" class="" style="height: 400px; min-width: max(100%, 664px);"></div></div>
  <div id="hbar"><div id="hthumb"></div></div>
@@ -449,6 +515,49 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
  </div>
  <div class="mf"><button class="btn out" onclick="closeModal('paste-modal')">Cancel</button><button class="btn fill" onclick="confirmPaste()">Paste</button></div>
 </div></div>
+
+<div class="ov" id="add-hub-modal"><div class="modal">
+ <div class="mh"><span id="add-hub-title">Add to Workspace</span></div>
+ <div class="stabs" role="tablist">
+   <button type="button" class="on" onclick="switchHubTab('page')">Add Page</button>
+   <button type="button" onclick="switchHubTab('widget')">Add Widget</button>
+ </div>
+ <div class="mb" id="hub-view-page">
+  <div style="text-align: center; padding: 20px; color: var(--mut);">
+    <button class="btn fill" onclick="closeModal('add-hub-modal'); openAddPageModal()">Create Standard Page</button>
+  </div>
+ </div>
+ <div class="mb" id="hub-view-widget" style="display: none;">
+  <div class="widget-gallery">
+    <div class="feat-thumb" onclick="addWidget('calc')">
+      <svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      <b>US/PH Calculator</b><p>Insurance 12:01 AM & conversions</p>
+    </div>
+    <div class="feat-thumb" onclick="addWidget('schedule')">
+      <svg viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      <b>Smart Schedule</b><p>Break tracking & live clock</p>
+    </div>
+    <div class="feat-thumb" onclick="addWidget('clock')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+      <b>Standalone Clock</b><p>Big clock synced to breaks</p>
+    </div>
+    <div class="feat-thumb" onclick="addWidget('formatter')">
+      <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+      <b>Quote Formatter</b><p>Auto-clean & copy quotes</p>
+    </div>
+  </div>
+ </div>
+ <div class="mf"><button class="btn out" onclick="closeModal('add-hub-modal')">Cancel</button></div>
+</div></div>
+
+<!-- Break reminder panel (Smart Schedule) -->
+<div class="notif-panel" id="schedule-notif" role="group" aria-label="Break reminder">
+  <div class="notif-head"><span class="notif-ttl"><span id="ns-title" aria-live="polite">Schedule alert</span><span class="notif-short" id="ns-short"></span></span><span class="notif-btns"><button type="button" class="ib sm" id="ns-mini" aria-label="Minimize" title="Minimize"><svg viewBox="0 0 24 24"><path d="M5 12h14"></path></svg></button><button type="button" class="ib sm" id="ns-min" aria-label="Dismiss" title="Dismiss"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"></path></svg></button></span></div>
+  <div class="notif-body" id="ns-body">--</div>
+  <div class="notif-bar" id="ns-barwrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="ns-bar"></i></div>
+  <div class="notif-act"><button type="button" class="btn fill sm" id="ns-ack" hidden>Acknowledge</button><button type="button" class="btn fill sm" id="ns-tag" hidden>Tagged</button><button type="button" class="btn fill sm" id="ns-back" hidden>I’m back</button></div>
+  <button type="button" class="notif-skip" id="ns-skip" hidden>Skip this break</button>
+</div>
 
 <script id="data-script">const INITIAL_DATA = /*DATA_START*/{
   "activeBookId": "b_asc",
@@ -634,7 +743,8 @@ function keepVisibleV(box){const a=box.querySelector('.on');if(!a)return;const t
 function renderChapters(){const c=$('chs'),st=c.scrollTop;c.innerHTML='';
  const list=appData.chapters.filter(x=>x.bookId===appData.activeBookId);
  if(!list.length){c.append(el('div','empty','No chapters yet. Add one with + Chapter.'));return}
- list.forEach(x=>{const b=el('button','chip-ch'+(x.id===appData.activeChapterId?' on':''));b.textContent=x.name;b.dataset.id=x.id;b.title=x.name;{const g=el('span','cgrip','<svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>');g.title='Drag to reorder';b.prepend(g)}b.onclick=()=>{appData.activeChapterId=x.id;persistLocal();renderChapters();renderHero();renderPages()};c.append(b)});
+ list.forEach(x=>{const b=el('button','chip-ch'+(x.id===appData.activeChapterId?' on':''));
+ {const nm=el('span','');nm.textContent=x.name;nm.style.flex='1';nm.style.minWidth='0';b.append(nm)}b.dataset.id=x.id;b.title=x.name;{const g=el('span','cgrip','<svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>');g.title='Drag to reorder';b.prepend(g)}b.onclick=()=>{appData.activeChapterId=x.id;persistLocal();renderChapters();renderHero();renderPages()};c.append(b)});
  c.scrollTop=st;keepVisibleV(c)}
 function curChap(){return appData.chapters.find(c=>c.id===appData.activeChapterId&&c.bookId===appData.activeBookId)}
 function renderHero(){const c=curChap(),a=$('hacts');a.innerHTML='';
@@ -646,12 +756,387 @@ function renderHero(){const c=curChap(),a=$('hacts');a.innerHTML='';
  const dd=el('div','dd'),db=el('button','ib sm',ic('dots')),m=el('div','menu');m.id='menu-ch';db.title='More';db.setAttribute('aria-label','More chapter actions');db.onclick=ev=>{ev.stopPropagation();toggleDropdown('ch',db)};
  const pp=el('button','mi',ic('paste')+'Paste page');pp.title='Paste a copied page into this chapter';pp.onclick=()=>startPaste('page');
  const cc=el('button','mi',ic('copy')+'Copy chapter');cc.title='Copy this chapter and its pages so you can paste it into any book';cc.onclick=()=>copyChapterData(c.id);
- const du=el('button','mi',ic('dup')+'Duplicate chapter');du.onclick=()=>duplicateChapter(c.id);const de=el('button','mi del',ic('trash')+'Delete chapter');de.onclick=()=>deleteChapter(c.id);
+ const du=el('button','mi',ic('dup')+'Duplicate chapter');du.onclick=()=>duplicateChapter(c.id);
+ const de=el('button','mi del',ic('trash')+'Delete chapter');de.onclick=()=>deleteChapter(c.id);
  m.append(pp,cc,du,de);dd.append(db,m);a.append(dd)}
 /* pages + board */
 function getCons(){return appData.containers.filter(c=>c.chapterId===appData.activeChapterId)}
 const RZ=['n','s','e','w','ne','nw','se','sw'];
 function addHandles(host){RZ.forEach(d=>{const r=el('div','rz '+d);r.dataset.d=d;r.setAttribute('aria-hidden','true');host.append(r)})}
+
+function switchHubTab(tab) {
+  $('hub-view-page').style.display = tab === 'page' ? 'block' : 'none';$('hub-view-widget').style.display = tab === 'widget' ? 'block' : 'none';
+  document.querySelectorAll('#add-hub-modal .stabs button').forEach(b => {
+    b.classList.toggle('on', b.textContent.toLowerCase().includes(tab));
+  });
+}
+
+// --- Smart Schedule: break reminders ---
+// State lives in appData (the schedule widget's settings), so deleting, editing or syncing the widget is always picked up.
+window.SmartScheduleManager = {
+  isActive: false, config: null, currentStatus: 'idle', currentBreakName: null, dismissedKey: '', prompted: false, activeBreak: null, state: null, level: '', curKey: '', mini: false,
+
+  findWidget() {
+    return (window.appData || appData).pages.find(p => p.isWidget && p.widgetType === 'schedule' && p.scheduleSettings && p.scheduleSettings.active);
+  },
+  sync() {
+    const w = this.findWidget();
+    this.config = w ? w.scheduleSettings : null;
+    this.isActive = !!w;
+    if (!w) { this.currentStatus = 'idle'; this.currentBreakName = null; }
+    return this.isActive;
+  },
+  updateConfig() { this.evaluate(); },
+  deactivate() { this.evaluate(); },
+
+  parseTime(str) {
+    const m = String(str || '').match(/(\d{1,2})(?::(\d{2}))?\s*(AM|PM)/i);
+    if (!m) return null;
+    let h = parseInt(m[1], 10); const min = parseInt(m[2] || '0', 10), ap = m[3].toUpperCase();
+    if (h > 12 || min > 59) return null;
+    if (ap === 'PM' && h !== 12) h += 12;
+    if (ap === 'AM' && h === 12) h = 0;
+    const d = new Date(); d.setHours(h, min, 0, 0); return d;
+  },
+  parseRange(raw) {
+    const pts = String(raw || '').split(/\s*[-\u2013\u2014]\s*/);
+    if (pts.length !== 2) return null;
+    const start = this.parseTime(pts[0]), end = this.parseTime(pts[1]);
+    return start && end ? { start, end } : null;
+  },
+
+  panel() { return document.getElementById('schedule-notif'); },
+  hide() { const p = this.panel(); if (p) p.classList.remove('show', 'warn', 'late', 'mini'); },
+  show(v, level) {
+    const p = this.panel(); if (!p) return;
+    const set = (id, t) => { const el = document.getElementById(id); if (el.textContent !== t) el.textContent = t; };
+    set('ns-title', v.t); set('ns-body', v.b); set('ns-short', v.s || '');
+    const acts = String(v.a || '').split(' ');
+    ['ack', 'tag', 'back', 'skip'].forEach(k => { document.getElementById('ns-' + k).hidden = !acts.includes(k); });
+    /* progress bar */
+    document.getElementById('ns-barwrap').hidden = v.p == null;
+    const pct = Math.round(Math.max(0, Math.min(1, v.p || 0)) * 100);
+    document.getElementById('ns-bar').style.width = pct + '%';
+    document.getElementById('ns-barwrap').setAttribute('aria-valuenow', pct);
+    /* yellow/red can be minimized to a small pill but never closed */
+    document.getElementById('ns-min').hidden = !!level;
+    const mini = !!this.mini, mb = document.getElementById('ns-mini');
+    mb.setAttribute('aria-label', mini ? 'Expand' : 'Minimize'); mb.title = mini ? 'Expand' : 'Minimize';
+    mb.querySelector('path').setAttribute('d', mini ? 'M5 15l7-7 7 7' : 'M5 12h14');
+    p.classList.toggle('mini', mini);
+    p.classList.toggle('warn', level === 'warn'); p.classList.toggle('late', level === 'late');
+    p.classList.add('show');
+  },
+
+  /* what you did today (tagged out / handled breaks) survives a reload */
+  loadState() {
+    const day = new Date().toDateString();
+    if (this.state && this.state.day === day) return this.state;
+    let s = null; try { s = JSON.parse(localStorage.getItem('ataraxia_break_state')); } catch (e) {}
+    this.state = s && s.day === day ? s : { day, tagged: null, done: [] };
+    return this.state;
+  },
+  saveState() { try { localStorage.setItem('ataraxia_break_state', JSON.stringify(this.state)); } catch (e) {} },
+  breakList() {
+    const cfg = this.config || {};
+    return [['1st Break', cfg.b1], ['Lunch', cfg.lunch], ['2nd Break', cfg.b2]]
+      .map(([name, raw]) => { const r = this.parseRange(raw); return r && { name, id: name + '|' + r.start.getTime(), start: r.start.getTime(), end: r.end.getTime() }; })
+      .filter(Boolean);
+  },
+  /* Return (min) comes first: you are due back that many minutes after you tag. Passing it is only a reminder;
+     it counts as overbreak once the scheduled end of the break has passed too (whichever is later). With Return at 0, the break's own length is used. */
+  returnFor(b, tagAt) {
+    const ret = (+(this.config && this.config.postWarn) || 0) * 60000;
+    const returnAt = tagAt + (ret > 0 ? ret : b.end - b.start);
+    return { returnAt, limitAt: Math.max(returnAt, b.end) };
+  },
+  tagNow() {
+    if (!this.sync()) return;
+    const b = this.activeBreak; if (!b) return;
+    const s = this.loadState(), now = Date.now();
+    const rt = this.returnFor(b, now);
+    s.tagged = { id: b.id, name: b.name, at: now, returnAt: rt.returnAt, limitAt: rt.limitAt };
+    if (!s.done.includes(b.id)) s.done.push(b.id); /* keyed by name + scheduled time, so changing the schedule starts that break fresh */
+    this.saveState(); this.currentStatus = 'tagged'; this.dismissedKey = ''; this.mini = false; this.evaluate();
+  },
+  backNow() {
+    const s = this.loadState(); s.tagged = null; this.saveState();
+    this.currentStatus = 'idle'; this.currentBreakName = null; this.dismissedKey = ''; this.mini = false; this.evaluate();
+  },
+  skipNow() {
+    const b = this.activeBreak; if (!b) return;
+    const s = this.loadState(); if (!s.done.includes(b.id)) s.done.push(b.id);
+    this.saveState(); this.currentStatus = 'idle'; this.currentBreakName = null; this.dismissedKey = ''; this.mini = false; this.evaluate();
+  },
+  toggleMini() { this.mini = !this.mini; this.evaluate(); },
+
+  evaluate() {
+    if (!this.sync()) { this.activeBreak = null; this.level = ''; this.mini = false; this.hide(); return; }
+    const now = Date.now(), cfg = this.config, st = this.loadState();
+    const pre = (+cfg.preWarn || 0) * 60000;
+    const LATE_AFTER = 3 * 60000; /* ms past the scheduled start: yellow before, red from here */
+    const fmt = ts => new Date(ts).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit' });
+    const parts = ms => { const s = Math.max(0, Math.floor(ms / 1000)); return [Math.floor(s / 3600), Math.floor(s % 3600 / 60), s % 60]; };
+    const dur = ms => { const [h, m, s] = parts(ms); return (h ? h + 'h ' : '') + (h || m ? m + 'm ' : '') + s + 's'; };
+    const clk = ms => { const [h, m, s] = parts(ms), p2 = n => String(n).padStart(2, '0'); return (h ? h + ':' + p2(m) : m) + ':' + p2(s); };
+    const put = (key, view, level) => {
+      this.level = level; this.curKey = key;
+      if (!level && this.dismissedKey === key) this.hide(); else this.show(view, level);
+    };
+
+    /* you tagged out: stays up with your return time until you press "I'm back" */
+    let t = st.tagged;
+    if (t && !this.breakList().some(b => b.id === t.id)) { /* the schedule changed since you tagged: that record is stale */
+      st.tagged = null; this.saveState(); t = null; this.currentStatus = 'idle'; this.currentBreakName = null; this.mini = false;
+    }
+    if (t) {
+      this.activeBreak = null; this.currentStatus = 'tagged'; this.currentBreakName = t.name;
+      const R = t.returnAt, H = Math.max(R, t.limitAt || R), total = Math.max(1, R - t.at);
+      let level = '', view;
+      if (now < R) view = { t: 'On break: ' + t.name, b: 'Tagged at ' + fmt(t.at) + '. Return by ' + fmt(R) + ' (' + dur(R - now) + ' left).', a: 'back', s: clk(R - now) + ' left', p: (now - t.at) / total };
+      else if (now < H) { level = 'warn'; view = { t: 'Time to return', b: 'You are ' + dur(now - R) + ' past your return time (' + fmt(R) + '). Make sure you are back. It counts as overbreak after ' + fmt(H) + '.', a: 'back', s: '+' + clk(now - R), p: 1 }; }
+      else { level = 'late'; view = { t: 'Overbreak', b: 'You are ' + dur(now - H) + ' over your break (it ended ' + fmt(H) + '). Make sure you are back.', a: 'back', s: '+' + clk(now - H), p: 1 }; }
+      put(t.name + '|tagged|' + level, view, level); return;
+    }
+
+    /* a break whose time has come and that you haven't tagged stays on screen, however long it has been */
+    const open = this.breakList().filter(b => !st.done.includes(b.id)).sort((x, y) => x.start - y.start);
+    let active = null, state = 'idle';
+    const started = open.filter(b => b.start <= now);
+    if (started.length) { active = started[started.length - 1]; state = 'in-break'; }
+    else if (open[0] && open[0].start - now <= pre) { active = open[0]; state = 'pre-break'; }
+    this.activeBreak = active;
+    if (!active) { this.currentStatus = 'idle'; this.currentBreakName = null; this.level = ''; this.mini = false; this.hide(); return; }
+
+    if (this.currentBreakName === active.name && this.currentStatus === 'acknowledged') state = 'acknowledged';
+    else if (this.currentBreakName !== active.name) { this.dismissedKey = ''; this.mini = false; }
+    this.currentBreakName = active.name; this.currentStatus = state;
+
+    const nm = active.name.toLowerCase();
+    if (state === 'pre-break') {
+      const until = active.start - now;
+      put(active.name + '|pre-break|', { t: 'Your break is near', b: 'Your scheduled ' + nm + ' starts in ' + dur(until) + ' (' + fmt(active.start).replace(/:00(?=\s)/, '') + ').', a: '', s: clk(until), p: null }, '');
+      return;
+    }
+    const lateMs = Math.max(0, now - active.start);
+    const level = lateMs >= LATE_AFTER ? 'late' : 'warn';
+    const ifTagNow = ' If you tag now, return by ' + fmt(this.returnFor(active, now).returnAt) + '.';
+    const lateMsg = 'It\u2019s been ' + dur(lateMs) + ' since your scheduled ' + nm + '. Make sure you are tagged already.' + ifTagNow;
+    const base = { s: '+' + clk(lateMs), p: lateMs / LATE_AFTER };
+    const view = state === 'acknowledged'
+      ? Object.assign({ t: lateMs < 60000 ? 'Pending tag' : 'Tag out now', b: lateMs < 60000 ? 'You acknowledged your ' + nm + '. Confirm once you have tagged out.' + ifTagNow : lateMsg, a: 'tag skip' }, base)
+      : Object.assign({ t: 'Your ' + nm + ' is due', b: lateMsg, a: 'ack tag skip' }, base);
+    put(active.name + '|' + state + '|' + level, view, level);
+  },
+
+  // sidebar red dot on every chapter that holds a schedule widget nobody has set up yet
+  refreshDots() {
+    const need = new Set();
+    if (!this.isActive) appData.pages.forEach(p => { if (p.isWidget && p.widgetType === 'schedule') need.add(p.chapterId); });
+    document.querySelectorAll('#chs .chip-ch').forEach(b => {
+      let dot = b.querySelector('.status-dot');
+      if (need.has(b.dataset.id)) { if (!dot) { dot = document.createElement('span'); dot.className = 'status-dot'; dot.title = 'Schedule not set'; b.append(dot); } }
+      else if (dot) dot.remove();
+    });
+  },
+
+  // once per visit: offer to set the schedule if the chapter on screen has an unset Smart Schedule
+  promptIfNeeded() {
+    if (this.prompted || this.isActive || !document.documentElement.classList.contains('unlocked')) return;
+    const w = appData.pages.find(p => p.isWidget && p.widgetType === 'schedule' && p.chapterId === appData.activeChapterId);
+    if (!w) return;
+    this.prompted = true;
+    const wrap = document.createElement('div');
+    wrap.className = 'ov open'; wrap.style.zIndex = '90';
+    wrap.innerHTML = '<div class="modal" style="max-width:380px"><div class="mh"><span>Good day.</span></div>' +
+      '<div class="mb"><p class="hint" style="margin:0;font-size:14px">Would you like to set today\u2019s break and lunch schedule?</p></div>' +
+      '<div class="mf"><button type="button" class="btn out" data-a="no">Not now</button><button type="button" class="btn fill" data-a="yes">Set schedule</button></div></div>';
+    wrap.addEventListener('click', e => {
+      const a = e.target.closest('[data-a]'); if (!a && e.target !== wrap) return;
+      wrap.remove();
+      if (a && a.dataset.a === 'yes') { revealNode(w.id); setTimeout(() => { const i = document.querySelector('[data-pid="' + w.id + '"] [data-k="b1"]'); if (i) i.focus(); }, 400); }
+    });
+    document.body.appendChild(wrap);
+  }
+};
+
+document.getElementById('ns-ack').onclick = () => { const m = window.SmartScheduleManager; m.currentStatus = 'acknowledged'; m.dismissedKey = ''; m.evaluate(); };
+document.getElementById('ns-tag').onclick = () => window.SmartScheduleManager.tagNow();
+document.getElementById('ns-back').onclick = () => window.SmartScheduleManager.backNow();
+document.getElementById('ns-skip').onclick = () => window.SmartScheduleManager.skipNow();
+document.getElementById('ns-mini').onclick = () => window.SmartScheduleManager.toggleMini();
+document.getElementById('ns-min').onclick = () => { const m = window.SmartScheduleManager; if (m.level) return; m.dismissedKey = m.curKey; m.hide(); };
+setInterval(() => window.SmartScheduleManager.evaluate(), 1000);
+setInterval(() => { const m = window.SmartScheduleManager; m.refreshDots(); m.promptIfNeeded(); }, 2000);
+
+function openAddHubModal() {
+  if(!appData.activeChapterId) { showToast('Select a chapter first.'); return; }
+  switchHubTab('page'); openModal('add-hub-modal');
+}
+
+function addWidget(type) {
+  const titles = { calc: 'Time Calculator', schedule: 'Smart Schedule', clock: 'Live Clock', formatter: 'Quote Formatter' };
+  const w = type === 'calc' ? 45 : type === 'schedule' ? 36 : type === 'clock' ? 30 : 55;
+  const h = type === 'formatter' ? 48 : undefined;/* the rest fit their own content */
+  
+  const nid = 'p_' + Date.now();
+  appData.pages.push({
+    id: nid, chapterId: appData.activeChapterId, containerId: '',
+    title: titles[type], content: '', isWidget: true, widgetType: type, w: w, h: h
+  });
+  if(type==='schedule'&&window.SmartScheduleManager)SmartScheduleManager.prompted=true;/* they just added it, no need to ask */
+  persistLocal(); closeModal('add-hub-modal'); renderPages(); revealNode(nid);
+}
+
+/* ---------- widgets: calculator, clock, smart schedule, quote formatter ---------- */
+const escAttr = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+const WIDGET_KEYS = ['isWidget', 'widgetType', 'calcMode', 'scheduleSettings'];
+/* copies the widget fields of a page so duplicated / copied / pasted widgets stay widgets */
+function widgetProps(src) {
+  const o = {};
+  if (src && src.isWidget) WIDGET_KEYS.forEach(k => { if (src[k] !== undefined) o[k] = JSON.parse(JSON.stringify(src[k])); });
+  return o;
+}
+
+/* Quote Formatter: rebuilds amounts that were pasted as "$ / 4,242 / .25", keeps related lines together */
+function cleanQuote(raw) {
+  let t = String(raw || '').replace(/\r\n?/g, '\n').replace(/\u00a0/g, ' ');
+  t = t.replace(/\$\s+(?=[\d.])/g, '$');                                   // "$" then the number on the next line
+  t = t.replace(/(\$[\d,]+)\s*\n\s*\.\s*(\d{2})(?!\d)/g, '$1.$2');          // ".25" cents on the next line
+  t = t.replace(/(\$[\d,]+\.\d{2})[ \t]*\n+[ \t]*(for\s[^\n$]+)/gi, '$1 $2'); // "for 6-month policy"
+  t = t.replace(/(\$[\d,]+\.\d{2})[ \t]*\n+[ \t]*\/\s*([a-z]+)/gi, '$1 / $2'); // "/ month"
+  const lines = t.split('\n').map(l => l.replace(/[ \t]+/g, ' ').trim());
+  const out = [];
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i] !== '') { out.push(lines[i]); continue; }
+    if (!out.length || out[out.length - 1] === '') continue;               // leading and repeated blank lines
+    let j = i + 1; while (j < lines.length && lines[j] === '') j++;
+    if (j >= lines.length) continue;                                       // trailing blank lines
+    if (out[out.length - 1].startsWith('$') && lines[j].startsWith('$')) continue; // amounts stay on consecutive lines
+    out.push('');                                                          // one blank line between sections
+  }
+  return out.join('\n');
+}
+
+/* time zone helpers for the calculator */
+function tzOffsetMs(ts, tz) {
+  const p = {}; new Intl.DateTimeFormat('en-US', { timeZone: tz, hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' })
+    .formatToParts(new Date(ts)).forEach(x => { p[x.type] = +x.value; });
+  return Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second) - Math.floor(ts / 1000) * 1000;
+}
+function wallToUtc(str, tz) { /* "2026-10-19T09:00" read as a clock time in tz -> real instant */
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(str); if (!m) return null;
+  const guess = Date.UTC(+m[1], m[2] - 1, +m[3], +m[4], +m[5]);
+  let utc = guess - tzOffsetMs(guess, tz);
+  const o2 = tzOffsetMs(utc, tz); utc = guess - o2;
+  return utc;
+}
+
+function buildCalcWidget(ui, p) {
+  p.calcMode = p.calcMode || 'eff';
+  ui.innerHTML = '<select class="w-input w-mode" aria-label="Calculator mode">' +
+    '<option value="eff">Endorsement effective date (12:01 AM rule)</option>' +
+    '<option value="us2ph">Convert US time to PH time</option>' +
+    '<option value="ph2us">Convert PH time to US time</option></select>' +
+    '<div class="w-row w-inputs"></div>' +
+    '<button type="button" class="btn tone sm block w-go">Calculate</button>' +
+    '<div class="calc-output">Waiting for input...</div>';
+  const mode = ui.querySelector('.w-mode'), wrap = ui.querySelector('.w-inputs'), out = ui.querySelector('.calc-output');
+  mode.value = p.calcMode;
+  const drawInputs = () => {
+    wrap.className = 'w-row w-inputs' + (mode.value === 'eff' ? ' one' : '');
+    wrap.innerHTML = mode.value === 'eff' ? '<input type="date" class="w-input w-date" aria-label="Effective date">' :
+      '<input type="datetime-local" class="w-input w-date" aria-label="Date and time">' +
+      '<select class="w-input w-tz" aria-label="US time zone"><option value="America/New_York">ET</option><option value="America/Chicago">CT</option><option value="America/Denver">MT</option><option value="America/Los_Angeles">PT</option></select>';
+  };
+  drawInputs();
+  mode.onchange = () => { p.calcMode = mode.value; persistLocal(); drawInputs(); out.textContent = 'Waiting for input...'; };
+  ui.querySelector('.w-go').onclick = () => {
+    const v = ui.querySelector('.w-date').value; if (!v) { out.textContent = 'Pick a date first.'; return; }
+    if (mode.value === 'eff') {
+      const d = new Date(v + 'T00:00:00'), prev = new Date(d); prev.setDate(prev.getDate() - 1);
+      out.innerHTML = '<strong>12:01 AM insurance rule</strong><br><br>If this endorsement is dated <strong>' + d.toLocaleDateString('en-US') + '</strong>, it takes effect at 12:01 AM.<br><br>Practically, coverage begins at midnight the night of <strong>' + prev.toLocaleDateString('en-US') + '</strong>.';
+      return;
+    }
+    const tzSel = ui.querySelector('.w-tz'), us = tzSel.value, usName = tzSel.options[tzSel.selectedIndex].text;
+    const fmt = (ts, tz) => new Date(ts).toLocaleString('en-US', { timeZone: tz, dateStyle: 'full', timeStyle: 'short' });
+    if (mode.value === 'us2ph') out.innerHTML = 'That translates to<br><strong>' + fmt(wallToUtc(v, us), 'Asia/Manila') + ' (PH time)</strong>.';
+    else out.innerHTML = 'That translates to<br><strong>' + fmt(wallToUtc(v, 'Asia/Manila'), us) + ' (' + usName + ')</strong>.';
+  };
+}
+
+function buildClockWidget(ui, p) {
+  ui.innerHTML = '<div class="widget-clock">--:--:--</div>';
+  const disp = ui.firstChild, M = () => window.SmartScheduleManager;
+  const tick = () => {
+    disp.textContent = new Date().toLocaleTimeString('en-US');
+    /* same logic and timing as the notification: red whenever it is yellow/red (break due and untagged, or past/near your return time) */
+    const m = M(), on = !!(m && m.isActive), lv = on ? m.level : '';
+    disp.classList.toggle('text-red', !!lv);
+    disp.classList.toggle('pulse', lv === 'late');
+    disp.classList.toggle('text-muted', !lv && on && m.currentStatus === 'tagged');
+  };
+  tick();
+  window.widgetIntervals[p.id] = setInterval(() => { if (!disp.isConnected) { clearInterval(window.widgetIntervals[p.id]); return; } tick(); }, 1000);
+}
+
+function buildScheduleWidget(ui, p) {
+  const S = p.scheduleSettings = Object.assign({ b1: '', lunch: '', b2: '', preWarn: 5, postWarn: 3, active: false }, p.scheduleSettings || {});
+  const tidy = v => String(v || '').toUpperCase().replace(/(\d)\s*(AM|PM)/g, '$1 $2').replace(/\s*[-\u2013\u2014]\s*/g, ' - ').replace(/\s+/g, ' ').trim();
+  const field = (k, label, ph) => '<div class="w-field"><label class="w-label">' + label + '</label><input type="text" class="w-input" data-k="' + k + '" placeholder="' + ph + '" value="' + escAttr(S[k]) + '" autocomplete="off" spellcheck="false"></div>';
+  const view = () => {
+    const M = window.SmartScheduleManager;
+    if (!S.active) {
+      ui.innerHTML = field('b1', '1st break', '10:00 AM - 10:15 AM') + field('lunch', 'Lunch', '12:00 PM - 1:00 PM') + field('b2', '2nd break', '3:00 PM - 3:15 PM') +
+        '<div class="w-row w-sep"><div class="w-field"><label class="w-label" title="Minutes before a break to remind you">Pre-break (min)</label><input type="number" min="0" max="60" class="w-input" data-k="preWarn" value="' + escAttr(S.preWarn) + '"></div>' +
+        '<div class="w-field"><label class="w-label" title="Minutes you have to come back after you tag. Passing it is a reminder; overbreak only starts after the scheduled end of the break">Return (min)</label><input type="number" min="0" max="60" class="w-input" data-k="postWarn" value="' + escAttr(S.postWarn) + '"></div></div>' +
+        '<button type="button" class="btn fill sm block w-save">Save &amp; activate</button>';
+      ui.querySelectorAll('input[type=text]').forEach(i => {
+        i.addEventListener('paste', () => setTimeout(() => { i.value = tidy(i.value); }, 10));
+        i.addEventListener('change', () => { i.value = tidy(i.value); });
+      });
+      ui.querySelector('.w-save').onclick = () => {
+        const get = k => ui.querySelector('[data-k="' + k + '"]').value;
+        const vals = { b1: tidy(get('b1')), lunch: tidy(get('lunch')), b2: tidy(get('b2')) };
+        const bad = Object.keys(vals).filter(k => vals[k] && !M.parseRange(vals[k]));
+        if (bad.length || !Object.values(vals).some(Boolean)) { showToast('Use times like 10:00 AM - 10:15 AM.'); return; }
+        const pre = parseInt(get('preWarn'), 10), post = parseInt(get('postWarn'), 10);
+        Object.assign(S, vals, { preWarn: isNaN(pre) ? 5 : pre, postWarn: isNaN(post) ? 3 : post, active: true });
+        persistLocal(); M.evaluate(); view(); M.refreshDots(); setTimeout(() => fitPageHeight(p.id), 0);
+      };
+    } else {
+      const row = (label, v) => '<div class="w-time"><span>' + label + '</span><b>' + escAttr(v || '--') + '</b></div>';
+      ui.innerHTML = '<div class="w-title w-ok">Schedule active</div><div class="w-list">' + row('1st break', S.b1) + row('Lunch', S.lunch) + row('2nd break', S.b2) + '</div>' +
+        '<button type="button" class="btn out sm block w-edit">Edit schedule</button>';
+      ui.querySelector('.w-edit').onclick = () => { S.active = false; persistLocal(); M.evaluate(); view(); M.refreshDots(); setTimeout(() => fitPageHeight(p.id), 0); };
+    }
+  };
+  view();
+}
+
+function buildFormatterWidget(ui, p) {
+  ui.innerHTML = '<textarea class="w-input w-in" placeholder="Paste raw messy quote here..." spellcheck="false"></textarea>' +
+    '<textarea class="w-input w-out" placeholder="Cleaned output..." readonly></textarea>' +
+    '<button type="button" class="btn fill sm block w-go">Clean &amp; copy</button>';
+  const inp = ui.querySelector('.w-in'), out = ui.querySelector('.w-out');
+  inp.addEventListener('input', () => { out.value = cleanQuote(inp.value); });
+  ui.querySelector('.w-go').onclick = () => {
+    out.value = cleanQuote(inp.value);
+    if (!out.value) { showToast('Paste a quote first.'); return; }
+    copyText(out.value, 'Cleaned & copied to clipboard!');
+  };
+}
+
+function renderWidgetUI(box, p) {
+  window.widgetIntervals = window.widgetIntervals || {};
+  if (window.widgetIntervals[p.id]) { clearInterval(window.widgetIntervals[p.id]); delete window.widgetIntervals[p.id]; }
+  box.innerHTML = '';
+  const ui = el('div', 'widget-ui');
+  const build = { calc: buildCalcWidget, clock: buildClockWidget, schedule: buildScheduleWidget, formatter: buildFormatterWidget }[p.widgetType];
+  if (build) build(ui, p); else ui.textContent = 'Unknown widget.';
+  box.append(ui);
+}
+
 function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),a=el('div','ca');card.dataset.pid=p.id;
  const gr=el('span','grip',ic('grip'));gr.tabIndex=0;gr.setAttribute('role','button');gr.title='Drag anywhere on the card to move it. Alt + arrows resize.';gr.setAttribute('aria-label','Move page '+p.title);
  gr.addEventListener('keydown',e=>gripKey(e,p.id));
@@ -673,7 +1158,7 @@ function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),a=el('div'
     const m = $('menu-var-'+p.id);
     m.style.left = Math.max(8, e.clientX - 10) + 'px';
     m.style.top = (e.clientY + 15) + 'px';
-    toggleDropdown('var-'+p.id, null); // bypass auto-positioning
+    toggleDropdown('var-'+p.id, null);
    }
   };
   titleEl.append(tb);
@@ -692,15 +1177,31 @@ function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),a=el('div'
   titleEl.textContent = p.title;
  }
 
- const cp=el('button','btn tone',ic('copy')+'<span class="lbl">Copy</span>');cp.title='Copy';cp.setAttribute('aria-label','Copy page text');cp.onclick=()=>copyPage(p.id);
- const ed=el('button','ib ed-btn',ic('pen'));ed.title='Edit page';ed.onclick=()=>openEditPageModal(p.id);
  const dd=el('div','dd'),db=el('button','ib',ic('dots')),m=el('div','menu');m.id='menu-'+p.id;db.title='More';db.onclick=e=>{e.stopPropagation();toggleDropdown(p.id,db)};
- const edm=el('button','mi',ic('pen')+'Edit page');edm.onclick=()=>openEditPageModal(p.id);
- const ft=el('button','mi',ic('fit')+'Fit height to text');ft.title='Resize this page so all of its text shows';ft.onclick=()=>fitPageHeight(p.id);
- const cpd=el('button','mi',ic('copy')+'Copy page');cpd.title='Copy this page so you can paste it into another chapter';cpd.onclick=()=>copyPageData(p.id);
- const du=el('button','mi',ic('dup')+'Duplicate page');du.onclick=()=>duplicatePage(p.id);const de=el('button','mi del',ic('trash')+'Delete page');de.onclick=()=>deletePage(p.id);
- m.append(edm,ft,cpd,du,de);dd.append(db,m);a.append(cp,ed,dd);h.append(gr,titleEl,a);
- const c=el('div','cc');buildSpiel(c,p);card.append(h,c);addHandles(card);return card}
+ const de=el('button','mi del',ic('trash')+'Delete page');de.onclick=()=>deletePage(p.id);
+
+ if (p.isWidget) {
+    m.append(de);
+    dd.append(db,m);
+    a.append(dd);
+    h.append(gr,titleEl,a);
+ } else {
+    const cp=el('button','btn tone',ic('copy')+'<span class="lbl">Copy</span>');cp.title='Copy';cp.setAttribute('aria-label','Copy page text');cp.onclick=()=>copyPage(p.id);
+    const ed=el('button','ib ed-btn',ic('pen'));ed.title='Edit page';ed.onclick=()=>openEditPageModal(p.id);
+    const edm=el('button','mi',ic('pen')+'Edit page');edm.onclick=()=>openEditPageModal(p.id);
+    const ft=el('button','mi',ic('fit')+'Fit height to text');ft.title='Resize this page so all of its text shows';ft.onclick=()=>fitPageHeight(p.id);
+    const cpd=el('button','mi',ic('copy')+'Copy page');cpd.title='Copy this page so you can paste it into another chapter';cpd.onclick=()=>copyPageData(p.id);
+    const du=el('button','mi',ic('dup')+'Duplicate page');du.onclick=()=>duplicatePage(p.id);
+    m.append(edm,ft,cpd,du,de);
+    dd.append(db,m);
+    a.append(cp,ed,dd);
+    h.append(gr,titleEl,a);
+ }
+ 
+ const c=el('div','cc');
+ if (p.isWidget) { renderWidgetUI(c, p); } else { buildSpiel(c, p); }
+ card.append(h,c);addHandles(card);return card}
+
 function renderPages(){const ws=$('ws'),wsc=$('wsc'),em=$('ws-empty');wsc.classList.add('nt');wsc.innerHTML='';nodes.clear();
  const ch=curChap();
  if(!ch){ws.hidden=true;em.hidden=false;em.textContent='Select or add a chapter to see its pages.';wsc.classList.remove('nt');return}
@@ -712,7 +1213,7 @@ function renderPages(){const ws=$('ws'),wsc=$('wsc'),em=$('ws-empty');wsc.classL
  layoutDirty=false;ensureLayout();applyAll();fitAll();
  em.hidden=!!(all.length||cons.length);em.textContent='No pages yet. Use + Add to create one, or + Board for a board.';
  void wsc.offsetWidth;wsc.classList.remove('nt');
- if(layoutDirty)persistLocal()}
+ if(layoutDirty)persistLocal();if(window.SmartScheduleManager)SmartScheduleManager.refreshDots()}
 function closeMenus(){document.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show'))}
 function toggleDropdown(id,btn){document.querySelectorAll('.menu').forEach(m=>{if(m.id!=='menu-'+id)m.classList.remove('show')});const t=$('menu-'+id);if(!t)return;
  const open=!t.classList.contains('show');t.classList.toggle('show',open);
@@ -748,7 +1249,7 @@ function saveChapter(){const id=$('chapter-id-input').value,name=$('chapter-name
 function duplicateChapter(id){const s=appData.chapters.find(c=>c.id===id);if(!s)return;const nid='c_'+Date.now();
  appData.chapters.push({id:nid,bookId:s.bookId,name:s.name+' (Copy)',description:s.description,referenceLink:s.referenceLink});
  const map={};appData.containers.filter(c=>c.chapterId===id).forEach(c=>{const k='k_'+rid();map[c.id]=k;appData.containers.push(Object.assign({},c,{id:k,chapterId:nid}))});
- appData.pages.filter(p=>p.chapterId===id).forEach(p=>appData.pages.push({id:'p_'+rid(),chapterId:nid,containerId:map[p.containerId]||'',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h}));
+ appData.pages.filter(p=>p.chapterId===id).forEach(p=>appData.pages.push(Object.assign({id:'p_'+rid(),chapterId:nid,containerId:map[p.containerId]||'',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h},widgetProps(p))));
  appData.activeChapterId=nid;persistLocal();renderAll();showToast('Chapter duplicated.')}
 function deleteChapter(id){if(!confirm('Delete this chapter and its pages?'))return;
  appData.chapters=appData.chapters.filter(c=>c.id!==id);appData.pages=appData.pages.filter(p=>p.chapterId!==id);appData.containers=appData.containers.filter(c=>c.chapterId!==id);
@@ -838,7 +1339,7 @@ function savePage(){const id=$('page-id-input').value, isVar = $('page-variant-c
  }
  persistLocal();closeModal('page-modal');renderHero();renderPages();if(nid)revealNode(nid)}
 function duplicatePage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;const nid='p_'+Date.now();
- appData.pages.push({id:nid,chapterId:p.chapterId,containerId:p.containerId||'',title:p.title+' (Copy)',content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h});
+ appData.pages.push(Object.assign({id:nid,chapterId:p.chapterId,containerId:p.containerId||'',title:p.title+' (Copy)',content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p)));
  persistLocal();renderHero();renderPages();revealNode(nid);showToast('Page duplicated.')}
 function deletePage(id){delete varVals[id];appData.pages=appData.pages.filter(p=>p.id!==id);persistLocal();renderHero();renderPages();showToast('Page deleted.')}
 /* ---------- freeform layout: pages and boards share one fine grid ---------- */
@@ -886,10 +1387,10 @@ function findSpot(items,w,h,cols,pad){const L=items.filter(i=>i.x!==undefined&&i
  return{x:pad,y:pad}}
 function packItems(items,cols,pad){items.forEach(d=>{if(d.x!==undefined&&d.y!==undefined)return;d.x=d.y=undefined;const s=findSpot(items,d.w,d.h,cols,pad);d.x=s.x;d.y=s.y;layoutDirty=true})}
 function sizePages(pages,cols,pad){pages.forEach(p=>{const n=nodes.get(p.id);if(!n)return;
+ if(p.isWidget&&p.widgetType==='schedule'&&!p.hFix){/* one-time: old schedule widgets were saved far too tall */p.hFix=1;p.h=0;p.w=Math.max(p.w||0,36);layoutDirty=true}
  if(!(p.w>0)){p.w=Math.max(MIN_PW,Math.min(DEF_PW,cols-2*pad));layoutDirty=true}
- n.classList.toggle('n1',p.w<34);n.classList.toggle('n2',p.w<27);
- if(!(p.h>0)){n.style.width=p.w*GRID+'px';n.style.height='auto';n.style.left='0px';n.style.top='0px';/* measure the natural height once */
-  p.h=clamp(Math.ceil(n.offsetHeight/GRID),MIN_PH,DEF_MAXH);layoutDirty=true}})}
+ if(!(p.h>0)){/* no saved height: fit the text, up to a cap */n.style.transition='none';n.style.width=p.w*GRID+'px';n.style.height='auto';const px=n.offsetHeight;n.style.height='';n.style.width='';n.style.transition='';p.h=clamp(Math.ceil(px/GRID),MIN_PH,DEF_MAXH);layoutDirty=true}
+})}
 function ensureLayout(){const cid=appData.activeChapterId,cons=getCons(),wc=Math.max(24,Math.floor($('ws').clientWidth/GRID));
  const loose=appData.pages.filter(p=>p.chapterId===cid&&!p.containerId);
  sizePages(loose,wc,PAD);
@@ -1200,12 +1701,12 @@ function fallbackCopy(t,msg){const a=document.createElement('textarea');a.value=
 const CLIP_TAG='paano-ba-yan';
 function rid(){return Date.now()+'_'+Math.random().toString(36).slice(2,6)}
 function copyPageData(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
- copyText(JSON.stringify({app:CLIP_TAG,type:'page',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h}),'Page copied. Use Paste page inside any chapter.')}
+ copyText(JSON.stringify(Object.assign({app:CLIP_TAG,type:'page',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p))),'Page copied. Use Paste page inside any chapter.')}
 function copyChapterData(id){const c=appData.chapters.find(x=>x.id===id);if(!c)return;
  const cons=appData.containers.filter(k=>k.chapterId===id);
  copyText(JSON.stringify({app:CLIP_TAG,type:'chapter',ver:2,name:c.name,description:c.description||'',referenceLink:c.referenceLink||'',
   containers:cons.map(k=>({name:k.name,x:k.x,y:k.y,w:k.w,h:k.h,border:k.border||'',bg:k.bg||''})),
-  pages:appData.pages.filter(p=>p.chapterId===id).map(p=>({title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h,container:cons.findIndex(k=>k.id===p.containerId)}))}),'Chapter copied. Use Paste chapter in any book.')}
+  pages:appData.pages.filter(p=>p.chapterId===id).map(p=>Object.assign({title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h,container:cons.findIndex(k=>k.id===p.containerId)},widgetProps(p)))}),'Chapter copied. Use Paste chapter in any book.')}
 function parseClip(t){try{const o=JSON.parse(t);return o&&o.app===CLIP_TAG?o:null}catch(e){return null}}
 let pasteKind='';
 async function startPaste(kind){
@@ -1219,13 +1720,13 @@ function applyPaste(t,kind){const o=parseClip(t);
  if(!o){showToast('Nothing to paste. Copy a '+kind+' first.');return false}
  if(o.type!==kind){showToast(kind==='chapter'?'That is a copied page. Use Paste page inside a chapter.':'That is a copied chapter. Use Paste chapter next to + Chapter.');return false}
  if(kind==='page'){if(!curChap()){showToast('Select a chapter first.');return false}
-  appData.pages.push({id:'p_'+rid(),chapterId:appData.activeChapterId,containerId:'',title:String(o.title||'Untitled'),content:String(o.content||''),variants:o.variants?JSON.parse(JSON.stringify(o.variants)):null,activeVariant:o.activeVariant||0,w:num(o.w),h:num(o.h)});
+  appData.pages.push(Object.assign({id:'p_'+rid(),chapterId:appData.activeChapterId,containerId:'',title:String(o.title||'Untitled'),content:String(o.content||''),variants:o.variants?JSON.parse(JSON.stringify(o.variants)):null,activeVariant:o.activeVariant||0,w:num(o.w),h:num(o.h)},widgetProps(o)));
   persistLocal();renderHero();renderPages();showToast('Page pasted.');return true}
  const nid='c_'+rid();
  appData.chapters.push({id:nid,bookId:appData.activeBookId,name:String(o.name||'Untitled'),description:String(o.description||''),referenceLink:String(o.referenceLink||'')});
  const v2=o.ver>=2,f=v2?1:1/GRID;/* older copies stored board geometry in pixels */
  const kids=(Array.isArray(o.containers)?o.containers:[]).map(k=>{const n={id:'k_'+rid(),chapterId:nid,name:String(k.name||'Board'),x:num((+k.x||0)*f),y:num((+k.y||0)*f),w:Math.max(MIN_BW,num((+k.w||(v2?DEF_BW:420))*f)||DEF_BW),h:Math.max(MIN_BH,num((+k.h||(v2?DEF_BH:300))*f)||DEF_BH),border:hex(k.border),bg:hex(k.bg),mig:v2?undefined:true};appData.containers.push(n);return n.id});
- (Array.isArray(o.pages)?o.pages:[]).forEach(p=>appData.pages.push({id:'p_'+rid(),chapterId:nid,containerId:kids[p.container]||'',title:String(p.title||'Untitled'),content:String(p.content||''),variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:num(p.x),y:num(p.y),w:num(p.w),h:num(p.h)}));
+ (Array.isArray(o.pages)?o.pages:[]).forEach(p=>appData.pages.push(Object.assign({id:'p_'+rid(),chapterId:nid,containerId:kids[p.container]||'',title:String(p.title||'Untitled'),content:String(p.content||''),variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:num(p.x),y:num(p.y),w:num(p.w),h:num(p.h)},widgetProps(p))));
  appData.activeChapterId=nid;persistLocal();renderAll();showToast('Chapter pasted.');return true}
 /* save */
 function generateUpdatedHtmlString(){const c=document.documentElement.cloneNode(true);if(window.lockClean)window.lockClean(c);/* strip transient UI so the saved file reopens clean */
@@ -1459,6 +1960,7 @@ G('lk-stay').checked=rd(KP)==='1';setMode(rd(KS)?'login':'key','signup');setLock
 })();
 </script>
 <script id="ux-script">
+
 (function(){
 const $=id=>document.getElementById(id);
 function hsl2rgb(h,s,l){s/=100;l/=100;const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l),f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));return[f(0),f(8),f(4)].map(v=>Math.round(v*255))}
