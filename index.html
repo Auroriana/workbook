@@ -841,7 +841,25 @@ function renderBooks(){const c=$('books');c.innerHTML='';
  appData.books.forEach(b=>{const on=b.id===appData.activeBookId,t=el('div','tab'+(on?' on':''));t.tabIndex=0;t.append(el('span','',''));t.firstChild.textContent=b.name;
   if(on){const e=el('button','ib',ic('pen'));e.title='Edit book';e.onclick=ev=>{ev.stopPropagation();openEditBookModal(b.id)};t.append(e)}
   t.onclick=()=>selectBook(b.id);t.onkeydown=e=>{if(e.key==='Enter')selectBook(b.id)};c.append(t)});keepVisible(c)}
-function selectBook(id){appData.activeBookId=id;const ch=appData.chapters.filter(c=>c.bookId===id);appData.activeChapterId=ch.length?ch[0].id:'';persistLocal();renderAll()}
+/* remembered spot per book: the chapter you were on and exactly where you were scrolled (kept on this device) */
+const VIEW_KEY='ataraxia_view';
+let viewMem={};try{viewMem=JSON.parse(localStorage.getItem(VIEW_KEY)||'{}')||{}}catch(e){viewMem={}}
+function saveViewMem(){try{localStorage.setItem(VIEW_KEY,JSON.stringify(viewMem))}catch(e){}}
+function captureView(bookId){/* read the live screen: page scroll, sideways scroll, chapter list scroll and every page/board that is scrolled inside */
+ const M=document.querySelector('main'),W=$('ws'),inner={};
+ W.querySelectorAll('[data-pid]>.cc').forEach(n=>{if(n.scrollTop)inner['p:'+n.parentNode.dataset.pid]=n.scrollTop});
+ W.querySelectorAll('[data-cid]>.cin').forEach(n=>{if(n.scrollTop)inner['c:'+n.parentNode.dataset.cid]=n.scrollTop});
+ viewMem[bookId]={ch:appData.activeChapterId,top:M.scrollTop,left:W.scrollLeft,side:$('chs').scrollTop,inner};saveViewMem()}
+function restoreView(v){/* v = null puts a book you have not opened yet back at the top */
+ v=v||{};const M=document.querySelector('main'),W=$('ws'),inn=v.inner||{};
+ M.scrollTop=v.top||0;W.scrollLeft=v.left||0;if(v.side!=null)$('chs').scrollTop=v.side;
+ W.querySelectorAll('[data-pid]>.cc').forEach(n=>{const y=inn['p:'+n.parentNode.dataset.pid];if(y)n.scrollTop=y});
+ W.querySelectorAll('[data-cid]>.cin').forEach(n=>{const y=inn['c:'+n.parentNode.dataset.cid];if(y)n.scrollTop=y})}
+function selectBook(id){if(id===appData.activeBookId)return;/* clicking the book you are already on changes nothing */
+ const old=appData.activeBookId;if(appData.books.some(b=>b.id===old))captureView(old);/* remember where you were before leaving */
+ appData.activeBookId=id;const ch=appData.chapters.filter(c=>c.bookId===id),v=viewMem[id],keep=v&&ch.find(c=>c.id===v.ch);
+ appData.activeChapterId=keep?keep.id:(ch.length?ch[0].id:'');/* back to the chapter you left, else the first one */
+ persistLocal();renderAll();restoreView(keep?v:null)}
 function keepVisibleV(box){const a=box.querySelector('.on');if(!a)return;const t=a.offsetTop,b=t+a.offsetHeight;if(t<box.scrollTop)box.scrollTop=t-4;else if(b>box.scrollTop+box.clientHeight)box.scrollTop=b-box.clientHeight+4}
 function renderChapters(){const c=$('chs'),st=c.scrollTop;c.innerHTML='';
  const list=appData.chapters.filter(x=>x.bookId===appData.activeBookId);
@@ -1452,11 +1470,11 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(ps){cancelPs();r
 function openAddBookModal(){$('book-modal-title').textContent='Add Book';$('book-id-input').value='';$('book-title-input').value='';$('book-del').style.display='none';openModal('book-modal')}
 function openEditBookModal(id){const b=appData.books.find(x=>x.id===id);if(!b)return;$('book-modal-title').textContent='Edit Book';$('book-id-input').value=b.id;$('book-title-input').value=b.name;$('book-del').style.display=appData.books.length>1?'':'none';openModal('book-modal')}
 function saveBook(){const id=$('book-id-input').value,t=$('book-title-input').value.trim();if(!t)return;
- if(id){appData.books.find(b=>b.id===id).name=t}else{const b={id:'b_'+Date.now(),name:t};appData.books.push(b);appData.activeBookId=b.id;appData.activeChapterId=''}
+ if(id){appData.books.find(b=>b.id===id).name=t}else{captureView(appData.activeBookId);const b={id:'b_'+Date.now(),name:t};appData.books.push(b);appData.activeBookId=b.id;appData.activeChapterId=''}
  persistLocal();closeModal('book-modal');renderAll();$('books').scrollLeft=1e6*(id?0:1)}
 function deleteBook(){const id=$('book-id-input').value;if(!confirm('Delete this book with all its chapters and pages?'))return;
  const ch=appData.chapters.filter(c=>c.bookId===id).map(c=>c.id);appData.pages=appData.pages.filter(p=>!ch.includes(p.chapterId));appData.containers=appData.containers.filter(c=>!ch.includes(c.chapterId));appData.chapters=appData.chapters.filter(c=>c.bookId!==id);appData.books=appData.books.filter(b=>b.id!==id);
- selectBook(appData.books[0].id);closeModal('book-modal');showToast('Book deleted.')}
+ delete viewMem[id];saveViewMem();selectBook(appData.books[0].id);closeModal('book-modal');showToast('Book deleted.')}
 /* chapters */
 function openAddChapterModal(){$('chapter-modal-title').textContent='Add Chapter';['id','name','desc','link'].forEach(k=>$('chapter-'+k+'-input').value='');openModal('chapter-modal')}
 function openEditChapterModal(){const c=curChap();if(!c)return;$('chapter-modal-title').textContent='Edit Chapter';$('chapter-id-input').value=c.id;$('chapter-name-input').value=c.name;$('chapter-desc-input').value=c.description||'';$('chapter-link-input').value=c.referenceLink||'';openModal('chapter-modal')}
