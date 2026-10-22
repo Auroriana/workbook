@@ -69,6 +69,41 @@ main{flex:1;min-width:0;min-height:0;overflow-y:auto;padding:8px 24px 40px;scrol
 .ph .pt-sub{flex:0 0 100%;order:5;margin-top:-4px;font-size:15px;line-height:1.3}
 .ph .pt-sub[hidden]{display:none}
 .ph .pt-sub .pt-sep{margin:0 11px;height:.85em}
+/* Documentation chats: up to 3 customers side by side */
+#chats{display:flex;gap:14px;align-items:stretch;margin-top:4px;height:max(440px,calc(100vh - 300px))}
+#chats[hidden]{display:none}
+.chat{flex:1 1 0;min-width:0;display:flex;flex-direction:column;background:var(--surf);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.chat-h{display:flex;align-items:center;gap:8px;padding:8px 8px 8px 16px;background:var(--pc);color:var(--on-pc);flex:none}
+.chat-h b{font-weight:600;white-space:nowrap}
+.chat-name{flex:1;min-width:0;background:transparent;border:0;border-bottom:1.5px dashed currentColor;border-radius:0;color:inherit;font-weight:500;padding:3px 2px;outline:none}
+.chat-name::placeholder{color:inherit;opacity:.55}
+.chat-name:focus{border-bottom-style:solid}
+.chat-h .ib{color:inherit}
+.chat-s{padding:10px 12px 6px;flex:none}
+.chat-s input{width:100%;height:36px;border-radius:999px;border:1px solid var(--line);background:var(--card);padding:0 14px;outline:none;font-size:14px}
+.chat-s input:focus{border-color:var(--p)}
+.chat-res{margin:0 12px 4px;max-height:40%;flex:none;overflow-y:auto;border:1px solid var(--line);border-radius:14px;background:var(--card);scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.chat-res[hidden]{display:none}
+.chat-res button{display:flex;flex-direction:column;align-items:flex-start;width:100%;text-align:left;padding:7px 12px;border-bottom:1px solid var(--line)}
+.chat-res button:last-child{border-bottom:0}
+.chat-res button:hover,.chat-res button.sel{background:var(--pc);color:var(--on-pc)}
+.chat-res .rt{font-size:14px;font-weight:600;overflow-wrap:anywhere}
+.chat-res .rs{font-size:12px;opacity:.7;overflow-wrap:anywhere}
+.chat-none{padding:10px 12px;font-size:13.5px;color:var(--mut)}
+.chat-body{flex:1;min-height:0;overflow-y:auto;padding:8px 12px 14px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.chat-empty{margin:auto;max-width:260px;color:var(--mut);font-size:14px;text-align:center;padding:20px 8px}
+.cp{flex:none;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px 8px 12px 14px}
+.cp-h{display:flex;align-items:center;gap:4px;margin-bottom:4px}
+.cp-t{flex:1;min-width:0;font-size:15.5px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+.cp-h .btn{height:30px;padding:0 12px;gap:6px;font-size:13px}.cp-h .btn svg{width:15px;height:15px}
+.cp-v{display:flex;flex-wrap:wrap;gap:6px;margin:2px 6px 8px 0}
+.cp-v button{padding:1px 12px;border-radius:999px;border:1px solid var(--line);font-size:12.5px;color:var(--mut)}
+.cp-v button:hover{background:var(--surf)}
+.cp-v button.on{background:var(--p);color:var(--on-p);border-color:var(--p)}
+.cp-c{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14.5px;color:var(--mut);padding-right:8px}
+.chats-none{margin:40px auto;text-align:center;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:14px}
+@media(max-width:900px){#chats{flex-direction:column;height:auto}.chat{min-height:420px}}
+
 .ph .pt{cursor:pointer;color:var(--mut);transition:color .15s;user-select:none}
 .ph .pt:hover{color:var(--txt)}
 .ph .pt.on{color:var(--txt);cursor:default}
@@ -547,8 +582,9 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
    </div>
    <div class="acts" id="hacts"><button class="btn xs fill">Edit info</button><div class="dd"><button class="ib sm" title="More" aria-label="More chapter actions"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-ch"><button class="mi" title="Paste a copied page into this chapter"><svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>Paste page</button><button class="mi" title="Copy this chapter and its pages so you can paste it into any book"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy chapter</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate chapter</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete chapter</button></div></div></div>
   </section>
-  <div class="ph"><h2><span class="pt on" id="pt-ws" role="button" tabindex="0" title="Your chapter workspace" onclick="closeTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeTools()}">Workspace</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-tools" role="button" tabindex="0" title="Your widgets, available from any chapter" onclick="openTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTools()}">Tools</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-docs" role="button" tabindex="0" title="Your documentation, available from any book" onclick="openDocs()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocs()}">Documentation</span><span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button class="btn tone" id="add-board-btn" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" onclick="openAddHubModal()">+ Add</button><div class="pt-sub" id="pt-sub" hidden></div></div>
+  <div class="ph"><h2><span class="pt on" id="pt-ws" role="button" tabindex="0" title="Your chapter workspace" onclick="closeTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeTools()}">Workspace</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-tools" role="button" tabindex="0" title="Your widgets, available from any chapter" onclick="openTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTools()}">Tools</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-docs" role="button" tabindex="0" title="Your documentation, available from any book" onclick="openDocs()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocs()}">Documentation</span><span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button class="btn tone" id="add-board-btn" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" id="add-main-btn" onclick="openAddHubModal()">+ Add</button><div class="pt-sub" id="pt-sub" hidden></div></div>
   <div class="empty" id="ws-empty" hidden="">No pages yet. Use + Add to create one, or + Board for a board.</div>
+  <div id="chats" hidden></div>
   <div id="ws"><div id="wsc" data-zone="" class="" style="height: 400px; min-width: max(100%, 664px);"></div></div>
  </div></main><div id="hbar"><div id="hthumb"></div></div></div>
 </div>
@@ -882,29 +918,34 @@ function ensureTools(){/* first run only: every widget starts in Tools. Ones you
 /* Documentation: two fixed chapters (Notations, What if) shared by every book. Like Tools they are never in appData.chapters, so they cannot be renamed, copied or deleted.
    Their boards and pages are ordinary ones in appData (seeded once from DOC_BOOK), so you can edit, move and resize them like anything else */
 const DOC_BOOK={"chapters":[{"name":"Notations","description":"Notations, for completed endorsements","containers":[{"name":"Common","x":2,"y":2,"w":131,"h":48,"border":"","bg":""},{"name":"Make a payment/Payment extension","x":2,"y":52,"w":67,"h":40,"border":"","bg":""},{"name":"Address - Mailing/All","x":135,"y":2,"w":63,"h":48,"border":"","bg":""},{"name":"Reinstatement","x":126,"y":52,"w":72,"h":40,"border":"","bg":""},{"name":"Autopay - EZP Enrollment/RCC","x":151,"y":94,"w":47,"h":52,"border":"","bg":""},{"name":"WSR - Agent change/Refund/Mileage","x":71,"y":52,"w":53,"h":40,"border":"","bg":""},{"name":"Account Endorsements","x":2,"y":94,"w":147,"h":52,"border":"","bg":""},{"name":"Driver & Occupant - Add/Remove","x":2,"y":148,"w":119,"h":59,"border":"","bg":""},{"name":"Vehicle - Add/Remove/Update/Suspend/Restore","x":123,"y":148,"w":75,"h":59,"border":"","bg":""}],"pages":[{"title":"Termination","content":"Customer Name: XXX\nRequested Action: Termination request\nCompleted Action: Termination: XXX\nReason for Termination: XXX \nEffective Date of New Coverage: XX/XX/XXXX\nNew Company Provided: [Yes]\nIf Yes, New Company: XXX\nEffective Date of Termination: XX/XX/XXXX\nPending EZP or RCC Withdrawal within Next 48 Hours: [No]\nInformed of Possible Tag or Plate Requirement and Potential Fees (MD, SC, WV): [No]","variants":null,"activeVariant":0,"x":55,"y":2,"w":73,"h":39,"container":0},{"title":"General","content":"Name: XXX\nReason for Inquiry: XXX\nDid you provide due dates/amounts to customer? [Yes]\nAdditional Explanation Provided: [Yes]\nInformation/Advice Provided: XXX","variants":null,"activeVariant":0,"x":2,"y":2,"w":51,"h":39,"container":0},{"title":"Made a payment","content":"Customer Name: XXX\nAmount Paid: $XXX\nPayment Method: XXX\nIf Scheduled Payment: [N/A | Yes]\nWas Current Amount Due Paid in Full? [Yes]\nConfirmation Number: [000 000000] \nIf No - Customer Informed of Remaining Balance and Due Date: [No]","variants":[{"title":"Made a payment","content":"Customer Name: XXX\nAmount Paid: $XXX\nPayment Method: XXX\nIf Scheduled Payment: [N/A | Yes]\nWas Current Amount Due Paid in Full? [Yes]\nConfirmation Number: [000 000000] \nIf No - Customer Informed of Remaining Balance and Due Date: [No]"},{"title":"Payment Extension","content":"Policy Number: [00 0000 000]\nCustomer Name: XXX\nInquired About: Payment extension\nDid you provide due date and amount due to customer? [Yes]\nAdditional Explanation Provided: [Yes]\nInformation/Advice Provided: XXX\nProvided a 7-day extension until XX/XX/XXXX"}],"activeVariant":0,"x":2,"y":2,"w":63,"h":30,"container":1},{"title":"Change address - Mailing","content":"Name: XXX\nRequested Address Change: [Yes]\nAddress Type: Mailing\nEffective Date: XX/XX/XXXX\nReason for Change: XXX\nUpdated Premium: $XXX\nIf Auto Policy, Was Vehicle Usage Reviewed? [No]\nIf Auto Policy, Was Vehicle Reviewed? [No]\nWas Pre-Complete eSign or Point of Sale required: [No]\nWere Trailing Document(s) discussed? [No]","variants":[{"title":"Change address - Mailing","content":"Name: XXX\nRequested Address Change: [Yes]\nAddress Type: Mailing\nEffective Date: XX/XX/XXXX\nReason for Change: XXX\nUpdated Premium: $XXX\nIf Auto Policy, Was Vehicle Usage Reviewed? [No]\nIf Auto Policy, Was Vehicle Reviewed? [No]\nWas Pre-Complete eSign or Point of Sale required: [No]\nWere Trailing Document(s) discussed? [No]"},{"title":"Change address - All","content":"Name: XXX\nRequested Address Change: [Yes]\nAddress Type: Mailing, Residence, and Garaging\nEffective Date: XX/XX/XXXX\nReason for Change: XXX\nUpdated Premium: $XXX\nIf Auto Policy, Was Vehicle Usage Reviewed? [No]\nIf Auto Policy, Was Vehicle Reviewed? [No]\nWas Pre-Complete eSign or Point of Sale required: [No]\nWere Trailing Document(s) discussed? [No]"}],"activeVariant":0,"x":2,"y":2,"w":59,"h":38,"container":2},{"title":"Reinstatement not eligable","content":"Customer Name: XXX\nReason for Reinstatement:  Doesn’t Qualify for Reinstatement\nIf NB Rejection  Is the Rejection TDOC Related?  [No]\nIf Doesn’t Qualify for Reinstatement  Reason: XXX\nWas the Chat Transferred?  [Yes]\nDepartment Transferred To: Licensed team","variants":null,"activeVariant":0,"x":2,"y":2,"w":68,"h":30,"container":3},{"title":"EZP Enrollment","content":"Name: XXX\nWhat Was the Request: XXX\nWas IPS Messaging Read? [Yes]\nIs There a Balance Due? [Yes]\nIf Yes, Informed Customer of the Remaining Balance and Due Date: [Yes]\nWere Impacts of Adding EZP Discussed? [Yes]","variants":[{"title":"EZP Enrollment","content":"Name: XXX\nWhat Was the Request: XXX\nWas IPS Messaging Read? [Yes]\nIs There a Balance Due? [Yes]\nIf Yes, Informed Customer of the Remaining Balance and Due Date: [Yes]\nWere Impacts of Adding EZP Discussed? [Yes]"},{"title":"RCC","content":"Name: XXX\nPolicy Number: [00 0000 000]\nRequest: XXX\nBalance: $XXX\nImpact: XXX"}],"activeVariant":0,"x":2,"y":2,"w":43,"h":43,"container":4},{"title":"Agent Change","content":"Name: XXX\nRequest: Agency Change\nReason: XXX\nCompleted Request: [Yes]\nPolicy: XXX\nReference Number: XXX","variants":[{"title":"General","content":"Name: XXX\nSubject of Inquiry: XXX\nInformation Provided: XXX\nReference Number: XXX"},{"title":"Agent Change","content":"Name: XXX\nRequest: Agency Change\nReason: XXX\nCompleted Request: [Yes]\nPolicy: XXX\nReference Number: XXX"},{"title":"Refund","content":"Policy: XXX\nName: XXX\nRequested a Refund Due to: XXX\nWSR/Follow-Up Task Submitted: [Yes]\nType of Task Submitted: WSR\nRequired: XXX"},{"title":"Mileage update/Dispute","content":"Name: XXX\nSubject of Inquiry: Mileage Dispute\nInformation Provided: XXX\nVehicle: XXX\nReference: XXX"}],"activeVariant":1,"x":2,"y":2,"w":49,"h":31,"container":5},{"title":"Name update","content":"Name: XXX\nEffective Date: XX/XX/XXXX\nName of Driver/Occupant Being Updated: XXX\nRequest Name Correction: [Yes]\nChange Due to Marital Status: [No]\nMarital Status Updated: [No]\nDriver Removed from Policy: [No]\nDid Premium Change: [No]\nReason: XXX","variants":null,"activeVariant":0,"x":2,"y":2,"w":43,"h":43,"container":6},{"title":"LienHolder/Interested party","content":"Name: XXX\nReason for Update: XXX\nEffective Date: XX/XX/XXXX\nType of 3rd Party: XXX\nMake and Model: XXX\nLender Details: XXX","variants":null,"activeVariant":0,"x":47,"y":2,"w":47,"h":43,"container":6},{"title":"Add Driver","content":"Customer Name: XXX\nName of Driver: XXX\nEffective date: XX/XX/XXXX\nWhat Was Requested: Add Driver\nDriver Usage/Assignment Updated? [No]\nUsage Class: [No]\nDriver Usage/Assignment: N/A\nVehicle/Item Usage: [No]\nWas a coverage change needed: [No]\nWas Pre-Complete eSign or Point of Sale required? [No]\nWere Trailing Document(s) discussed? [No]\nDifference from Previous Premium: $XXX","variants":[{"title":"Add Driver","content":"Customer Name: XXX\nName of Driver: XXX\nEffective date: XX/XX/XXXX\nWhat Was Requested: Add Driver\nDriver Usage/Assignment Updated? [No]\nUsage Class: [No]\nDriver Usage/Assignment: N/A\nVehicle/Item Usage: [No]\nWas a coverage change needed: [No]\nWas Pre-Complete eSign or Point of Sale required? [No]\nWere Trailing Document(s) discussed? [No]\nDifference from Previous Premium: $XXX"},{"title":"Remove a Driver","content":"Name: XXX\nWhat Was Requested: Remove Driver\nEffective Date: XX/XX/XXXX\nName of Driver/Occupant Being Removed: XXX\nType of Update: Remove Driver\nReason: XXX\nWas Driver Eligible to Be Removed? [Yes]\nWas Vehicle Usage Updated? [No]\nWas a Coverage Change Needed? [No]\nDid Premium Change? [Yes]\nIf Yes, \nWas PreComplete eSign or Point of Sale Required? [Yes]\nWere Trailing Documents Discussed? [No]\nIs Proof Required? [Yes]"}],"activeVariant":0,"x":2,"y":2,"w":55,"h":50,"container":7},{"title":"Remove Occupant","content":"Name: XXX\nWhat Was Requested: Remove Driver\nEffective Date: XX/XX/XXXX\nName of Driver/Occupant Being Removed: XXX\nType of Update: Remove Occupant\nReason: XXX\nWas Driver Eligible to Be Removed? [Yes]\nWas Vehicle Usage Updated? [No]\nWas a Coverage Change Needed? [No]\nDid Premium Change? [Yes]\nIf Yes, \nWas PreComplete eSign or Point of Sale Required? [Yes]\nWere Trailing Documents Discussed? [No]\nIs Proof Required? [Yes]","variants":[{"title":"Add Occupant","content":"Customer Name: XXX\nName of Occupant: XXX\nWhat Was Requested: Add Occupant\nWas Dwelling Information Reviewed?  [No]\nWas Coverage Information Reviewed? [No]\nEffective Date: XX/XX/XXXX\nUpdated Premium: $XXX\nWas Pre-Complete eSign or Point of Sale Required?  [No]\nWere Trailing Documents Discussed? [No]\nIf Yes, Which Trailing Documents Were Discussed: [No]\nIf No, Was a Follow-Up Submitted? [No]"},{"title":"Remove Occupant","content":"Name: XXX\nWhat Was Requested: Remove Driver\nEffective Date: XX/XX/XXXX\nName of Driver/Occupant Being Removed: XXX\nType of Update: Remove Occupant\nReason: XXX\nWas Driver Eligible to Be Removed? [Yes]\nWas Vehicle Usage Updated? [No]\nWas a Coverage Change Needed? [No]\nDid Premium Change? [Yes]\nIf Yes, \nWas PreComplete eSign or Point of Sale Required? [Yes]\nWere Trailing Documents Discussed? [No]\nIs Proof Required? [Yes]"}],"activeVariant":1,"x":59,"y":2,"w":57,"h":50,"container":7},{"title":"Update coverage","content":"Name: XXX\nYear/Make/Model of item updated: XXX\nRequested to Update: XXX\nEffective Date: XX/XX/XXXX\nUpdated Premium: $XXX\nWhat was requested match coverage: [No]\nIf yes,\nDid Customer Decline/Remove Any Coverage? [Yes]\nWas Pre-Complete eSign or Point of Sale Required? [No]\nWere Trailing Documents Discussed? [No]","variants":null,"activeVariant":0,"x":96,"y":2,"w":49,"h":43,"container":6},{"title":"Remove","content":"Name: XXX\nRequested Removal Item: XXX\nYear/Make/Model of item removed: XXX\nEffective Date: XX/XX/XXXX\nReason: XXX\nWas Vehicle Usage Reviewed? [No]\nDid Customer Decline/Remove Any Coverages? [No]\nDifference from Current Premium: $XXX\nFor All Other States, Was Customer Informed of Plate/Tag Requirements and Potential Fees? [No]\nWere Trailing Document(s) discussed? [No]\nWas Pre-Complete eSign or Point of Sale required? [No]","variants":[{"title":"Add","content":"Name: XXX\nRequested to Add Vehicle\nYear/Make/Model: XXX\nEffective Date: XX/XX/XXXX\nCustomer Requested Additional Coverage: [No]\nCustomer Declined or Removed Coverages: [No]\nMatched Coverages from Another Vehicle: [Yes]\nIf Yes,  \nDriver Usage/Assignment reviewed?: [No]\nDifference from Current Premium: $XXX\nWere Trailing Document(s) discussed? [No]\nWas Pre-Complete eSign or Point of Sale required? [No]"},{"title":"Update","content":"Customer Name: XXX\nWhat was requested: Update vehicle\nEffective Date: XX/XX/XXXX\nYear/Make/Model of item updated: XXX\nFeature updated: XXX\nDifference from current premium: $XXX\nWas Pre-Complete eSign or Point of Sale required? [No]\nWere Trailing Document(s) discussed? [No]"},{"title":"Remove","content":"Name: XXX\nRequested Removal Item: XXX\nYear/Make/Model of item removed: XXX\nEffective Date: XX/XX/XXXX\nReason: XXX\nWas Vehicle Usage Reviewed? [No]\nDid Customer Decline/Remove Any Coverages? [No]\nDifference from Current Premium: $XXX\nFor All Other States, Was Customer Informed of Plate/Tag Requirements and Potential Fees? [No]\nWere Trailing Document(s) discussed? [No]\nWas Pre-Complete eSign or Point of Sale required? [No]"},{"title":"Suspend","content":"Customer Name: XXX\nWhat Was Requested: Suspend\nEffective Date: XX/XX/XXXX\nYear/Make/Model of Item: XXX\nWas Customer Eligible Based on State Guidelines? [Yes]\nIf Yes, Was Comprehensive Coverage Added? [No] – [Already on policy | Added]\nWas 30-Day Minimum Discussed? [No]\nUpdated Premium: $XXX\nWas Customer Informed of Possible Tag/Plate Requirement and Potential Fees? [No]"},{"title":"Restore","content":"Customer Name: XXX\nWhat was requested: Reinstatement \nEffective date: XX/XX/XXXX\nYear/Make/Model of item: XXX\nDid you match coverage to what vehicle has prior to suspension: [No]\nDid customer decline/remove any coverages: [No]\nWas 30 day minimum discussed: [No]\nUpdated Premium: $XXX"}],"activeVariant":2,"x":2,"y":2,"w":71,"h":50,"container":8},{"title":"Escalation","content":"Customer's Name: XXX\nCustomer's Initial Reason for Calling: XXX\nManager/Leader Requested: XXX\nReason Customer Requested a Manager/Leader: XXX\nName of Leader/Coaching Partner Who Will Take the Escalation: XXX","variants":null,"activeVariant":0,"x":200,"y":2,"w":40,"h":48,"container":-1},{"title":"Discount Applied","content":"Customer Name: XXX\nYear/Make/Model of item updated: XXX\nEffective Date: XX/XX/XXXX\nWhat was requested: Add discount\nUpdated premium: $XXX\nWas Pre-Complete eSign or Point of Sale required? [No]\nWere Trailing Document(s) discussed? [No]","variants":null,"activeVariant":0,"x":200,"y":52,"w":40,"h":39,"container":-1}]},{"name":"What if","description":"These documentations are for What if scenarios, for quotations and stuff.","containers":[{"name":"Vehicle","x":2,"y":2,"w":60,"h":49,"border":"","bg":""},{"name":"Driver / Occupant","x":64,"y":2,"w":45,"h":35,"border":"","bg":""},{"name":"Coverage","x":111,"y":2,"w":56,"h":43,"border":"","bg":""},{"name":"Address","x":64,"y":39,"w":45,"h":35,"border":"","bg":""}],"pages":[{"title":"Remove","content":"Customer Name: XXX\nWhat Was Requested: Remove item\nUpdated Premium: AMT\nYear/Make/Model of the Item to Be Removed:  XXX\nDid You Match Coverage from Another Item? [No]\nDid Customer Request Additional Coverages? [No]\nDid Customer Decline/Remove Any Coverages? [No]\nItem Use Type: [N/A|XXX]\nDid Operator Assignment and Percentage Change? [N/A|XXX]","variants":[{"title":"Add","content":"Customer Name: XXX\nWhat Was Requested: Add item\nUpdated Premium: $XXX\nYear/Make/Model of the Item to Be Added: XXX\nDid You Match Coverage from Another Item? [No]\nDid Customer Request Additional Coverages? [No]\nDid Customer Decline/Remove Any Coverages? [No]\nItem Use Type: [N/A|XXX]\nDid Operator Assignment and Percentage Change? [N/A|XXX]"},{"title":"Replace","content":"Customer Name: XXX\nWhat Was Requested: Replace item\nUpdated Premium: $XXX\nYear/Make/Model of Current Item: XXX\nYear/Make/Model of Replacement Item: XXX\nDid You Match Coverage from Another Item? [Yes]\nDid Customer Request Additional Coverages? [No]\nDid Customer Decline/Remove Any Coverages? [No]\nItem Use Type: [N/A|XXX]\nDid Operator Assignment and Percentage Change? [N/A|XXX]"},{"title":"Remove","content":"Customer Name: XXX\nWhat Was Requested: Remove item\nUpdated Premium: AMT\nYear/Make/Model of the Item to Be Removed:  XXX\nDid You Match Coverage from Another Item? [No]\nDid Customer Request Additional Coverages? [No]\nDid Customer Decline/Remove Any Coverages? [No]\nItem Use Type: [N/A|XXX]\nDid Operator Assignment and Percentage Change? [N/A|XXX]"}],"activeVariant":2,"x":2,"y":2,"w":55,"h":39,"container":0},{"title":"Add Driver","content":"Customer Name: XXX\nWhat Was Requested: Add driver\nUpdated Premium: $XXX\nName of Driver: XXX\nDriver Usage/Assignment Reviewed? [No]\nWas a Coverage Change Needed? [No]","variants":[{"title":"Add Driver","content":"Customer Name: XXX\nWhat Was Requested: Add driver\nUpdated Premium: $XXX\nName of Driver: XXX\nDriver Usage/Assignment Reviewed? [No]\nWas a Coverage Change Needed? [No]"},{"title":"Remove Driver","content":"Customer Name: XXX\nWhat Was Requested: Remove driver\nUpdated Premium: $XXX\nName of Driver: XXX\nDriver Usage/Assignment Reviewed? [No]\nWas a Coverage Change Needed? [No]"}],"activeVariant":0,"x":2,"y":2,"w":40,"h":25,"container":1},{"title":"Coverage","content":"Customer Name: XXX\nWhat Was Requested: XXX\nUpdated Premium: $XXX\nMake and Model: XXX\nDid You Match Coverage with Another Item? [No]\nWhat Coverages Were Updated? XXX\nDid Customer Decline/Remove Any Coverages? [No]","variants":null,"activeVariant":0,"x":2,"y":2,"w":51,"h":33,"container":2},{"title":"Address Change","content":"Customer Name: XXX\nWhat Was Requested: Change address\nUpdated Premium: $XXX\nNew Address: [N/A|XXX]\nIf Auto Policy: [N/A|XXX]\nDriver Usage/Assignment Reviewed? [No]","variants":null,"activeVariant":0,"x":2,"y":2,"w":40,"h":25,"container":3}]}]};
-const DOC_CHAPS=DOC_BOOK.chapters.map((c,i)=>({id:'__doc_'+i+'__',bookId:null,name:c.name,description:c.description||''}));
+const DOC_LIB=DOC_BOOK.chapters.map((c,i)=>({id:'__doc_'+i+'__',bookId:null,name:c.name,description:c.description||''}));/* the editable template boards: Notations, What if */
+const DOC_CHATS_ID='__doc_chats__';
+const DOC_CHATS={id:DOC_CHATS_ID,bookId:null,name:'Chats',description:'Up to 3 customers at once. Type the customer name once and it fills every Name field. Chats survive a refresh and clear when you close the tab.'};
+const DOC_CHAPS=[DOC_CHATS].concat(DOC_LIB);
 const isDoc=id=>DOC_CHAPS.some(c=>c.id===id);
 function ensureDocs(){/* first run only: fills Documentation. Pages you delete stay deleted */
  if(appData.docSeeded)return;
  if(appData.pages.some(p=>isDoc(p.chapterId))||appData.containers.some(k=>isDoc(k.chapterId))){appData.docSeeded=true;return}
- DOC_BOOK.chapters.forEach((c,i)=>{const cid=DOC_CHAPS[i].id;
+ DOC_BOOK.chapters.forEach((c,i)=>{const cid=DOC_LIB[i].id;
   const kids=(c.containers||[]).map((k,j)=>{const n={id:'k_doc'+i+'_'+j,chapterId:cid,name:k.name,x:k.x,y:k.y,w:k.w,h:k.h,border:k.border||'',bg:k.bg||''};appData.containers.push(n);return n.id});
   (c.pages||[]).forEach((p,j)=>appData.pages.push({id:'p_doc'+i+'_'+j,chapterId:cid,containerId:kids[p.container]||'',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h}))});
  appData.docSeeded=true}
 function syncPh(){const t=appData.activeChapterId===TOOLS_ID,d=isDoc(appData.activeChapterId),w=!t&&!d;
  [['pt-ws',w],['pt-tools',t],['pt-docs',d]].forEach(([id,on])=>{$(id).classList.toggle('on',on);$(id).setAttribute('aria-pressed',String(on))});
- $('add-board-btn').style.display=t?'none':'';
+ const k=appData.activeChapterId===DOC_CHATS_ID;/* Chats: + Add becomes + Chat, no boards, no move mode */
+ $('add-board-btn').style.display=(t||k)?'none':'';$('add-main-btn').textContent=k?'+ Chat':'+ Add';$('edit-toggle').style.display=k?'none':'';
  const sub=$('pt-sub');sub.hidden=!d;sub.innerHTML='';/* second row, only inside Documentation: Notations | What if */
  if(d)DOC_CHAPS.forEach((c,i)=>{if(i)sub.append(el('span','pt-sep'));const b=el('span','pt'+(c.id===appData.activeChapterId?' on':''));b.textContent=c.name;b.setAttribute('role','button');b.tabIndex=0;b.title=c.description;
   b.onclick=()=>openDocChapter(c.id);b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDocChapter(c.id)}};sub.append(b)});
  syncSnap()}
 function goFixed(id){/* opens Tools or a Documentation chapter, remembering the real chapter to come back to */
  if(appData.activeChapterId===id)return;
+ if(id===DOC_CHATS_ID&&editMode)setEdit(false,true);
  if(appData.activeChapterId!==TOOLS_ID&&!isDoc(appData.activeChapterId))appData.prevChapterId=appData.activeChapterId;
  appData.activeChapterId=id;persistView();renderChapters();renderHero();renderPages()}
 function openTools(){goFixed(TOOLS_ID)}
-function openDocs(){ensureDocs();const last=isDoc(appData.docLast)?appData.docLast:DOC_CHAPS[0].id;goFixed(last)}
-function openDocChapter(id){if(!isDoc(id))return;appData.docLast=id;goFixed(id)}
+function openDocs(){ensureDocs();goFixed(DOC_CHATS_ID);if(!chats.length)addChat()}/* Documentation opens on your chats */
+function openDocChapter(id){if(!isDoc(id))return;goFixed(id);if(id===DOC_CHATS_ID&&!chats.length)addChat()}
 function closeTools(){/* Workspace button: back to the book's own chapters from Tools or Documentation */
  if(appData.activeChapterId!==TOOLS_ID&&!isDoc(appData.activeChapterId))return;
  const ch=appData.chapters.filter(c=>c.bookId===appData.activeBookId),back=ch.find(c=>c.id===appData.prevChapterId);
@@ -989,6 +1030,7 @@ function renderHero(){const c=curChap(),a=$('hacts');a.innerHTML='';syncPh();
   $('hc').textContent=n+(n===1?' widget':' widgets');$('ht').textContent='Tools';$('hd').textContent=c.description;$('hd').style.display='';
   return}
  if(!c){$('hc').textContent=(appData.books.find(b=>b.id===appData.activeBookId)||{}).name||'';$('ht').textContent='No chapter selected';$('hd').textContent='Add a chapter to start collecting your pages.';$('hd').style.display='';return}
+ if(c.id===DOC_CHATS_ID){$('hc').textContent=chats.length+' of '+CHAT_MAX+' chats open';$('ht').textContent='Chats';$('hd').textContent=c.description;$('hd').style.display='';return}
  const n=appData.pages.filter(p=>p.chapterId===c.id).length;
  $('hc').textContent=n+(n===1?' page':' pages');$('ht').textContent=c.name;$('hd').textContent=c.description||'';$('hd').style.display=c.description?'':'none';
  if(isDoc(c.id))return;/* fixed chapters: nothing to rename, copy or delete */
@@ -1250,10 +1292,23 @@ window.SmartScheduleManager = {
     if (this.state) return this.state;
     let s = null; try { s = JSON.parse(localStorage.getItem('ataraxia_break_state')); } catch (e) {}
     /* old saves were per calendar day and had no shiftStart: there is no way to place them on a shift, so start clean */
-    this.state = s && +s.shiftStart > 0 ? { shiftStart: +s.shiftStart, tagged: s.tagged || null, done: Array.isArray(s.done) ? s.done : [] } : { shiftStart: 0, tagged: null, done: [] };
+    this.state = s && +s.shiftStart > 0 ? { shiftStart: +s.shiftStart, tagged: s.tagged || null, done: Array.isArray(s.done) ? s.done : [], t: +s.t || 0 } : { shiftStart: 0, tagged: null, done: [], t: +(s && s.t) || 0 };
     return this.state;
   },
-  saveState() { try { localStorage.setItem('ataraxia_break_state', JSON.stringify(this.state)); } catch (e) {} },
+  saveState(quiet) { /* quiet = housekeeping only: written here, not stamped and not sent to the other devices */
+    if (!quiet) this.state.t = Date.now();
+    try { localStorage.setItem('ataraxia_break_state', JSON.stringify(this.state)); } catch (e) {}
+    if (!quiet && window.onBreakState) { try { window.onBreakState(this.state); } catch (e) {} } /* sync code: sends this to your other devices */
+  },
+  applyRemote(r) { /* the newest tag / back / shift start made on another device. Last change wins (t = when it was made) */
+    const cur = this.loadState(); if (!r || !(+r.t > (cur.t || 0))) return false;
+    const newShift = (+r.shiftStart || 0) !== cur.shiftStart;
+    this.state = { shiftStart: +r.shiftStart || 0, tagged: r.tagged || null, done: Array.isArray(r.done) ? r.done : [], t: +r.t };
+    this.saveState(true); this._bl = null; this._bk = ''; this._dc = null;
+    if (newShift) { this.acked = ''; this.autoFor = ''; }
+    if (this.open !== 'edit') this.open = '';
+    this.evaluate(); return true;
+  },
   schedule() { /* this shift's entries as clock times only (works before the shift starts); the end is always start + length */
     const c = this.config || this.cfg(), d = this.shiftDay();
     return (c.items || []).filter(it => this.dayMatch(it, d)).map(it => {
@@ -1344,7 +1399,7 @@ window.SmartScheduleManager = {
     const mmss = ms => { const s = Math.max(0, Math.floor(ms / 1000)); return [String(Math.floor(s / 60)), _p2(s % 60)]; };
     const vm = { tone: '', pre: '', a: '', b: '', ap: '', lbl: '', sub: '', chk: false, mode: 'idle', dots: ['wait', 'wait', 'wait'] };
     const dl = list.some(b => b.type !== 'other') ? list.filter(b => b.type !== 'other') : list, slots = dl.slice(0, 3).map(b => b.iid); slots.forEach((_, i) => { vm.dots[i] = st.done.includes(dl[i].id) ? 'done' : 'wait'; }); /* meetings / training never take a dot */ const dot = (iid, v) => { const i = slots.indexOf(iid); if (i > -1) vm.dots[i] = v; }; // the 3 dots follow the first 3 entries; finished ones stay green for the whole shift
-    let t = st.tagged; if (t && !t.custom && !list.some(b => b.id === t.id)) { st.tagged = t = null; this.saveState(); }
+    let t = st.tagged; if (t && !t.custom && !list.some(b => b.id === t.id)) { st.tagged = t = null; this.saveState(true); }
     this.activeBreak = null; this.level = ''; this._phase = '';
     if (t) { /* STATE 2 (on break) -> reminder (last 2 / 5 min) -> 4 (overbreak) */
       const E = t.end != null ? t.end : (t.limitAt || t.returnAt || now), RB = t.returnBy != null ? t.returnBy : E; // (older saves only have limitAt/returnAt)
@@ -1528,6 +1583,7 @@ window.SmartScheduleManager = {
 })();
 
 function openAddHubModal() {
+  if(appData.activeChapterId===DOC_CHATS_ID){addChat();return}
   if(!appData.activeChapterId) { showToast('Select a chapter first.'); return; }
   const t=appData.activeChapterId===TOOLS_ID;/* Tools only takes widgets */
   $('hub-tabs').style.display=t?'none':'';$('add-hub-title').textContent=t?'Add Widget to Tools':(isDoc(appData.activeChapterId)?'Add to Documentation':'Add to Workspace');
@@ -1902,7 +1958,9 @@ function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),a=el('div'
 function refreshCard(id){/* redraw one page instead of the whole chapter */
  const p=appData.pages.find(x=>x.id===id),o=nodes.get(id);if(!p||!o||!o.parentNode){renderPages();return}
  const n=buildCard(p);o.replaceWith(n);nodes.set(id,n);if(p.x!==undefined)applyRect(p,n)}
-function renderPages(){const ws=$('ws'),wsc=$('wsc'),em=$('ws-empty');wsc.classList.add('nt');wsc.innerHTML='';nodes.clear();
+function renderPages(){const ws=$('ws'),wsc=$('wsc'),em=$('ws-empty'),chOn=appData.activeChapterId===DOC_CHATS_ID;$('chats').hidden=!chOn;
+ if(chOn){ws.hidden=true;em.hidden=true;wsc.innerHTML='';nodes.clear();renderChats();return}
+ wsc.classList.add('nt');wsc.innerHTML='';nodes.clear();
  const ch=curChap();
  if(!ch){ws.hidden=true;em.hidden=false;em.textContent='Select or add a chapter to see its pages.';wsc.classList.remove('nt');return}
  ws.hidden=false;
@@ -2473,6 +2531,105 @@ function composeSpiel(p){const vals=varVals[p.id]||{},src=p.content||'';let i=0,
  return{text:out+src.slice(last),blank}}
 function copyPage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;const r=composeSpiel(p);
  copyText(r.text,r.blank?'Copied. '+r.blank+(r.blank>1?' variables are':' variable is')+' still blank.':'Copied to clipboard.')}
+/* ---------- Documentation chats: up to 3 customers at once ----------
+   Each chat holds working COPIES of templates, so filling one in never touches the template itself or another chat.
+   Chats live only in sessionStorage: they survive a refresh, are cleared when the tab closes, and are never part of appData, so they never sync or get backed up. */
+const CHAT_MAX=3,CHAT_KEY='ataraxia_chats';
+let chats=[],chatUI={},_chatT=0;
+const CHAT_X='<svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+function chatSave(){clearTimeout(_chatT);try{sessionStorage.setItem(CHAT_KEY,JSON.stringify(chats))}catch(e){}}
+function chatSaveSoon(){clearTimeout(_chatT);_chatT=setTimeout(chatSave,300)}
+function chatRestore(){let s=null;try{s=JSON.parse(sessionStorage.getItem(CHAT_KEY)||'null')}catch(e){}
+ chats=(Array.isArray(s)?s:[]).slice(0,CHAT_MAX).filter(c=>c&&typeof c==='object').map(c=>({id:String(c.id||'c'+rid()),name:String(c.name||''),
+  pages:(Array.isArray(c.pages)?c.pages:[]).filter(p=>p&&typeof p.content==='string').map(p=>({id:String(p.id||'cp_'+rid()),src:p.src||'',title:String(p.title||''),content:p.content,
+   variants:Array.isArray(p.variants)&&p.variants.length?p.variants:null,activeVariant:+p.activeVariant||0,vv:p.vv&&typeof p.vv==='object'?p.vv:{}}))}));
+ chats.forEach(c=>c.pages.forEach(p=>{const a=p.activeVariant||0;varVals[p.id]=p.vv[a]||(p.vv[a]={})}))}/* a page's live values ARE p.vv[its active variant], so saving the chat saves them */
+chatRestore();
+addEventListener('pagehide',chatSave);document.addEventListener('visibilitychange',()=>{if(document.hidden)chatSave()});
+['input','change','focusout','click'].forEach(ev=>$('chats').addEventListener(ev,chatSaveSoon));
+
+/* the "Name: XXX" / "Customer Name: XXX" / "Customer's Name: XXX" fields of a template (not "Name of Driver", not "Old name") */
+const NAME_LBL=/^\s*(?:customer[\u2019']?s?\s+name|name)\s*:\s*$/i;
+function nameIdx(content){const out=[];let i=0;
+ for(const m of scanVars(content)){if(m.tok==='XXX'){const ls=content.lastIndexOf('\n',m.index-1)+1;if(NAME_LBL.test(content.slice(ls,m.index)))out.push(i)}i++}
+ return out}
+function chatFill(chat,p,vi){/* puts the chat's customer name into one variant's Name fields; returns that variant's values */
+ const vals=p.vv[vi]||(p.vv[vi]={}),n=chat.name;if(!n)return vals;
+ nameIdx(p.variants?p.variants[vi].content:p.content).forEach(i=>{if(vals[i]===undefined)vals[i]=n});return vals}
+function chatOpenPage(chat,e){const s=e.page,vi=e.vi,v=s.variants&&s.variants.length?JSON.parse(JSON.stringify(s.variants)):null;
+ const p={id:'cp_'+rid(),src:s.id,title:v?v[vi].title:s.title,content:v?v[vi].content:s.content,variants:v,activeVariant:vi,vv:{}};
+ varVals[p.id]=chatFill(chat,p,vi);chat.pages.unshift(p);chatSave();return p}
+function chatVariant(chat,p,vi){p.activeVariant=vi;p.title=p.variants[vi].title;p.content=p.variants[vi].content;varVals[p.id]=chatFill(chat,p,vi);chatSave()}
+function chatRename(chat,root,n){/* typing the customer name updates every Name field that still holds the old name (or is empty); anything you typed yourself is left alone */
+ const prev=chat.name;chat.name=n;
+ chat.pages.forEach(p=>(p.variants?p.variants.map((_,i)=>i):[0]).forEach(vi=>{
+  const vals=p.vv[vi];if(!vals)return;/* a variant you never opened gets the name when you open it */
+  nameIdx(p.variants?p.variants[vi].content:p.content).forEach(i=>{const cur=vals[i];
+   if(cur===prev||(cur===undefined&&!prev)){if(n)vals[i]=n;else delete vals[i];
+    if(vi===(p.activeVariant||0)){const sp=root.querySelector('.var[data-pid="'+p.id+'"][data-i="'+i+'"]');if(sp){sp.textContent=n||sp.dataset.ph;sp.classList.toggle('filled',!!n)}}}})}));
+ chatSaveSoon()}
+
+/* search every template (board name + template or variant title + Notations / What if), one row per variant */
+function docIndex(){const cn={};appData.containers.forEach(k=>{cn[k.id]=k.name});const out=[];
+ DOC_LIB.forEach((lc,ci)=>appData.pages.forEach(p=>{if(p.chapterId!==lc.id||p.isWidget)return;
+  const board=cn[p.containerId]||'';
+  (p.variants&&p.variants.length?p.variants.map((v,i)=>({vi:i,title:v.title})):[{vi:0,title:p.title}]).forEach(v=>
+   out.push({page:p,vi:v.vi,title:v.title,board,chap:lc.name,ci,hay:(v.title+' '+board+' '+lc.name).toLowerCase(),th:v.title.toLowerCase()}))}));
+ return out}
+function docSearch(q){const t=q.toLowerCase().split(/\s+/).filter(Boolean);if(!t.length)return[];
+ return docIndex().filter(e=>t.every(w=>e.hay.includes(w))).map(e=>({e,s:t.filter(w=>e.th.includes(w)).length})).sort((a,b)=>b.s-a.s||a.e.ci-b.e.ci).map(x=>x.e)}
+
+function chatHasInput(chat,p){return Object.values(p.vv).some(v=>Object.values(v).some(x=>x!==chat.name))}
+function chatCard(chat,p,root){
+ const card=el('div','cp'),h=el('div','cp-h'),t=el('div','cp-t');t.textContent=p.title;
+ const cp=el('button','btn tone',ic('copy')+'<span>Copy</span>');cp.title='Copy this note';cp.setAttribute('aria-label','Copy '+p.title);
+ cp.onclick=()=>{const r=composeSpiel(p);copyText(r.text,r.blank?'Copied. '+r.blank+(r.blank>1?' variables are':' variable is')+' still blank.':'Copied to clipboard.')};
+ const ed=el('button','ib sm',ic('pen'));ed.title='Edit the template';ed.setAttribute('aria-label','Edit template '+p.title);
+ ed.onclick=()=>{if(appData.pages.some(x=>x.id===p.src))openEditPageModal(p.src);else showToast('The original template no longer exists.')};
+ const rm=el('button','ib sm',CHAT_X);rm.title='Remove from this chat';rm.setAttribute('aria-label','Remove '+p.title+' from this chat');
+ rm.onclick=async()=>{if(chatHasInput(chat,p)&&!await askConfirm('Remove this template and what you filled in?','Remove'))return;
+  delete varVals[p.id];chat.pages=chat.pages.filter(x=>x!==p);chatSave();card.remove();if(!chat.pages.length&&root._body)root._body()};
+ h.append(t,cp,ed,rm);card.append(h);
+ if(p.variants&&p.variants.length>1){const vb=el('div','cp-v');
+  p.variants.forEach((v,i)=>{const b=el('button',i===(p.activeVariant||0)?'on':'');b.type='button';b.textContent=v.title;
+   b.onclick=()=>{if(i===(p.activeVariant||0))return;chatVariant(chat,p,i);card.replaceWith(chatCard(chat,p,root))};vb.append(b)});
+  card.append(vb)}
+ const c=el('div','cp-c');buildSpiel(c,p);card.append(c);return card}
+function chatEl(chat,idx){
+ const root=el('section','chat');root.dataset.id=chat.id;
+ const h=el('div','chat-h'),lb=el('b');lb.textContent='Chat '+(idx+1)+':';
+ const nm=el('input','chat-name');nm.type='text';nm.placeholder='Customer name';nm.value=chat.name;nm.maxLength=80;nm.spellcheck=false;nm.autocomplete='off';nm.setAttribute('aria-label','Customer name for chat '+(idx+1));
+ nm.oninput=()=>chatRename(chat,root,nm.value.trim());
+ const x=el('button','ib sm',CHAT_X);x.title='Close this chat';x.setAttribute('aria-label','Close chat '+(idx+1));x.onclick=()=>closeChat(chat);
+ h.append(lb,nm,x);
+ const s=el('div','chat-s'),si=el('input');si.type='text';si.autocomplete='off';si.spellcheck=false;si.placeholder='Search templates (e.g. vehicle, payment)';si.setAttribute('aria-label','Search documentation for chat '+(idx+1));s.append(si);
+ const res=el('div','chat-res');res.hidden=true;
+ const body=el('div','chat-body'),ui=chatUI[chat.id]||(chatUI[chat.id]={sel:0,list:[]});
+ const paintBody=()=>{body.innerHTML='';
+  if(!chat.pages.length){const em=el('div','chat-empty');em.textContent='Search above and pick a template. The customer name fills in by itself.';body.append(em);return}
+  chat.pages.forEach(p=>body.append(chatCard(chat,p,root)))};
+ root._body=paintBody;
+ const paintRes=()=>{const q=si.value;res.innerHTML='';if(!q.trim()){res.hidden=true;ui.list=[];return}
+  ui.list=docSearch(q).slice(0,40);res.hidden=false;ui.sel=Math.min(ui.sel,Math.max(0,ui.list.length-1));
+  if(!ui.list.length){const n=el('div','chat-none');n.textContent='No template matches that.';res.append(n);return}
+  ui.list.forEach((e,i)=>{const b=el('button',i===ui.sel?'sel':'');b.type='button';const a=el('span','rt'),c=el('span','rs');a.textContent=e.title;c.textContent=e.chap+' \u203a '+(e.board||'Other');b.append(a,c);b.onclick=()=>pick(e);res.append(b)})};
+ const pick=e=>{chatOpenPage(chat,e);si.value='';ui.sel=0;paintRes();paintBody();body.scrollTop=0;renderHero()};
+ si.oninput=()=>{ui.sel=0;paintRes()};
+ si.onkeydown=e=>{
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){if(!ui.list.length)return;e.preventDefault();ui.sel=(ui.sel+(e.key==='ArrowDown'?1:-1)+ui.list.length)%ui.list.length;paintRes();const b=res.children[ui.sel];if(b&&b.scrollIntoView)b.scrollIntoView({block:'nearest'})}
+  else if(e.key==='Enter'){if(ui.list[ui.sel]){e.preventDefault();pick(ui.list[ui.sel])}}
+  else if(e.key==='Escape'){si.value='';paintRes()}};
+ root.append(h,s,res,body);paintBody();return root}
+function renderChats(){const box=$('chats');box.innerHTML='';
+ if(!chats.length){const e=el('div','chats-none'),m=el('div');m.textContent='No chats open.';const b=el('button','btn fill','+ New chat');b.onclick=addChat;e.append(m,b);box.append(e);return}
+ chats.forEach((c,i)=>box.append(chatEl(c,i)))}
+function addChat(){if(chats.length>=CHAT_MAX){showToast('Up to '+CHAT_MAX+' chats at once. Close one first.');return}
+ const c={id:'c'+rid(),name:'',pages:[]};chats.push(c);chatSave();renderHero();renderChats();
+ const n=document.querySelector('.chat[data-id="'+c.id+'"] .chat-name');if(n)n.focus()}
+async function closeChat(chat){
+ if((chat.name||chat.pages.length)&&!await askConfirm('Close this chat? Everything you filled in here will be cleared.','Close chat'))return;
+ chat.pages.forEach(p=>delete varVals[p.id]);chats=chats.filter(c=>c!==chat);delete chatUI[chat.id];chatSave();renderHero();renderChats()}
+
 function fmtDate(d){return d.length>4?d.slice(0,2)+'/'+d.slice(2,4)+'/'+d.slice(4):d.length>2?d.slice(0,2)+'/'+d.slice(2):d}
 function caretOff(v){const s=getSelection();if(!s.rangeCount||!v.contains(s.anchorNode))return null;const r=s.getRangeAt(0).cloneRange();r.selectNodeContents(v);r.setEnd(s.anchorNode,s.anchorOffset);return r.toString().length}
 function setCaret(v,n){const tn=v.firstChild;if(!tn)return;const r=document.createRange();r.setStart(tn,Math.min(n,tn.length));r.collapse(true);const s=getSelection();s.removeAllRanges();s.addRange(r)}
@@ -2729,13 +2886,27 @@ window.lockNow=lockNow;
 async function enter(user){if(entered===user.uid){unsoft();setLocked(false);return}entered=user.uid;
  uid=user.uid;name=(user.email||'').split('@')[0];wr(KS,'1');wr(KL,name);lastSeen=0;setSync('Syncing…');msg('Syncing…');
  try{await reconcile()}catch(e){setSync('Offline. Will sync when you are back online.')}
- listen();
+ listen();brkListen();
  await fsInit().catch(()=>{});paint();paintAcct();setLocked(false);
  if(fsPending())toast('Auto-save to file is paused. Open Settings and press Reconnect.')}
 async function logout(){if(!uid)return;if(rd(KD)===uid)await push();
  if(rd(KD)===uid){toast('Your latest changes have not synced yet. Check your connection first.');return}
  try{await AU.signOut(auth)}catch(e){}
  window.__noFlush=true;rm(KDATA);rm(KD);location.reload()}
+/* break / shift progress (tag, I'm back, shift start) syncs through its own small node. It is tiny, so it is sent at once, and the listener below pushes
+   a change from another device within a second or two (no polling). Last change wins. */
+const brkRef=()=>uref('brk');let brkUnsub=null,brkErr=false;
+function brkFail(e){if(/PERMISSION/i.test(((e&&e.code)||'')+((e&&e.message)||''))&&!brkErr){brkErr=true;toast('Break sync was blocked by your Firebase database rules. Allow the "brk" child under your user.')}}
+function brkPush(s){if(!uid||!DB)return;
+ try{DB.set(brkRef(),JSON.parse(JSON.stringify({shiftStart:s.shiftStart||0,tagged:s.tagged||null,done:s.done||[],t:s.t||Date.now(),dev:DEV}))).catch(brkFail)}catch(e){brkFail(e)}}
+window.onBreakState=brkPush;
+function brkHandle(r){const M=window.SmartScheduleManager;if(!M)return;const L=M.loadState();
+ if(!r){if(L.shiftStart||L.tagged)M.saveState();return}/* nothing in the cloud yet: this device's progress becomes the first copy */
+ if(+r.t>(L.t||0))M.applyRemote(r);
+ else if((L.t||0)>+r.t&&r.dev!==DEV)M.saveState()}/* this device has a newer change the cloud missed (made offline) */
+function brkListen(){if(brkUnsub)brkUnsub();brkUnsub=DB.onValue(brkRef(),s=>brkHandle(s.val()),brkFail)}
+function brkRefresh(){if(uid&&DB)DB.get(brkRef()).then(s=>brkHandle(s.val())).catch(()=>{})}/* when the phone wakes up or comes back online */
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)brkRefresh()});addEventListener('online',brkRefresh);
 window.onPersist=()=>{if(uid&&!applying){edits++;wr(KD,uid);setSync('Waiting to sync…');clearTimeout(pushT);pushT=setTimeout(push,1500)}fsSoon()};
 addEventListener('beforeunload',e=>{if(uid&&rd(KD)===uid){e.preventDefault();e.returnValue=''}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&uid&&rd(KD)===uid)push()});
@@ -2799,7 +2970,7 @@ G('lk-stay').checked=rd(KP)==='1';setMode(rd(KS)?'login':'key','signup');setLock
  try{const[fa,au,dbm]=await Promise.all([import(FB+'firebase-app.js'),import(FB+'firebase-auth.js'),import(FB+'firebase-database.js')]);
   const app=fa.initializeApp(CFG);AU=au;DB=dbm;auth=au.getAuth(app);db=dbm.getDatabase(app)}
  catch(e){offline=true;msg("Can't reach Firebase. You can still keep working offline on this device.",true);G('lk-off').hidden=false;return}
- AU.onAuthStateChanged(auth,u=>{if(manual||softLock)return;if(u){if(rd(KP)===null){AU.signOut(auth).catch(()=>{});return}enter(u).catch(()=>setLocked(false))}else if(uid){uid=null;entered=null;paintAcct();setLocked(true)}})})();
+ AU.onAuthStateChanged(auth,u=>{if(manual||softLock)return;if(u){if(rd(KP)===null){AU.signOut(auth).catch(()=>{});return}enter(u).catch(()=>setLocked(false))}else if(uid){uid=null;entered=null;if(brkUnsub){brkUnsub();brkUnsub=null}paintAcct();setLocked(true)}})})();
 })();
 </script>
 <script id="ux-script">
