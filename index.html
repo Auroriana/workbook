@@ -1292,19 +1292,24 @@ window.SmartScheduleManager = {
     if (this.state) return this.state;
     let s = null; try { s = JSON.parse(localStorage.getItem('ataraxia_break_state')); } catch (e) {}
     /* old saves were per calendar day and had no shiftStart: there is no way to place them on a shift, so start clean */
-    this.state = s && +s.shiftStart > 0 ? { shiftStart: +s.shiftStart, tagged: s.tagged || null, done: Array.isArray(s.done) ? s.done : [], t: +s.t || 0 } : { shiftStart: 0, tagged: null, done: [], t: +(s && s.t) || 0 };
+    const ok = s && +s.shiftStart > 0, st = ok ? { shiftStart: +s.shiftStart, tagged: s.tagged || null, done: Array.isArray(s.done) ? s.done : [] } : { shiftStart: 0, tagged: null, done: [] };
+    /* saved before tag sync existed: no stamp. Date it by the newest thing in it (the tag, else the shift start) so it is never treated as older than everything */
+    st.t = +(s && s.t) || (ok ? Math.max(st.shiftStart, (st.tagged && +st.tagged.at) || 0) : 0);
+    this.legacy = !!(st.tagged && !(s && +s.t)); /* a tag from before the update, not yet shared */
+    this.state = st;
     return this.state;
   },
   saveState(quiet) { /* quiet = housekeeping only: written here, not stamped and not sent to the other devices */
-    if (!quiet) this.state.t = Date.now();
+    if (!quiet) { this.state.t = Date.now(); this.legacy = false; }
     try { localStorage.setItem('ataraxia_break_state', JSON.stringify(this.state)); } catch (e) {}
-    if (!quiet && window.onBreakState) { try { window.onBreakState(this.state); } catch (e) {} } /* sync code: sends this to your other devices */
+    if (!quiet) this.pushState();
   },
+  pushState() { if (window.onBreakState) { try { window.onBreakState(this.state); } catch (e) {} } }, /* sync code: sends this to your other devices as it is */
   applyRemote(r) { /* the newest tag / back / shift start made on another device. Last change wins (t = when it was made) */
     const cur = this.loadState(); if (!r || !(+r.t > (cur.t || 0))) return false;
     const newShift = (+r.shiftStart || 0) !== cur.shiftStart;
     this.state = { shiftStart: +r.shiftStart || 0, tagged: r.tagged || null, done: Array.isArray(r.done) ? r.done : [], t: +r.t };
-    this.saveState(true); this._bl = null; this._bk = ''; this._dc = null;
+    this.saveState(true); this.legacy = false; this._bl = null; this._bk = ''; this._dc = null;
     if (newShift) { this.acked = ''; this.autoFor = ''; }
     if (this.open !== 'edit') this.open = '';
     this.evaluate(); return true;
@@ -2896,14 +2901,18 @@ async function logout(){if(!uid)return;if(rd(KD)===uid)await push();
 /* break / shift progress (tag, I'm back, shift start) syncs through its own small node. It is tiny, so it is sent at once, and the listener below pushes
    a change from another device within a second or two (no polling). Last change wins. */
 const brkRef=()=>uref('brk');let brkUnsub=null,brkErr=false;
-function brkFail(e){if(/PERMISSION/i.test(((e&&e.code)||'')+((e&&e.message)||''))&&!brkErr){brkErr=true;toast('Break sync was blocked by your Firebase database rules. Allow the "brk" child under your user.')}}
+function brkFail(e){if(/PERMISSION/i.test(((e&&e.code)||'')+((e&&e.message)||''))&&!brkErr){brkErr=true;toast('Break sync was blocked by your Firebase database rules. Allow the "brk" child under your user.');if(window.SmartScheduleManager)SmartScheduleManager.syncNote('Break sync blocked by database rules')}}
 function brkPush(s){if(!uid||!DB)return;
  try{DB.set(brkRef(),JSON.parse(JSON.stringify({shiftStart:s.shiftStart||0,tagged:s.tagged||null,done:s.done||[],t:s.t||Date.now(),dev:DEV}))).catch(brkFail)}catch(e){brkFail(e)}}
 window.onBreakState=brkPush;
 function brkHandle(r){const M=window.SmartScheduleManager;if(!M)return;const L=M.loadState();
- if(!r){if(L.shiftStart||L.tagged)M.saveState();return}/* nothing in the cloud yet: this device's progress becomes the first copy */
+ if(!r){if(L.shiftStart||L.tagged)M.pushState();return}/* nothing in the cloud yet: this device's progress becomes the first copy */
+ /* first start after updating: a tag made before the update carries no stamp. If the cloud copy has no tag and the tag here is still running (or just ended), keep it and share it,
+    so updating never wipes a break in progress. The tag's own start and return times are untouched */
+ if(M.legacy&&L.tagged&&!r.tagged&&r.dev!==DEV&&Date.now()<(+L.tagged.returnBy||+L.tagged.end||0)+30*60000){
+  L.t=Math.max(+r.t||0,L.t||0)+1;M.legacy=false;M.saveState(true);M.pushState();return}
  if(+r.t>(L.t||0))M.applyRemote(r);
- else if((L.t||0)>+r.t&&r.dev!==DEV)M.saveState()}/* this device has a newer change the cloud missed (made offline) */
+ else if((L.t||0)>+r.t&&r.dev!==DEV)M.pushState()}/* this device has a newer change the cloud missed (made offline) */
 function brkListen(){if(brkUnsub)brkUnsub();brkUnsub=DB.onValue(brkRef(),s=>brkHandle(s.val()),brkFail)}
 function brkRefresh(){if(uid&&DB)DB.get(brkRef()).then(s=>brkHandle(s.val())).catch(()=>{})}/* when the phone wakes up or comes back online */
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)brkRefresh()});addEventListener('online',brkRefresh);
