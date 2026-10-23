@@ -236,6 +236,9 @@ textarea{resize:none;overflow:hidden;min-height:96px;display:block}
 .cprev i{display:block;height:34px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
 #toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--txt);color:var(--bg);padding:12px 22px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:100;max-width:calc(100% - 32px);text-align:center}
 #toast.show{opacity:1;transform:translate(-50%,0)}
+#undo{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);display:flex;align-items:center;gap:14px;background:var(--txt);color:var(--bg);padding:7px 7px 7px 20px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:101;max-width:calc(100% - 32px)}
+#undo.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#undo button{background:var(--bg);color:var(--txt);border-radius:999px;padding:6px 16px;font-weight:600;font-size:13.5px;flex:none}
 @media(max-width:600px){header{padding:0 12px;gap:8px;height:58px}.brand{display:none}.side{width:128px;gap:8px;padding:10px 6px 10px 10px}.side .btn{padding:0 8px}.side-top{gap:4px}.side-top .ib{width:28px;height:28px}.chip-ch{padding:8px 10px;font-size:13px}.hero{flex-direction:column;gap:8px}.acts{flex-wrap:wrap}main{padding:8px 12px 32px}.btn{padding:0 16px}.ph .btn{padding:0 12px}.mb,.mh,.mf{padding-left:18px;padding-right:18px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
@@ -553,6 +556,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
  <div class="th-act"><button class="btn out" type="button" id="th-cancel">Cancel</button><button class="btn fill" type="button" id="th-save">Save</button></div>
 </div>
 <div id="toast" role="status" class=""></div>
+<div id="undo" role="status" aria-live="polite"></div>
 <div id="szbadge" style="display: none; left: 1325px; top: 612px;">280 × 216 px</div>
 <header>
  <button class="ib tone" style="background:var(--pc);color:var(--on-pc)" onclick="openModal('settings-modal')" title="Settings" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></button>
@@ -956,6 +960,12 @@ const clamp=(v,a,b)=>Math.min(Math.max(v,a),b);
 let appData,fileHandle=null,handleName='';
 function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
 function showToast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200)}
+/* Undo bar: things that clear something (no confirmation) are put back from here. Several in a row stack, newest first; the bar goes away after 8 seconds */
+const _undo=[];let _undoT=0;
+function showUndo(msg,fn){_undo.push({msg,fn});paintUndo()}
+function paintUndo(){const u=$('undo');clearTimeout(_undoT);if(!_undo.length){u.classList.remove('show');return}
+ const e=_undo[_undo.length-1];u.innerHTML='';const s=el('span');s.textContent=e.msg;const b=el('button');b.type='button';b.textContent='Undo';
+ b.onclick=()=>{if(e.fn()!==false)_undo.pop();paintUndo()};u.append(s,b);u.classList.add('show');_undoT=setTimeout(()=>{_undo.length=0;paintUndo()},8000)}
 let _pT=0,_pD=false;
 function flushLocal(){clearTimeout(_pT);if(!_pD||window.__noFlush)return;_pD=false;try{localStorage.setItem('paano_ba_yan_data',JSON.stringify(appData))}catch(e){}}
 function persistView(){_pD=true;clearTimeout(_pT);_pT=setTimeout(flushLocal,400)}/* view-only changes (which book, chapter or variant is open): kept on this device, never synced */
@@ -1059,6 +1069,7 @@ function switchHubTab(tab) {
 const ISLAND_UI = {
   tz: 'Asia/Manila',                         // clock timezone (PH time, always)
   shiftHours: 9,                             // length of a shift. Breaks are placed inside [Start shift, Start shift + this]; a break outside that window is listed but never alerts
+  alarmMs: 60000,                           // alarm once this long before a tagged break ends / before a scheduled break starts
   lateAfterMs: 3 * 60000,                    // a due-but-untagged break turns from yellow to red after this long
   flashMs: 3000,                             // how long the "Too early" message stays before the schedule view returns
   tooEarlyMsg: 'Too early, Ano ka TL?',      // shown when tagging earlier than the "early limit" setting
@@ -1097,6 +1108,22 @@ const _bell = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 
    imported entries and asks for the next week's schedule. Pass them as importItems(list, { replace, days }). ScheduleImporter.sendToIsland() does all of this.
    Use SmartScheduleManager.importItems([...raw entries...], { replace }) - it accepts loose input (start as '1000', '10:00 AM', 600 minutes;
    an 'end' instead of 'len'; day names in any case) and returns { added, skipped: [{ index, reason }] }. */
+/* ---- alarm: one short 3-beep pattern. If the page is in the background, or the browser has not allowed sound yet, the tab title flashes too ---- */
+const AlarmSound = {
+  ctx: null, _ft: 0, _base: '',
+  unlock() { try { const C = window.AudioContext || window.webkitAudioContext; if (!C) return; if (!this.ctx) this.ctx = new C(); if (this.ctx.state === 'suspended') this.ctx.resume(); } catch (e) {} },
+  ready() { return !!this.ctx && this.ctx.state === 'running'; },
+  beep() { if (!this.ready()) return false; const c = this.ctx, t0 = c.currentTime + 0.03;
+    [[0, 880], [0.3, 880], [0.6, 1175]].forEach(([o, f]) => { const os = c.createOscillator(), g = c.createGain(); os.type = 'sine'; os.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t0 + o); g.gain.exponentialRampToValueAtTime(0.4, t0 + o + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t0 + o + 0.24);
+      os.connect(g); g.connect(c.destination); os.start(t0 + o); os.stop(t0 + o + 0.26); });
+    return true; },
+  flash(msg) { clearInterval(this._ft); const base = this._base || (this._base = document.title); let on = false, n = 0;
+    this._ft = setInterval(() => { on = !on; document.title = on ? '\u23F0 ' + msg : base; if (++n > 60 || (!document.hidden && n > 6)) { clearInterval(this._ft); document.title = base; this._base = ''; } }, 700); },
+  fire(msg) { const played = this.beep(); if (!played || document.hidden) this.flash(msg); }
+};
+['pointerdown', 'keydown', 'touchend'].forEach(ev => addEventListener(ev, () => { if (!AlarmSound.ready()) AlarmSound.unlock(); }, true)); /* any click or key on the page lets the browser play the alarm */
+
 window.SmartScheduleManager = {
   isActive: false, config: null, state: null, level: '', currentStatus: 'idle', currentBreakName: null, activeBreak: null,
   open: '',          // island expansion: '' collapsed | 'alert' | 'panel' (schedule) | 'edit' (schedule editor) | 'back'
@@ -1300,10 +1327,14 @@ window.SmartScheduleManager = {
     return this.state;
   },
   saveState(quiet) { /* quiet = housekeeping only: written here, not stamped and not sent to the other devices */
-    if (!quiet) { this.state.t = Date.now(); this.legacy = false; }
+    if (!quiet) { this.state.t = Date.now() + (window.__srvSkew || 0); this.legacy = false; } /* stamped in server time (see brkListen) so a device with a wrong clock can't win or lose sync */
     try { localStorage.setItem('ataraxia_break_state', JSON.stringify(this.state)); } catch (e) {}
     if (!quiet) this.pushState();
   },
+  /* alarm bookkeeping: which alarms already rang or were acknowledged. Kept on this device, so a reload never repeats one */
+  _seen() { if (!this._sn) { try { this._sn = JSON.parse(localStorage.getItem('ataraxia_alarm_seen') || '{}') || {}; } catch (e) { this._sn = {}; } } return this._sn; },
+  alarmMark(k) { const s = this._seen(); s[k] = Date.now(); const ks = Object.keys(s); if (ks.length > 40) ks.sort((a, b) => s[a] - s[b]).slice(0, ks.length - 40).forEach(x => delete s[x]); try { localStorage.setItem('ataraxia_alarm_seen', JSON.stringify(s)); } catch (e) {} },
+  ackAlarm() { if (this._alarmKey) this.alarmMark(this._alarmKey); }, /* Got it, or a tap on the pill, while a break is coming up / about to end */
   pushState() { if (window.onBreakState) { try { window.onBreakState(this.state); } catch (e) {} } }, /* sync code: sends this to your other devices as it is */
   applyRemote(r) { /* the newest tag / back / shift start made on another device. Last change wins (t = when it was made) */
     const cur = this.loadState(); if (!r || !(+r.t > (cur.t || 0))) return false;
@@ -1438,6 +1469,14 @@ window.SmartScheduleManager = {
     }
     if (this.open === 'remind' && !this._phase) this.open = ''; // tagged back (or the break is gone): the popup goes away
     if (this.open === 'alert' && (vm.mode !== 'due' || this.acked === (this.activeBreak && this.activeBreak.id))) this.open = '';
+    /* ALARM, once per break: 1 minute before a tagged break ends, or before a scheduled break / lunch starts, unless you have acknowledged it (Got it, or a tap on the pill) */
+    let ak = '', am = '';
+    if (t) { const E2 = t.end != null ? t.end : (t.limitAt || t.returnAt || now), R2 = t.returnBy != null ? t.returnBy : E2, nm = t.name || 'Break';
+      if (now >= Math.min(R2, E2 - U.alarmMs)) { ak = 'end|' + t.id + '|' + t.at; if (E2 - now <= U.alarmMs && E2 - (+t.at || 0) > U.alarmMs) am = E2 > now ? nm + ' ends in 1 minute' : nm + ' is over'; } }
+    else if (this.activeBreak && (this.currentStatus === 'pre' || this.currentStatus === 'due')) { const b2 = this.activeBreak, due2 = this.currentStatus === 'due';
+      ak = 'pre|' + b2.id; if (due2 ? this.acked !== b2.id : b2.start - now <= U.alarmMs) am = due2 ? b2.name + ' is due' : b2.name + ' starts in 1 minute'; }
+    this._alarmKey = ak;
+    if (ak && am && !this._seen()[ak]) { this.alarmMark(ak); AlarmSound.fire(am); showToast(am); }
     this._vm = vm; this.render(vm);
     [['set-early', 'earlyLimit']].forEach(([id, k]) => { const i = $(id); if (i && document.activeElement !== i) i.value = cfg[k]; });
   },
@@ -1461,7 +1500,7 @@ window.SmartScheduleManager = {
   bodyHTML(vm) {
     const fl = '<div class="isl-flash" id="isl-fl" hidden></div>', ab = this.activeBreak;
     if (this.open === 'alert' && ab) return '<div class="isl-in"><b>Scheduled ' + escAttr(ab.name.toLowerCase()) + '</b><p class="isl-p">It\u2019s time. Tag out when you start, or acknowledge to minimize.</p><div class="isl-row">' + (this.acked === ab.id ? '' : '<button class="isl-btn" data-a="ack">Acknowledge</button>') + '<button class="isl-btn pri" data-a="tag">Tagged</button></div></div>';
-    if (this.open === 'remind') { const t = this.loadState().tagged; if (t) { const over = this._phase === 'over', nm = escAttr(String(t.name || 'Break')); return '<div class="isl-in"><b>' + (over ? nm + ' is over' : nm + ' ending soon') + '</b><p class="isl-p">' + (over ? 'Your time is up. Tag back as soon as you can.' : 'Make sure to be back by <b>' + this.phFmt(t.returnBy != null ? t.returnBy : t.end) + '</b>.') + '</p><div class="isl-row"><button class="isl-btn pri" data-a="backed">I\u2019m back</button></div></div>'; } }
+    if (this.open === 'remind') { const t = this.loadState().tagged; if (t) { const over = this._phase === 'over', nm = escAttr(String(t.name || 'Break')); return '<div class="isl-in"><b>' + (over ? nm + ' is over' : nm + ' ending soon') + '</b><p class="isl-p">' + (over ? 'Your time is up. Tag back as soon as you can.' : 'Make sure to be back by <b>' + this.phFmt(t.returnBy != null ? t.returnBy : t.end) + '</b>.') + '</p><div class="isl-row"><button class="isl-btn" data-a="gotit">Got it</button><button class="isl-btn pri" data-a="backed">I\u2019m back</button></div></div>'; } }
     if (this.open === 'edit') {
       const T = ISLAND_UI.types, opts = cur => Object.keys(T).map(k => '<option value="' + k + '"' + (k === cur ? ' selected' : '') + '>' + T[k].label + '</option>').join('');
       const row = it => '<div class="isl-er" data-iid="' + escAttr(it.iid) + '"><div class="isl-row"><select class="isl-inp" data-f="type" aria-label="Type">' + opts(it.type) + '</select><input class="isl-inp" data-f="name" placeholder="Name" maxlength="40" value="' + escAttr(it.name) + '" autocomplete="off"><input class="isl-inp tm" data-f="start" placeholder="1000" value="' + escAttr(it.start) + '" autocomplete="off" spellcheck="false" aria-label="Start time"></div>' +
@@ -1490,12 +1529,13 @@ window.SmartScheduleManager = {
     const b = e.target.closest('[data-a]');
     if (b) { const a = b.dataset.a;
       if (a === 'ack' && M.activeBreak) { M.acked = M.activeBreak.id; M.open = ''; M.evaluate(); }
+      else if (a === 'gotit') { M.ackAlarm(); M.open = ''; M.evaluate(); }
       else if (a === 'backed') M.backNow(); else if (a === 'tag') M.tagNow(); else if (a === 'early') M.takeEarly(b.dataset.id);
       else if (a === 'edit') M.openEdit(); else if (a === 'cancel') { M.draft = null; M.open = 'panel'; M.evaluate(); } else if (a === 'save') M.saveSchedule();
       else if (a === 'custom') M.customTag($('isl-cn').value.trim(), $('isl-cm').value);
       else if (a === 'start') M.startShift(); else if (a === 'end') M.endShift(); else if (a === 'import') M.importPasted(); else if (a === 'preview') M.togglePV();
       return; }
-    if (e.target.closest('#isl-pill')) { if (M.err && !M.errSeen) { M.errSeen = true; M.err = ''; } else M.open = M.open ? '' : 'panel'; M.evaluate(); }
+    if (e.target.closest('#isl-pill')) { M.ackAlarm(); if (M.err && !M.errSeen) { M.errSeen = true; M.err = ''; } else M.open = M.open ? '' : 'panel'; M.evaluate(); }
   });
   $('isl-pill').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('isl-pill').click(); } });
   document.addEventListener('click', e => { const path = e.composedPath(); if (M.open === 'panel' && !path.includes(isl) && !path.includes($('isl-pv'))) { M.open = ''; M.evaluate(); } });
@@ -1615,10 +1655,10 @@ function widgetProps(src) {
 /* Quote Formatter: rebuilds amounts that were pasted as "$ / 4,242 / .25", keeps related lines together */
 function cleanQuote(raw) {
   let t = String(raw || '').replace(/\r\n?/g, '\n').replace(/\u00a0/g, ' ');
-  t = t.replace(/\$\s+(?=[\d.])/g, '$');                                   // "$" then the number on the next line
-  t = t.replace(/(\$[\d,]+)\s*\n\s*\.\s*(\d{2})(?!\d)/g, '$1.$2');          // ".25" cents on the next line
-  t = t.replace(/(\$[\d,]+\.\d{2})[ \t]*\n+[ \t]*(for\s[^\n$]+)/gi, '$1 $2'); // "for 6-month policy"
-  t = t.replace(/(\$[\d,]+\.\d{2})[ \t]*\n+[ \t]*\/\s*([a-z]+)/gi, '$1 / $2'); // "/ month"
+  t = t.replace(/\$\s*(-|\u2212)?\s*(?=[\d.])/g, (m, neg) => (neg ? '-$' : '$')); // "$" then the number on the next line; "$ / -1" becomes "-$1"
+  t = t.replace(/(-?\$[\d,]+)\s*\n\s*\.\s*(\d{2})(?!\d)/g, '$1.$2');          // ".25" cents on the next line
+  t = t.replace(/(-?\$[\d,]+\.\d{2})[ \t]*\n+[ \t]*(for\s[^\n$]+)/gi, '$1 $2'); // "for 6-month policy"
+  t = t.replace(/(-?\$[\d,]+\.\d{2})[ \t]*\n+[ \t]*\/\s*([a-z]+)/gi, '$1 / $2'); // "/ month"
   const lines = t.split('\n').map(l => l.replace(/[ \t]+/g, ' ').trim());
   const out = [];
   for (let i = 0; i < lines.length; i++) {
@@ -1626,7 +1666,7 @@ function cleanQuote(raw) {
     if (!out.length || out[out.length - 1] === '') continue;               // leading and repeated blank lines
     let j = i + 1; while (j < lines.length && lines[j] === '') j++;
     if (j >= lines.length) continue;                                       // trailing blank lines
-    if (out[out.length - 1].startsWith('$') && lines[j].startsWith('$')) continue; // amounts stay on consecutive lines
+    if (/^-?\$/.test(out[out.length - 1]) && /^-?\$/.test(lines[j])) continue; // amounts stay on consecutive lines
     out.push('');                                                          // one blank line between sections
   }
   return out.join('\n');
@@ -2584,16 +2624,15 @@ function docIndex(){const cn={};appData.containers.forEach(k=>{cn[k.id]=k.name})
 function docSearch(q){const t=q.toLowerCase().split(/\s+/).filter(Boolean);if(!t.length)return[];
  return docIndex().filter(e=>t.every(w=>e.hay.includes(w))).map(e=>({e,s:t.filter(w=>e.th.includes(w)).length})).sort((a,b)=>b.s-a.s||a.e.ci-b.e.ci).map(x=>x.e)}
 
-function chatHasInput(chat,p){return Object.values(p.vv).some(v=>Object.values(v).some(x=>x!==chat.name))}
 function chatCard(chat,p,root){
  const card=el('div','cp'),h=el('div','cp-h'),t=el('div','cp-t');t.textContent=p.title;
  const cp=el('button','btn tone',ic('copy')+'<span>Copy</span>');cp.title='Copy this note';cp.setAttribute('aria-label','Copy '+p.title);
  cp.onclick=()=>{const r=composeSpiel(p);copyText(r.text,r.blank?'Copied. '+r.blank+(r.blank>1?' variables are':' variable is')+' still blank.':'Copied to clipboard.')};
  const ed=el('button','ib sm',ic('pen'));ed.title='Edit the template';ed.setAttribute('aria-label','Edit template '+p.title);
  ed.onclick=()=>{if(appData.pages.some(x=>x.id===p.src))openEditPageModal(p.src);else showToast('The original template no longer exists.')};
- const rm=el('button','ib sm',CHAT_X);rm.title='Remove from this chat';rm.setAttribute('aria-label','Remove '+p.title+' from this chat');
- rm.onclick=async()=>{if(chatHasInput(chat,p)&&!await askConfirm('Remove this template and what you filled in?','Remove'))return;
-  delete varVals[p.id];chat.pages=chat.pages.filter(x=>x!==p);chatSave();card.remove();if(!chat.pages.length&&root._body)root._body()};
+ const rm=el('button','ib sm',ic('trash'));rm.title='Clear this template';rm.setAttribute('aria-label','Clear '+p.title);
+ rm.onclick=()=>{const i=chat.pages.indexOf(p);if(i<0)return;chat.pages.splice(i,1);chatSave();card.remove();if(!chat.pages.length&&root._body)root._body();
+  showUndo('Template cleared',()=>{if(chat.pages.indexOf(p)<0){chat.pages.splice(Math.min(i,chat.pages.length),0,p);chatSave();const r=document.querySelector('.chat[data-id="'+chat.id+'"]');if(r&&r._body)r._body()}})};
  h.append(t,cp,ed,rm);card.append(h);
  if(p.variants&&p.variants.length>1){const vb=el('div','cp-v');
   p.variants.forEach((v,i)=>{const b=el('button',i===(p.activeVariant||0)?'on':'');b.type='button';b.textContent=v.title;
@@ -2606,7 +2645,8 @@ function chatEl(chat,idx){
  const nm=el('input','chat-name');nm.type='text';nm.placeholder='Customer name';nm.value=chat.name;nm.maxLength=80;nm.spellcheck=false;nm.autocomplete='off';nm.setAttribute('aria-label','Customer name for chat '+(idx+1));
  nm.oninput=()=>chatRename(chat,root,nm.value.trim());
  const x=el('button','ib sm',CHAT_X);x.title='Close this chat';x.setAttribute('aria-label','Close chat '+(idx+1));x.onclick=()=>closeChat(chat);
- h.append(lb,nm,x);
+ const tr=el('button','ib sm',ic('trash'));tr.title='Clear this chat';tr.setAttribute('aria-label','Clear chat '+(idx+1));tr.onclick=()=>clearChat(chat);
+ h.append(lb,nm,tr,x);
  const s=el('div','chat-s'),si=el('input');si.type='text';si.autocomplete='off';si.spellcheck=false;si.placeholder='Search templates (e.g. vehicle, payment)';si.setAttribute('aria-label','Search documentation for chat '+(idx+1));s.append(si);
  const res=el('div','chat-res');res.hidden=true;
  const body=el('div','chat-body'),ui=chatUI[chat.id]||(chatUI[chat.id]={sel:0,list:[]});
@@ -2631,9 +2671,13 @@ function renderChats(){const box=$('chats');box.innerHTML='';
 function addChat(){if(chats.length>=CHAT_MAX){showToast('Up to '+CHAT_MAX+' chats at once. Close one first.');return}
  const c={id:'c'+rid(),name:'',pages:[]};chats.push(c);chatSave();renderHero();renderChats();
  const n=document.querySelector('.chat[data-id="'+c.id+'"] .chat-name');if(n)n.focus()}
-async function closeChat(chat){
- if((chat.name||chat.pages.length)&&!await askConfirm('Close this chat? Everything you filled in here will be cleared.','Close chat'))return;
- chat.pages.forEach(p=>delete varVals[p.id]);chats=chats.filter(c=>c!==chat);delete chatUI[chat.id];chatSave();renderHero();renderChats()}
+function clearChat(chat){/* empties the chat (customer name and every template) but keeps the window */
+ if(!chat.name&&!chat.pages.length){showToast('This chat is already empty.');return}
+ const snap={name:chat.name,pages:chat.pages};chat.name='';chat.pages=[];chatSave();renderChats();
+ showUndo('Chat cleared',()=>{chat.name=chat.name||snap.name;chat.pages=snap.pages.concat(chat.pages);chatSave();renderChats()})}
+function closeChat(chat){const i=chats.indexOf(chat);if(i<0)return;chats.splice(i,1);chatSave();renderHero();renderChats();
+ showUndo('Chat closed',()=>{if(chats.length>=CHAT_MAX){showToast('All '+CHAT_MAX+' chat slots are in use. Close another chat first.');return false}
+  chats.splice(Math.min(i,chats.length),0,chat);chatSave();renderHero();renderChats()})}
 
 function fmtDate(d){return d.length>4?d.slice(0,2)+'/'+d.slice(2,4)+'/'+d.slice(4):d.length>2?d.slice(0,2)+'/'+d.slice(2):d}
 function caretOff(v){const s=getSelection();if(!s.rangeCount||!v.contains(s.anchorNode))return null;const r=s.getRangeAt(0).cloneRange();r.selectNodeContents(v);r.setEnd(s.anchorNode,s.anchorOffset);return r.toString().length}
@@ -2903,7 +2947,7 @@ async function logout(){if(!uid)return;if(rd(KD)===uid)await push();
 const brkRef=()=>uref('brk');let brkUnsub=null,brkErr=false;
 function brkFail(e){if(/PERMISSION/i.test(((e&&e.code)||'')+((e&&e.message)||''))&&!brkErr){brkErr=true;toast('Break sync was blocked by your Firebase database rules. Allow the "brk" child under your user.');if(window.SmartScheduleManager)SmartScheduleManager.syncNote('Break sync blocked by database rules')}}
 function brkPush(s){if(!uid||!DB)return;
- try{DB.set(brkRef(),JSON.parse(JSON.stringify({shiftStart:s.shiftStart||0,tagged:s.tagged||null,done:s.done||[],t:s.t||Date.now(),dev:DEV}))).catch(brkFail)}catch(e){brkFail(e)}}
+ try{DB.set(brkRef(),JSON.parse(JSON.stringify({shiftStart:s.shiftStart||0,tagged:s.tagged||null,done:s.done||[],t:s.t||(Date.now()+(window.__srvSkew||0)),dev:DEV}))).catch(brkFail)}catch(e){brkFail(e)}}
 window.onBreakState=brkPush;
 function brkHandle(r){const M=window.SmartScheduleManager;if(!M)return;const L=M.loadState();
  if(!r){if(L.shiftStart||L.tagged)M.pushState();return}/* nothing in the cloud yet: this device's progress becomes the first copy */
@@ -2913,7 +2957,10 @@ function brkHandle(r){const M=window.SmartScheduleManager;if(!M)return;const L=M
   L.t=Math.max(+r.t||0,L.t||0)+1;M.legacy=false;M.saveState(true);M.pushState();return}
  if(+r.t>(L.t||0))M.applyRemote(r);
  else if((L.t||0)>+r.t&&r.dev!==DEV)M.pushState()}/* this device has a newer change the cloud missed (made offline) */
-function brkListen(){if(brkUnsub)brkUnsub();brkUnsub=DB.onValue(brkRef(),s=>brkHandle(s.val()),brkFail)}
+let skewUnsub=null;
+function brkListen(){if(brkUnsub)brkUnsub();if(skewUnsub)skewUnsub();
+ try{skewUnsub=DB.onValue(DB.ref(db,'.info/serverTimeOffset'),s=>{window.__srvSkew=+s.val()||0})}catch(e){}/* server clock minus this device's clock */
+ brkUnsub=DB.onValue(brkRef(),s=>brkHandle(s.val()),brkFail)}
 function brkRefresh(){if(uid&&DB)DB.get(brkRef()).then(s=>brkHandle(s.val())).catch(()=>{})}/* when the phone wakes up or comes back online */
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)brkRefresh()});addEventListener('online',brkRefresh);
 window.onPersist=()=>{if(uid&&!applying){edits++;wr(KD,uid);setSync('Waiting to sync…');clearTimeout(pushT);pushT=setTimeout(push,1500)}fsSoon()};
