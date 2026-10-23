@@ -241,7 +241,7 @@ body.edit .rz{display:block}
 .mi:disabled{opacity:.45;cursor:default}
 .menu-label{padding:7px 12px 5px;color:var(--mut);font-size:11.5px;max-width:270px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .menu-sep{height:1px;background:var(--line);margin:5px 6px}
-.side-top{flex-wrap:wrap}.side-top>#paste-chapter-btn{flex-basis:100%;height:30px;font-size:12px}
+.paste-action{flex:none}.paste-action[hidden]{display:none}
 .btn:active:not(:disabled),.ib:active:not(:disabled){transform:scale(.97)}
 .card.copy-ok{animation:copy-ring .55s ease-out}
 .paste-destination{color:var(--mut);font-size:13px;overflow-wrap:anywhere}
@@ -686,7 +686,7 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
  <aside class="side">
   <div class="side-top">
    <button class="btn tone sm" onclick="openAddChapterModal()">+ Chapter</button>
-   <button class="btn out sm" id="paste-chapter-btn" onclick="startPaste('chapter')" title="Paste a chapter into this book">Paste chapter</button>
+   <button type="button" class="ib paste-action" id="paste-chapter-btn" onclick="startPaste('chapter')" title="Paste chapter into this book" aria-label="Paste chapter"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg></button>
   </div>
   <nav id="chs" aria-label="Chapters"><button class="chip-ch on" title="General">General</button><button class="chip-ch" title="Billing">Billing</button></nav>
  </aside>
@@ -698,7 +698,7 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
    </div>
    <div class="acts" id="hacts"><button class="btn xs fill">Edit info</button><div class="dd"><button class="ib sm" title="More" aria-label="More chapter actions"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-ch"><button class="mi" title="Paste a copied page into this chapter"><svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>Paste page</button><button class="mi" title="Copy this chapter and its pages so you can paste it into any book"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy chapter</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate chapter</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete chapter</button></div></div></div>
   </section>
-  <div class="ph"><h2><button type="button" class="ph-search" id="ph-search" title="Search every page (press /)" aria-label="Search" onclick="window.openSearch&amp;&amp;window.openSearch()"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button><span class="pt on" id="pt-ws" role="button" tabindex="0" title="Your chapter workspace" onclick="closeTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeTools()}">Workspace</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-tools" role="button" tabindex="0" title="Your widgets, available from any chapter" onclick="openTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTools()}">Tools</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-docs" role="button" tabindex="0" title="Your documentation, available from any book" onclick="openDocs()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocs()}">Documentation</span><span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button class="btn out" id="paste-main-btn" onclick="startPaste('page')" title="Paste the page copied in this tab. Right-click for more actions; Shift + right-click opens the browser menu.">Paste page</button><button class="btn out" id="paste-board-btn" onclick="startPaste('board')" title="Paste a whole board with its pages into this chapter">Paste board</button><button class="btn tone" id="add-board-btn" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" id="add-main-btn" onclick="openAddHubModal()">+ Add</button><div class="pt-sub" id="pt-sub" hidden></div></div>
+  <div class="ph"><h2><button type="button" class="ph-search" id="ph-search" title="Search every page (press /)" aria-label="Search" onclick="window.openSearch&amp;&amp;window.openSearch()"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button><span class="pt on" id="pt-ws" role="button" tabindex="0" title="Your chapter workspace" onclick="closeTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeTools()}">Workspace</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-tools" role="button" tabindex="0" title="Your widgets, available from any chapter" onclick="openTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTools()}">Tools</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-docs" role="button" tabindex="0" title="Your documentation, available from any book" onclick="openDocs()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocs()}">Documentation</span><span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button type="button" class="ib paste-action" id="paste-main-btn" onclick="startPaste()" title="Paste page, board or chapter" aria-label="Paste page, board or chapter"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg></button><button class="btn tone" id="add-board-btn" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" id="add-main-btn" onclick="openAddHubModal()">+ Add</button><div class="pt-sub" id="pt-sub" hidden></div></div>
   <div class="empty" id="ws-empty" hidden="">No pages yet. Use + Add to create one, or + Board for a board.</div>
   <div id="chats" hidden></div>
   <div id="ws"><div id="wsc" data-zone="" class="" style="height: 400px; min-width: max(100%, 664px);"></div></div>
@@ -1055,7 +1055,7 @@ function ensureDocs(){/* first run only: fills Documentation. Pages you delete s
 function syncPh(){const t=appData.activeChapterId===TOOLS_ID,d=isDoc(appData.activeChapterId),w=!t&&!d;
  [['pt-ws',w],['pt-tools',t],['pt-docs',d]].forEach(([id,on])=>{$(id).classList.toggle('on',on);$(id).setAttribute('aria-pressed',String(on))});
  const k=appData.activeChapterId===DOC_CHATS_ID;/* Chats: + Add becomes + Chat, no boards, no move mode */
- $('paste-board-btn').hidden=t||k;$('paste-main-btn').hidden=k;$('paste-main-btn').textContent=t?'Paste widget':'Paste page';$('add-board-btn').style.display=(t||k)?'none':'';$('add-main-btn').textContent=k?'+ Chat':'+ Add';$('edit-toggle').style.display=k?'none':'';
+ $('paste-main-btn').hidden=k;$('paste-main-btn').title=t?'Paste widget':'Paste page, board or chapter';$('paste-main-btn').setAttribute('aria-label',$('paste-main-btn').title);$('add-board-btn').style.display=(t||k)?'none':'';$('add-main-btn').textContent=k?'+ Chat':'+ Add';$('edit-toggle').style.display=k?'none':'';
  const sub=$('pt-sub');sub.hidden=!d;sub.innerHTML='';/* second row, only inside Documentation: Notations | What if */
  if(d)DOC_CHAPS.forEach((c,i)=>{if(i)sub.append(el('span','pt-sep'));const b=el('span','pt'+(c.id===appData.activeChapterId?' on':''));b.textContent=c.name;b.setAttribute('role','button');b.tabIndex=0;b.title=c.description;
   b.onclick=()=>openDocChapter(c.id);b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDocChapter(c.id)}};sub.append(b)});
@@ -2963,7 +2963,7 @@ function rid(){return Date.now()+'_'+Math.random().toString(36).slice(2,6)}
 function copyPageData(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
  return copyStructure(Object.assign({app:CLIP_TAG,type:'page',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p)))}
 async function copyStructure(o){const t=JSON.stringify(o);appClipboard=t;const ok=await writeClipboard(t);
- const hints={page:'Use Paste page or right-click a board.',board:'Use Paste board in the destination chapter.',chapter:'Use Paste chapter below + Chapter.'};
+ const hints={page:'Use Paste page or right-click a board.',board:'Use Paste board in the destination chapter.',chapter:'Use Paste chapter beside + Chapter.'};
  if(appClipboard===t)showToast(o.type[0].toUpperCase()+o.type.slice(1)+' copied. '+(ok?'':'Available in this tab. ')+hints[o.type]);return true}
 function copyBoardData(id){const c=appData.containers.find(c=>c.id===id);if(!c)return;
  return copyStructure({app:CLIP_TAG,type:'board',ver:1,name:c.name,w:c.w,h:c.h,border:c.border||'',bg:c.bg||'',
@@ -3006,7 +3006,7 @@ async function startPaste(kind='auto',target={},fromSystem=false){closeMenus();c
 function confirmPaste(){if(applyPaste($('paste-input').value,pasteKind,pasteDestination))closeModal('paste-modal')}
 function applyPaste(t,kind='auto',target=getPasteTarget()){const o=parseClip(t);target=target||getPasteTarget();
  if(!o){showToast('Use Copy page, Copy board or Copy chapter first. This is not valid template data.');return false}
- if(kind!=='auto'&&o.type!==kind){showToast('This is a '+o.type+'. Choose Paste '+o.type+(o.type==='chapter'?' below + Chapter.':' in the workspace.'));return false}
+ if(kind!=='auto'&&o.type!==kind){showToast('This is a '+o.type+'. Choose Paste '+o.type+(o.type==='chapter'?' beside + Chapter.':' in the workspace.'));return false}
  if(!appData.books.some(b=>b.id===target.bookId)){showToast('The destination book no longer exists.');return false}
  if(o.type==='board'){
   const c=appData.chapters.find(c=>c.id===target.chapterId&&c.bookId===target.bookId)||DOC_LIB.find(c=>c.id===target.chapterId);

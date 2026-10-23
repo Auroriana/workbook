@@ -32,8 +32,13 @@ async function app(t,options={}){
 
 test('visible paste controls and right-click copy distinguish text from pages',async t=>{
  const p=await app(t);
- assert.equal(await p.locator('#paste-main-btn').innerText(),'Paste page');
- assert.equal(await p.locator('#paste-chapter-btn').innerText(),'Paste chapter');
+ assert.equal(await p.locator('#paste-main-btn').innerText(),'');
+ assert.equal(await p.locator('#paste-main-btn').getAttribute('aria-label'),'Paste page, board or chapter');
+ assert.equal(await p.locator('#paste-main-btn svg').count(),1);
+ assert.equal(await p.locator('#paste-board-btn').count(),0);
+ assert.equal(await p.locator('#paste-chapter-btn').innerText(),'');
+ assert.equal(await p.locator('#paste-chapter-btn').getAttribute('aria-label'),'Paste chapter');
+ assert.equal(await p.locator('#paste-chapter-btn svg').count(),1);
  const card=p.locator('.card').first();
  const expected=await card.locator('.cc').innerText();
  await card.click({button:'right',position:{x:20,y:20}});
@@ -264,7 +269,7 @@ test('right-click copies a whole board and pastes its layout into another chapte
  assert.deepEqual(pasted.pages,[{title:'Cancellation',content:'Cancellation: XXX',x:2,y:2,w:40,h:20,active:1,variants:[{title:'Renewal',content:'Renewal: XXX'},{title:'Cancellation',content:'Cancellation: XXX'}],widget:null},{title:'Quote formatter',content:'',x:44,y:2,w:40,h:30,active:0,variants:null,widget:'formatter'}]);
  assert.equal(pasted.fresh,true);
  assert.equal(await p.evaluate(()=>JSON.stringify({board:appData.containers.find(c=>c.id==='source-board'),pages:appData.pages.filter(p=>p.containerId==='source-board')})),original);
- await p.locator('#paste-board-btn').click();
+ await p.locator('#paste-main-btn').click();
  assert.equal(await p.evaluate(()=>getCons().filter(c=>c.name==='Insurance templates').length),2);
  assert.equal(await p.evaluate(()=>new Set(appData.pages.map(p=>p.id)).size===appData.pages.length),true);
 });
@@ -276,7 +281,7 @@ test('board menu supports empty boards and manual clipboard paste',async t=>{
  await p.locator('#menu-empty-board').getByRole('menuitem',{name:'Copy board',exact:true}).click();
  const clip=await p.evaluate(()=>navigator.clipboard.readText());
  await p.evaluate(()=>{appClipboard=null;Object.defineProperty(navigator.clipboard,'readText',{configurable:true,value:()=>Promise.reject(new Error('Denied'))})});
- await p.locator('#paste-board-btn').click();
+ await p.locator('#paste-main-btn').click();
  await p.locator('#paste-input').fill(clip);
  await p.locator('#paste-modal').getByRole('button',{name:'Paste',exact:true}).click();
  assert.equal(await p.evaluate(()=>getCons().filter(c=>c.name==='Empty board').length),2);
