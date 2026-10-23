@@ -698,7 +698,7 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
    </div>
    <div class="acts" id="hacts"><button class="btn xs fill">Edit info</button><div class="dd"><button class="ib sm" title="More" aria-label="More chapter actions"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-ch"><button class="mi" title="Paste a copied page into this chapter"><svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>Paste page</button><button class="mi" title="Copy this chapter and its pages so you can paste it into any book"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy chapter</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate chapter</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete chapter</button></div></div></div>
   </section>
-  <div class="ph"><h2><button type="button" class="ph-search" id="ph-search" title="Search every page (press /)" aria-label="Search" onclick="window.openSearch&amp;&amp;window.openSearch()"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button><span class="pt on" id="pt-ws" role="button" tabindex="0" title="Your chapter workspace" onclick="closeTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeTools()}">Workspace</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-tools" role="button" tabindex="0" title="Your widgets, available from any chapter" onclick="openTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTools()}">Tools</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-docs" role="button" tabindex="0" title="Your documentation, available from any book" onclick="openDocs()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocs()}">Documentation</span><span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button class="btn out" id="paste-main-btn" onclick="startPaste('page')" title="Paste the page copied in this tab. Right-click for more actions; Shift + right-click opens the browser menu.">Paste page</button><button class="btn tone" id="add-board-btn" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" id="add-main-btn" onclick="openAddHubModal()">+ Add</button><div class="pt-sub" id="pt-sub" hidden></div></div>
+  <div class="ph"><h2><button type="button" class="ph-search" id="ph-search" title="Search every page (press /)" aria-label="Search" onclick="window.openSearch&amp;&amp;window.openSearch()"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button><span class="pt on" id="pt-ws" role="button" tabindex="0" title="Your chapter workspace" onclick="closeTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeTools()}">Workspace</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-tools" role="button" tabindex="0" title="Your widgets, available from any chapter" onclick="openTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTools()}">Tools</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-docs" role="button" tabindex="0" title="Your documentation, available from any book" onclick="openDocs()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocs()}">Documentation</span><span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button class="btn out" id="paste-main-btn" onclick="startPaste('page')" title="Paste the page copied in this tab. Right-click for more actions; Shift + right-click opens the browser menu.">Paste page</button><button class="btn out" id="paste-board-btn" onclick="startPaste('board')" title="Paste a whole board with its pages into this chapter">Paste board</button><button class="btn tone" id="add-board-btn" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" id="add-main-btn" onclick="openAddHubModal()">+ Add</button><div class="pt-sub" id="pt-sub" hidden></div></div>
   <div class="empty" id="ws-empty" hidden="">No pages yet. Use + Add to create one, or + Board for a board.</div>
   <div id="chats" hidden></div>
   <div id="ws"><div id="wsc" data-zone="" class="" style="height: 400px; min-width: max(100%, 664px);"></div></div>
@@ -828,7 +828,7 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
 <div class="ov" id="paste-modal"><div class="modal">
  <div class="mh"><span id="paste-modal-title">Paste</span></div>
  <div class="mb">
-  <p class="hint" id="paste-help" style="margin:0">Paste a copied page or chapter below. Use Copy text on a template to send its response to your chat.</p>
+  <p class="hint" id="paste-help" style="margin:0">Paste a copied page, board or chapter below. Use Copy text on a template to send its response to your chat.</p>
   <p class="paste-destination" id="paste-destination"></p>
   <textarea id="paste-input" placeholder="Paste the copied data here..."></textarea>
  </div>
@@ -1055,7 +1055,7 @@ function ensureDocs(){/* first run only: fills Documentation. Pages you delete s
 function syncPh(){const t=appData.activeChapterId===TOOLS_ID,d=isDoc(appData.activeChapterId),w=!t&&!d;
  [['pt-ws',w],['pt-tools',t],['pt-docs',d]].forEach(([id,on])=>{$(id).classList.toggle('on',on);$(id).setAttribute('aria-pressed',String(on))});
  const k=appData.activeChapterId===DOC_CHATS_ID;/* Chats: + Add becomes + Chat, no boards, no move mode */
- $('paste-main-btn').hidden=k;$('paste-main-btn').textContent=t?'Paste widget':'Paste page';$('add-board-btn').style.display=(t||k)?'none':'';$('add-main-btn').textContent=k?'+ Chat':'+ Add';$('edit-toggle').style.display=k?'none':'';
+ $('paste-board-btn').hidden=t||k;$('paste-main-btn').hidden=k;$('paste-main-btn').textContent=t?'Paste widget':'Paste page';$('add-board-btn').style.display=(t||k)?'none':'';$('add-main-btn').textContent=k?'+ Chat':'+ Add';$('edit-toggle').style.display=k?'none':'';
  const sub=$('pt-sub');sub.hidden=!d;sub.innerHTML='';/* second row, only inside Documentation: Notations | What if */
  if(d)DOC_CHAPS.forEach((c,i)=>{if(i)sub.append(el('span','pt-sep'));const b=el('span','pt'+(c.id===appData.activeChapterId?' on':''));b.textContent=c.name;b.setAttribute('role','button');b.tabIndex=0;b.title=c.description;
   b.onclick=()=>openDocChapter(c.id);b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDocChapter(c.id)}};sub.append(b)});
@@ -2542,9 +2542,11 @@ function buildBox(c,pages){const box=el('section','cbox fi'),bar=el('div','cbar'
  const ed=el('button','ib sm',ic('pen'));ed.title='Edit board';ed.setAttribute('aria-label','Edit board');ed.onclick=()=>openEditContainerModal(c.id);
  const dd=el('div','dd'),db=el('button','ib sm',ic('dots')),m=el('div','menu');m.id='menu-'+c.id;db.title='More';db.setAttribute('aria-label','More board actions');db.onclick=e=>{e.stopPropagation();toggleDropdown(c.id,db)};
  const pa=el('button','mi',ic('paste')+'Paste page here');pa.onclick=()=>startPaste('page',{chapterId:c.chapterId,containerId:c.id});
+ const cb=el('button','mi',ic('copy')+'Copy board');cb.onclick=()=>copyBoardData(c.id);
+ const pb=el('button','mi',ic('paste')+'Paste board into this chapter');pb.onclick=()=>startPaste('board',{chapterId:c.chapterId});
  const ad=el('button','mi',ic('plus')+'Add page here');ad.onclick=()=>openAddPageModal(c.id);
  const de=el('button','mi del',ic('trash')+'Delete board');de.onclick=()=>deleteContainer(c.id);
- m.append(ad,pa,de);dd.append(db,m);bar.append(mv,nm,cn,ed,dd);
+ m.append(ad,pa,cb,pb,de);dd.append(db,m);bar.append(mv,nm,cn,ed,dd);
  can.dataset.zone=c.id;
  if(!pages.length)can.append(el('div','bempty','Drag pages here, or use the menu to add one.'));
  pages.forEach(p=>{const n=buildCard(p);nodes.set(p.id,n);can.append(n)});
@@ -2961,7 +2963,11 @@ function rid(){return Date.now()+'_'+Math.random().toString(36).slice(2,6)}
 function copyPageData(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
  return copyStructure(Object.assign({app:CLIP_TAG,type:'page',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p)))}
 async function copyStructure(o){const t=JSON.stringify(o);appClipboard=t;const ok=await writeClipboard(t);
- if(appClipboard===t)showToast((o.type==='page'?'Page':'Chapter')+' copied. '+(ok?'':'Available in this tab. ')+(o.type==='page'?'Use Paste page or right-click a board.':'Use Paste chapter below + Chapter.'));return true}
+ const hints={page:'Use Paste page or right-click a board.',board:'Use Paste board in the destination chapter.',chapter:'Use Paste chapter below + Chapter.'};
+ if(appClipboard===t)showToast(o.type[0].toUpperCase()+o.type.slice(1)+' copied. '+(ok?'':'Available in this tab. ')+hints[o.type]);return true}
+function copyBoardData(id){const c=appData.containers.find(c=>c.id===id);if(!c)return;
+ return copyStructure({app:CLIP_TAG,type:'board',ver:1,name:c.name,w:c.w,h:c.h,border:c.border||'',bg:c.bg||'',
+ pages:appData.pages.filter(p=>p.chapterId===c.chapterId&&p.containerId===c.id).map(p=>Object.assign({x:p.x,y:p.y},clipPageProps(p)))})}
 function chapterClip(id){const c=appData.chapters.find(x=>x.id===id);if(!c)return null;
  const cons=appData.containers.filter(k=>k.chapterId===id);
  return {app:CLIP_TAG,type:'chapter',ver:2,name:c.name,description:c.description||'',referenceLink:c.referenceLink||'',
@@ -2972,11 +2978,12 @@ function validPageClip(p){return p&&typeof p==='object'&&typeof p.title==='strin
  (!p.variants||(Array.isArray(p.variants)&&p.variants.every(v=>v&&typeof v.title==='string'&&typeof v.content==='string')))}
 function validChapterClip(c){return c&&typeof c==='object'&&typeof c.name==='string'&&Array.isArray(c.pages)&&c.pages.every(validPageClip)&&
  (!c.containers||(Array.isArray(c.containers)&&c.containers.every(k=>k&&typeof k==='object')))}
+function validBoardClip(c){return c&&typeof c==='object'&&typeof c.name==='string'&&Array.isArray(c.pages)&&c.pages.every(validPageClip)}
 function clipPageProps(p){const variants=Array.isArray(p.variants)&&p.variants.length?structuredClone(p.variants):null;
  const activeVariant=variants&&Number.isInteger(p.activeVariant)&&p.activeVariant>=0&&p.activeVariant<variants.length?p.activeVariant:0;
  return Object.assign({title:variants?variants[activeVariant].title:p.title||'Untitled',content:variants?variants[activeVariant].content:p.content||'',variants,activeVariant,
  w:num(p.w)===undefined?undefined:clamp(num(p.w),MIN_PW,MAX_U),h:num(p.h)===undefined?undefined:clamp(num(p.h),MIN_PH,MAX_U)},widgetProps(p))}
-function parseClip(t){try{const o=JSON.parse(t);return o&&o.app===CLIP_TAG&&((o.type==='page'&&validPageClip(o))||(o.type==='chapter'&&validChapterClip(o)))?o:null}catch(e){return null}}
+function parseClip(t){try{const o=JSON.parse(t);return o&&o.app===CLIP_TAG&&((o.type==='page'&&validPageClip(o))||(o.type==='board'&&validBoardClip(o))||(o.type==='chapter'&&validChapterClip(o)))?o:null}catch(e){return null}}
 /* builds one chapter (with its boards and pages) from a copied-chapter object and returns its id */
 function addChapterFromClip(o,bookId){
  const nid='c_'+rid();
@@ -2988,8 +2995,8 @@ function addChapterFromClip(o,bookId){
 let pasteKind='auto',pasteDestination=null;
 function getPasteTarget(target={}){return {bookId:target.bookId??appData.activeBookId,chapterId:target.chapterId??appData.activeChapterId,containerId:target.containerId||''}}
 function describePasteTarget(target){const c=appData.chapters.find(c=>c.id===target.chapterId)||DOC_CHAPS.find(c=>c.id===target.chapterId)||(target.chapterId===TOOLS_ID?TOOLS_CHAP:null),b=appData.books.find(b=>b.id===target.bookId),board=appData.containers.find(c=>c.id===target.containerId);
- return 'Pages → '+(c?c.name:'select a chapter')+(board?' / '+board.name:'')+' · Chapters → '+(b?b.name:'select a book')}
-function openPasteDialog(kind,target,text=''){pasteKind=kind;pasteDestination=target;$('paste-modal-title').textContent=kind==='auto'?'Paste page or chapter':'Paste '+kind;
+ return 'Pages → '+(c?c.name:'select a chapter')+(board?' / '+board.name:'')+' · Boards → '+(c?c.name:'select a chapter')+' · Chapters → '+(b?b.name:'select a book')}
+function openPasteDialog(kind,target,text=''){pasteKind=kind;pasteDestination=target;$('paste-modal-title').textContent=kind==='auto'?'Paste page, board or chapter':'Paste '+kind;
  $('paste-destination').textContent=describePasteTarget(target);$('paste-input').value=text;openModal('paste-modal');setTimeout(()=>$('paste-input').focus(),30)}
 async function startPaste(kind='auto',target={},fromSystem=false){closeMenus();const dest=getPasteTarget(target),cached=parseClip(appClipboard);
  if(!fromSystem&&cached&&(kind==='auto'||kind===cached.type))return applyPaste(appClipboard,kind,dest);
@@ -2998,9 +3005,17 @@ async function startPaste(kind='auto',target={},fromSystem=false){closeMenus();c
  openPasteDialog(kind,dest,t||'')}
 function confirmPaste(){if(applyPaste($('paste-input').value,pasteKind,pasteDestination))closeModal('paste-modal')}
 function applyPaste(t,kind='auto',target=getPasteTarget()){const o=parseClip(t);target=target||getPasteTarget();
- if(!o){showToast('Use Copy page or Copy chapter first. This is not valid template data.');return false}
- if(kind!=='auto'&&o.type!==kind){showToast(o.type==='page'?'This is a page. Choose Paste page in the workspace.':'This is a chapter. Choose Paste chapter below + Chapter.');return false}
+ if(!o){showToast('Use Copy page, Copy board or Copy chapter first. This is not valid template data.');return false}
+ if(kind!=='auto'&&o.type!==kind){showToast('This is a '+o.type+'. Choose Paste '+o.type+(o.type==='chapter'?' below + Chapter.':' in the workspace.'));return false}
  if(!appData.books.some(b=>b.id===target.bookId)){showToast('The destination book no longer exists.');return false}
+ if(o.type==='board'){
+  const c=appData.chapters.find(c=>c.id===target.chapterId&&c.bookId===target.bookId)||DOC_LIB.find(c=>c.id===target.chapterId);
+  if(!c){showToast('Select a workspace or documentation chapter for this board.');return false}
+  // Boards are siblings in a chapter; a board target never nests the copied board.
+  const board={id:'k_'+rid(),chapterId:c.id,name:o.name||'Board',w:Math.max(num(o.w)||DEF_BW,MIN_BW),h:Math.max(num(o.h)||DEF_BH,MIN_BH),border:hex(o.border),bg:hex(o.bg)};
+  const pages=o.pages.map(p=>Object.assign({id:'p_'+rid(),chapterId:c.id,containerId:board.id,x:num(p.x),y:num(p.y)},clipPageProps(p)));
+  appData.containers.push(board);appData.pages.push(...pages);appData.activeBookId=target.bookId;appData.activeChapterId=c.id;
+  persistLocal();renderAll();revealNode(board.id);showToast('Board pasted into '+c.name+'.');return true}
  if(o.type==='page'){
   const c=appData.chapters.find(c=>c.id===target.chapterId&&c.bookId===target.bookId)||DOC_LIB.find(c=>c.id===target.chapterId)||(target.chapterId===TOOLS_ID?TOOLS_CHAP:null);
   if(!c){showToast('Select a chapter for this page first.');return false}
@@ -3036,14 +3051,15 @@ function showContextMenu(t,x,y,keyboard=false){
   if(!p.isWidget){sep();add('Fit height to text','fit',()=>fitPageHeight(p.id));add('Clear filled fields','trash',()=>resetPageFields(p))}
   sep();add('Delete page','trash',()=>deletePage(p.id),true);
  }else if(chapter){const c=appData.chapters.find(c=>c.id===chapter.dataset.id);if(!c)return false;label('Chapter · '+c.name);
-  add('Paste page into this chapter','paste',()=>startPaste('page',dest));add('Copy chapter','copy',()=>copyChapterData(c.id));add('Duplicate chapter','dup',()=>duplicateChapter(c.id));
+  add('Paste page into this chapter','paste',()=>startPaste('page',dest));add('Paste board into this chapter','paste',()=>startPaste('board',dest));add('Copy chapter','copy',()=>copyChapterData(c.id));add('Duplicate chapter','dup',()=>duplicateChapter(c.id));
   add('Edit chapter','pen',()=>openEditChapterModal(c.id));sep();add('Delete chapter','trash',()=>deleteChapter(c.id),true);
  }else if(book){const b=appData.books.find(b=>b.id===book.dataset.id);if(!b)return false;label('Book · '+b.name);
   add('Paste chapter into this book','paste',()=>startPaste('chapter',dest));add('Edit book','pen',()=>openEditBookModal(b.id));add('Download book','copy',()=>downloadBook(b.id));
  }else{const c=board&&appData.containers.find(c=>c.id===board.dataset.cid);label(c?'Board · '+c.name:'Workspace');
   add('Paste page here','paste',()=>startPaste('page',dest));
+  if(appData.activeChapterId!==TOOLS_ID)add('Paste board into this chapter','paste',()=>startPaste('board',dest));
   if(appData.activeChapterId!==TOOLS_ID)add('Add page here','plus',()=>openAddPageModal(c?c.id:''));
-  if(c){add('Edit board','pen',()=>openEditContainerModal(c.id));sep();add('Delete board','trash',()=>deleteContainer(c.id),true)}
+  if(c){add('Copy board','copy',()=>copyBoardData(c.id));add('Edit board','pen',()=>openEditContainerModal(c.id));sep();add('Delete board','trash',()=>deleteContainer(c.id),true)}
  }
  sep();add('Paste from system clipboard…','paste',()=>startPaste('auto',dest,true));
  m.classList.add('show');placeMenu(m,x,y);if(keyboard)m.querySelector('.mi').focus({preventScroll:true});return true}
@@ -3060,7 +3076,7 @@ document.addEventListener('keydown',e=>{
  }
  if(editingTarget(e.target)||document.querySelector('.ov.open'))return;
  if(e.key==='ContextMenu'||(e.shiftKey&&e.key==='F10')){const r=e.target.getBoundingClientRect();if(showContextMenu(e.target,r.left+12,r.top+12,true))e.preventDefault()}
- if((e.ctrlKey||e.metaKey)&&!e.altKey&&!e.shiftKey&&e.key.toLowerCase()==='c'&&getSelection().isCollapsed){const card=e.target.closest('.card[data-pid]');if(card){e.preventDefault();copyPage(card.dataset.pid)}}
+ if((e.ctrlKey||e.metaKey)&&!e.altKey&&!e.shiftKey&&e.key.toLowerCase()==='c'&&getSelection().isCollapsed){const card=e.target.closest('.card[data-pid]'),board=e.target.closest('.cbox[data-cid]');if(card){e.preventDefault();copyPage(card.dataset.pid)}else if(board){e.preventDefault();copyBoardData(board.dataset.cid)}}
 },true);
 document.addEventListener('paste',e=>{
  if(!document.documentElement.classList.contains('unlocked')||document.querySelector('.ov.open')||editingTarget(e.target)||e.target.closest('.chat'))return;

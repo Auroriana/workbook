@@ -240,3 +240,63 @@ test('context menu stays within a small viewport and respects reduced motion',as
  assert.ok(rect.left>=8&&rect.right<=383&&rect.top>=8&&rect.bottom<=743,JSON.stringify(rect));
  assert.equal(rect.animation,'none');
 });
+
+async function seedBoard(page){return page.evaluate(()=>{
+ const chapterId=appData.activeChapterId;
+ const board={id:'source-board',chapterId,name:'Insurance templates',x:2,y:30,w:90,h:60,border:'#64b5f6',bg:'#e3f2fd'};
+ appData.containers.push(board);
+ appData.pages.push({id:'board-template',chapterId,containerId:board.id,title:'Renewal',content:'Renewal: XXX',x:2,y:2,w:40,h:20,
+  variants:[{title:'Renewal',content:'Renewal: XXX'},{title:'Cancellation',content:'Cancellation: XXX'}],activeVariant:1});
+ appData.pages.push({id:'board-widget',chapterId,containerId:board.id,title:'Quote formatter',content:'',x:44,y:2,w:40,h:30,isWidget:true,widgetType:'formatter'});
+ renderPages();return appData.chapters.find(c=>c.bookId===appData.activeBookId&&c.id!==chapterId).id;
+})}
+
+test('right-click copies a whole board and pastes its layout into another chapter',async t=>{
+ const p=await app(t),target=await seedBoard(p);
+ const original=await p.evaluate(()=>JSON.stringify({board:appData.containers.find(c=>c.id==='source-board'),pages:appData.pages.filter(p=>p.containerId==='source-board')}));
+ await p.locator('[data-cid="source-board"] .cname').click({button:'right'});
+ await p.locator('#menu-context').getByRole('menuitem',{name:'Copy board',exact:true}).click();
+ await p.evaluate(()=>copyText('A response for the customer'));
+ await p.locator('.chip-ch[data-id="'+target+'"]').click({button:'right'});
+ await p.locator('#menu-context').getByRole('menuitem',{name:'Paste board into this chapter'}).click();
+ const pasted=await p.evaluate(()=>{const c=appData.containers.at(-1);return {board:{name:c.name,w:c.w,h:c.h,border:c.border,bg:c.bg},pages:appData.pages.filter(p=>p.containerId===c.id).map(p=>({title:p.title,content:p.content,x:p.x,y:p.y,w:p.w,h:p.h,active:p.activeVariant,variants:p.variants,widget:p.widgetType||null})),fresh:c.id!=='source-board'&&appData.pages.filter(p=>p.containerId===c.id).every(p=>!['board-template','board-widget'].includes(p.id))}});
+ assert.deepEqual(pasted.board,{name:'Insurance templates',w:90,h:60,border:'#64b5f6',bg:'#e3f2fd'});
+ assert.deepEqual(pasted.pages,[{title:'Cancellation',content:'Cancellation: XXX',x:2,y:2,w:40,h:20,active:1,variants:[{title:'Renewal',content:'Renewal: XXX'},{title:'Cancellation',content:'Cancellation: XXX'}],widget:null},{title:'Quote formatter',content:'',x:44,y:2,w:40,h:30,active:0,variants:null,widget:'formatter'}]);
+ assert.equal(pasted.fresh,true);
+ assert.equal(await p.evaluate(()=>JSON.stringify({board:appData.containers.find(c=>c.id==='source-board'),pages:appData.pages.filter(p=>p.containerId==='source-board')})),original);
+ await p.locator('#paste-board-btn').click();
+ assert.equal(await p.evaluate(()=>getCons().filter(c=>c.name==='Insurance templates').length),2);
+ assert.equal(await p.evaluate(()=>new Set(appData.pages.map(p=>p.id)).size===appData.pages.length),true);
+});
+
+test('board menu supports empty boards and manual clipboard paste',async t=>{
+ const p=await app(t);
+ await p.evaluate(()=>{appData.containers.push({id:'empty-board',chapterId:appData.activeChapterId,name:'Empty board',w:52,h:38});renderPages()});
+ await p.locator('[data-cid="empty-board"]').getByRole('button',{name:'More board actions'}).click();
+ await p.locator('#menu-empty-board').getByRole('menuitem',{name:'Copy board',exact:true}).click();
+ const clip=await p.evaluate(()=>navigator.clipboard.readText());
+ await p.evaluate(()=>{appClipboard=null;Object.defineProperty(navigator.clipboard,'readText',{configurable:true,value:()=>Promise.reject(new Error('Denied'))})});
+ await p.locator('#paste-board-btn').click();
+ await p.locator('#paste-input').fill(clip);
+ await p.locator('#paste-modal').getByRole('button',{name:'Paste',exact:true}).click();
+ assert.equal(await p.evaluate(()=>getCons().filter(c=>c.name==='Empty board').length),2);
+ assert.equal(await p.evaluate(()=>appData.pages.filter(p=>p.containerId===appData.containers.at(-1).id).length),0);
+});
+
+test('board clipboard rejects malformed content and unsupported destinations',async t=>{
+ const p=await app(t);await seedBoard(p);
+ assert.deepEqual(await p.evaluate(async()=>{
+  await copyBoardData('source-board');const clip=appClipboard,count=appData.containers.length,pages=appData.pages.length;
+  const rejected=[applyPaste(JSON.stringify({app:CLIP_TAG,type:'board',name:'Bad',pages:[null]}),'board'),applyPaste(clip,'board',getPasteTarget({chapterId:'deleted'})),applyPaste(clip,'board',getPasteTarget({chapterId:TOOLS_ID})),applyPaste(clip,'board',getPasteTarget({chapterId:DOC_CHATS_ID}))];
+  return {rejected,unchanged:count===appData.containers.length&&pages===appData.pages.length};
+ }),{rejected:[false,false,false,false],unchanged:true});
+});
+
+test('focused board supports Ctrl+C and native paste events with new IDs',async t=>{
+ const p=await app(t);await seedBoard(p);
+ await p.locator('[data-cid="source-board"]').focus();await p.keyboard.press('Control+c');
+ await p.waitForFunction(()=>parseClip(appClipboard)?.type==='board');
+ await p.evaluate(()=>{const dt=new DataTransfer();dt.setData('text/plain',appClipboard);nodes.get('source-board').dispatchEvent(new ClipboardEvent('paste',{bubbles:true,cancelable:true,clipboardData:dt}))});
+ assert.equal(await p.evaluate(()=>getCons().filter(c=>c.name==='Insurance templates').length),2);
+ assert.equal(await p.evaluate(()=>appData.pages.filter(p=>p.containerId===appData.containers.at(-1).id).length),2);
+});
