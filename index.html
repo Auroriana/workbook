@@ -674,6 +674,10 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
 .pi .ico svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
 #page-image-pos-btn[data-pos="below"] .pos-up,#page-image-pos-btn[data-pos="above"] .pos-down{display:none}
 #page-image-position[hidden]{display:none}
+.pi-ring{position:relative;display:inline-flex;flex:none;border-radius:50%;margin:0 4px;--left:0}
+.pi-ring::after{content:"";position:absolute;inset:-5px;border-radius:50%;padding:3px;pointer-events:none;background:conic-gradient(var(--rc2,var(--p)) calc(var(--left)*1%),var(--line) 0);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);transition:background .3s}
+.pi-ring:not([data-level])::after{background:var(--line)}
+.pi-ring[data-level=warn]{--rc2:#e6a23c}.pi-ring[data-level=low]{--rc2:var(--danger)}
 .pi-prev{position:relative;width:fit-content;max-width:100%}
 .pi-trash{position:absolute;top:16px;left:8px;width:30px;height:30px;display:grid;place-items:center;padding:0;margin:0;border:0;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;cursor:pointer;opacity:.85;transition:opacity .15s,background .15s}
 .pi-trash:hover,.pi-trash:focus-visible{opacity:1;background:#c0392b}
@@ -849,7 +853,7 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
     <button type="button" class="btn out sm ico" id="page-image-pos-btn" data-pos="below"><svg class="pos-up" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg><svg class="pos-down" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
     <select id="page-image-position" aria-label="Image position" hidden><option value="above">Above text</option><option value="below" selected>Below text</option></select>
     <input type="text" id="page-image-alt" class="pi-alt" maxlength="200" placeholder="Description" aria-label="Image description">
-    <button type="button" class="btn out sm ico" id="page-image-manage" title="Manage cloud images" aria-label="Manage cloud images"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg></button>
+    <span class="pi-ring" id="page-image-ring"><button type="button" class="btn out sm ico" id="page-image-manage" title="Manage cloud images" aria-label="Manage cloud images"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg></button></span>
    </div>
    <div class="pi-prev"><div id="page-image-preview"></div><button type="button" class="pi-trash" id="page-image-remove" title="Detach image" aria-label="Detach image"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6"/></svg></button></div>
    <p class="hint" id="page-image-status" role="status"></p>
@@ -2399,12 +2403,12 @@ async function removeEditVariant(){if(vs.length<2)return;if(window.PageImages?.u
  vsCapture();vs.splice(vcur,1);vsLoad(Math.min(vcur,vs.length-1))}
 
 function openAddPageModal(z){if(!appData.activeChapterId){showToast('Select a chapter first.');return}
- $('page-modal-title').textContent='Add Page';$('page-id-input').value='';$('page-container-input').value=typeof z==='string'?z:'';
+ $('page-modal-title').textContent='Add Page';window.PageImages?.refreshUsage();$('page-id-input').value='';$('page-container-input').value=typeof z==='string'?z:'';
  vs=[blankVariant()];vsLoad(0);
  openModal('page-modal')}
 
 function openEditPageModal(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
- $('page-modal-title').textContent='Edit Page';$('page-id-input').value=p.id;$('page-container-input').value=p.containerId||'';
+ $('page-modal-title').textContent='Edit Page';window.PageImages?.refreshUsage();$('page-id-input').value=p.id;$('page-container-input').value=p.containerId||'';
  if(p.variants&&p.variants.length>0){syncVariantImage(p);vs=p.variants.map(v=>({title:v.title,content:v.content,image:pageImageProps(v).image||null}))}
  else vs=[{title:p.title,content:p.content,image:pageImageProps(p).image||null}];
  vsLoad(0);
@@ -3254,6 +3258,15 @@ window.PageImages=(()=>{
  let draft=null,uploading=false,editorGeneration=0,epoch=0;
  const cache=new Map();
  const info=text=>$('page-image-status').textContent=text;
+ /* the ring around the cloud button shows how much of the 5 MB image storage is still free */
+ const CAP=5*1024*1024;let used=null;
+ const fmtSize=n=>n>=1048576?(n/1048576).toFixed(1)+' MB':Math.max(0,Math.round(n/1024))+' KB';
+ function paintUsage(){const ring=$('page-image-ring'),b=$('page-image-manage');
+  if(used==null){ring.removeAttribute('data-level');ring.style.setProperty('--left','0');b.title='Manage cloud images';b.setAttribute('aria-label','Manage cloud images');return}
+  const left=Math.max(0,CAP-used),pct=Math.min(100,left/CAP*100),t=fmtSize(left)+' of 5 MB left';
+  ring.style.setProperty('--left',pct.toFixed(1));ring.dataset.level=pct<=10?'low':pct<=20?'warn':'ok';
+  b.title='Manage cloud images · '+t;b.setAttribute('aria-label','Manage cloud images. '+t)}
+ async function refreshUsage(){try{const r=await request({action:'list'});used=r.images.reduce((n,i)=>n+(+i.size||0),0);paintUsage()}catch(e){}}
  function props(p){const i=p?.image;return i&&/^[a-f0-9]{64}\/[a-f0-9]{48}$/.test(i.key)?{image:{key:i.key,position:i.position==='above'?'above':'below',alt:String(i.alt||'').slice(0,200)}}:{}}
  function syncPos(){const b=$('page-image-pos-btn'),v=$('page-image-position').value==='above'?'above':'below',t=v==='above'?'Image above text':'Image below text';b.dataset.pos=v;b.title=t+' (click to switch)';b.setAttribute('aria-label',t+'. Click to switch.')}
  function edit(p){editorGeneration++;draft=props(p).image||null;$('page-image-file').value='';$('page-image-position').value=draft?.position||'below';$('page-image-alt').value=draft?.alt||'';syncPos();$('page-image-preview').replaceChildren();info(draft?'Cloud image attached.':'No image attached.');if(draft)mount($('page-image-preview'),{image:draft});}
@@ -3404,7 +3417,7 @@ window.PageImages=(()=>{
  }
  const toB64=blob=>new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result.split(',')[1]);r.onerror=reject;r.readAsDataURL(blob)});
  async function encode(file){return toB64(await compress(file,false))}
- async function attach(f){if(!f||uploading)return;const gen=editorGeneration;uploading=true;info('Compressing and uploading…');try{const data=await encode(f),r=await request({action:'upload',data,name:f.name});if(gen!==editorGeneration)return;draft={key:r.key,position:$('page-image-position').value,alt:$('page-image-alt').value};$('page-image-preview').replaceChildren();mount($('page-image-preview'),{image:draft});info('Uploaded · '+Math.ceil(r.size/1024)+' KB cloud storage. Save the page to attach it.');}catch(e){if(gen===editorGeneration)info(String(e.message||e));}finally{uploading=false;$('page-image-file').value=''}}
+ async function attach(f){if(!f||uploading)return;const gen=editorGeneration;uploading=true;info('Compressing and uploading…');try{const data=await encode(f),r=await request({action:'upload',data,name:f.name});if(gen!==editorGeneration)return;draft={key:r.key,position:$('page-image-position').value,alt:$('page-image-alt').value};$('page-image-preview').replaceChildren();mount($('page-image-preview'),{image:draft});info('Uploaded · '+Math.ceil(r.size/1024)+' KB cloud storage. Save the page to attach it.');refreshUsage();}catch(e){if(gen===editorGeneration)info(String(e.message||e));}finally{uploading=false;$('page-image-file').value=''}}
  $('page-image-file').onchange=()=>attach($('page-image-file').files[0]);
  /* Screenshots (Win + Shift + S, Print Screen, phone copies) arrive as clipboard images: Ctrl+V anywhere in the open page editor, or the Paste screenshot button. */
  const shot=b=>new File([b],'Screenshot '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:false}).replace(':','-'),{type:b.type});
@@ -3412,11 +3425,11 @@ window.PageImages=(()=>{
  $('page-image-paste').onclick=async()=>{try{for(const it of await navigator.clipboard.read()){const t=it.types.find(x=>x.startsWith('image/'));if(t)return attach(shot(await it.getType(t)))}info('No image on the clipboard. Press Win + Shift + S, select an area, then try again.')}catch(e){info('The browser blocked clipboard access. Press Ctrl + V here instead.')}};
  $('page-image-pos-btn').onclick=()=>{const s=$('page-image-position');s.value=s.value==='above'?'below':'above';syncPos()};syncPos();
  $('page-image-remove').onclick=()=>{draft=null;$('page-image-preview').replaceChildren();info('Image detached. Save the page to keep this change.');};
- $('page-image-manage').onclick=async()=>{const list=$('page-image-library');list.replaceChildren();try{const r=await request({action:'list'});info(Math.ceil(r.images.reduce((n,i)=>n+i.size,0)/1024)+' KB of 5 MB used. Deleting affects all shared copies.');for(const i of r.images){const row=document.createElement('div'),label=document.createElement('span'),b=document.createElement('button');row.className='seg';label.textContent=i.name+' · '+Math.ceil(i.size/1024)+' KB';b.type='button';b.className='btn out sm';b.textContent='Delete from cloud';b.onclick=async()=>{if(!await askConfirm('Delete "'+i.name+'" from the cloud? Every page and shared copy using this image will lose it. This can\'t be undone.','Delete image','Delete from cloud'))return;try{await request({action:'delete',key:i.key});cache.get(i.key)?.then(URL.revokeObjectURL,()=>{});cache.delete(i.key);if(draft?.key===i.key){draft=null;$('page-image-preview').replaceChildren()}window.dispatchEvent(new CustomEvent('page-image-deleted',{detail:{key:i.key}}));row.remove();info('Cloud image deleted.');}catch(e){info(String(e.message||e))}};row.append(label,b);list.append(row)}}catch(e){info(String(e.message||e))}};
- window.addEventListener('cloud-locked',()=>{epoch++;editorGeneration++;for(const v of cache.values())v.then(URL.revokeObjectURL,()=>{});cache.clear();draft=null;$('page-image-preview').replaceChildren();$('page-image-library').replaceChildren();lbClose();document.querySelectorAll('.page-cloud-image img').forEach(i=>i.removeAttribute('src'));document.querySelectorAll('.page-img-zoom').forEach(b=>{b.hidden=true});});
+ $('page-image-manage').onclick=async()=>{const list=$('page-image-library');list.replaceChildren();try{const r=await request({action:'list'});used=r.images.reduce((n,i)=>n+(+i.size||0),0);paintUsage();info(Math.ceil(used/1024)+' KB of 5 MB used. Deleting affects all shared copies.');for(const i of r.images){const row=document.createElement('div'),label=document.createElement('span'),b=document.createElement('button');row.className='seg';label.textContent=i.name+' · '+Math.ceil(i.size/1024)+' KB';b.type='button';b.className='btn out sm';b.textContent='Delete from cloud';b.onclick=async()=>{if(!await askConfirm('Delete "'+i.name+'" from the cloud? Every page and shared copy using this image will lose it. This can\'t be undone.','Delete image','Delete from cloud'))return;try{await request({action:'delete',key:i.key});cache.get(i.key)?.then(URL.revokeObjectURL,()=>{});cache.delete(i.key);if(draft?.key===i.key){draft=null;$('page-image-preview').replaceChildren()}window.dispatchEvent(new CustomEvent('page-image-deleted',{detail:{key:i.key}}));row.remove();refreshUsage();info('Cloud image deleted.');}catch(e){info(String(e.message||e))}};row.append(label,b);list.append(row)}}catch(e){info(String(e.message||e))}};
+ window.addEventListener('cloud-locked',()=>{used=null;paintUsage();epoch++;editorGeneration++;for(const v of cache.values())v.then(URL.revokeObjectURL,()=>{});cache.clear();draft=null;$('page-image-preview').replaceChildren();$('page-image-library').replaceChildren();lbClose();document.querySelectorAll('.page-cloud-image img').forEach(i=>i.removeAttribute('src'));document.querySelectorAll('.page-img-zoom').forEach(b=>{b.hidden=true});});
  /* upload/enlarge are also used by the global chat */
- async function upload(f){const blob=await compress(f,true),r=await request({action:'upload',data:await toB64(blob),name:f.name});return {...r,thumb:URL.createObjectURL(blob)}}
- return {edit,value,mount,props,upload,enlarge,get uploading(){return uploading}};
+ async function upload(f){const blob=await compress(f,true),r=await request({action:'upload',data:await toB64(blob),name:f.name});refreshUsage();return {...r,thumb:URL.createObjectURL(blob)}}
+ return {edit,value,mount,props,upload,enlarge,refreshUsage,get uploading(){return uploading}};
 })();
 renderPages();
 </script>
