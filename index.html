@@ -638,6 +638,21 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .copy-pop small{display:block;margin-top:1px;font-size:10.5px;font-weight:500;opacity:.65}
 html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--card)}
 @keyframes copyPop{0%{opacity:0;transform:translate(-50%,-46%) scale(.92)}14%{opacity:1;transform:translate(-50%,-50%) scale(1)}78%{opacity:1}100%{opacity:0;transform:translate(-50%,-52%) scale(.98)}}
+/* Team chat uses the existing pill palette and motion. */
+.page-cloud-image{margin:8px 0;min-height:40px}.page-cloud-image img{display:block;max-width:100%;height:auto;border-radius:8px}#page-image-preview img{max-height:180px}#page-image-library{max-height:180px;overflow:auto}
+#island.chat-open{width:min(420px,calc(100vw - 16px));border-radius:var(--isl-radius-open)}
+#island.chat-open:hover{transform:none}
+#island.chat-open>.isl-bd,#island.chat-open>.isl-sub{display:none}
+#team-panel{position:relative;z-index:2;padding:16px;max-height:calc(100dvh - 100px);overflow:auto;order:0}
+#team-panel[hidden]{display:none}#isl-root[data-v=top] #team-panel{order:4}
+.team-row{display:flex;align-items:center;gap:8px;margin:8px 0}.team-row>span,.team-row>b,.team-row>small{flex:1;overflow-wrap:anywhere}
+#team-panel input,#team-panel select{min-width:0;flex:1}#team-panel textarea{width:100%;resize:vertical;min-height:52px}
+#team-messages{height:min(280px,32dvh);overflow:auto;overscroll-behavior:contain;user-select:text}
+#team-messages article{padding:10px 0;border-bottom:1px solid var(--isl-edge);overflow-wrap:anywhere}
+#team-messages p{white-space:pre-wrap;margin:5px 0}#team-messages small{opacity:.7}
+#team-panel details{max-height:140px;overflow:auto}#team-panel summary{cursor:pointer}#team-toggle{flex-shrink:0;padding:6px}
+#team-toggle svg{fill:none;stroke:currentColor;stroke-width:1.7}
+#team-panel .team-row button{flex-shrink:0}#team-status{font-size:12px;margin:8px 0}#team-attachment:empty+button{display:none}
 </style>
 <body class="" style="--rc: nwse-resize;">
 <div id="lock" role="dialog" aria-modal="true" aria-label="Login">
@@ -698,7 +713,7 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
    </div>
    <div class="acts" id="hacts"><button class="btn xs fill">Edit info</button><div class="dd"><button class="ib sm" title="More" aria-label="More chapter actions"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-ch"><button class="mi" title="Paste a copied page into this chapter"><svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>Paste page</button><button class="mi" title="Copy this chapter and its pages so you can paste it into any book"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy chapter</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate chapter</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete chapter</button></div></div></div>
   </section>
-  <div class="ph"><h2><button type="button" class="ph-search" id="ph-search" title="Search every page (press /)" aria-label="Search" onclick="window.openSearch&amp;&amp;window.openSearch()"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button><span class="pt on" id="pt-ws" role="button" tabindex="0" title="Your chapter workspace" onclick="closeTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeTools()}">Workspace</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-tools" role="button" tabindex="0" title="Your widgets, available from any chapter" onclick="openTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTools()}">Tools</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-docs" role="button" tabindex="0" title="Your documentation, available from any book" onclick="openDocs()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocs()}">Documentation</span><span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button type="button" class="ib paste-action" id="paste-main-btn" onclick="startPaste()" title="Paste page, board or chapter" aria-label="Paste page, board or chapter"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg></button><button class="btn tone" id="add-board-btn" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" id="add-main-btn" onclick="openAddHubModal()">+ Add</button><div class="pt-sub" id="pt-sub" hidden></div></div>
+  <div class="ph"><h2><button type="button" class="ph-search" id="ph-search" title="Search every page (press /)" aria-label="Search" onclick="window.openSearch&amp;&amp;window.openSearch()"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button><span class="pt on" id="pt-ws" role="button" tabindex="0" title="Your chapter workspace" onclick="closeTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeTools()}">Workspace</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-tools" role="button" tabindex="0" title="Your widgets, available from any chapter" onclick="openTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTools()}">Tools</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-docs" role="button" tabindex="0" title="Your documentation, available from any book" onclick="openDocs()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocs()}">Documentation</span><span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button type="button" class="ib paste-action" id="paste-main-btn" onclick="startPaste()" title="Paste page, board, chapter or book" aria-label="Paste page, board, chapter or book"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg></button><button class="btn tone" id="add-board-btn" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" id="add-main-btn" onclick="openAddHubModal()">+ Add</button><div class="pt-sub" id="pt-sub" hidden></div></div>
   <div class="empty" id="ws-empty" hidden="">No pages yet. Use + Add to create one, or + Board for a board.</div>
   <div id="chats" hidden></div>
   <div id="ws"><div id="wsc" data-zone="" class="" style="height: 400px; min-width: max(100%, 664px);"></div></div>
@@ -791,6 +806,7 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
    <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('YN',event)" title="Yes/No toggle. Hold Shift while clicking to insert [No] instead of [Yes]">Y/N</button>
   </div>
 
+  <section class="sec"><div><label for="page-image-file">Page image (optional)</label><input type="file" id="page-image-file" accept="image/jpeg,image/png,image/webp"><div class="seg"><select id="page-image-position" aria-label="Image position"><option value="above">Above text</option><option value="below" selected>Below text</option></select><button type="button" class="btn out sm" id="page-image-paste">Paste screenshot</button><button type="button" class="btn out sm" id="page-image-remove">Detach image</button><button type="button" class="btn out sm" id="page-image-manage">Manage cloud images</button></div><input id="page-image-alt" maxlength="200" placeholder="Image description" aria-label="Image description"><p class="hint" id="page-image-status" role="status"></p><p class="hint">Tip: press Win + Shift + S, select an area, then Ctrl + V here. Text stays unchanged. Images use cloud storage (5 MB per account); shared copies use the same image. Sign in to load them.</p><div id="page-image-preview"></div><div id="page-image-library"></div></div></section>
   <div id="page-normal-edit">
    <div><label for="page-title-input">Title</label><input type="text" id="page-title-input" placeholder="e.g. Coverage - Renters/Homes"></div>
    <div>
@@ -871,9 +887,20 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
 
 <!-- Smart Island: live clock + break tracker + schedule (bottom right). Content is filled in by SmartScheduleManager. -->
 <div id="isl-scrim"></div><div id="isl-root"><div id="island" role="region" aria-label="Live clock and breaks" data-tone="">
+  <section id="team-panel" hidden aria-label="Team chat">
+ <div class="team-row"><b>Team chat</b><button type="button" class="isl-btn sm" id="team-close" aria-label="Close chat">×</button></div>
+ <label class="team-row">Conversation <select id="team-room" class="isl-inp"><option value="">Shared room</option></select></label>
+ <details><summary>Friends</summary><div class="team-row"><input id="team-user" class="isl-inp" maxlength="24" placeholder="Username" aria-label="Friend username"><button type="button" class="isl-btn sm" id="team-add">Add friend</button></div><div id="team-friends"></div></details>
+ <p id="team-status" class="isl-p" role="status"></p>
+ <button type="button" class="isl-btn sm" id="team-older" hidden>Earlier messages</button>
+ <div id="team-messages" role="log" aria-label="Messages" aria-live="polite"></div>
+ <form id="team-form"><textarea id="team-text" class="isl-inp" maxlength="4000" rows="2" placeholder="Message · Shift+Enter for a new line" aria-label="Message"></textarea>
+ <div class="team-row"><button type="button" class="isl-btn sm" id="team-share">Share copied item</button><button type="button" class="isl-btn sm" id="team-schedule">Schedule</button><button class="isl-btn pri" id="team-send">Send</button></div>
+ <div class="team-row"><small id="team-attachment"></small><button type="button" class="isl-btn sm" id="team-remove" aria-label="Remove attachment">×</button></div></form>
+</section>
   <div class="isl-bd"><div id="isl-body"></div></div>
   <div class="isl-pill" id="isl-pill" role="button" tabindex="0" aria-expanded="false" aria-label="Open schedule">
-    <div class="isl-clk"><span id="isl-pre"></span><span id="isl-a">--</span><span class="isl-dots"><i></i><i></i><i></i></span><span id="isl-b">--</span><small id="isl-ap"></small></div>
+    <button type="button" class="isl-btn sm" id="team-toggle" title="Team chat" aria-label="Team chat" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M21 11a8 8 0 0 1-8 8H5l-4 3V11a10 10 0 0 1 20 0Z"/></svg></button><div class="isl-clk"><span id="isl-pre"></span><span id="isl-a">--</span><span class="isl-dots"><i></i><i></i><i></i></span><span id="isl-b">--</span><small id="isl-ap"></small></div>
     <div class="isl-lbl" id="isl-lbl" aria-live="polite"></div>
     <button type="button" class="isl-chk" id="isl-chk" aria-label="I'm back"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></button>
     <button type="button" class="isl-end" id="isl-end">End shift</button>
@@ -1055,7 +1082,7 @@ function ensureDocs(){/* first run only: fills Documentation. Pages you delete s
 function syncPh(){const t=appData.activeChapterId===TOOLS_ID,d=isDoc(appData.activeChapterId),w=!t&&!d;
  [['pt-ws',w],['pt-tools',t],['pt-docs',d]].forEach(([id,on])=>{$(id).classList.toggle('on',on);$(id).setAttribute('aria-pressed',String(on))});
  const k=appData.activeChapterId===DOC_CHATS_ID;/* Chats: + Add becomes + Chat, no boards, no move mode */
- $('paste-main-btn').hidden=k;$('paste-main-btn').title=t?'Paste widget':'Paste page, board or chapter';$('paste-main-btn').setAttribute('aria-label',$('paste-main-btn').title);$('add-board-btn').style.display=(t||k)?'none':'';$('add-main-btn').textContent=k?'+ Chat':'+ Add';$('edit-toggle').style.display=k?'none':'';
+ $('paste-main-btn').hidden=k;$('paste-main-btn').title=t?'Paste widget':'Paste page, board, chapter or book';$('paste-main-btn').setAttribute('aria-label',$('paste-main-btn').title);$('add-board-btn').style.display=(t||k)?'none':'';$('add-main-btn').textContent=k?'+ Chat':'+ Add';$('edit-toggle').style.display=k?'none':'';
  const sub=$('pt-sub');sub.hidden=!d;sub.innerHTML='';/* second row, only inside Documentation: Notations | What if */
  if(d)DOC_CHAPS.forEach((c,i)=>{if(i)sub.append(el('span','pt-sep'));const b=el('span','pt'+(c.id===appData.activeChapterId?' on':''));b.textContent=c.name;b.setAttribute('role','button');b.tabIndex=0;b.title=c.description;
   b.onclick=()=>openDocChapter(c.id);b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDocChapter(c.id)}};sub.append(b)});
@@ -1766,6 +1793,7 @@ function addWidget(type) {
 /* ---------- widgets: calculator, clock, smart schedule, quote formatter ---------- */
 const escAttr = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 const WIDGET_KEYS = ['isWidget', 'widgetType', 'calcMode', 'scheduleSettings', 'importData'];
+function pageImageProps(src){const i=src&&src.image;return i&&/^[a-f0-9]{64}\/[a-f0-9]{48}$/.test(i.key)?{image:{key:i.key,position:i.position==='above'?'above':'below',alt:String(i.alt||'').slice(0,200)}}:{}}
 /* copies the widget fields of a page so duplicated / copied / pasted widgets stay widgets */
 function widgetProps(src) {
   const o = {};
@@ -2132,7 +2160,7 @@ function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),a=el('div'
  }
  
  const c=el('div','cc');
- if (p.isWidget) { renderWidgetUI(c, p); } else { buildSpiel(c, p); }
+ if (p.isWidget) { renderWidgetUI(c, p); } else { buildSpiel(c, p); window.PageImages?.mount(c,p); }
  card.append(h,c);addHandles(card);return card}
 
 function refreshCard(id){/* redraw one page instead of the whole chapter */
@@ -2226,7 +2254,7 @@ function saveChapter(){const id=$('chapter-id-input').value,name=$('chapter-name
 function duplicateChapter(id){const s=appData.chapters.find(c=>c.id===id);if(!s)return;const nid='c_'+Date.now();
  appData.chapters.push({id:nid,bookId:s.bookId,name:s.name+' (Copy)',description:s.description,referenceLink:s.referenceLink});
  const map={};appData.containers.filter(c=>c.chapterId===id).forEach(c=>{const k='k_'+rid();map[c.id]=k;appData.containers.push(Object.assign({},c,{id:k,chapterId:nid}))});
- appData.pages.filter(p=>p.chapterId===id).forEach(p=>appData.pages.push(Object.assign({id:'p_'+rid(),chapterId:nid,containerId:map[p.containerId]||'',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h},widgetProps(p))));
+ appData.pages.filter(p=>p.chapterId===id).forEach(p=>appData.pages.push(Object.assign({id:'p_'+rid(),chapterId:nid,containerId:map[p.containerId]||'',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h},widgetProps(p),pageImageProps(p))));
  appData.activeBookId=s.bookId;appData.activeChapterId=nid;persistLocal();renderAll();showToast('Chapter duplicated.')}
 async function deleteChapter(id){if(!await askConfirm('Delete this chapter and its pages?','Delete chapter'))return;
  appData.chapters=appData.chapters.filter(c=>c.id!==id);appData.pages=appData.pages.filter(p=>p.chapterId!==id);appData.containers=appData.containers.filter(c=>c.chapterId!==id);
@@ -2275,20 +2303,20 @@ function addVariantField(t='', c='') {
 }
 
 function openAddPageModal(z){if(!appData.activeChapterId){showToast('Select a chapter first.');return}
- $('page-modal-title').textContent='Add Page';['id','title','content'].forEach(k=>$('page-'+k+'-input').value='');$('page-container-input').value=typeof z==='string'?z:'';
+ window.PageImages?.edit(null);$('page-modal-title').textContent='Add Page';['id','title','content'].forEach(k=>$('page-'+k+'-input').value='');$('page-container-input').value=typeof z==='string'?z:'';
  $('page-variant-cb').checked = false; toggleVariantMode(false);
  $('variant-list').innerHTML = ''; addVariantField('',''); addVariantField('','');
  openModal('page-modal')}
 
 function openEditPageModal(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
- $('page-modal-title').textContent='Edit Page';$('page-id-input').value=p.id;$('page-container-input').value=p.containerId||'';$('page-title-input').value=p.title;$('page-content-input').value=p.content;
+ window.PageImages?.edit(p);$('page-modal-title').textContent='Edit Page';$('page-id-input').value=p.id;$('page-container-input').value=p.containerId||'';$('page-title-input').value=p.title;$('page-content-input').value=p.content;
  const isVar = p.variants && p.variants.length > 0;
  $('page-variant-cb').checked = isVar; toggleVariantMode(isVar);
  $('variant-list').innerHTML = '';
  if (isVar) p.variants.forEach(v => addVariantField(v.title, v.content)); else { addVariantField('',''); addVariantField('',''); }
  openModal('page-modal')}
 
-function savePage(){const id=$('page-id-input').value, isVar = $('page-variant-cb').checked;
+function savePage(){if(window.PageImages?.uploading){showToast('Wait for the image upload to finish.');return}const id=$('page-id-input').value, isVar = $('page-variant-cb').checked;
  let title=$('page-title-input').value.trim(), content=$('page-content-input').value, variants=null, activeVariant=0;
  if (isVar) {
   variants = [];
@@ -2309,14 +2337,14 @@ function savePage(){const id=$('page-id-input').value, isVar = $('page-variant-c
    if (activeVariant >= variants.length) activeVariant = 0;
    title = variants[activeVariant].title; content = variants[activeVariant].content;
   }
-  Object.assign(pg,{title, content, variants, activeVariant});
+  Object.assign(pg,{title, content, variants, activeVariant,image:window.PageImages?.value()||null});
  } else {
   nid='p_'+Date.now();
-  appData.pages.push({id:nid, chapterId:appData.activeChapterId, containerId:$('page-container-input').value||'', title, content, variants, activeVariant:0});
+  appData.pages.push({id:nid, chapterId:appData.activeChapterId, containerId:$('page-container-input').value||'', title, content, variants, activeVariant:0,image:window.PageImages?.value()||null});
  }
  persistLocal();closeModal('page-modal');renderHero();renderPages();if(nid)revealNode(nid)}
 function duplicatePage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;const nid='p_'+Date.now();
- appData.pages.push(Object.assign({id:nid,chapterId:p.chapterId,containerId:p.containerId||'',title:p.title+' (Copy)',content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p)));
+ appData.pages.push(Object.assign({id:nid,chapterId:p.chapterId,containerId:p.containerId||'',title:p.title+' (Copy)',content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p),pageImageProps(p)));
  persistLocal();renderHero();renderPages();revealNode(nid);showToast('Page duplicated.')}
 function deletePage(id){const i=appData.pages.findIndex(p=>p.id===id);if(i<0)return;const p=appData.pages[i],vals=varVals[id],variants=variantVals[id];delete varVals[id];delete variantVals[id];appData.pages.splice(i,1);persistLocal();renderHero();renderPages();
  showUndo('Page deleted',()=>{if(!appData.chapters.some(c=>c.id===p.chapterId)&&!isDoc(p.chapterId)&&p.chapterId!==TOOLS_ID){showToast('The chapter no longer exists.');return false}
@@ -2759,7 +2787,7 @@ function chatFill(chat,p,vi){/* puts the chat's session fields into one variant'
  Object.keys(CHAT_FIELDS).forEach(k=>{const n=chat[k];if(!n)return;fieldIdx(src,k).forEach(i=>{if(vals[i]===undefined)vals[i]=n})});
  return vals}
 function chatOpenPage(chat,e){const s=e.page,vi=e.vi,v=s.variants&&s.variants.length?JSON.parse(JSON.stringify(s.variants)):null;
- const p={id:'cp_'+rid(),src:s.id,title:v?v[vi].title:s.title,content:v?v[vi].content:s.content,variants:v,activeVariant:vi,vv:{}};
+ const p={...pageImageProps(s),id:'cp_'+rid(),src:s.id,title:v?v[vi].title:s.title,content:v?v[vi].content:s.content,variants:v,activeVariant:vi,vv:{}};
  varVals[p.id]=chatFill(chat,p,vi);chat.pages.unshift(p);chatSave();return p}
 function chatVariant(chat,p,vi){p.activeVariant=vi;p.title=p.variants[vi].title;p.content=p.variants[vi].content;varVals[p.id]=chatFill(chat,p,vi);chatSave()}
 function chatSet(chat,root,key,n){/* changing a session field updates every matching variable that still holds the old value (or is empty); anything you typed yourself is left alone */
@@ -2828,7 +2856,7 @@ function chatCard(chat,p,root){
   p.variants.forEach((v,i)=>{const b=el('button',i===(p.activeVariant||0)?'on':'');b.type='button';b.textContent=v.title;
    b.onclick=()=>{if(i===(p.activeVariant||0))return;chatVariant(chat,p,i);card.replaceWith(chatCard(chat,p,root))};vb.append(b)});
   card.append(vb)}
- const c=el('div','cp-c');buildSpiel(c,p);card.append(c);return card}
+ const c=el('div','cp-c');buildSpiel(c,p);window.PageImages?.mount(c,p);card.append(c);return card}
 function chatEl(chat,idx){
  const root=el('section','chat');root.dataset.id=chat.id;
  const h=el('div','chat-h'),lb=el('b');lb.textContent='Chat '+(idx+1)+':';
@@ -2961,9 +2989,9 @@ const CLIP_TAG='paano-ba-yan';
 let appClipboard=null;
 function rid(){return Date.now()+'_'+Math.random().toString(36).slice(2,6)}
 function copyPageData(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
- return copyStructure(Object.assign({app:CLIP_TAG,type:'page',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p)))}
+ return copyStructure(Object.assign({app:CLIP_TAG,type:'page',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p),pageImageProps(p)))}
 async function copyStructure(o){const t=JSON.stringify(o);appClipboard=t;const ok=await writeClipboard(t);
- const hints={page:'Use Paste page or right-click a board.',board:'Use Paste board in the destination chapter.',chapter:'Use Paste chapter beside + Chapter.'};
+ const hints={page:'Use Paste page or right-click a board.',board:'Use Paste board in the destination chapter.',chapter:'Use Paste chapter beside + Chapter.',book:'Paste to add a new book, or share it in Team chat.'};
  if(appClipboard===t)showToast(o.type[0].toUpperCase()+o.type.slice(1)+' copied. '+(ok?'':'Available in this tab. ')+hints[o.type]);return true}
 function copyBoardData(id){const c=appData.containers.find(c=>c.id===id);if(!c)return;
  return copyStructure({app:CLIP_TAG,type:'board',ver:1,name:c.name,w:c.w,h:c.h,border:c.border||'',bg:c.bg||'',
@@ -2972,7 +3000,7 @@ function chapterClip(id){const c=appData.chapters.find(x=>x.id===id);if(!c)retur
  const cons=appData.containers.filter(k=>k.chapterId===id);
  return {app:CLIP_TAG,type:'chapter',ver:2,name:c.name,description:c.description||'',referenceLink:c.referenceLink||'',
   containers:cons.map(k=>({name:k.name,x:k.x,y:k.y,w:k.w,h:k.h,border:k.border||'',bg:k.bg||''})),
-  pages:appData.pages.filter(p=>p.chapterId===id).map(p=>Object.assign({title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h,container:cons.findIndex(k=>k.id===p.containerId)},widgetProps(p)))}}
+  pages:appData.pages.filter(p=>p.chapterId===id).map(p=>Object.assign({title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h,container:cons.findIndex(k=>k.id===p.containerId)},widgetProps(p),pageImageProps(p)))}}
 function copyChapterData(id){const o=chapterClip(id);if(o)return copyStructure(o)}
 function validPageClip(p){return p&&typeof p==='object'&&typeof p.title==='string'&&typeof p.content==='string'&&
  (!p.variants||(Array.isArray(p.variants)&&p.variants.every(v=>v&&typeof v.title==='string'&&typeof v.content==='string')))}
@@ -2982,8 +3010,8 @@ function validBoardClip(c){return c&&typeof c==='object'&&typeof c.name==='strin
 function clipPageProps(p){const variants=Array.isArray(p.variants)&&p.variants.length?structuredClone(p.variants):null;
  const activeVariant=variants&&Number.isInteger(p.activeVariant)&&p.activeVariant>=0&&p.activeVariant<variants.length?p.activeVariant:0;
  return Object.assign({title:variants?variants[activeVariant].title:p.title||'Untitled',content:variants?variants[activeVariant].content:p.content||'',variants,activeVariant,
- w:num(p.w)===undefined?undefined:clamp(num(p.w),MIN_PW,MAX_U),h:num(p.h)===undefined?undefined:clamp(num(p.h),MIN_PH,MAX_U)},widgetProps(p))}
-function parseClip(t){try{const o=JSON.parse(t);return o&&o.app===CLIP_TAG&&((o.type==='page'&&validPageClip(o))||(o.type==='board'&&validBoardClip(o))||(o.type==='chapter'&&validChapterClip(o)))?o:null}catch(e){return null}}
+ w:num(p.w)===undefined?undefined:clamp(num(p.w),MIN_PW,MAX_U),h:num(p.h)===undefined?undefined:clamp(num(p.h),MIN_PH,MAX_U)},widgetProps(p),pageImageProps(p))}
+function parseClip(t){try{const o=JSON.parse(t);return o&&o.app===CLIP_TAG&&((o.type==='page'&&validPageClip(o))||(o.type==='board'&&validBoardClip(o))||(o.type==='chapter'&&validChapterClip(o))||(o.type==='book'&&typeof o.name==='string'&&Array.isArray(o.chapters)&&o.chapters.every(validChapterClip)))?o:null}catch(e){return null}}
 /* builds one chapter (with its boards and pages) from a copied-chapter object and returns its id */
 function addChapterFromClip(o,bookId){
  const nid='c_'+rid();
@@ -2996,7 +3024,7 @@ let pasteKind='auto',pasteDestination=null;
 function getPasteTarget(target={}){return {bookId:target.bookId??appData.activeBookId,chapterId:target.chapterId??appData.activeChapterId,containerId:target.containerId||''}}
 function describePasteTarget(target){const c=appData.chapters.find(c=>c.id===target.chapterId)||DOC_CHAPS.find(c=>c.id===target.chapterId)||(target.chapterId===TOOLS_ID?TOOLS_CHAP:null),b=appData.books.find(b=>b.id===target.bookId),board=appData.containers.find(c=>c.id===target.containerId);
  return 'Pages → '+(c?c.name:'select a chapter')+(board?' / '+board.name:'')+' · Boards → '+(c?c.name:'select a chapter')+' · Chapters → '+(b?b.name:'select a book')}
-function openPasteDialog(kind,target,text=''){pasteKind=kind;pasteDestination=target;$('paste-modal-title').textContent=kind==='auto'?'Paste page, board or chapter':'Paste '+kind;
+function openPasteDialog(kind,target,text=''){pasteKind=kind;pasteDestination=target;$('paste-modal-title').textContent=kind==='auto'?'Paste page, board, chapter or book':'Paste '+kind;
  $('paste-destination').textContent=describePasteTarget(target);$('paste-input').value=text;openModal('paste-modal');setTimeout(()=>$('paste-input').focus(),30)}
 async function startPaste(kind='auto',target={},fromSystem=false){closeMenus();const dest=getPasteTarget(target),cached=parseClip(appClipboard);
  if(!fromSystem&&cached&&(kind==='auto'||kind===cached.type))return applyPaste(appClipboard,kind,dest);
@@ -3005,8 +3033,9 @@ async function startPaste(kind='auto',target={},fromSystem=false){closeMenus();c
  openPasteDialog(kind,dest,t||'')}
 function confirmPaste(){if(applyPaste($('paste-input').value,pasteKind,pasteDestination))closeModal('paste-modal')}
 function applyPaste(t,kind='auto',target=getPasteTarget()){const o=parseClip(t);target=target||getPasteTarget();
- if(!o){showToast('Use Copy page, Copy board or Copy chapter first. This is not valid template data.');return false}
+ if(!o){showToast('Use Copy page, board, chapter or book first. This is not valid template data.');return false}
  if(kind!=='auto'&&o.type!==kind){showToast('This is a '+o.type+'. Choose Paste '+o.type+(o.type==='chapter'?' beside + Chapter.':' in the workspace.'));return false}
+ if(o.type==='book'){const bid='b_'+rid();appData.books.push({id:bid,name:o.name||'Imported book'});const ids=o.chapters.map(c=>addChapterFromClip(c,bid));appData.activeBookId=bid;appData.activeChapterId=ids[0]||'';persistLocal();renderAll();showToast('Book pasted.');return true}
  if(!appData.books.some(b=>b.id===target.bookId)){showToast('The destination book no longer exists.');return false}
  if(o.type==='board'){
   const c=appData.chapters.find(c=>c.id===target.chapterId&&c.bookId===target.bookId)||DOC_LIB.find(c=>c.id===target.chapterId);
@@ -3054,7 +3083,7 @@ function showContextMenu(t,x,y,keyboard=false){
   add('Paste page into this chapter','paste',()=>startPaste('page',dest));add('Paste board into this chapter','paste',()=>startPaste('board',dest));add('Copy chapter','copy',()=>copyChapterData(c.id));add('Duplicate chapter','dup',()=>duplicateChapter(c.id));
   add('Edit chapter','pen',()=>openEditChapterModal(c.id));sep();add('Delete chapter','trash',()=>deleteChapter(c.id),true);
  }else if(book){const b=appData.books.find(b=>b.id===book.dataset.id);if(!b)return false;label('Book · '+b.name);
-  add('Paste chapter into this book','paste',()=>startPaste('chapter',dest));add('Edit book','pen',()=>openEditBookModal(b.id));add('Download book','copy',()=>downloadBook(b.id));
+  add('Paste chapter into this book','paste',()=>startPaste('chapter',dest));add('Edit book','pen',()=>openEditBookModal(b.id));add('Copy book','copy',()=>copyStructure(bookClip(b.id)));add('Paste as new book','paste',()=>startPaste('book',dest));add('Download book','copy',()=>downloadBook(b.id));
  }else{const c=board&&appData.containers.find(c=>c.id===board.dataset.cid);label(c?'Board · '+c.name:'Workspace');
   add('Paste page here','paste',()=>startPaste('page',dest));
   if(appData.activeChapterId!==TOOLS_ID)add('Paste board into this chapter','paste',()=>startPaste('board',dest));
@@ -3085,6 +3114,7 @@ document.addEventListener('paste',e=>{
 /* save */
 function generateUpdatedHtmlString(){const c=document.documentElement.cloneNode(true);if(window.lockClean)window.lockClean(c);/* strip transient UI so the saved file reopens clean */
  c.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));c.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show'));c.querySelectorAll('.ghost,.copy-pop,#menu-context').forEach(n=>n.remove());c.querySelector('body').classList.remove('edit','dragging-page','rszing');c.classList.remove('lite','flat-isl');['books','chs','wsc','hacts','chats'].forEach(i=>{const n=c.querySelector('#'+i);if(n)n.innerHTML=''});
+ c.querySelector('#island')?.classList.remove('chat-open');const panel=c.querySelector('#team-panel');if(panel)panel.hidden=true;['team-messages','team-friends','team-status','team-attachment','page-image-preview','page-image-library','page-image-status'].forEach(id=>c.querySelector('#'+id)?.replaceChildren());const room=c.querySelector('#team-room');if(room)room.innerHTML='<option value="">Shared room</option>';c.querySelectorAll('#team-panel input,#team-panel textarea').forEach(n=>{n.textContent='';n.removeAttribute('value')});c.querySelector('#team-toggle')?.setAttribute('aria-expanded','false');
  const t=c.querySelector('#toast');if(t){t.className='';t.textContent=''}
  return '<!DOCTYPE html>\n'+c.outerHTML.replace(/\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//,()=>'/*DATA_START*/'+JSON.stringify(appData,null,2).replace(/</g,'\\u003c')+'/*DATA_END*/')}
 async function saveDirectToFile(){const h=generateUpdatedHtmlString(),fn=fileName()+'.html';
@@ -3120,6 +3150,130 @@ function importAppData(event){const file=event.target.files[0];if(!file)return;c
   reader.readAsText(file)}
 
 </script>
+<script id="page-images-script">
+window.PageImages=(()=>{
+ const $=id=>document.getElementById(id),request=body=>window.cloudRequest('media',body);
+ let draft=null,uploading=false,editorGeneration=0,epoch=0;
+ const cache=new Map();
+ const info=text=>$('page-image-status').textContent=text;
+ function props(p){const i=p?.image;return i&&/^[a-f0-9]{64}\/[a-f0-9]{48}$/.test(i.key)?{image:{key:i.key,position:i.position==='above'?'above':'below',alt:String(i.alt||'').slice(0,200)}}:{}}
+ function edit(p){editorGeneration++;draft=props(p).image||null;$('page-image-file').value='';$('page-image-position').value=draft?.position||'below';$('page-image-alt').value=draft?.alt||'';$('page-image-preview').replaceChildren();info(draft?'Cloud image attached.':'No image attached.');if(draft)mount($('page-image-preview'),{image:draft});}
+ function value(){return draft?{...draft,position:$('page-image-position').value,alt:$('page-image-alt').value.trim().slice(0,200)}:null}
+ async function url(key){
+  if(cache.has(key))return cache.get(key);const gen=epoch;
+  const promise=request({action:'get',key}).then(r=>{if(gen!==epoch)throw new Error('Session changed.');const bytes=Uint8Array.from(atob(r.data),c=>c.charCodeAt(0));return URL.createObjectURL(new Blob([bytes],{type:'image/webp'}));}).catch(e=>{cache.delete(key);throw e});cache.set(key,promise);
+  // Keep a small cache. Revoking an already displayed image does not remove its decoded pixels.
+  if(cache.size>24){const first=cache.keys().next().value;cache.get(first).then(URL.revokeObjectURL,()=>{});cache.delete(first)}return promise;
+ }
+ const pending=new Map();
+ const observer=new IntersectionObserver(entries=>{for(const e of entries){if(!e.isIntersecting)continue;const load=pending.get(e.target);observer.unobserve(e.target);pending.delete(e.target);load?.();}});
+ new MutationObserver(()=>{for(const fig of pending.keys())if(!fig.isConnected){observer.unobserve(fig);pending.delete(fig)}}).observe(document.body,{childList:true,subtree:true});
+ function mount(box,p){const image=props(p).image;if(!image)return;const fig=document.createElement('figure');fig.className='page-cloud-image';const img=document.createElement('img');img.alt=image.alt||'Page image';img.loading='lazy';img.decoding='async';fig.append(img);if(image.position==='above')box.prepend(fig);else box.append(fig);
+  pending.set(fig,()=>url(image.key).then(u=>{if(img.isConnected)img.src=u}).catch(e=>{if(!fig.isConnected)return;const b=document.createElement('button');b.className='btn out sm';b.type='button';b.textContent='Load cloud image';b.title=String(e.message||e);b.onclick=()=>{cache.delete(image.key);url(image.key).then(u=>{img.src=u;b.remove()}).catch(e=>showToast(String(e.message||e)))};fig.append(b)}));observer.observe(fig);
+ }
+ async function encode(file){
+  if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>12*1024*1024)throw new Error('Choose a JPEG, PNG or WebP under 12 MB.');
+  const bitmap=await createImageBitmap(file);try{if(bitmap.width*bitmap.height>40000000)throw new Error('Choose an image under 40 megapixels.');const scale=Math.min(1,1600/bitmap.width,1600/bitmap.height),canvas=document.createElement('canvas');canvas.width=Math.round(bitmap.width*scale);canvas.height=Math.round(bitmap.height*scale);canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);
+   let blob=null;for(const q of [.88,.78,.68,.58]){blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',q));if(blob&&blob.size<=300*1024)break}/* step quality down until it fits the 300 KB cloud cap */
+   if(!blob||blob.size>300*1024)throw new Error('This image is too detailed to compress clearly under 300 KB. Crop it or select a smaller image.');
+   return await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result.split(',')[1]);r.onerror=reject;r.readAsDataURL(blob)});
+  }finally{bitmap.close()}
+ }
+ async function attach(f){if(!f||uploading)return;const gen=editorGeneration;uploading=true;info('Compressing and uploading…');try{const data=await encode(f),r=await request({action:'upload',data,name:f.name});if(gen!==editorGeneration)return;draft={key:r.key,position:$('page-image-position').value,alt:$('page-image-alt').value};$('page-image-preview').replaceChildren();mount($('page-image-preview'),{image:draft});info('Uploaded · '+Math.ceil(r.size/1024)+' KB cloud storage. Save the page to attach it.');}catch(e){if(gen===editorGeneration)info(String(e.message||e));}finally{uploading=false;$('page-image-file').value=''}}
+ $('page-image-file').onchange=()=>attach($('page-image-file').files[0]);
+ /* Screenshots (Win + Shift + S, Print Screen, phone copies) arrive as clipboard images: Ctrl+V anywhere in the open page editor, or the Paste screenshot button. */
+ const shot=b=>new File([b],'Screenshot '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:false}).replace(':','-'),{type:b.type});
+ document.addEventListener('paste',e=>{if(!$('page-modal').classList.contains('open'))return;const f=[...(e.clipboardData?.files||[])].find(x=>x.type.startsWith('image/'));if(!f)return;e.preventDefault();e.stopPropagation();attach(shot(f))},true);
+ $('page-image-paste').onclick=async()=>{try{for(const it of await navigator.clipboard.read()){const t=it.types.find(x=>x.startsWith('image/'));if(t)return attach(shot(await it.getType(t)))}info('No image on the clipboard. Press Win + Shift + S, select an area, then try again.')}catch(e){info('The browser blocked clipboard access. Press Ctrl + V here instead.')}};
+ $('page-image-remove').onclick=()=>{draft=null;$('page-image-preview').replaceChildren();info('Image detached. Save the page to keep this change.');};
+ $('page-image-manage').onclick=async()=>{const list=$('page-image-library');list.replaceChildren();try{const r=await request({action:'list'});info(Math.ceil(r.images.reduce((n,i)=>n+i.size,0)/1024)+' KB of 5 MB used. Deleting affects all shared copies.');for(const i of r.images){const row=document.createElement('div'),label=document.createElement('span'),b=document.createElement('button');row.className='seg';label.textContent=i.name+' · '+Math.ceil(i.size/1024)+' KB';b.type='button';b.className='btn out sm';b.textContent='Delete from cloud';b.onclick=async()=>{if(!confirm('Permanently delete '+i.name+'? Every page and shared copy using this image will lose it.'))return;try{await request({action:'delete',key:i.key});cache.get(i.key)?.then(URL.revokeObjectURL,()=>{});cache.delete(i.key);if(draft?.key===i.key)draft=null;row.remove();info('Cloud image deleted.');}catch(e){info(String(e.message||e))}};row.append(label,b);list.append(row)}}catch(e){info(String(e.message||e))}};
+ window.addEventListener('cloud-locked',()=>{epoch++;editorGeneration++;for(const v of cache.values())v.then(URL.revokeObjectURL,()=>{});cache.clear();draft=null;$('page-image-preview').replaceChildren();$('page-image-library').replaceChildren();document.querySelectorAll('.page-cloud-image img').forEach(i=>i.removeAttribute('src'));});
+ return {edit,value,mount,props,get uploading(){return uploading}};
+})();
+renderPages();
+</script>
+
+<script id="team-chat-script">
+/* Messages and drafts live only in memory; the server owns storage and expiry. */
+window.TeamChat = (() => {
+ const $ = id => document.getElementById(id), panel=$('team-panel');
+ let opened=false, peer='', generation=0, timer=0, busy=false, messages=[], attachment=null, retryId=null, expiresAt=0, friends={};
+ const request = body => window.cloudRequest('chat',body);
+ const status = text => $('team-status').textContent=text;
+ const button = (text,fn) => { const b=document.createElement('button');b.type='button';b.className='isl-btn sm';b.textContent=text;b.onclick=fn;return b; };
+ function reset() { close(); peer='';messages=[];friends={};attachment=null;retryId=null;expiresAt=0;$('team-messages').replaceChildren();$('team-friends').replaceChildren();$('team-room').replaceChildren(new Option('Shared room',''));$('team-text').value='';$('team-user').value='';$('team-attachment').textContent='';status(''); }
+ function close() { opened=false;generation++;clearTimeout(timer);panel.hidden=true;$('island').classList.remove('chat-open');$('team-toggle').setAttribute('aria-expanded','false'); }
+ function open() { if(opened){close();return} opened=true;generation++;panel.hidden=false;$('island').classList.add('chat-open');$('team-toggle').setAttribute('aria-expanded','true');window.SmartScheduleManager.open='';window.SmartScheduleManager.evaluate();poll(); }
+ function render() {
+  const box=$('team-messages'),bottom=box.scrollHeight-box.scrollTop-box.clientHeight<60,scroll=box.scrollTop;
+  box.replaceChildren();
+  for(const m of messages) {
+   const row=document.createElement('article'),head=document.createElement('small'),text=document.createElement('p');
+   head.textContent=m.name+' · '+new Date(m.at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});text.textContent=m.text;row.append(head,text);
+   if(m.attachment){const a=m.attachment,caption=document.createElement('p');caption.textContent=a.type==='schedule'?'Schedule · '+a.days.length+' days':a.type+' · '+(a.name||a.title||'Untitled');row.append(caption);
+    row.append(button(a.type==='schedule'?'Preview schedule':'Save to clipboard',()=>{
+     if(a.type==='schedule'){
+      const preview=a.days.map(d=>d.iso+': '+new Date(d.start).toLocaleString()+' – '+new Date(d.end).toLocaleTimeString()).join('\n')+'\n'+a.items.map(i=>i.name+' · '+i.start+' · '+i.len+' min').join('\n');
+      if(confirm(preview+'\n\nReplace your schedule with this shared schedule?')){const M=window.SmartScheduleManager;M.importItems(structuredClone(a.items),{replace:true,days:structuredClone(a.days)});M.cfg().importTz=a.importTz;persistLocal();M.evaluate();showToast('Shared schedule imported.');}
+     }else {copyStructure(a);showToast('Saved '+a.type+' to clipboard. Choose its destination, then paste.');}
+    }));
+   }
+   box.append(row);
+  }
+  if(!messages.length){const p=document.createElement('p');p.textContent='No messages today. Start the conversation.';box.append(p)}
+  box.scrollTop=bottom?box.scrollHeight:scroll;
+ }
+ function renderFriends() {
+  const select=$('team-room');select.replaceChildren(new Option('Shared room',''));
+  const list=$('team-friends');list.replaceChildren();
+  for(const [id,f] of Object.entries(friends)){
+   if(f.status==='accepted') select.add(new Option(f.username,id));
+   const row=document.createElement('div');row.className='team-row';const label=document.createElement('span');label.textContent=f.username+(f.status==='pending'?(f.incoming?' · wants to add you':' · request sent'):'');row.append(label);
+   if(f.status==='pending'&&f.incoming)row.append(button('Accept',()=>friendAction('accept',f.username)));
+   row.append(button(f.status==='accepted'?'Unfriend':f.incoming?'Decline':'Cancel',()=>{if(f.status!=='accepted'||confirm('Unfriend '+f.username+'? Private chat will no longer be available.'))friendAction(f.status==='accepted'?'unfriend':'decline',f.username)}));list.append(row);
+  }
+  if(peer&&!friends[peer]||peer&&friends[peer].status!=='accepted'){peer='';messages=[];render();generation++;}
+  select.value=peer;
+ }
+ async function friendAction(action,username) {try {await request({action,username});$('team-user').value='';await refreshFriends();status(action==='request'?'Friend request sent.':'Friends updated.');}catch(e){status(String(e.message||e))} }
+ async function refreshFriends(){const g=generation,r=await request({action:'friends'});if(opened&&g===generation){friends=r.friends;renderFriends();}}
+ async function poll(){clearTimeout(timer);if(!opened||document.hidden)return;const g=generation;
+  try {await refreshFriends();if(g!==generation)return;const r=await request({action:'list',peer});if(g!==generation||!opened)return;
+   expiresAt=r.expiresAt;const incoming=r.messages;
+   // Preserve loaded earlier messages while refreshing the newest hundred.
+   const merged=new Map(messages.filter(m=>m.expiresAt>Date.now()).map(m=>[m.id,m]));incoming.forEach(m=>merged.set(m.id,m));const next=[...merged.values()].sort((a,b)=>a.at-b.at||a.id.localeCompare(b.id));
+   if(JSON.stringify(next)!==JSON.stringify(messages)){messages=next;render();}
+   $('team-older').hidden=incoming.length<100&&messages.length<100;status('Cloud chat · resets daily at 8 AM Philippine time');
+  }catch(e){if(g===generation)status(String(e.message||e));}
+  finally{if(opened)timer=setTimeout(poll,5000)}
+ }
+ function stage(a){attachment=structuredClone(a);retryId=null;$('team-attachment').textContent='Attached: '+a.type+' · '+(a.name||a.title||'current schedule');}
+ async function send(e){e.preventDefault();if(busy)return;busy=true;$('team-send').disabled=true;
+  const g=generation,target=peer,text=$('team-text').value,a=attachment;retryId=retryId||crypto.randomUUID();
+  try {await request({action:'send',peer:target,text,attachment:a,id:retryId});if(g===generation){if($('team-text').value===text)$('team-text').value='';if(attachment===a){attachment=null;$('team-attachment').textContent='';}retryId=null;await poll();}}
+  catch(e){status(String(e.message||e));}finally{busy=false;$('team-send').disabled=false;}
+ }
+ $('team-toggle').addEventListener('keydown',e=>e.stopPropagation());
+ $('isl-pill').addEventListener('click',e=>{if(!e.target.closest('#team-toggle'))close()},true);
+ $('team-toggle').onclick=e=>{e.stopPropagation();open()};$('team-close').onclick=close;
+ panel.addEventListener('pointerdown',e=>e.stopPropagation());panel.addEventListener('click',e=>e.stopPropagation());panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();close();$('team-toggle').focus();}});
+ $('team-form').onsubmit=send;
+ $('team-text').oninput=()=>retryId=null;
+ $('team-text').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();$('team-form').requestSubmit()}};
+ $('team-room').onchange=()=>{peer=$('team-room').value;generation++;retryId=null;messages=[];render();poll()};
+ $('team-add').onclick=()=>friendAction('request',$('team-user').value);
+ $('team-share').onclick=()=>{const a=parseClip(appClipboard);if(!a)return status('Copy a page, board, chapter or book first.');stage(a)};
+ $('team-schedule').onclick=()=>{const c=window.SmartScheduleManager.cfg();if(!c.items?.length&&!c.days?.length)return status('Import or create a schedule first.');stage({type:'schedule',items:(c.items||[]).map(i=>({...i,len:Number(i.len)||ISLAND_UI.types[i.type]?.len||15})),days:c.days||[],importTz:c.importTz||'Asia/Manila'})};
+ $('team-remove').onclick=()=>{attachment=null;retryId=null;$('team-attachment').textContent=''};
+ $('team-older').onclick=async()=>{const g=generation;try{const r=await request({action:'list',peer,before:messages[0]?.at,beforeId:messages[0]?.id});if(g!==generation)return;const all=new Map([...r.messages,...messages].map(m=>[m.id,m]));messages=[...all.values()].sort((a,b)=>a.at-b.at);render();$('team-older').hidden=r.messages.length<100;}catch(e){status(String(e.message||e))}};
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)clearTimeout(timer);else if(opened)poll()});
+ window.addEventListener('cloud-locked',reset);
+ // Expire even a cached conversation on an offline or sleeping tab.
+ setInterval(()=>{if(expiresAt&&Date.now()>=expiresAt){messages=[];expiresAt=0;render();}},1000);
+ return {open,close,reset};
+})();
+</script>
+
 <script id="lock-script">
 (function(){
 const G=id=>document.getElementById(id);
@@ -3152,11 +3306,16 @@ async function api(path,body){
  let d={};try{d=await r.json()}catch(e){}
  if(!r.ok)throw d.error||('Server error ('+r.status+')');return d}
 
+window.cloudRequest=async(path,body={})=>{
+ if(!document.documentElement.classList.contains('unlocked')||!auth?.currentUser)throw new Error('Sign in online to use cloud chat.');
+ return api(path,{...body,token:await auth.currentUser.getIdToken()});
+};
 /* ---------- login screen ---------- */
 const DEFMSG={login:'Log in to your account',key:'Enter the master key to continue',signup:'Create your account',reset:'Reset with your recovery code or the master key',code:'Save this recovery code now. It is shown once and is how you reset your password yourself'};
 function msg(t,bad){const m=G('lk-msg');m.textContent=t;m.classList.toggle('bad',!!bad)}
 function tick(){const d=new Date();G('lk-clock').textContent=d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}).replace(/\s?[ap]\.?m\.?$/i,'');G('lk-date').textContent=d.toLocaleDateString([],{weekday:'long',month:'long',day:'numeric'})}
 function setLocked(on){
+ if(on)window.dispatchEvent(new Event("cloud-locked"));
  document.documentElement.classList.toggle('unlocked',!on);
  [...document.body.children].forEach(n=>{if(n.id!=='lock'&&n.tagName!=='SCRIPT')n.toggleAttribute('inert',on)});
  clearInterval(timer);
@@ -3509,7 +3668,7 @@ function flip(change){/* the island slides between its corner and the centre ins
  s.transition='translate var(--isl-dur) var(--isl-ease)';s.translate='0px 0px';clearTimeout(ft);ft=setTimeout(()=>{s.transition='';s.translate=''},750)}
 function open(){const M=window.SmartScheduleManager;if(on||locked()||!ready()||(M&&M.open==='edit'))return;on=true;
  if(M&&M.open==='panel'){M.open='';M.evaluate()}
- flip(()=>{root.classList.add('srch');scrim.classList.add('on')});sel='';chapF='';q.value='';sr.classList.remove('on');q.focus({preventScroll:true})}
+ window.TeamChat?.close();flip(()=>{root.classList.add('srch');scrim.classList.add('on')});sel='';chapF='';q.value='';sr.classList.remove('on');q.focus({preventScroll:true})}
 window.openSearch=open;/* the magnifier next to Workspace */
 function close(){if(!on)return;on=false;clearTimeout(tm);q.blur();
  flip(()=>{root.classList.remove('srch');scrim.classList.remove('on');sr.classList.remove('on')});
