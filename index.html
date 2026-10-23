@@ -660,31 +660,54 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
 #img-lightbox .lb-bar .lb-pct{min-width:58px;font-size:13px;font-variant-numeric:tabular-nums}
 #img-lightbox .lb-bar button:hover,#img-lightbox .lb-bar button:focus-visible{background:rgba(255,255,255,.2)}
 #img-lightbox .lb-x:hover,#img-lightbox .lb-x:focus-visible{background:rgba(255,255,255,.32)}
-#island.chat-open,#island.mail-open{width:min(420px,calc(100vw - 16px));border-radius:var(--isl-radius-open)}
-#island.chat-open:hover,#island.mail-open:hover{transform:none}
-#island.chat-open>.isl-bd,#island.chat-open>.isl-sub,#island.mail-open>.isl-bd,#island.mail-open>.isl-sub{display:none}
-#team-panel{position:relative;z-index:2;padding:16px;max-height:calc(100dvh - 100px);overflow:auto;order:0}
-#team-panel[hidden]{display:none}#isl-root[data-v=top] #team-panel{order:4}
-.team-row{display:flex;align-items:center;gap:8px;margin:8px 0}.team-row>span,.team-row>b,.team-row>small{flex:1;overflow-wrap:anywhere}
-#team-panel input,#team-panel select{min-width:0;flex:1}#team-panel textarea{width:100%;resize:vertical;min-height:52px}
-#team-messages{height:min(280px,32dvh);overflow:auto;overscroll-behavior:contain;user-select:text}
-#team-messages article{padding:10px 0;border-bottom:1px solid var(--isl-edge);overflow-wrap:anywhere}
-#team-messages p{white-space:pre-wrap;margin:5px 0}#team-messages small{opacity:.7}
-#team-panel details{max-height:140px;overflow:auto}#team-panel summary{cursor:pointer}#team-toggle{flex-shrink:0;padding:6px}
-#team-toggle svg{fill:none;stroke:currentColor;stroke-width:1.7}
-#team-panel .team-row button{flex-shrink:0}#team-status{font-size:12px;margin:8px 0}#team-attachment:empty+button{display:none}
+#island.mail-open{width:min(440px,calc(100vw - 16px));border-radius:var(--isl-radius-open)}
+#island.mail-open:hover{transform:none}
+#island.mail-open>.isl-bd,#island.mail-open>.isl-sub{display:none}
+#team-status{font-size:12px;margin:0;min-height:0}#team-status:empty{display:none}
+#team-messages{height:min(300px,34dvh);overflow:auto;overscroll-behavior:contain;user-select:text;padding:4px 0;scroll-behavior:auto}
+.gc-m{position:relative;display:flex;gap:10px;padding:2px 6px 2px 4px;border-radius:8px;overflow-wrap:anywhere}.gc-m:not(.cont){margin-top:10px}
+.gc-m:hover,.gc-m:focus-within{background:rgba(127,127,127,.14)}
+.gc-av{flex:none;width:36px;height:36px;border-radius:50%;overflow:hidden;display:grid;place-items:center;font-weight:700;font-size:15px;color:#fff;user-select:none}.gc-av img{width:100%;height:100%;object-fit:cover;display:block}
+.gc-m.cont .gc-av{visibility:hidden;height:0}.gc-m.cont .gc-side{width:36px}
+.gc-side{flex:none;width:36px;position:relative}.gc-side time{display:none}.gc-m.cont .gc-side time{display:none;position:absolute;top:2px;left:0;width:36px;text-align:center;font-size:10px;opacity:.6}.gc-m.cont:hover .gc-side time{display:block}
+.gc-b{flex:1;min-width:0}.gc-h{display:flex;align-items:baseline;gap:8px}.gc-h b{font-size:14px}.gc-h time{font-size:11px;opacity:.6}
+.gc-t{white-space:pre-wrap;margin:1px 0;font-size:14px;line-height:1.4}.gc-t.big{font-size:30px;line-height:1.2}
+.gc-img{margin:4px 0}.gc-img .page-cloud-image{margin:2px 0}.gc-img img{max-height:260px;max-width:100%;width:auto;cursor:zoom-in;background:rgba(127,127,127,.15)}
+.gc-card{margin:4px 0;padding:8px 10px;border-left:3px solid var(--isl-ok);border-radius:6px;background:rgba(127,127,127,.16);display:flex;flex-direction:column;gap:4px;max-width:100%}
+.gc-card small{opacity:.7;text-transform:uppercase;letter-spacing:.04em;font-size:10px}.gc-card b{font-size:14px}.gc-card .isl-btn{align-self:flex-start}
+.gc-rx{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}
+.gc-rx button{height:24px;padding:0 8px;border:1px solid transparent;border-radius:12px;background:rgba(127,127,127,.22);color:inherit;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.gc-rx button.me{border-color:var(--isl-ok);background:rgba(48,209,88,.2)}.gc-rx button:hover{filter:brightness(1.2)}.gc-rx span{font-size:12px;font-weight:600}
+.gc-act{position:absolute;right:6px;top:-14px;display:none;gap:2px;padding:2px;border-radius:8px;background:var(--isl-bg);border:1px solid var(--isl-edge);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);z-index:3}
+.gc-m:hover .gc-act,.gc-m:focus-within .gc-act{display:flex}@media(hover:none){.gc-m .gc-act{display:flex;opacity:.8}}
+.gc-act button{width:26px;height:26px;padding:0;border:0;border-radius:6px;background:transparent;color:inherit;font-size:15px;cursor:pointer}.gc-act button:hover{background:rgba(127,127,127,.3)}
+#team-pop{border-radius:12px;background:rgba(127,127,127,.18);padding:6px}#team-pop[hidden]{display:none}
+#team-pop-tabs{display:flex;gap:2px;margin-bottom:4px}#team-pop-tabs button{flex:1;height:28px;border:0;border-radius:6px;background:transparent;color:inherit;font-size:16px;cursor:pointer;opacity:.6}#team-pop-tabs button[aria-selected=true]{opacity:1;background:rgba(127,127,127,.3)}
+#team-pop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(32px,1fr));gap:2px;max-height:132px;overflow:auto;overscroll-behavior:contain}
+#team-pop-grid button{height:32px;border:0;border-radius:6px;background:transparent;font-size:20px;cursor:pointer}#team-pop-grid button:hover,#team-pop-grid button:focus-visible{background:rgba(127,127,127,.35)}
+#team-attachment{display:flex;align-items:center;gap:8px;padding:6px 8px;margin-bottom:6px;border-radius:8px;background:rgba(127,127,127,.2);font-size:12px}#team-attachment[hidden]{display:none}
+#team-attachment img{width:44px;height:44px;object-fit:cover;border-radius:6px}#team-attachment span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#team-panel.drop{outline:2px dashed var(--isl-ok);outline-offset:-4px}
+#team-panel{display:flex;flex-direction:column;gap:6px;min-height:0}
+#team-status{font-size:12px;margin:0}#team-status:empty{display:none}
+#team-older{align-self:center}
+#team-clipmenu{display:flex;align-items:center;gap:8px;padding:6px 8px;margin-bottom:6px;border-radius:10px;background:rgba(127,127,127,.2);font-size:13px}#team-clipmenu[hidden]{display:none}#team-clipmenu span{flex:1}
+.gc-bar{display:flex;align-items:flex-end;gap:6px}.gc-input{position:relative;flex:1;min-width:0}
+.gc-input textarea{width:100%;box-sizing:border-box;resize:none;height:38px;min-height:38px;max-height:120px;padding:9px 38px 9px 12px;line-height:20px;border-radius:19px}
+#team-emoji{position:absolute;right:6px;bottom:5px;width:28px;height:28px;padding:0;border:0;border-radius:50%;background:transparent;color:inherit;opacity:.65;cursor:pointer;display:grid;place-items:center}#team-emoji:hover,#team-emoji:focus-visible{opacity:1;background:rgba(127,127,127,.3)}
+.gc-bar .isl-btn{height:38px;flex-shrink:0}.gc-clip{width:38px;padding:0;display:grid;place-items:center}
 /* MAIL: replaces the team chat in the pill. Same glass look as the island. */
 #mail-toggle{flex-shrink:0;padding:6px;position:relative}
 #mail-toggle svg{fill:none;stroke:currentColor;stroke-width:1.7}
 #mail-dot{position:absolute;top:-1px;right:-1px;width:10px;height:10px;border-radius:50%;background:var(--isl-late);box-shadow:0 0 0 2px rgba(255,255,255,.35);animation:isl-pop .45s var(--isl-ease);pointer-events:none}
-#mail-dot[hidden],#team-toggle[hidden]{display:none}
-#isl-root.srch #mail-toggle,#isl-root.srch #team-toggle{opacity:.4;cursor:default}/* search owns the island while it is open */
-#isl-root.srch #mail-panel,#isl-root.srch #team-panel{display:none}
+#mail-dot[hidden]{display:none}
+#isl-root.srch #mail-toggle{opacity:.4;cursor:default}/* search owns the island while it is open */
+#isl-root.srch #mail-panel{display:none}
 #mail-panel{position:relative;z-index:2;padding:16px;max-height:calc(100dvh - 100px);overflow:auto;order:0;display:flex;flex-direction:column;gap:10px}
 #mail-panel[hidden]{display:none}#isl-root[data-v=top] #mail-panel{order:4}
 #mail-panel [hidden]{display:none!important}
 .mail-top{display:flex;align-items:center;gap:8px}.mail-top b{flex:1;font-size:15px}
-.mail-tabs{display:flex;gap:6px}.mail-tabs .isl-btn{display:inline-flex;align-items:center;gap:6px}
+.mail-tabs{display:flex;gap:6px;align-items:center}.mail-sep{width:1px;height:18px;background:currentColor;opacity:.3;margin:0 2px}.mail-tabs .isl-btn{display:inline-flex;align-items:center;gap:6px}
 .mail-n{font-style:normal;min-width:16px;height:16px;padding:0 5px;border-radius:999px;background:var(--isl-late);color:#fff;font-size:10.5px;font-weight:700;line-height:16px;text-align:center}
 .mail-n:empty{display:none}
 #mail-list{display:flex;flex-direction:column;gap:6px;max-height:min(300px,36dvh);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-right:2px}
@@ -974,20 +997,9 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
 
 <!-- Smart Island: live clock + break tracker + schedule (bottom right). Content is filled in by SmartScheduleManager. -->
 <div id="isl-scrim"></div><div id="isl-root"><div id="island" role="region" aria-label="Live clock and breaks" data-tone="">
-  <section id="team-panel" hidden aria-label="Team chat">
- <div class="team-row"><b>Team chat</b><button type="button" class="isl-btn sm" id="team-close" aria-label="Close chat">×</button></div>
- <label class="team-row">Conversation <select id="team-room" class="isl-inp"><option value="">Shared room</option></select></label>
- <details><summary>Friends</summary><div class="team-row"><input id="team-user" class="isl-inp" maxlength="24" placeholder="Username" aria-label="Friend username"><button type="button" class="isl-btn sm" id="team-add">Add friend</button></div><div id="team-friends"></div></details>
- <p id="team-status" class="isl-p" role="status"></p>
- <button type="button" class="isl-btn sm" id="team-older" hidden>Earlier messages</button>
- <div id="team-messages" role="log" aria-label="Messages" aria-live="polite"></div>
- <form id="team-form"><textarea id="team-text" class="isl-inp" maxlength="4000" rows="2" placeholder="Message · Shift+Enter for a new line" aria-label="Message"></textarea>
- <div class="team-row"><button type="button" class="isl-btn sm" id="team-share">Share copied item</button><button type="button" class="isl-btn sm" id="team-schedule">Schedule</button><button class="isl-btn pri" id="team-send">Send</button></div>
- <div class="team-row"><small id="team-attachment"></small><button type="button" class="isl-btn sm" id="team-remove" aria-label="Remove attachment">×</button></div></form>
-</section>
   <section id="mail-panel" hidden aria-label="Mail">
  <div class="mail-top"><b id="mail-h">Mail</b><button type="button" class="isl-btn sm pri" id="mail-new">Compose</button><button type="button" class="isl-btn sm" id="mail-close" aria-label="Close mail">×</button></div>
- <div class="mail-tabs" id="mail-tabs" role="tablist" aria-label="Mailbox"><button type="button" class="isl-btn sm pri" role="tab" data-b="inbox" aria-selected="true">Inbox<i class="mail-n" id="mail-n"></i></button><button type="button" class="isl-btn sm" role="tab" data-b="sent" aria-selected="false">Sent</button></div>
+ <div class="mail-tabs" id="mail-tabs" role="tablist" aria-label="Mailbox"><button type="button" class="isl-btn sm pri" role="tab" data-b="inbox" aria-selected="true">Inbox<i class="mail-n" id="mail-n"></i></button><button type="button" class="isl-btn sm" role="tab" data-b="sent" aria-selected="false">Sent</button><span class="mail-sep" aria-hidden="true"></span><button type="button" class="isl-btn sm" role="tab" data-b="chat" aria-selected="false">Chat</button></div>
  <div id="mail-list" role="list" aria-label="Messages"></div>
  <div id="mail-read" hidden></div>
  <form id="mail-compose" hidden autocomplete="off">
@@ -999,11 +1011,27 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
   <div class="mail-f" id="mail-attrow" hidden><span>Attached</span><b id="mail-att"></b><small id="mail-kind"></small><button type="button" class="isl-btn sm" id="mail-remove" aria-label="Remove attachment">×</button></div>
   <div class="mail-act"><button class="isl-btn pri" id="mail-send" disabled>Send</button><button type="button" class="isl-btn" id="mail-cancel">Cancel</button></div>
  </form>
+  <div id="team-panel" hidden role="tabpanel" aria-label="Global chat">
+ <p id="team-status" class="isl-p" role="status"></p>
+ <button type="button" class="isl-btn sm" id="team-older" hidden>Load earlier messages</button>
+ <div id="team-messages" role="log" aria-label="Messages" aria-live="polite"></div>
+ <div id="team-pop" hidden><div id="team-pop-tabs" role="tablist" aria-label="Emoji categories"></div><div id="team-pop-grid" role="listbox" aria-label="Emoji"></div></div>
+ <form id="team-form" autocomplete="off">
+  <div id="team-attachment" hidden></div>
+  <div id="team-clipmenu" hidden role="dialog" aria-label="Attach an image"><span>Attach an image?</span><button type="button" class="isl-btn sm pri" id="team-image">Choose image</button><button type="button" class="isl-btn sm" id="team-clipno">Cancel</button></div>
+  <div class="gc-bar">
+   <div class="gc-input"><textarea id="team-text" class="isl-inp" maxlength="4000" rows="1" aria-label="Message"></textarea><button type="button" id="team-emoji" aria-label="Emoji" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.2c.9 1.1 2 1.7 3.5 1.7s2.6-.6 3.5-1.7"/><path d="M9 9.5h.01M15 9.5h.01" stroke-width="2.4"/></svg></button></div>
+   <button type="button" class="isl-btn sm gc-clip" id="team-clip" aria-label="Attach" aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 11.5-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6l7.9-7.9"/></svg></button>
+   <button class="isl-btn pri sm" id="team-send">Send</button>
+  </div>
+  <input type="file" id="team-file" accept="image/jpeg,image/png,image/webp" hidden>
+ </form>
+</div>
  <p id="mail-status" class="isl-p" role="status"></p>
 </section>
   <div class="isl-bd"><div id="isl-body"></div></div>
   <div class="isl-pill" id="isl-pill" role="button" tabindex="0" aria-expanded="false" aria-label="Open schedule">
-    <button type="button" class="isl-btn sm" id="mail-toggle" title="Mail" aria-label="Mail" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></svg><i id="mail-dot" hidden></i></button><button type="button" class="isl-btn sm" id="team-toggle" title="Team chat" aria-label="Team chat" aria-expanded="false" hidden><svg viewBox="0 0 24 24" width="18" height="18"><path d="M21 11a8 8 0 0 1-8 8H5l-4 3V11a10 10 0 0 1 20 0Z"/></svg></button><div class="isl-clk"><span id="isl-pre"></span><span id="isl-a">--</span><span class="isl-dots"><i></i><i></i><i></i></span><span id="isl-b">--</span><small id="isl-ap"></small></div>
+    <button type="button" class="isl-btn sm" id="mail-toggle" title="Mail" aria-label="Mail" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></svg><i id="mail-dot" hidden></i></button><div class="isl-clk"><span id="isl-pre"></span><span id="isl-a">--</span><span class="isl-dots"><i></i><i></i><i></i></span><span id="isl-b">--</span><small id="isl-ap"></small></div>
     <div class="isl-lbl" id="isl-lbl" aria-live="polite"></div>
     <button type="button" class="isl-chk" id="isl-chk" aria-label="I'm back"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></button>
     <button type="button" class="isl-end" id="isl-end">End shift</button>
@@ -3217,7 +3245,7 @@ document.addEventListener('paste',e=>{
 /* save */
 function generateUpdatedHtmlString(){const c=document.documentElement.cloneNode(true);if(window.lockClean)window.lockClean(c);/* strip transient UI so the saved file reopens clean */
  c.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));c.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show'));c.querySelectorAll('.ghost,.copy-pop,#menu-context').forEach(n=>n.remove());c.querySelector('body').classList.remove('edit','dragging-page','rszing');c.classList.remove('lite','flat-isl');['books','chs','wsc','hacts','chats'].forEach(i=>{const n=c.querySelector('#'+i);if(n)n.innerHTML=''});
- c.querySelector('#island')?.classList.remove('chat-open');const panel=c.querySelector('#team-panel');if(panel)panel.hidden=true;['team-messages','team-friends','team-status','team-attachment','page-image-preview','page-image-library','page-image-status'].forEach(id=>c.querySelector('#'+id)?.replaceChildren());const room=c.querySelector('#team-room');if(room)room.innerHTML='<option value="">Shared room</option>';c.querySelectorAll('#team-panel input,#team-panel textarea').forEach(n=>{n.textContent='';n.removeAttribute('value')});c.querySelector('#team-toggle')?.setAttribute('aria-expanded','false');
+ const panel=c.querySelector('#team-panel');if(panel)panel.hidden=true;['team-messages','team-pop-tabs','team-pop-grid','team-status','team-attachment','page-image-preview','page-image-library','page-image-status'].forEach(id=>c.querySelector('#'+id)?.replaceChildren());const pop=c.querySelector('#team-pop');if(pop)pop.hidden=true;const att=c.querySelector('#team-attachment');if(att)att.hidden=true;c.querySelectorAll('#team-panel input,#team-panel textarea').forEach(n=>{n.textContent='';n.removeAttribute('value')});const cm=c.querySelector('#team-clipmenu');if(cm)cm.hidden=true;
  c.querySelector('#island')?.classList.remove('mail-open');const mp=c.querySelector('#mail-panel');if(mp)mp.hidden=true;['mail-list','mail-read','mail-att','mail-kind','mail-status','mail-n'].forEach(id=>c.querySelector('#'+id)?.replaceChildren());c.querySelectorAll('#mail-panel input').forEach(n=>n.removeAttribute('value'));c.querySelectorAll('#mail-panel .mail-chip').forEach(n=>n.remove());c.querySelectorAll('#mail-panel textarea').forEach(n=>{n.textContent=''});const msj=c.querySelector('#mail-subj');if(msj)msj.setAttribute('placeholder','Subject (optional)');const mcr=c.querySelector('#mail-cc-row');if(mcr)mcr.hidden=true;const mcs=c.querySelector('#mail-cc-show');if(mcs)mcs.hidden=false;const mar=c.querySelector('#mail-attrow');if(mar)mar.hidden=true;const md=c.querySelector('#mail-dot');if(md)md.hidden=true;const mt=c.querySelector('#mail-toggle');if(mt){mt.setAttribute('aria-expanded','false');mt.setAttribute('aria-label','Mail');mt.title='Mail'}
  const t=c.querySelector('#toast');if(t){t.className='';t.textContent=''}
  return '<!DOCTYPE html>\n'+c.outerHTML.replace(/\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//,()=>'/*DATA_START*/'+JSON.stringify(appData,null,2).replace(/</g,'\\u003c')+'/*DATA_END*/')}
@@ -3392,98 +3420,226 @@ window.PageImages=(()=>{
  $('page-image-remove').onclick=()=>{draft=null;$('page-image-preview').replaceChildren();info('Image detached. Save the page to keep this change.');};
  $('page-image-manage').onclick=async()=>{const list=$('page-image-library');list.replaceChildren();try{const r=await request({action:'list'});info(Math.ceil(r.images.reduce((n,i)=>n+i.size,0)/1024)+' KB of 5 MB used. Deleting affects all shared copies.');for(const i of r.images){const row=document.createElement('div'),label=document.createElement('span'),b=document.createElement('button');row.className='seg';label.textContent=i.name+' · '+Math.ceil(i.size/1024)+' KB';b.type='button';b.className='btn out sm';b.textContent='Delete from cloud';b.onclick=async()=>{if(!confirm('Permanently delete '+i.name+'? Every page and shared copy using this image will lose it.'))return;try{await request({action:'delete',key:i.key});cache.get(i.key)?.then(URL.revokeObjectURL,()=>{});cache.delete(i.key);if(draft?.key===i.key)draft=null;row.remove();info('Cloud image deleted.');}catch(e){info(String(e.message||e))}};row.append(label,b);list.append(row)}}catch(e){info(String(e.message||e))}};
  window.addEventListener('cloud-locked',()=>{epoch++;editorGeneration++;for(const v of cache.values())v.then(URL.revokeObjectURL,()=>{});cache.clear();draft=null;$('page-image-preview').replaceChildren();$('page-image-library').replaceChildren();lbClose();document.querySelectorAll('.page-cloud-image img').forEach(i=>i.removeAttribute('src'));document.querySelectorAll('.page-img-zoom').forEach(b=>{b.hidden=true});});
- return {edit,value,mount,props,get uploading(){return uploading}};
+ /* upload/enlarge are also used by the global chat */
+ async function upload(f){const data=await encode(f);return request({action:'upload',data,name:f.name})}
+ return {edit,value,mount,props,upload,enlarge,get uploading(){return uploading}};
 })();
 renderPages();
 </script>
 
 <script id="team-chat-script">
-/* TEAM CHAT SWITCH: the chat is switched OFF (hidden, never opens, never contacts the server). All of its code is still here and unchanged.
-   Set this to true to bring it back: its icon returns to the pill next to the mail icon. Mail (below) does not depend on it. */
-const TEAM_CHAT_ENABLED = false;
-/* Messages and drafts live only in memory; the server owns storage and expiry. */
+const TEAM_CHAT_ENABLED = true;
+/* GLOBAL CHAT: one room that every signed-in user shares (the server's shared room, peer ''). Discord-style: avatars, grouped messages,
+   image/screenshot attachments (opened in the zoomable viewer), copied pages / boards / chapters / books, schedules, emoji and reactions.
+   Messages and drafts live only in memory; the server (api/chat.js) owns storage and expiry.
+   Server contract used here:
+     list  {action:'list',peer:'',before?,beforeId?}   -> {messages:[{id,name,text,at,expiresAt,attachment?,avatar?,reactions?:{emoji:[names]}}],expiresAt}
+     send  {action:'send',peer:'',text,attachment?,id,avatar?}   attachment.type: page|board|chapter|book|schedule|image ({type:'image',key,name,alt})
+     react {action:'react',id,emoji,on}   toggles the caller's reaction on a message */
 window.TeamChat = (() => {
- const $ = id => document.getElementById(id), panel=$('team-panel');
- let opened=false, peer='', generation=0, timer=0, busy=false, messages=[], attachment=null, retryId=null, expiresAt=0, friends={};
- const request = body => TEAM_CHAT_ENABLED ? window.cloudRequest('chat',body) : Promise.reject(new Error('Team chat is switched off.'));
- const status = text => $('team-status').textContent=text;
- const button = (text,fn) => { const b=document.createElement('button');b.type='button';b.className='isl-btn sm';b.textContent=text;b.onclick=fn;return b; };
- function reset() { close(); peer='';messages=[];friends={};attachment=null;retryId=null;expiresAt=0;$('team-messages').replaceChildren();$('team-friends').replaceChildren();$('team-room').replaceChildren(new Option('Shared room',''));$('team-text').value='';$('team-user').value='';$('team-attachment').textContent='';status(''); }
- function close() { opened=false;generation++;clearTimeout(timer);panel.hidden=true;$('island').classList.remove('chat-open');$('team-toggle').setAttribute('aria-expanded','false'); }
- function open() { if(!TEAM_CHAT_ENABLED)return; if(opened){close();return} window.Mail?.close();opened=true;generation++;panel.hidden=false;$('island').classList.add('chat-open');$('team-toggle').setAttribute('aria-expanded','true');window.SmartScheduleManager.open='';window.SmartScheduleManager.evaluate();poll(); }
- function render() {
-  const box=$('team-messages'),bottom=box.scrollHeight-box.scrollTop-box.clientHeight<60,scroll=box.scrollTop;
-  box.replaceChildren();
-  for(const m of messages) {
-   const row=document.createElement('article'),head=document.createElement('small'),text=document.createElement('p');
-   head.textContent=m.name+' · '+new Date(m.at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});text.textContent=m.text;row.append(head,text);
-   if(m.attachment){const a=m.attachment,caption=document.createElement('p');caption.textContent=a.type==='schedule'?'Schedule · '+a.days.length+' days':a.type+' · '+(a.name||a.title||'Untitled');row.append(caption);
-    row.append(button(a.type==='schedule'?'Preview schedule':'Save to clipboard',()=>{
-     if(a.type==='schedule'){
-      const preview=a.days.map(d=>d.iso+': '+new Date(d.start).toLocaleString()+' – '+new Date(d.end).toLocaleTimeString()).join('\n')+'\n'+a.items.map(i=>i.name+' · '+i.start+' · '+i.len+' min').join('\n');
-      if(confirm(preview+'\n\nReplace your schedule with this shared schedule?')){const M=window.SmartScheduleManager;M.importItems(structuredClone(a.items),{replace:true,days:structuredClone(a.days)});M.cfg().importTz=a.importTz;persistLocal();M.evaluate();showToast('Shared schedule imported.');}
-     }else {copyStructure(a);showToast('Saved '+a.type+' to clipboard. Choose its destination, then paste.');}
-    }));
-   }
-   box.append(row);
+ const $ = id => document.getElementById(id), panel=$('team-panel'), box=$('team-messages'), ta=$('team-text');
+ const CATS = [
+  ['😀','Smileys','😀 😃 😄 😁 😆 😅 🤣 😂 🙂 🙃 😉 😊 😇 🥰 😍 🤩 😘 😋 😛 😜 🤪 😎 🤓 🥳 😏 😒 😞 😔 😟 😕 🙁 😣 😖 😫 😩 🥺 😢 😭 😤 😠 😡 🤬 🤯 😳 🥵 🥶 😱 😨 😰 😥 😓 🤗 🤔 🤭 🤫 😶 😐 😑 😬 🙄 😯 😲 😴 🤤 😪 😵 🤐 🥴 🤢 🤮 🤧 😷 🤒 🤕 🤠 🥸 😈 💀 👻 🤖 💩'],
+  ['👍','Gestures','👍 👎 👌 ✌️ 🤞 🤟 🤘 🤙 👈 👉 👆 👇 ☝️ ✋ 🤚 🖐 🖖 👋 👏 🙌 👐 🤲 🤝 🙏 ✍️ 💪 🫶 🫡 🤌 🫰 🫵 💅'],
+  ['❤️','Hearts','❤️ 🧡 💛 💚 💙 💜 🖤 🤍 🤎 💔 ❣️ 💕 💞 💓 💗 💖 💘 💝 💯 💢 💥 💫 💦 💤 ✨ 🔥 ⭐ 🌟'],
+  ['🐶','Animals','🐶 🐱 🐭 🐹 🐰 🦊 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐸 🐵 🙈 🙉 🙊 🐔 🐧 🐦 🦆 🦉 🐺 🐴 🦄 🐝 🦋 🐌 🐞 🐢 🐍 🐙 🐬 🐳 🦈 🌸 🌹 🌻 🌲 🍀'],
+  ['🍕','Food','🍎 🍌 🍉 🍇 🍓 🍒 🍑 🥭 🍍 🥑 🍅 🥕 🌽 🍞 🧀 🍗 🍔 🍟 🍕 🌭 🌮 🍣 🍜 🍩 🍪 🎂 🍫 🍿 ☕ 🍵 🥤 🍺 🍷'],
+  ['⚽','Activity','⚽ 🏀 🏈 ⚾ 🎾 🏐 🎱 🏓 🏸 🥊 🎯 🎮 🎲 🎵 🎶 🎤 🎧 🎸 🎬 🎨 🏆 🥇 🎉 🎊 🎁 🎈'],
+  ['💻','Objects','💻 📱 ⌨️ 🖥 📷 📚 📖 📝 ✏️ 📌 📎 📅 📊 📈 🔒 🔑 💡 🔔 ⏰ ⌛ 💰 📦 ✅ ❌ ❓ ❗ ⚠️ 🚀 🎓 🧠 👀 💬']
+ ].map(([icon,name,list])=>({icon,name,list:list.split(' ')}));
+ const QUICK=['👍','❤️','😂','😮','😢','🎉'];
+ const NAMES={smile:'😄',grin:'😁',joy:'😂',lol:'😂',heart:'❤️',thumbsup:'👍',thumbsdown:'👎',fire:'🔥',tada:'🎉',party:'🥳',clap:'👏',pray:'🙏',cry:'😢',sob:'😭',wink:'😉',cool:'😎',thinking:'🤔',eyes:'👀',ok:'👌',wave:'👋',rocket:'🚀',star:'⭐',check:'✅',x:'❌',sleepy:'😴',angry:'😠',love:'😍',laugh:'🤣',100:'💯',coffee:'☕',pizza:'🍕',skull:'💀'};
+ const EMOTICONS={':)':'🙂',':-)':'🙂',':D':'😃',':-D':'😃',':(':'🙁',':-(':'🙁',';)':'😉',';-)':'😉',':P':'😛',':p':'😛',':O':'😮',':o':'😮','<3':'❤️',":'(":'😢','xD':'😂','XD':'😂'};
+ const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+ const EMO_RE = new RegExp('(^|\\s)('+Object.keys(EMOTICONS).map(esc).join('|')+')(?=\\s|$)','g');
+ const withEmoji = t => t.replace(/:([a-z0-9_]{1,20}):/gi,(m,n)=>NAMES[n.toLowerCase()]||m).replace(EMO_RE,(m,s,e)=>s+EMOTICONS[e]);
+ const isEmojiOnly = t => !!t && t.length<=24 && !/[A-Za-z0-9]/.test(t) && /^[\p{Extended_Pictographic}\p{Emoji_Component}\s‍️]+$/u.test(t);
+ let opened=false, generation=0, timer=0, busy=false, uploading=false, messages=[], staged=null, retryId=null, expiresAt=0, popMode=null, popCat=0, smallAv=null;
+ const nodes=new Map();
+ const grow=()=>{ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,120)+'px'};
+ const request = body => window.cloudRequest('chat',{peer:'',...body});
+ const status = text => $('team-status').textContent=text||'';
+ const h = (tag,cls,text) => { const n=document.createElement(tag); if(cls)n.className=cls; if(text!==undefined)n.textContent=text; return n; };
+ const button = (text,fn,cls) => { const b=h('button',cls||'isl-btn sm',text);b.type='button';b.onclick=fn;return b; };
+ const me = () => String(window.ChatIdentity?.name?.()||'').toLowerCase();
+ const isMine = m => m.mine===true || (!!m.name && String(m.name).toLowerCase()===me());
+ const goodAv = a => typeof a==='string' && a.length<30000 && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(a);
+ const hue = s => { let x=0; for(const c of String(s))x=(x*31+c.charCodeAt(0))%360; return x; };
+ const fmt = t => new Date(t).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+ /* A 48 px copy of the profile picture travels with each message so other users can see it. */
+ function smallAvatar() {
+  if(smallAv!==null)return smallAv;
+  const src=window.ChatIdentity?.avatar?.()||'';
+  if(!src)return smallAv='';
+  return smallAv=new Promise(res=>{const i=new Image();i.onload=()=>{try{const c=document.createElement('canvas');c.width=c.height=48;c.getContext('2d').drawImage(i,0,0,48,48);res(c.toDataURL('image/jpeg',.7))}catch(e){res('')}};i.onerror=()=>res('');i.src=src}).then(v=>smallAv=v);
+ }
+ function avatarEl(m) {
+  const a=h('div','gc-av'),mineAv=isMine(m)?(window.ChatIdentity?.avatar?.()||''):'',src=mineAv||m.avatar;
+  if(mineAv||goodAv(src)){const i=new Image();i.alt='';i.src=src;a.append(i)}
+  else{a.textContent=(m.name||'?').trim().charAt(0).toUpperCase()||'?';a.style.background='hsl('+hue(m.name)+' 45% 45%)'}
+  return a;
+ }
+ function reset() { hide(); messages=[];staged=null;retryId=null;expiresAt=0;smallAv=null;nodes.clear();box.replaceChildren();ta.value='';clearStage();status('');closePop(); }
+ /* The chat lives inside the Mail panel as its "Chat" tab: Mail calls show() when the tab opens and hide() when it closes or another tab is picked. */
+ function hide() { if(!opened)return; opened=false;generation++;clearTimeout(timer);closePop();closeClip(); }
+ function show() { if(opened)return; opened=true;generation++;poll();setTimeout(()=>{if(opened&&!panel.hidden)ta.focus({preventScroll:true})},80); }
+
+ /* ---------- attachments inside a message ---------- */
+ function attachmentEl(a) {
+  if(a.type==='image'){
+   const wrap=h('div','gc-img');
+   window.PageImages.mount(wrap,{image:{key:a.key,position:'below',alt:a.alt||a.name||'Shared image'}});
+   const img=wrap.querySelector('img');if(img)img.onclick=()=>window.PageImages.enlarge(img,img);
+   return wrap;
   }
-  if(!messages.length){const p=document.createElement('p');p.textContent='No messages today. Start the conversation.';box.append(p)}
+  const card=h('div','gc-card');
+  if(a.type==='schedule'){
+   card.append(h('small',0,'Schedule'),h('b',0,(a.days?.length||0)+' day'+(a.days?.length===1?'':'s')+' · '+(a.items?.length||0)+' items'),
+    button('Preview schedule',()=>{
+     const preview=a.days.map(d=>d.iso+': '+new Date(d.start).toLocaleString()+' – '+new Date(d.end).toLocaleTimeString()).join('\n')+'\n'+a.items.map(i=>i.name+' · '+i.start+' · '+i.len+' min').join('\n');
+     if(confirm(preview+'\n\nReplace your schedule with this shared schedule?')){const M=window.SmartScheduleManager;M.importItems(structuredClone(a.items),{replace:true,days:structuredClone(a.days)});M.cfg().importTz=a.importTz;persistLocal();M.evaluate();showToast('Shared schedule imported.');}
+    }));
+   return card;
+  }
+  const count=a.type==='book'?(a.chapters?.length||0)+' chapters':a.type==='chapter'||a.type==='board'?(a.pages?.length||0)+' pages':'';
+  card.append(h('small',0,a.type),h('b',0,a.name||a.title||'Untitled'));
+  if(count)card.append(h('span',0,count));
+  card.append(button('Save to clipboard',()=>{copyStructure(a);showToast('Saved '+a.type+' to clipboard. Choose its destination, then paste.')}));
+  return card;
+ }
+
+ /* ---------- one message ---------- */
+ function build(m,cont) {
+  const row=h('article','gc-m'+(cont?' cont':'')),side=h('div','gc-side'),body=h('div','gc-b');
+  row.dataset.id=m.id;
+  side.append(avatarEl(m),h('time',0,fmt(m.at)));
+  if(!cont){const head=h('div','gc-h');head.append(h('b',0,m.name||'Unknown'),h('time',0,fmt(m.at)));body.append(head)}
+  if(m.text){const t=h('p','gc-t'+(isEmojiOnly(m.text)?' big':''),m.text);body.append(t)}
+  if(m.attachment&&typeof m.attachment==='object')body.append(attachmentEl(m.attachment));
+  const rx=Object.entries(m.reactions||{}).filter(([,u])=>Array.isArray(u)&&u.length);
+  if(rx.length){
+   const bar=h('div','gc-rx');
+   for(const [e,users] of rx){
+    const mine=users.some(u=>String(u).toLowerCase()===me()),b=button('',()=>react(m.id,e),mine?'me':'');
+    b.append(document.createTextNode(e),h('span',0,String(users.length)));b.title=users.join(', ');b.setAttribute('aria-label',e+' '+users.length+(mine?', you reacted':''));b.setAttribute('aria-pressed',mine);bar.append(b);
+   }
+   body.append(bar);
+  }
+  const act=h('div','gc-act');
+  for(const e of QUICK.slice(0,3))act.append(button(e,()=>react(m.id,e),''));
+  const more=button('☺',()=>openPop('react',m.id),'');more.title='Add reaction';more.setAttribute('aria-label','Add reaction');act.append(more);
+  row.append(side,body,act);
+  return row;
+ }
+ function render() {
+  const bottom=box.scrollHeight-box.scrollTop-box.clientHeight<60,scroll=box.scrollTop,list=[],keep=new Set();let prev=null;
+  for(const m of messages){
+   const cont=!!prev&&prev.name===m.name&&m.at-prev.at<5*60000,sig=JSON.stringify([m,cont,isMine(m)]);let rec=nodes.get(m.id);
+   if(!rec||rec.sig!==sig){rec={sig,el:build(m,cont)};nodes.set(m.id,rec)}
+   keep.add(m.id);list.push(rec.el);prev=m;
+  }
+  for(const id of [...nodes.keys()])if(!keep.has(id))nodes.delete(id);
+  if(!list.length){list.push(h('p','gc-t','No messages yet today. Say hello 👋'))}
+  box.replaceChildren(...list);
   box.scrollTop=bottom?box.scrollHeight:scroll;
  }
- function renderFriends() {
-  const select=$('team-room');select.replaceChildren(new Option('Shared room',''));
-  const list=$('team-friends');list.replaceChildren();
-  for(const [id,f] of Object.entries(friends)){
-   if(f.status==='accepted') select.add(new Option(f.username,id));
-   const row=document.createElement('div');row.className='team-row';const label=document.createElement('span');label.textContent=f.username+(f.status==='pending'?(f.incoming?' · wants to add you':' · request sent'):'');row.append(label);
-   if(f.status==='pending'&&f.incoming)row.append(button('Accept',()=>friendAction('accept',f.username)));
-   row.append(button(f.status==='accepted'?'Unfriend':f.incoming?'Decline':'Cancel',()=>{if(f.status!=='accepted'||confirm('Unfriend '+f.username+'? Private chat will no longer be available.'))friendAction(f.status==='accepted'?'unfriend':'decline',f.username)}));list.append(row);
-  }
-  if(peer&&!friends[peer]||peer&&friends[peer].status!=='accepted'){peer='';messages=[];render();generation++;}
-  select.value=peer;
+
+ /* ---------- reactions ---------- */
+ async function react(id,emoji) {
+  closePop();
+  const m=messages.find(x=>x.id===id);if(!m)return;
+  const before=structuredClone(m.reactions||{}),n=me(),r=m.reactions=m.reactions||{},list=r[emoji]=r[emoji]||[],i=list.findIndex(u=>String(u).toLowerCase()===n),on=i<0;
+  if(on)list.push(n);else list.splice(i,1);if(!list.length)delete r[emoji];
+  render();
+  try{await request({action:'react',id,emoji,on});poll()}
+  catch(e){m.reactions=before;render();status(String(e.message||e))}
  }
- async function friendAction(action,username) {try {await request({action,username});$('team-user').value='';await refreshFriends();status(action==='request'?'Friend request sent.':'Friends updated.');}catch(e){status(String(e.message||e))} }
- async function refreshFriends(){const g=generation,r=await request({action:'friends'});if(opened&&g===generation){friends=r.friends;renderFriends();}}
+
+ /* ---------- emoji picker (compose and react share it) ---------- */
+ function fillPop() {
+  const tabs=$('team-pop-tabs'),grid=$('team-pop-grid');
+  tabs.replaceChildren(...CATS.map((c,i)=>{const b=button(c.icon,()=>{popCat=i;fillPop()},'');b.setAttribute('role','tab');b.setAttribute('aria-selected',i===popCat);b.title=c.name;return b}));
+  grid.replaceChildren(...CATS[popCat].list.map(e=>{const b=button(e,()=>pick(e),'');b.setAttribute('role','option');b.setAttribute('aria-label',e);return b}));
+ }
+ function openPop(mode,id) {
+  if(!$('team-pop').hidden&&popMode&&popMode.mode===mode&&popMode.id===id){closePop();return}
+  closeClip();popMode={mode,id};fillPop();$('team-pop').hidden=false;$('team-emoji').setAttribute('aria-expanded',mode==='compose');
+  $('team-pop').scrollIntoView({block:'nearest'});
+ }
+ function closePop() { popMode=null;$('team-pop').hidden=true;$('team-emoji').setAttribute('aria-expanded','false'); }
+ function pick(e) {
+  if(popMode?.mode==='react'){react(popMode.id,e);return}
+  const s=ta.selectionStart??ta.value.length,t=ta.selectionEnd??s;ta.setRangeText(e,s,t,'end');retryId=null;ta.focus({preventScroll:true});
+ }
+
+ /* ---------- polling ---------- */
  async function poll(){clearTimeout(timer);if(!opened||document.hidden)return;const g=generation;
-  try {await refreshFriends();if(g!==generation)return;const r=await request({action:'list',peer});if(g!==generation||!opened)return;
-   expiresAt=r.expiresAt;const incoming=r.messages;
-   // Preserve loaded earlier messages while refreshing the newest hundred.
-   const merged=new Map(messages.filter(m=>m.expiresAt>Date.now()).map(m=>[m.id,m]));incoming.forEach(m=>merged.set(m.id,m));const next=[...merged.values()].sort((a,b)=>a.at-b.at||a.id.localeCompare(b.id));
+  try {const r=await request({action:'list'});if(g!==generation||!opened)return;
+   expiresAt=r.expiresAt;const incoming=r.messages||[];
+   // Keep earlier messages that were loaded, refresh the newest hundred.
+   const merged=new Map(messages.filter(m=>!m.expiresAt||m.expiresAt>Date.now()).map(m=>[m.id,m]));incoming.forEach(m=>merged.set(m.id,m));const next=[...merged.values()].sort((a,b)=>a.at-b.at||String(a.id).localeCompare(String(b.id)));
    if(JSON.stringify(next)!==JSON.stringify(messages)){messages=next;render();}
-   $('team-older').hidden=incoming.length<100&&messages.length<100;status('Cloud chat · resets daily at 8 AM Philippine time');
+   $('team-older').hidden=incoming.length<100&&messages.length<100;status('');
   }catch(e){if(g===generation)status(String(e.message||e));}
   finally{if(opened)timer=setTimeout(poll,5000)}
  }
- function stage(a){attachment=structuredClone(a);retryId=null;$('team-attachment').textContent='Attached: '+a.type+' · '+(a.name||a.title||'current schedule');}
- async function send(e){e.preventDefault();if(busy)return;busy=true;$('team-send').disabled=true;
-  const g=generation,target=peer,text=$('team-text').value,a=attachment;retryId=retryId||crypto.randomUUID();
-  try {await request({action:'send',peer:target,text,attachment:a,id:retryId});if(g===generation){if($('team-text').value===text)$('team-text').value='';if(attachment===a){attachment=null;$('team-attachment').textContent='';}retryId=null;await poll();}}
-  catch(e){status(String(e.message||e));}finally{busy=false;$('team-send').disabled=false;}
+
+ /* ---------- composing ---------- */
+ function clearStage(){if(staged?.thumb)URL.revokeObjectURL(staged.thumb);staged=null;retryId=null;const s=$('team-attachment');s.hidden=true;s.replaceChildren()}
+ function stage(a,thumb){
+  clearStage();staged={a:structuredClone(a),thumb:thumb||''};
+  const s=$('team-attachment');s.hidden=false;
+  if(thumb){const i=new Image();i.alt='';i.src=thumb;s.append(i)}
+  s.append(h('span',0,a.type==='image'?'Image · '+(a.name||'screenshot'):a.type==='schedule'?'Schedule · '+((a.days||[]).length)+' days':a.type+' · '+(a.name||a.title||'Untitled')),button('×',clearStage,'isl-btn sm'));
+  s.lastChild.setAttribute('aria-label','Remove attachment');
  }
- $('team-toggle').hidden=!TEAM_CHAT_ENABLED;
- $('team-toggle').addEventListener('keydown',e=>e.stopPropagation());
- $('isl-pill').addEventListener('click',e=>{if(!e.target.closest('#team-toggle'))close()},true);
- $('team-toggle').onclick=e=>{e.stopPropagation();open()};$('team-close').onclick=close;
- panel.addEventListener('pointerdown',e=>e.stopPropagation());panel.addEventListener('click',e=>e.stopPropagation());panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();close();$('team-toggle').focus();}});
+ async function attachImage(f){
+  if(!f||uploading)return;if(!f.type.startsWith('image/'))return status('Choose an image file.');
+  uploading=true;$('team-send').disabled=true;status('Compressing and uploading…');
+  try{const r=await window.PageImages.upload(f);stage({type:'image',key:r.key,name:(f.name||'Screenshot').slice(0,80),alt:(f.name||'Shared image').slice(0,200)},URL.createObjectURL(f));status('Uploaded · '+Math.ceil(r.size/1024)+' KB of your cloud image storage.')}
+  catch(e){status(String(e.message||e))}finally{uploading=false;$('team-send').disabled=busy}
+ }
+ async function send(e){e.preventDefault();if(busy||uploading)return;
+  const text=withEmoji(ta.value.trim()),s=staged;if(!text&&!s)return;
+  busy=true;$('team-send').disabled=true;const g=generation;retryId=retryId||crypto.randomUUID();
+  try {const avatar=await smallAvatar();await request({action:'send',text,attachment:s?.a||null,id:retryId,...(avatar?{avatar}:{})});
+   if(g===generation){if(withEmoji(ta.value.trim())===text){ta.value='';grow()}if(staged===s)clearStage();retryId=null;closePop();status('');await poll();box.scrollTop=box.scrollHeight;}}
+  catch(e){status(String(e.message||e));}finally{busy=false;$('team-send').disabled=uploading}
+ }
+
+ /* ---------- wiring ---------- */
+ panel.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('team-pop').hidden){e.stopPropagation();closePop();ta.focus({preventScroll:true})}else if(!$('team-clipmenu').hidden){e.stopPropagation();closeClip();$('team-clip').focus()}}});
  $('team-form').onsubmit=send;
- $('team-text').oninput=()=>retryId=null;
- $('team-text').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();$('team-form').requestSubmit()}};
- $('team-room').onchange=()=>{peer=$('team-room').value;generation++;retryId=null;messages=[];render();poll()};
- $('team-add').onclick=()=>friendAction('request',$('team-user').value);
- $('team-share').onclick=()=>{const a=parseClip(appClipboard);if(!a)return status('Copy a page, board, chapter or book first.');stage(a)};
- $('team-schedule').onclick=()=>{const c=window.SmartScheduleManager.cfg();if(!c.items?.length&&!c.days?.length)return status('Import or create a schedule first.');stage({type:'schedule',items:(c.items||[]).map(i=>({...i,len:Number(i.len)||ISLAND_UI.types[i.type]?.len||15})),days:c.days||[],importTz:c.importTz||'Asia/Manila'})};
- $('team-remove').onclick=()=>{attachment=null;retryId=null;$('team-attachment').textContent=''};
- $('team-older').onclick=async()=>{const g=generation;try{const r=await request({action:'list',peer,before:messages[0]?.at,beforeId:messages[0]?.id});if(g!==generation)return;const all=new Map([...r.messages,...messages].map(m=>[m.id,m]));messages=[...all.values()].sort((a,b)=>a.at-b.at);render();$('team-older').hidden=r.messages.length<100;}catch(e){status(String(e.message||e))}};
+ ta.oninput=()=>{retryId=null;grow()};
+ ta.onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();$('team-form').requestSubmit()}};
+ /* Ctrl+V: a screenshot becomes an image attachment, a copied page / board / chapter / book becomes an item attachment, anything else pastes as text. */
+ ta.addEventListener('paste',e=>{
+  const f=[...(e.clipboardData?.files||[])].find(x=>x.type.startsWith('image/'));
+  if(f){e.preventDefault();e.stopPropagation();attachImage(new File([f],'Screenshot '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:false}).replace(':','-'),{type:f.type}));return}
+  const t=e.clipboardData?.getData('text')||'';if(t.length>20&&t[0]==='{'){const a=parseClip(t);if(a){e.preventDefault();e.stopPropagation();stage(a)}}
+  else if(!t){const a=parseClip(appClipboard);if(a){e.preventDefault();e.stopPropagation();stage(a)}}
+ });
+ panel.addEventListener('dragover',e=>{if([...(e.dataTransfer?.types||[])].includes('Files')){e.preventDefault();panel.classList.add('drop')}});
+ panel.addEventListener('dragleave',e=>{if(!panel.contains(e.relatedTarget))panel.classList.remove('drop')});
+ panel.addEventListener('drop',e=>{panel.classList.remove('drop');const f=[...(e.dataTransfer?.files||[])].find(x=>x.type.startsWith('image/'));if(f){e.preventDefault();attachImage(f)}});
+ /* The clip asks first, and offers only an image. Copied items can only be pasted into the message box. */
+ function closeClip(){$('team-clipmenu').hidden=true;$('team-clip').setAttribute('aria-expanded','false')}
+ $('team-clip').onclick=()=>{const m=$('team-clipmenu');if(m.hidden){closePop();m.hidden=false;$('team-clip').setAttribute('aria-expanded','true');$('team-image').focus({preventScroll:true})}else closeClip()};
+ $('team-clipno').onclick=()=>{closeClip();ta.focus({preventScroll:true})};
+ $('team-image').onclick=()=>{closeClip();$('team-file').click()};
+ $('team-file').onchange=()=>{const f=$('team-file').files[0];$('team-file').value='';attachImage(f)};
+ $('team-emoji').onclick=()=>openPop('compose');
+ $('team-older').onclick=async()=>{const g=generation;try{const r=await request({action:'list',before:messages[0]?.at,beforeId:messages[0]?.id});if(g!==generation)return;const all=new Map([...r.messages,...messages].map(m=>[m.id,m]));messages=[...all.values()].sort((a,b)=>a.at-b.at);render();$('team-older').hidden=r.messages.length<100;}catch(e){status(String(e.message||e))}};
  document.addEventListener('visibilitychange',()=>{if(document.hidden)clearTimeout(timer);else if(opened)poll()});
  window.addEventListener('cloud-locked',reset);
  // Expire even a cached conversation on an offline or sleeping tab.
  setInterval(()=>{if(expiresAt&&Date.now()>=expiresAt){messages=[];expiresAt=0;render();}},1000);
- return {open,close,reset};
+ return {show,hide,close:hide,reset};
 })();
 </script>
 
 <script id="mail-script">
-/* MAIL: replaces the team chat in the pill (the chat is still in the file, switched off by TEAM_CHAT_ENABLED in the script above).
+/* MAIL: sits next to the global chat icon in the pill.
    A mail goes to one or more users by username (To) and optionally to others as Cc, like Gmail. It carries a written message, an attachment, or both:
    an attachment is your Schedule or a copied page / board / chapter / book. Reply answers the sender; Reply all also writes to everyone else on the mail.
    A received schedule is only displayed (day by day); it never touches the receiver's own schedule. Other items are copied to the clipboard to paste where they want.
@@ -3548,10 +3704,11 @@ window.Mail = (() => {
 
  /* which part of the panel is showing: inbox / sent (lists), read, compose */
  function show() {
-  const list=view==='inbox'||view==='sent';
-  $('mail-tabs').hidden=!list; $('mail-list').hidden=!list; $('mail-read').hidden=view!=='read'; $('mail-compose').hidden=view!=='compose'; $('mail-new').hidden=view==='compose';
-  $('mail-h').textContent=view==='compose'?'New mail':'Mail';
-  $('mail-tabs').querySelectorAll('button').forEach(b=>{ const on=b.dataset.b===box; b.classList.toggle('pri',on); b.setAttribute('aria-selected',String(on)); });
+  const list=view==='inbox'||view==='sent', chat=view==='chat';
+  $('mail-tabs').hidden=!(list||chat); $('mail-list').hidden=!list; $('mail-read').hidden=view!=='read'; $('mail-compose').hidden=view!=='compose'; $('mail-new').hidden=view==='compose'||chat; $('team-panel').hidden=!chat;
+  $('mail-h').textContent=view==='compose'?'New mail':chat?'Global chat':'Mail';
+  if(chat&&opened)window.TeamChat?.show(); else window.TeamChat?.hide();
+  $('mail-tabs').querySelectorAll('button').forEach(b=>{ const on=b.dataset.b===(chat?'chat':box); b.classList.toggle('pri',on); b.setAttribute('aria-selected',String(on)); });
  }
  const shortNames = l => l.length>2 ? l[0]+', '+l[1]+' +'+(l.length-2) : l.join(', ');
  function paintList() {
@@ -3686,7 +3843,6 @@ window.Mail = (() => {
   if(root.classList.contains('srch'))return;/* search owns the island while it is open */
   const M=window.SmartScheduleManager;
   if(M&&M.open==='edit'){ showToast('Finish editing the schedule first.'); return; }
-  window.TeamChat?.close();
   opened=true; gen++; panel.hidden=false; isl.classList.add('mail-open'); tog.setAttribute('aria-expanded','true');
   if(M){ M.open=''; M.evaluate(); }
   show(); if(view==='inbox'||view==='sent')paintList(); say(''); poll();
@@ -3694,6 +3850,7 @@ window.Mail = (() => {
  function close() {
   if(!opened&&panel.hidden)return;
   opened=false; gen++; panel.hidden=true; isl.classList.remove('mail-open'); tog.setAttribute('aria-expanded','false');
+  window.TeamChat?.hide();
   if(view==='read')view=box;/* a half-written mail is kept for next time; an open message goes back to its list */
  }
  function reset() {
@@ -3707,7 +3864,7 @@ window.Mail = (() => {
  $('isl-pill').addEventListener('click',e=>{ if(!e.target.closest('#mail-toggle'))close(); },true);
  panel.addEventListener('pointerdown',e=>e.stopPropagation()); panel.addEventListener('click',e=>e.stopPropagation());
  panel.addEventListener('keydown',e=>{ if(e.key==='Escape'){ e.stopPropagation(); close(); tog.focus(); } });
- $('mail-tabs').onclick=e=>{ const b=e.target.closest('button[data-b]'); if(b)switchBox(b.dataset.b); };
+ $('mail-tabs').onclick=e=>{ const b=e.target.closest('button[data-b]'); if(!b)return; if(b.dataset.b==='chat'){ view='chat'; say(''); show(); } else switchBox(b.dataset.b); };
  $('mail-new').onclick=()=>compose();
  $('mail-compose').onsubmit=send;
  for(const f of ['to','cc']){
@@ -3835,6 +3992,7 @@ function fit(file){return new Promise((res,rej)=>{
 async function saveAvatar(d){if(!wr(KA,d)){toast('Could not store the picture (browser storage is full or blocked).');return}paint();
  if(uid){try{if(d)await DB.set(uref('avatar'),d);else await DB.remove(uref('avatar'))}catch(e){toast('Saved here, but it could not be uploaded yet.')}}}
 window.setAvatar=saveAvatar;
+window.ChatIdentity={name:()=>rd(KL)||'',avatar};/* read by the global chat: who I am and my profile picture */
 
 /* ---------- cloud sync (Realtime Database, one JSON string per account) ---------- */
 const uref=p=>DB.ref(db,'ataraxia/users/'+uid+(p?'/'+p:''));
