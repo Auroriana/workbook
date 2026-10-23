@@ -189,6 +189,26 @@ body.edit .cc{pointer-events:none}
 body.dragging-page,body.dragging-page *{cursor:grabbing!important;user-select:none!important;-webkit-user-select:none!important}
 body.rszing,body.rszing *{cursor:var(--rc,nwse-resize)!important;user-select:none!important;-webkit-user-select:none!important}
 .cbox.zone-on{outline:2px dashed var(--p);outline-offset:4px}
+.card.imgw,.cin .card.imgw{padding:0;border:0;background:transparent;border-radius:16px;min-height:0}
+.imgw .page-cloud-image{position:absolute;inset:0;width:auto;max-width:none;margin:0;min-height:0;border-radius:16px;overflow:hidden;background:var(--surf)}
+.imgw .page-cloud-image img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;border-radius:0}
+.imgw .page-cloud-image>.btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.imgw .page-img-zoom{opacity:0}.imgw:hover .page-img-zoom,.imgw:focus-within .page-img-zoom{opacity:.9}
+.imgw-dd{position:absolute;top:8px;right:46px;z-index:2;opacity:0;transition:opacity .15s}
+.imgw:hover .imgw-dd,.imgw:focus-within .imgw-dd,.imgw-dd:has(.menu.show){opacity:1}
+.imgw-dd>.ib{width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:grid;place-items:center;padding:0}
+.imgw-empty{position:absolute;inset:0;display:grid;place-items:center;border:2px dashed var(--line);border-radius:16px;background:var(--surf)}
+@media(hover:none){.imgw .page-img-zoom{opacity:.85}.imgw-dd{opacity:1}}
+body.edit .imgw .page-cloud-image,body.edit .imgw-empty{pointer-events:none}
+body.edit .imgw-dd,body.edit .imgw .page-img-zoom{display:none}
+.imgw-drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:210px;padding:24px;text-align:center;border:2px dashed var(--line);border-radius:20px;background:var(--surf);color:var(--mut);cursor:pointer;transition:border-color .15s,background .15s,color .15s}
+.imgw-drop:hover,.imgw-drop:focus-visible,.imgw-drop.over{border-color:var(--p);background:var(--pc);color:var(--on-pc);outline:0}
+.imgw-drop.busy{opacity:.6;pointer-events:none}
+.imgw-drop svg{width:36px;height:36px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.imgw-drop b{font-size:16px;color:var(--txt)}.imgw-drop:hover b,.imgw-drop:focus-visible b,.imgw-drop.over b{color:inherit}
+.imgw-drop span{font-size:13px}
+#img-lightbox .lb-cap{position:absolute;left:50%;bottom:calc(max(16px,env(safe-area-inset-bottom)) + 52px);transform:translateX(-50%);max-width:min(80vw,720px);max-height:20dvh;overflow:auto;padding:8px 16px;border-radius:14px;background:rgba(20,20,20,.62);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font-size:14px;line-height:1.4;text-align:center;overflow-wrap:anywhere}
+#img-lightbox.lb-has-cap img{max-height:calc(100dvh - 170px)}
 #szbadge{display:none;position:fixed;z-index:80;pointer-events:none;background:var(--txt);color:var(--bg);font-size:12px;font-variant-numeric:tabular-nums;padding:3px 10px;border-radius:999px}
 /* board */
 .cbox,.cprev{border:2px solid var(--cb,var(--line));background:var(--cbg,var(--surf));color:var(--cfg,var(--txt))}
@@ -849,6 +869,28 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
  <div class="mf"><button class="btn out" onclick="closeModal('page-modal')">Cancel</button><button class="btn fill" onclick="savePage()">Save Page</button></div>
 </div></div>
 
+<div class="ov" id="imgw-modal"><div class="modal" style="max-width:460px">
+ <div class="mh"><span id="imgw-title">Add image</span></div>
+ <div class="mb">
+  <label class="imgw-drop" id="imgw-drop" tabindex="0">
+   <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>
+   <b>Paste, drag over, or select an image</b>
+   <span>Press Ctrl + V, drop a file here, or click to browse.</span>
+   <input type="file" id="imgw-file" accept="image/*" hidden>
+  </label>
+  <p class="hint" id="imgw-status" role="status" style="margin:0"></p>
+ </div>
+ <div class="mf"><button class="btn out" onclick="closeModal('imgw-modal')">Cancel</button></div>
+</div></div>
+
+<div class="ov" id="imgd-modal"><div class="modal" style="max-width:460px">
+ <div class="mh"><span>Image description</span></div>
+ <div class="mb"><input type="hidden" id="imgd-id">
+  <div><label for="imgd-input">Description</label><input type="text" id="imgd-input" maxlength="200" placeholder="Shown below the image when it is enlarged"></div>
+ </div>
+ <div class="mf"><button class="btn out" onclick="closeModal('imgd-modal')">Cancel</button><button class="btn fill" onclick="saveImageDesc()">Save</button></div>
+</div></div>
+
 <div class="ov" id="container-modal"><div class="modal">
  <div class="mh"><span id="container-modal-title">Add Board</span></div>
  <div class="mb"><input type="hidden" id="container-id-input" value="">
@@ -900,6 +942,10 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
     <div class="feat-thumb" onclick="addWidget('scheduleimport')">
       <svg viewBox="0 0 24 24"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"></path></svg>
       <b>Schedule Import</b><p>Paste the weekly schedule, get a clean PH view</p>
+    </div>
+    <div class="feat-thumb" onclick="addWidget('image')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"></path></svg>
+      <b>Image</b><p>A borderless picture you can resize</p>
     </div>
   </div>
  </div>
@@ -1067,7 +1113,7 @@ const GRID=8;/* px per grid unit. Positions and sizes are stored in grid units *
 /* Tools: one fixed chapter, shared by every book, that only holds widgets. It is never in appData.chapters, so it cannot be renamed, copied or deleted */
 const TOOLS_ID='__tools__';
 const TOOLS_CHAP={id:TOOLS_ID,bookId:null,name:'Tools',description:'Your widgets in one place. Move, resize or remove them, and add more with + Add.'};
-const WIDGET_DEFS={calc:{title:'Time Calculator',w:45},schedule:{title:'Smart Schedule',w:36},formatter:{title:'Quote Formatter',w:55,h:48},scheduleimport:{title:'Schedule Import',w:60}};
+const WIDGET_DEFS={calc:{title:'Time Calculator',w:45},schedule:{title:'Smart Schedule',w:36},formatter:{title:'Quote Formatter',w:55,h:48},scheduleimport:{title:'Schedule Import',w:60},image:{title:'Image',w:40}};
 const DEFAULT_TOOLS=['calc','formatter','scheduleimport'];
 function newWidgetPage(type,chapterId){const d=WIDGET_DEFS[type]||{title:'Widget',w:45};
  return {id:'p_'+rid(),chapterId:chapterId,containerId:'',title:d.title,content:'',isWidget:true,widgetType:type,w:d.w,h:d.h}}
@@ -1796,15 +1842,69 @@ function openAddHubModal() {
 }
 
 function addWidget(type) {
+  if(type==='image'){closeModal('add-hub-modal');openImageWidgetModal();return}
   const wp = newWidgetPage(type, appData.activeChapterId), nid = wp.id;/* sizes live in WIDGET_DEFS; the ones without a height fit their own content */
   appData.pages.push(wp);
   if(type==='schedule'&&window.SmartScheduleManager)SmartScheduleManager.prompted=true;/* they just added it, no need to ask */
   persistLocal(); closeModal('add-hub-modal'); renderPages(); revealNode(nid);
 }
 
-/* ---------- widgets: calculator, clock, smart schedule, quote formatter ---------- */
+/* ---------- image widget: a borderless picture. Asked for through a paste / drag / select pop-up, no title, keeps its shape when resized ---------- */
+let imgwTarget=null,imgwBusy=false;
+function imgSize(A,w0){let w=Math.max(MIN_PW,w0||40),h=Math.round(w*A);
+ if(h>110){h=110;w=Math.max(MIN_PW,Math.round(h/A));h=Math.round(w*A)}
+ if(h<MIN_PH){h=MIN_PH;w=Math.round(h/A)}
+ return [clamp(w,MIN_PW,MAX_U),clamp(h,MIN_PH,MAX_U)]}
+function openImageWidgetModal(id){imgwTarget=typeof id==='string'?id:null;
+ $('imgw-title').textContent=imgwTarget?'Replace image':'Add image';$('imgw-status').textContent='';
+ $('imgw-drop').classList.remove('over','busy');$('imgw-file').value='';openModal('imgw-modal');setTimeout(()=>$('imgw-drop').focus(),30)}
+async function imgwTake(file){
+ if(!file||imgwBusy)return;
+ if(file.type&&!file.type.startsWith('image/')){$('imgw-status').textContent='That is not an image.';return}
+ imgwBusy=true;$('imgw-drop').classList.add('busy');$('imgw-status').textContent='Compressing and uploading…';
+ try{
+  if(!window.PageImages)throw new Error('Image uploads are not ready yet.');
+  const r=await window.PageImages.upload(file);
+  const dim=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res([i.naturalWidth,i.naturalHeight]);i.onerror=()=>rej(new Error('Could not read this image.'));i.src=r.thumb});
+  URL.revokeObjectURL(r.thumb);
+  if(!$('imgw-modal').classList.contains('open'))return;/* cancelled while uploading */
+  const A=dim[1]/dim[0],p=imgwTarget&&appData.pages.find(x=>x.id===imgwTarget&&x.isWidget&&x.widgetType==='image');
+  if(p){const [w,h]=imgSize(A,p.w);Object.assign(p,{image:{key:r.key,position:'below',alt:(p.image&&p.image.alt)||''},aspect:A,w,h});
+   persistLocal();closeModal('imgw-modal');renderHero();renderPages()}
+  else{const wp=newWidgetPage('image',appData.activeChapterId),[w,h]=imgSize(A,40);
+   Object.assign(wp,{image:{key:r.key,position:'below',alt:''},aspect:A,w,h});appData.pages.push(wp);
+   persistLocal();closeModal('imgw-modal');renderHero();renderPages();revealNode(wp.id)}
+ }catch(e){$('imgw-status').textContent=String(e.message||e)}
+ finally{imgwBusy=false;$('imgw-drop').classList.remove('busy');$('imgw-file').value=''}}
+$('imgw-file').onchange=()=>imgwTake($('imgw-file').files[0]);
+$('imgw-drop').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('imgw-file').click()}});
+['dragenter','dragover'].forEach(t=>$('imgw-modal').addEventListener(t,e=>{e.preventDefault();if(e.target.closest('#imgw-drop'))$('imgw-drop').classList.add('over')}));
+$('imgw-modal').addEventListener('dragleave',e=>{if(!e.relatedTarget||!$('imgw-drop').contains(e.relatedTarget))$('imgw-drop').classList.remove('over')});
+$('imgw-modal').addEventListener('drop',e=>{e.preventDefault();$('imgw-drop').classList.remove('over');imgwTake([...(e.dataTransfer?.files||[])].find(f=>!f.type||f.type.startsWith('image/'))||e.dataTransfer?.files?.[0])});
+document.addEventListener('paste',e=>{if(!$('imgw-modal').classList.contains('open'))return;
+ const f=[...(e.clipboardData?.files||[])].find(x=>x.type.startsWith('image/'));
+ e.preventDefault();e.stopPropagation();if(f)imgwTake(f);else $('imgw-status').textContent='No image on the clipboard. Press Win + Shift + S, select an area, then paste.'},true);
+function openImageDescModal(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
+ if(!(p.image&&p.image.key)){showToast('Add an image first.');return}
+ $('imgd-id').value=id;$('imgd-input').value=p.image.alt||'';openModal('imgd-modal');setTimeout(()=>{const f=$('imgd-input');f.focus();f.select()},40)}
+function saveImageDesc(){const id=$('imgd-id').value,p=appData.pages.find(x=>x.id===id);
+ if(p&&p.image){p.image=Object.assign({},p.image,{alt:$('imgd-input').value.trim().slice(0,200)});persistLocal();refreshCard(id)}closeModal('imgd-modal')}
+$('imgd-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveImageDesc()}});
+function buildImageCard(p){
+ const card=el('div','card fi imgw');card.dataset.pid=p.id;card.tabIndex=0;card.setAttribute('aria-label',(p.image&&p.image.alt)||'Image');
+ card.addEventListener('keydown',e=>{if(e.target===card)gripKey(e,p.id)});
+ if(pageImageProps(p).image)window.PageImages?.mount(card,p);
+ else{const em=el('div','imgw-empty'),b=el('button','btn out sm');b.type='button';b.textContent='Add image';b.onclick=()=>openImageWidgetModal(p.id);em.append(b);card.append(em)}
+ const dd=el('div','dd imgw-dd'),db=el('button','ib',ic('dots')),m=el('div','menu');m.id='menu-'+p.id;db.title='More';db.setAttribute('aria-label','Image options');db.onclick=e=>{e.stopPropagation();toggleDropdown(p.id,db)};
+ const rp=el('button','mi',ic('pen')+'Replace image');rp.onclick=()=>openImageWidgetModal(p.id);
+ const ds=el('button','mi',ic('pen')+'Description');ds.onclick=()=>openImageDescModal(p.id);
+ const du=el('button','mi',ic('dup')+'Duplicate');du.onclick=()=>duplicatePage(p.id);
+ const de=el('button','mi del',ic('trash')+'Delete');de.onclick=()=>deletePage(p.id);
+ m.append(rp,ds,du,de);dd.append(db,m);card.append(dd);addHandles(card);return card}
+
+/* ---------- widgets: calculator, smart schedule, quote formatter ---------- */
 const escAttr = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
-const WIDGET_KEYS = ['isWidget', 'widgetType', 'calcMode', 'scheduleSettings', 'importData'];
+const WIDGET_KEYS = ['isWidget', 'widgetType', 'calcMode', 'scheduleSettings', 'importData', 'aspect'];
 function applyVariantImage(p,vi){/* a page's own image field always mirrors the variant on show */
  const im=p.variants&&p.variants[vi]?pageImageProps(p.variants[vi]).image:null;if(im)p.image=im;else delete p.image}
 function syncVariantImage(p){/* older pages kept one image for the whole page: hand it to every variant once, then follow the active variant */
@@ -2101,7 +2201,7 @@ function renderWidgetUI(box, p) {
 }
 function clearWidgetTimers(){if(window.widgetIntervals){Object.values(window.widgetIntervals).forEach(clearInterval);window.widgetIntervals={}}}
 
-function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),a=el('div','ca');card.dataset.pid=p.id;card.tabIndex=0;card.setAttribute('aria-label',p.title||'Page');
+function buildCard(p){if(p.isWidget&&p.widgetType==='image')return buildImageCard(p);const card=el('div','card fi'),h=el('div','ch'),a=el('div','ca');card.dataset.pid=p.id;card.tabIndex=0;card.setAttribute('aria-label',p.title||'Page');
  const gr=el('span','grip',ic('grip'));gr.tabIndex=0;gr.setAttribute('role','button');gr.title='Drag anywhere on the card to move it. Alt + arrows resize.';gr.setAttribute('aria-label','Move page '+p.title);
  gr.addEventListener('keydown',e=>gripKey(e,p.id));
  
@@ -2509,6 +2609,16 @@ function preview(final){const d=ps.d,b=ps.r0;restoreBase();let key,r,sn=null,cv=
   if(z.includes('w')){x=b.x+b.w-w;if(x<0){x=0;w=b.x+b.w}}
   if(z.includes('n')){y=b.y+b.h-h;if(y<0){y=0;h=b.y+b.h}}
   if(z.includes('e')&&!(snap&&key))w=Math.max(bf?bf.w:m[0],Math.min(w,Math.max(areaCols(key,d),b.x+b.w)-x));/* inside a board with snapping, the board grows instead */
+  if(d.isWidget&&d.widgetType==='image'&&d.aspect>0){/* a picture keeps its shape, so it always fills the whole card */
+   const A=d.aspect;
+   if(z==='n'||z==='s')w=Math.round(h/A);else h=Math.round(w*A);
+   if(h<m[1]){h=m[1];w=Math.round(h/A)}if(w<m[0]){w=m[0];h=Math.round(w*A)}
+   if(h>MAX_U){h=MAX_U;w=Math.round(h/A)}if(w>MAX_U){w=MAX_U;h=Math.round(w*A)}
+   x=z.includes('w')?b.x+b.w-w:b.x;y=z.includes('n')?b.y+b.h-h:b.y;
+   if(x<0){x=0;w=b.x+b.w;h=Math.round(w*A);if(z.includes('n'))y=b.y+b.h-h}
+   if(y<0){y=0;h=b.y+b.h;w=Math.round(h/A);if(z.includes('w'))x=b.x+b.w-w}
+   if(z.includes('e')&&!(snap&&key)){const mw=Math.max(areaCols(key,d),b.x+b.w)-x;if(w>mw){w=Math.max(m[0],mw);h=Math.round(w*A);if(z.includes('n'))y=Math.max(0,b.y+b.h-h)}}
+  }
   r={x,y,w,h};
   const bd=$('szbadge');bd.style.display='block';bd.textContent=w*GRID+' × '+h*GRID+' px';bd.style.left=(ps.x+16)+'px';bd.style.top=(ps.y+18)+'px'}
  else{key=pickArea();cv=key?nodes.get(key).querySelector('.bcan'):$('wsc');
@@ -3157,7 +3267,7 @@ window.PageImages=(()=>{
  const pending=new Map();
  const observer=new IntersectionObserver(entries=>{for(const e of entries){if(!e.isIntersecting)continue;const load=pending.get(e.target);observer.unobserve(e.target);pending.delete(e.target);load?.();}});
  new MutationObserver(()=>{for(const fig of pending.keys())if(!fig.isConnected){observer.unobserve(fig);pending.delete(fig)}}).observe(document.body,{childList:true,subtree:true});
- function mount(box,p){const image=props(p).image;if(!image)return;const fig=document.createElement('figure');fig.className='page-cloud-image';const img=document.createElement('img');img.alt=image.alt||'Page image';img.loading='lazy';img.decoding='async';const zoom=document.createElement('button');zoom.type='button';zoom.className='page-img-zoom';zoom.hidden=true;zoom.title='Enlarge image';zoom.setAttribute('aria-label','Enlarge image');zoom.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>';zoom.onclick=e=>{e.preventDefault();e.stopPropagation();enlarge(img,zoom)};img.addEventListener('load',()=>{zoom.hidden=false});fig.append(img,zoom);if(image.position==='above')box.prepend(fig);else box.append(fig);
+ function mount(box,p){const image=props(p).image;if(!image)return;const fig=document.createElement('figure');fig.className='page-cloud-image';const img=document.createElement('img');img.alt=image.alt||'Page image';img.loading='lazy';img.decoding='async';const zoom=document.createElement('button');zoom.type='button';zoom.className='page-img-zoom';zoom.hidden=true;zoom.title='Enlarge image';zoom.setAttribute('aria-label','Enlarge image');zoom.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>';zoom.onclick=e=>{e.preventDefault();e.stopPropagation();enlarge(img,zoom,image.alt)};img.addEventListener('load',()=>{zoom.hidden=false});fig.append(img,zoom);if(image.position==='above')box.prepend(fig);else box.append(fig);
   pending.set(fig,()=>url(image.key).then(u=>{if(img.isConnected)img.src=u}).catch(e=>{if(!fig.isConnected)return;const b=document.createElement('button');b.className='btn out sm';b.type='button';b.textContent='Load cloud image';b.title=String(e.message||e);b.onclick=()=>{cache.delete(image.key);url(image.key).then(u=>{img.src=u;b.remove()}).catch(e=>showToast(String(e.message||e)))};fig.append(b)}));observer.observe(fig);
  }
  /* Enlarge: shows the image big in a pop-up. Scroll / pinch / double-click zooms, drag pans, + - 0 and arrow keys work too.
@@ -3202,14 +3312,14 @@ window.PageImages=(()=>{
   const mk=(txt,label,fn)=>{const b=document.createElement('button');b.type='button';b.textContent=txt;b.setAttribute('aria-label',label);b.addEventListener('click',e=>{e.stopPropagation();fn()});return b};
   lbPct=mk('100%','Reset zoom',()=>{lbZ=1;lbApply(true)});lbPct.className='lb-pct';
   bar.append(mk('−','Zoom out',()=>lbZoomMid(1/1.4)),lbPct,mk('+','Zoom in',()=>lbZoomMid(1.4)));
-  lb.append(big,x,bar);
+  const cap=document.createElement('div');cap.className='lb-cap';cap.hidden=true;lb.append(big,x,bar,cap);
   x.addEventListener('click',e=>{e.stopPropagation();lbClose()});
   /* backdrop click closes, but never right after a drag/pinch */
   lb.addEventListener('click',e=>{
    if(lbDragged){lbDragged=false;return}
    /* pointer capture makes e.target the backdrop even for clicks on the image, so test the position instead */
    const r=lbImg.getBoundingClientRect(),onImg=e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom;
-   if(!onImg&&!e.target.closest('.lb-bar,.lb-x'))lbClose()});
+   if(!onImg&&!e.target.closest('.lb-bar,.lb-x,.lb-cap'))lbClose()});
   /* mouse wheel / trackpad scroll zooms toward the cursor; trackpad pinch (ctrl+wheel) too */
   lb.addEventListener('wheel',e=>{
    e.preventDefault();
@@ -3218,13 +3328,13 @@ window.PageImages=(()=>{
    lbZoomAt(lbZ*Math.exp(-d*(e.ctrlKey?.01:.0018)),e.clientX,e.clientY,false);
   },{passive:false});
   lb.addEventListener('dblclick',e=>{
-   if(e.target.closest('.lb-bar,.lb-x'))return;
+   if(e.target.closest('.lb-bar,.lb-x,.lb-cap'))return;
    e.preventDefault();lbDragged=false;
    if(lbZ>1.01){lbZ=1;lbApply(true)}else lbZoomAt(2.5,e.clientX,e.clientY,true);
   });
   /* pointer events: one pointer drags (when zoomed), two pointers pinch */
   lb.addEventListener('pointerdown',e=>{
-   if(e.target.closest('.lb-bar,.lb-x'))return;
+   if(e.target.closest('.lb-bar,.lb-x,.lb-cap'))return;
    if(e.pointerType==='mouse'&&e.button!==0)return;
    lbPtrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
    try{lb.setPointerCapture(e.pointerId)}catch(_){}
@@ -3255,9 +3365,10 @@ window.PageImages=(()=>{
   document.body.append(lb);
  }
  function lbClose(){if(!lb||lb.hidden)return;lb.hidden=true;lb.querySelector('img').removeAttribute('src');lbReset();document.removeEventListener('keydown',lbKey,true);const f=lbFrom;lbFrom=null;if(f&&f.isConnected)f.focus({preventScroll:true})}
- function enlarge(img,from){
+ function enlarge(img,from,desc){
   if(!img.src)return;
   if(!lb)lbBuild();
+  {const cap=lb.querySelector('.lb-cap'),t=String(desc||'').trim();cap.textContent=t;cap.hidden=!t;lb.classList.toggle('lb-has-cap',!!t)}
   const big=lb.querySelector('img');lbReset();lbDragged=false;big.alt=img.alt||'Page image';big.src=img.src;lbFrom=from;lb.hidden=false;document.addEventListener('keydown',lbKey,true);lb.querySelector('.lb-x').focus({preventScroll:true});
  }
  /* compress(): decodes the image and re-encodes it as WebP under the 300 KB cloud cap.
