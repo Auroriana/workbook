@@ -639,6 +639,12 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--card)}
 @keyframes copyPop{0%{opacity:0;transform:translate(-50%,-46%) scale(.92)}14%{opacity:1;transform:translate(-50%,-50%) scale(1)}78%{opacity:1}100%{opacity:0;transform:translate(-50%,-52%) scale(.98)}}
 /* Team chat uses the existing pill palette and motion. */
+.pi{display:flex;flex-direction:column;gap:10px}.pi-title{font-size:14px;font-weight:600;color:var(--txt)}.pi-title small{font-weight:400;color:var(--mut);margin-left:8px}
+.pi-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.pi .hint{margin:0}
+.sec .pi-pick{position:relative;cursor:pointer;font-weight:500;color:var(--p)}.pi-pick input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.pi-pick:focus-within{box-shadow:0 0 0 2px var(--p)}
+.pi select{height:36px;border-radius:999px;border:1px solid var(--line);background:var(--surf);color:var(--txt);padding:0 14px;font-size:14px;outline:none;cursor:pointer}.pi select:focus{border-color:var(--p);box-shadow:0 0 0 1px var(--p)}
+.pi input.pi-alt{flex:1;min-width:160px;width:auto;height:36px;padding:0 14px;border-radius:999px;font-size:14px}
+#page-image-preview:empty,#page-image-library:empty{display:none}#page-image-preview img{border-radius:12px;border:1px solid var(--line)}#page-image-library .seg{align-items:center;justify-content:space-between;margin-top:6px}
 .page-cloud-image{margin:8px 0;min-height:40px}.page-cloud-image img{display:block;max-width:100%;height:auto;border-radius:8px}#page-image-preview img{max-height:180px}#page-image-library{max-height:180px;overflow:auto}
 #island.chat-open{width:min(420px,calc(100vw - 16px));border-radius:var(--isl-radius-open)}
 #island.chat-open:hover{transform:none}
@@ -806,7 +812,25 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
    <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('YN',event)" title="Yes/No toggle. Hold Shift while clicking to insert [No] instead of [Yes]">Y/N</button>
   </div>
 
-  <section class="sec"><div><label for="page-image-file">Page image (optional)</label><input type="file" id="page-image-file" accept="image/jpeg,image/png,image/webp"><div class="seg"><select id="page-image-position" aria-label="Image position"><option value="above">Above text</option><option value="below" selected>Below text</option></select><button type="button" class="btn out sm" id="page-image-paste">Paste screenshot</button><button type="button" class="btn out sm" id="page-image-remove">Detach image</button><button type="button" class="btn out sm" id="page-image-manage">Manage cloud images</button></div><input id="page-image-alt" maxlength="200" placeholder="Image description" aria-label="Image description"><p class="hint" id="page-image-status" role="status"></p><p class="hint">Tip: press Win + Shift + S, select an area, then Ctrl + V here. Text stays unchanged. Images use cloud storage (5 MB per account); shared copies use the same image. Sign in to load them.</p><div id="page-image-preview"></div><div id="page-image-library"></div></div></section>
+  <section class="sec pi">
+   <div class="pi-title">Page image<small>optional</small></div>
+   <div class="pi-row">
+    <label class="btn out sm pi-pick">Choose image<input type="file" id="page-image-file" accept="image/jpeg,image/png,image/webp" aria-label="Choose an image"></label>
+    <button type="button" class="btn out sm" id="page-image-paste">Paste screenshot</button>
+   </div>
+   <div id="page-image-preview"></div>
+   <div class="pi-row">
+    <select id="page-image-position" aria-label="Image position"><option value="above">Above text</option><option value="below" selected>Below text</option></select>
+    <input type="text" id="page-image-alt" class="pi-alt" maxlength="200" placeholder="Description (optional)" aria-label="Image description">
+   </div>
+   <p class="hint" id="page-image-status" role="status"></p>
+   <div class="pi-row">
+    <button type="button" class="btn out sm" id="page-image-remove">Detach image</button>
+    <button type="button" class="btn out sm" id="page-image-manage">Manage cloud images</button>
+   </div>
+   <div id="page-image-library"></div>
+   <p class="hint">Tip: Win + Shift + S, then Ctrl + V anywhere in this window. Your page text is never changed. 5 MB cloud per account; shared copies reuse the same image.</p>
+  </section>
   <div id="page-normal-edit">
    <div><label for="page-title-input">Title</label><input type="text" id="page-title-input" placeholder="e.g. Coverage - Renters/Homes"></div>
    <div>
