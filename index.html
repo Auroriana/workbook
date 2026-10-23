@@ -1024,7 +1024,7 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
    <button type="button" class="isl-btn sm gc-clip" id="team-clip" aria-label="Attach" aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 11.5-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6l7.9-7.9"/></svg></button>
    <button class="isl-btn pri sm" id="team-send">Send</button>
   </div>
-  <input type="file" id="team-file" accept="image/jpeg,image/png,image/webp" hidden>
+  <input type="file" id="team-file" accept="image/*,.heic,.heif,.avif" hidden>
  </form>
 </div>
  <p id="mail-status" class="isl-p" role="status"></p>
@@ -3403,14 +3403,39 @@ window.PageImages=(()=>{
   if(!lb)lbBuild();
   const big=lb.querySelector('img');lbReset();lbDragged=false;big.alt=img.alt||'Page image';big.src=img.src;lbFrom=from;lb.hidden=false;document.addEventListener('keydown',lbKey,true);lb.querySelector('.lb-x').focus({preventScroll:true});
  }
- async function encode(file){
-  if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>12*1024*1024)throw new Error('Choose a JPEG, PNG or WebP under 12 MB.');
-  const bitmap=await createImageBitmap(file);try{if(bitmap.width*bitmap.height>40000000)throw new Error('Choose an image under 40 megapixels.');const scale=Math.min(1,1600/bitmap.width,1600/bitmap.height),canvas=document.createElement('canvas');canvas.width=Math.round(bitmap.width*scale);canvas.height=Math.round(bitmap.height*scale);canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);
-   let blob=null;for(const q of [.88,.78,.68,.58]){blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',q));if(blob&&blob.size<=300*1024)break}/* step quality down until it fits the 300 KB cloud cap */
+ /* compress(): decodes the image and re-encodes it as WebP under the 300 KB cloud cap.
+    lenient=false (page editor): unchanged rules - JPEG/PNG/WebP, 12 MB, 40 MP, one 1600 px pass.
+    lenient=true (global chat): any image the browser can decode (GIF, BMP, AVIF, HEIC on Safari, files with a missing MIME type...) is accepted,
+    huge photos are shrunk while decoding, and if 1600 px will not fit under the cap it keeps stepping the size and quality down until it does. */
+ async function compress(file,lenient){
+  if(lenient?file.size>40*1024*1024:(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>12*1024*1024))throw new Error(lenient?'Choose an image under 40 MB.':'Choose a JPEG, PNG or WebP under 12 MB.');
+  let bitmap;
+  try{bitmap=await createImageBitmap(file)}catch(e){
+   if(!lenient)throw e;
+   /* some formats decode through <img> even when createImageBitmap refuses them */
+   bitmap=await new Promise((res,rej)=>{const u=URL.createObjectURL(file),i=new Image();i.onload=()=>{URL.revokeObjectURL(u);res(i)};i.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('Your browser cannot read this image format. Try a JPEG, PNG or WebP.'))};i.src=u});
+  }
+  try{
+   let w=bitmap.width||bitmap.naturalWidth,h=bitmap.height||bitmap.naturalHeight;
+   if(!w||!h)throw new Error('Could not read this image.');
+   if(w*h>40000000){
+    if(!lenient)throw new Error('Choose an image under 40 megapixels.');
+    const k=Math.sqrt(25000000/(w*h));
+    try{const small=await createImageBitmap(file,{resizeWidth:Math.round(w*k),resizeHeight:Math.round(h*k),resizeQuality:'medium'});bitmap.close?.();bitmap=small;w=small.width;h=small.height}catch(e){throw new Error('This image is too large to process. Choose a smaller one.')}
+   }
+   const sizes=lenient?[1600,1280,1024,800,640]:[1600],qs=lenient?[.88,.78,.68,.58,.45]:[.88,.78,.68,.58];
+   let blob=null;
+   for(const m of sizes){
+    const scale=Math.min(1,m/w,m/h),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(w*scale));canvas.height=Math.max(1,Math.round(h*scale));canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);
+    for(const q of qs){blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',q));if(blob&&blob.size<=300*1024)break}/* step quality down until it fits the 300 KB cloud cap */
+    if(blob&&blob.size<=300*1024)break;
+   }
    if(!blob||blob.size>300*1024)throw new Error('This image is too detailed to compress clearly under 300 KB. Crop it or select a smaller image.');
-   return await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result.split(',')[1]);r.onerror=reject;r.readAsDataURL(blob)});
-  }finally{bitmap.close()}
+   return blob;
+  }finally{bitmap.close?.()}
  }
+ const toB64=blob=>new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result.split(',')[1]);r.onerror=reject;r.readAsDataURL(blob)});
+ async function encode(file){return toB64(await compress(file,false))}
  async function attach(f){if(!f||uploading)return;const gen=editorGeneration;uploading=true;info('Compressing and uploading…');try{const data=await encode(f),r=await request({action:'upload',data,name:f.name});if(gen!==editorGeneration)return;draft={key:r.key,position:$('page-image-position').value,alt:$('page-image-alt').value};$('page-image-preview').replaceChildren();mount($('page-image-preview'),{image:draft});info('Uploaded · '+Math.ceil(r.size/1024)+' KB cloud storage. Save the page to attach it.');}catch(e){if(gen===editorGeneration)info(String(e.message||e));}finally{uploading=false;$('page-image-file').value=''}}
  $('page-image-file').onchange=()=>attach($('page-image-file').files[0]);
  /* Screenshots (Win + Shift + S, Print Screen, phone copies) arrive as clipboard images: Ctrl+V anywhere in the open page editor, or the Paste screenshot button. */
@@ -3421,7 +3446,7 @@ window.PageImages=(()=>{
  $('page-image-manage').onclick=async()=>{const list=$('page-image-library');list.replaceChildren();try{const r=await request({action:'list'});info(Math.ceil(r.images.reduce((n,i)=>n+i.size,0)/1024)+' KB of 5 MB used. Deleting affects all shared copies.');for(const i of r.images){const row=document.createElement('div'),label=document.createElement('span'),b=document.createElement('button');row.className='seg';label.textContent=i.name+' · '+Math.ceil(i.size/1024)+' KB';b.type='button';b.className='btn out sm';b.textContent='Delete from cloud';b.onclick=async()=>{if(!confirm('Permanently delete '+i.name+'? Every page and shared copy using this image will lose it.'))return;try{await request({action:'delete',key:i.key});cache.get(i.key)?.then(URL.revokeObjectURL,()=>{});cache.delete(i.key);if(draft?.key===i.key)draft=null;row.remove();info('Cloud image deleted.');}catch(e){info(String(e.message||e))}};row.append(label,b);list.append(row)}}catch(e){info(String(e.message||e))}};
  window.addEventListener('cloud-locked',()=>{epoch++;editorGeneration++;for(const v of cache.values())v.then(URL.revokeObjectURL,()=>{});cache.clear();draft=null;$('page-image-preview').replaceChildren();$('page-image-library').replaceChildren();lbClose();document.querySelectorAll('.page-cloud-image img').forEach(i=>i.removeAttribute('src'));document.querySelectorAll('.page-img-zoom').forEach(b=>{b.hidden=true});});
  /* upload/enlarge are also used by the global chat */
- async function upload(f){const data=await encode(f);return request({action:'upload',data,name:f.name})}
+ async function upload(f){const blob=await compress(f,true),r=await request({action:'upload',data:await toB64(blob),name:f.name});return {...r,thumb:URL.createObjectURL(blob)}}
  return {edit,value,mount,props,upload,enlarge,get uploading(){return uploading}};
 })();
 renderPages();
@@ -3593,10 +3618,11 @@ window.TeamChat = (() => {
   s.append(h('span',0,a.type==='image'?'Image · '+(a.name||'screenshot'):a.type==='schedule'?'Schedule · '+((a.days||[]).length)+' days':a.type+' · '+(a.name||a.title||'Untitled')),button('×',clearStage,'isl-btn sm'));
   s.lastChild.setAttribute('aria-label','Remove attachment');
  }
+ const isImg=f=>f.type.startsWith('image/')||/\.(jpe?g|jfif|png|webp|gif|bmp|avif|heic|heif|tiff?)$/i.test(f.name||'');
  async function attachImage(f){
-  if(!f||uploading)return;if(!f.type.startsWith('image/'))return status('Choose an image file.');
+  if(!f||uploading)return;if(!isImg(f))return status('Choose an image file.');
   uploading=true;$('team-send').disabled=true;status('Compressing and uploading…');
-  try{const r=await window.PageImages.upload(f);stage({type:'image',key:r.key,name:(f.name||'Screenshot').slice(0,80),alt:(f.name||'Shared image').slice(0,200)},URL.createObjectURL(f));status('Uploaded · '+Math.ceil(r.size/1024)+' KB of your cloud image storage.')}
+  try{const r=await window.PageImages.upload(f);stage({type:'image',key:r.key,name:(f.name||'Screenshot').slice(0,80),alt:(f.name||'Shared image').slice(0,200)},r.thumb);status('Uploaded · '+Math.ceil(r.size/1024)+' KB of your cloud image storage.')}
   catch(e){status(String(e.message||e))}finally{uploading=false;$('team-send').disabled=busy}
  }
  async function send(e){e.preventDefault();if(busy||uploading)return;
@@ -3621,7 +3647,7 @@ window.TeamChat = (() => {
  });
  panel.addEventListener('dragover',e=>{if([...(e.dataTransfer?.types||[])].includes('Files')){e.preventDefault();panel.classList.add('drop')}});
  panel.addEventListener('dragleave',e=>{if(!panel.contains(e.relatedTarget))panel.classList.remove('drop')});
- panel.addEventListener('drop',e=>{panel.classList.remove('drop');const f=[...(e.dataTransfer?.files||[])].find(x=>x.type.startsWith('image/'));if(f){e.preventDefault();attachImage(f)}});
+ panel.addEventListener('drop',e=>{panel.classList.remove('drop');const f=[...(e.dataTransfer?.files||[])].find(isImg);if(f){e.preventDefault();attachImage(f)}});
  /* The clip asks first, and offers only an image. Copied items can only be pasted into the message box. */
  function closeClip(){$('team-clipmenu').hidden=true;$('team-clip').setAttribute('aria-expanded','false')}
  $('team-clip').onclick=()=>{const m=$('team-clipmenu');if(m.hidden){closePop();m.hidden=false;$('team-clip').setAttribute('aria-expanded','true');$('team-image').focus({preventScroll:true})}else closeClip()};
