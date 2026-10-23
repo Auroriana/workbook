@@ -2271,6 +2271,14 @@ document.addEventListener('focusin', e => {
  if(e.target.tagName === 'TEXTAREA' || e.target.type === 'text') activeEditor = e.target;
 });
 
+/* a cloud image was deleted: every page, variant (saved or open in the editor) and chat copy that pointed at it lets go of it, so no dead "Load cloud image" box is left behind */
+window.addEventListener('page-image-deleted',e=>{const key=e.detail&&e.detail.key;if(!key)return;
+ const hit=o=>!!(o&&o.image&&o.image.key===key),strip=pg=>{let ch=false;if(hit(pg)){delete pg.image;ch=true}
+  if(Array.isArray(pg.variants))pg.variants.forEach(v=>{if(hit(v)){v.image=null;ch=true}});return ch};
+ vs.forEach(v=>{if(hit(v))v.image=null});
+ let any=false;appData.pages.forEach(pg=>{if(strip(pg))any=true});
+ if(typeof chats!=='undefined'&&Array.isArray(chats)){let c2=false;chats.forEach(c=>(c.pages||[]).forEach(pg=>{if(strip(pg))c2=true}));if(c2&&typeof chatSave==='function'){try{chatSave()}catch(_){}}}
+ if(any){persistLocal();renderPages()}});
 /* ---- page editor: one editor, one tab per variant. Each tab owns its title, text and image. ---- */
 let vs=[],vcur=0;
 const blankVariant=()=>({title:'',content:'',image:null});
@@ -3293,7 +3301,7 @@ window.PageImages=(()=>{
  $('page-image-paste').onclick=async()=>{try{for(const it of await navigator.clipboard.read()){const t=it.types.find(x=>x.startsWith('image/'));if(t)return attach(shot(await it.getType(t)))}info('No image on the clipboard. Press Win + Shift + S, select an area, then try again.')}catch(e){info('The browser blocked clipboard access. Press Ctrl + V here instead.')}};
  $('page-image-pos-btn').onclick=()=>{const s=$('page-image-position');s.value=s.value==='above'?'below':'above';syncPos()};syncPos();
  $('page-image-remove').onclick=()=>{draft=null;$('page-image-preview').replaceChildren();info('Image detached. Save the page to keep this change.');};
- $('page-image-manage').onclick=async()=>{const list=$('page-image-library');list.replaceChildren();try{const r=await request({action:'list'});info(Math.ceil(r.images.reduce((n,i)=>n+i.size,0)/1024)+' KB of 5 MB used. Deleting affects all shared copies.');for(const i of r.images){const row=document.createElement('div'),label=document.createElement('span'),b=document.createElement('button');row.className='seg';label.textContent=i.name+' · '+Math.ceil(i.size/1024)+' KB';b.type='button';b.className='btn out sm';b.textContent='Delete from cloud';b.onclick=async()=>{if(!confirm('Permanently delete '+i.name+'? Every page and shared copy using this image will lose it.'))return;try{await request({action:'delete',key:i.key});cache.get(i.key)?.then(URL.revokeObjectURL,()=>{});cache.delete(i.key);if(draft?.key===i.key)draft=null;row.remove();info('Cloud image deleted.');}catch(e){info(String(e.message||e))}};row.append(label,b);list.append(row)}}catch(e){info(String(e.message||e))}};
+ $('page-image-manage').onclick=async()=>{const list=$('page-image-library');list.replaceChildren();try{const r=await request({action:'list'});info(Math.ceil(r.images.reduce((n,i)=>n+i.size,0)/1024)+' KB of 5 MB used. Deleting affects all shared copies.');for(const i of r.images){const row=document.createElement('div'),label=document.createElement('span'),b=document.createElement('button');row.className='seg';label.textContent=i.name+' · '+Math.ceil(i.size/1024)+' KB';b.type='button';b.className='btn out sm';b.textContent='Delete from cloud';b.onclick=async()=>{if(!await askConfirm('Delete "'+i.name+'" from the cloud? Every page and shared copy using this image will lose it. This can\'t be undone.','Delete image','Delete from cloud'))return;try{await request({action:'delete',key:i.key});cache.get(i.key)?.then(URL.revokeObjectURL,()=>{});cache.delete(i.key);if(draft?.key===i.key){draft=null;$('page-image-preview').replaceChildren()}window.dispatchEvent(new CustomEvent('page-image-deleted',{detail:{key:i.key}}));row.remove();info('Cloud image deleted.');}catch(e){info(String(e.message||e))}};row.append(label,b);list.append(row)}}catch(e){info(String(e.message||e))}};
  window.addEventListener('cloud-locked',()=>{epoch++;editorGeneration++;for(const v of cache.values())v.then(URL.revokeObjectURL,()=>{});cache.clear();draft=null;$('page-image-preview').replaceChildren();$('page-image-library').replaceChildren();lbClose();document.querySelectorAll('.page-cloud-image img').forEach(i=>i.removeAttribute('src'));document.querySelectorAll('.page-img-zoom').forEach(b=>{b.hidden=true});});
  /* upload/enlarge are also used by the global chat */
  async function upload(f){const blob=await compress(f,true),r=await request({action:'upload',data:await toB64(blob),name:f.name});return {...r,thumb:URL.createObjectURL(blob)}}
