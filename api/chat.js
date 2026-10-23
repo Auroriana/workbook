@@ -1,7 +1,7 @@
 /* POST /api/chat — friends, private chats, shared room, schedule / workbook attachments.
    Messages are deleted at 8:00 AM Philippine time every day: list hides expired ones immediately,
    send purges the room opportunistically, and /api/cleanup sweeps everything daily. */
-const { admin, ref, route, fail, normUser, nextReset, EMAIL_SUFFIX } = require('./_lib');
+const { admin, ref, route, fail, normUser, nextReset, EMAIL_SUFFIX } = require('./_chatlib');
 
 const MAX_TEXT = 4000, MAX_ATTACHMENT_BYTES = 200 * 1024, PAGE = 100, RATE_PER_MIN = 30;
 const ID_RE = /^[A-Za-z0-9-]{8,64}$/, UID_RE = /^[A-Za-z0-9]{20,40}$/;

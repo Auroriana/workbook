@@ -5,7 +5,7 @@
    The key the page stores is "<owner>/<id>": 64 hex + 48 hex. It is unguessable, so anyone who has a copied
    page can load its image, but nobody can enumerate someone else's images. Only the owner can list or delete. */
 const crypto = require('crypto');
-const { ref, route, fail } = require('./_lib');
+const { ref, route, fail } = require('./_chatlib');
 
 const MAX_IMAGE = 300 * 1024;          // per image, after compression
 const QUOTA = 5 * 1024 * 1024;         // per account

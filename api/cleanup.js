@@ -1,7 +1,7 @@
 /* GET /api/cleanup — daily sweep, run by Vercel Cron at 08:00 Philippine time (00:00 UTC), the chat reset time.
    Vercel sends "Authorization: Bearer <CRON_SECRET>" automatically once CRON_SECRET is set in the project. */
 const crypto = require('crypto');
-const { ref } = require('./_lib');
+const { ref } = require('./_chatlib');
 
 const safeEqual = (a, b) => { const x = Buffer.from(a), y = Buffer.from(b); return x.length === y.length && crypto.timingSafeEqual(x, y); };
 
