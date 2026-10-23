@@ -235,6 +235,25 @@ body.edit .rz{display:block}
 .menu.show{display:block}
 .mi{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:10px;font-size:14px;text-align:left}
 .mi:hover{background:var(--surf)}.mi.del{color:var(--danger)}
+.menu{max-width:calc(100vw - 16px);max-height:calc(100dvh - 16px);overflow-y:auto;overscroll-behavior:contain}
+.menu.show{animation:menu-in .12s ease-out;transform-origin:top left}
+.mi:focus-visible{background:var(--surf);outline-offset:-2px}
+.mi:disabled{opacity:.45;cursor:default}
+.menu-label{padding:7px 12px 5px;color:var(--mut);font-size:11.5px;max-width:270px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.menu-sep{height:1px;background:var(--line);margin:5px 6px}
+.side-top{flex-wrap:wrap}.side-top>#paste-chapter-btn{flex-basis:100%;height:30px;font-size:12px}
+.btn:active:not(:disabled),.ib:active:not(:disabled){transform:scale(.97)}
+.card.copy-ok{animation:copy-ring .55s ease-out}
+.paste-destination{color:var(--mut);font-size:13px;overflow-wrap:anywhere}
+@keyframes menu-in{from{opacity:0;transform:translateY(-3px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes copy-ring{from{box-shadow:0 0 0 3px var(--p)}to{box-shadow:0 0 0 0 transparent}}
+@media(prefers-reduced-motion:reduce){.btn:active:not(:disabled),.ib:active:not(:disabled){transform:none}}
+@media(max-width:900px){.ph h2{flex-basis:100%}}
+@media(max-width:600px){
+ .ph{gap:8px;padding-top:14px}.ph h2{display:flex;flex:0 0 100%;align-items:center;flex-wrap:wrap;gap:6px 10px;font-size:16px}
+ .ph .pt-sep{display:none}.ph-search{width:20px;flex:none}.ph-search svg{right:0;width:20px}
+ .ph .btn{height:32px;padding:0 10px;font-size:12px}
+}
 /* modal */
 .ov{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:16px}
 .ov.open{display:flex}
@@ -667,10 +686,7 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
  <aside class="side">
   <div class="side-top">
    <button class="btn tone sm" onclick="openAddChapterModal()">+ Chapter</button>
-   <div class="dd">
-    <button class="ib" onclick="event.stopPropagation();toggleDropdown('side',this)" title="More" aria-label="More chapter actions"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button>
-    <div class="menu" id="menu-side" style="left: 39px; top: 122px;"><button class="mi" onclick="startPaste('chapter')"><svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>Paste chapter</button></div>
-   </div>
+   <button class="btn out sm" id="paste-chapter-btn" onclick="startPaste('chapter')" title="Paste a chapter into this book">Paste chapter</button>
   </div>
   <nav id="chs" aria-label="Chapters"><button class="chip-ch on" title="General">General</button><button class="chip-ch" title="Billing">Billing</button></nav>
  </aside>
@@ -682,7 +698,7 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
    </div>
    <div class="acts" id="hacts"><button class="btn xs fill">Edit info</button><div class="dd"><button class="ib sm" title="More" aria-label="More chapter actions"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-ch"><button class="mi" title="Paste a copied page into this chapter"><svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>Paste page</button><button class="mi" title="Copy this chapter and its pages so you can paste it into any book"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy chapter</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate chapter</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete chapter</button></div></div></div>
   </section>
-  <div class="ph"><h2><button type="button" class="ph-search" id="ph-search" title="Search every page (press /)" aria-label="Search" onclick="window.openSearch&amp;&amp;window.openSearch()"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button><span class="pt on" id="pt-ws" role="button" tabindex="0" title="Your chapter workspace" onclick="closeTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeTools()}">Workspace</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-tools" role="button" tabindex="0" title="Your widgets, available from any chapter" onclick="openTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTools()}">Tools</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-docs" role="button" tabindex="0" title="Your documentation, available from any book" onclick="openDocs()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocs()}">Documentation</span><span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button class="btn tone" id="add-board-btn" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" id="add-main-btn" onclick="openAddHubModal()">+ Add</button><div class="pt-sub" id="pt-sub" hidden></div></div>
+  <div class="ph"><h2><button type="button" class="ph-search" id="ph-search" title="Search every page (press /)" aria-label="Search" onclick="window.openSearch&amp;&amp;window.openSearch()"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button><span class="pt on" id="pt-ws" role="button" tabindex="0" title="Your chapter workspace" onclick="closeTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeTools()}">Workspace</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-tools" role="button" tabindex="0" title="Your widgets, available from any chapter" onclick="openTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTools()}">Tools</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-docs" role="button" tabindex="0" title="Your documentation, available from any book" onclick="openDocs()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocs()}">Documentation</span><span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button class="btn out" id="paste-main-btn" onclick="startPaste('page')" title="Paste the page copied in this tab. Right-click for more actions; Shift + right-click opens the browser menu.">Paste page</button><button class="btn tone" id="add-board-btn" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" id="add-main-btn" onclick="openAddHubModal()">+ Add</button><div class="pt-sub" id="pt-sub" hidden></div></div>
   <div class="empty" id="ws-empty" hidden="">No pages yet. Use + Add to create one, or + Board for a board.</div>
   <div id="chats" hidden></div>
   <div id="ws"><div id="wsc" data-zone="" class="" style="height: 400px; min-width: max(100%, 664px);"></div></div>
@@ -812,7 +828,8 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
 <div class="ov" id="paste-modal"><div class="modal">
  <div class="mh"><span id="paste-modal-title">Paste</span></div>
  <div class="mb">
-  <p class="hint" style="margin:0">Your browser didn't allow automatic clipboard access. Press Ctrl+V (or long-press and Paste) in the box below, then click Paste.</p>
+  <p class="hint" id="paste-help" style="margin:0">Paste a copied page or chapter below. Use Copy text on a template to send its response to your chat.</p>
+  <p class="paste-destination" id="paste-destination"></p>
   <textarea id="paste-input" placeholder="Paste the copied data here..."></textarea>
  </div>
  <div class="mf"><button class="btn out" onclick="closeModal('paste-modal')">Cancel</button><button class="btn fill" onclick="confirmPaste()">Paste</button></div>
@@ -1038,7 +1055,7 @@ function ensureDocs(){/* first run only: fills Documentation. Pages you delete s
 function syncPh(){const t=appData.activeChapterId===TOOLS_ID,d=isDoc(appData.activeChapterId),w=!t&&!d;
  [['pt-ws',w],['pt-tools',t],['pt-docs',d]].forEach(([id,on])=>{$(id).classList.toggle('on',on);$(id).setAttribute('aria-pressed',String(on))});
  const k=appData.activeChapterId===DOC_CHATS_ID;/* Chats: + Add becomes + Chat, no boards, no move mode */
- $('add-board-btn').style.display=(t||k)?'none':'';$('add-main-btn').textContent=k?'+ Chat':'+ Add';$('edit-toggle').style.display=k?'none':'';
+ $('paste-main-btn').hidden=k;$('paste-main-btn').textContent=t?'Paste widget':'Paste page';$('add-board-btn').style.display=(t||k)?'none':'';$('add-main-btn').textContent=k?'+ Chat':'+ Add';$('edit-toggle').style.display=k?'none':'';
  const sub=$('pt-sub');sub.hidden=!d;sub.innerHTML='';/* second row, only inside Documentation: Notations | What if */
  if(d)DOC_CHAPS.forEach((c,i)=>{if(i)sub.append(el('span','pt-sep'));const b=el('span','pt'+(c.id===appData.activeChapterId?' on':''));b.textContent=c.name;b.setAttribute('role','button');b.tabIndex=0;b.title=c.description;
   b.onclick=()=>openDocChapter(c.id);b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDocChapter(c.id)}};sub.append(b)});
@@ -1068,14 +1085,16 @@ function paintUndo(){const u=$('undo');clearTimeout(_undoT);if(!_undo.length){u.
  const e=_undo[_undo.length-1];u.innerHTML='';const s=el('span');s.textContent=e.msg;const b=el('button');b.type='button';b.textContent='Undo';
  b.onclick=()=>{if(e.fn()!==false)_undo.pop();paintUndo()};u.append(s,b);u.classList.add('show');_undoT=setTimeout(()=>{_undo.length=0;paintUndo()},8000)}
 let _pT=0,_pD=false;
-function flushLocal(){clearTimeout(_pT);if(!_pD||window.__noFlush)return;_pD=false;try{localStorage.setItem('paano_ba_yan_data',JSON.stringify(appData))}catch(e){}}
+let storageWarning=false;
+function flushLocal(){clearTimeout(_pT);if(!_pD||window.__noFlush)return;try{localStorage.setItem('paano_ba_yan_data',JSON.stringify(appData));_pD=false;storageWarning=false}catch(e){if(!storageWarning){storageWarning=true;showToast('Device storage is full or blocked. Export a backup in Settings to keep your changes.')}}}
 function persistView(){_pD=true;clearTimeout(_pT);_pT=setTimeout(flushLocal,400)}/* view-only changes (which book, chapter or variant is open): kept on this device, never synced */
 function persistLocal(){persistView();if(window.onPersist)window.onPersist()}
 addEventListener('pagehide',flushLocal);addEventListener('beforeunload',flushLocal);document.addEventListener('visibilitychange',()=>{if(document.hidden)flushLocal()});
 function hex(v){return /^#[0-9a-f]{6}$/i.test(v||'')?String(v).toLowerCase():''}
-function load(){let s=null;try{s=localStorage.getItem('paano_ba_yan_data')}catch(e){}
- try{appData=s?JSON.parse(s):INITIAL_DATA}catch(e){appData=INITIAL_DATA}
- appData.books=appData.books||[];appData.chapters=appData.chapters||[];appData.pages=appData.pages||[];
+function load(data){let s=null;if(data===undefined)try{s=localStorage.getItem('paano_ba_yan_data')}catch(e){}
+ try{appData=data!==undefined?structuredClone(data):s?JSON.parse(s):structuredClone(INITIAL_DATA)}catch(e){appData=structuredClone(INITIAL_DATA)}
+ if(!appData||typeof appData!=='object'||Array.isArray(appData))appData=structuredClone(INITIAL_DATA);
+ ['books','chapters','pages'].forEach(k=>{appData[k]=(Array.isArray(appData[k])?appData[k]:[]).filter(x=>x&&typeof x==='object')});
  appData.containers=Array.isArray(appData.containers)?appData.containers:[];/* older saves have none */
  if((appData.layoutVer||0)<3){/* older saves kept board geometry in pixels */
   appData.containers.forEach(c=>{c.x=(+c.x||0)/GRID;c.y=(+c.y||0)/GRID;c.w=(+c.w||420)/GRID;c.h=(+c.h||300)/GRID;c.mig=true})}
@@ -1148,7 +1167,7 @@ function renderHero(){const c=curChap(),a=$('hacts');a.innerHTML='';syncPh();
  const e=el('button','btn xs fill','Edit info');e.onclick=openEditChapterModal;a.append(e);
  if(c.referenceLink&&c.referenceLink.trim()){let u=c.referenceLink.trim();if(!/^https?:\/\//i.test(u))u='https://'+u;const l=el('a','btn xs out',ic('link')+'<span></span>');l.lastChild.textContent='Reference';l.href=u;l.target='_blank';l.rel='noopener';a.append(l)}
  const dd=el('div','dd'),db=el('button','ib sm',ic('dots')),m=el('div','menu');m.id='menu-ch';db.title='More';db.setAttribute('aria-label','More chapter actions');db.onclick=ev=>{ev.stopPropagation();toggleDropdown('ch',db)};
- const pp=el('button','mi',ic('paste')+'Paste page');pp.title='Paste a copied page into this chapter';pp.onclick=()=>startPaste('page');
+ const pp=el('button','mi',ic('paste')+'Paste page here');pp.title='Paste a copied page into this chapter';pp.onclick=()=>startPaste('page');
  const cc=el('button','mi',ic('copy')+'Copy chapter');cc.title='Copy this chapter and its pages so you can paste it into any book';cc.onclick=()=>copyChapterData(c.id);
  const du=el('button','mi',ic('dup')+'Duplicate chapter');du.onclick=()=>duplicateChapter(c.id);
  const de=el('button','mi del',ic('trash')+'Delete chapter');de.onclick=()=>deleteChapter(c.id);
@@ -2049,23 +2068,24 @@ function renderWidgetUI(box, p) {
   if (build) build(ui, p); else ui.textContent = 'Unknown widget.';
   box.append(ui);
 }
+function clearWidgetTimers(){if(window.widgetIntervals){Object.values(window.widgetIntervals).forEach(clearInterval);window.widgetIntervals={}}}
 
-function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),a=el('div','ca');card.dataset.pid=p.id;
+function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),a=el('div','ca');card.dataset.pid=p.id;card.tabIndex=0;card.setAttribute('aria-label',p.title||'Page');
  const gr=el('span','grip',ic('grip'));gr.tabIndex=0;gr.setAttribute('role','button');gr.title='Drag anywhere on the card to move it. Alt + arrows resize.';gr.setAttribute('aria-label','Move page '+p.title);
  gr.addEventListener('keydown',e=>gripKey(e,p.id));
  
  let titleEl;
  if (p.variants && p.variants.length > 0) {
-  const av = p.activeVariant || 0;
+  const av=Number.isInteger(p.activeVariant)&&p.activeVariant>=0&&p.activeVariant<p.variants.length?p.activeVariant:0;p.activeVariant=av;
   p.title = p.variants[av].title;
   p.content = p.variants[av].content;
   titleEl = el('div', 'dd ct');
   titleEl.style.display = 'inline-block'; titleEl.style.maxWidth = '100%'; titleEl.style.overflow = 'hidden'; titleEl.style.textOverflow = 'ellipsis'; titleEl.style.whiteSpace = 'nowrap';
-  const tb = el('div'); tb.innerHTML = p.title + ' <svg style="width:14px;height:14px;vertical-align:middle;margin-left:4px" viewBox="0 0 24 24"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>';
-  tb.style.cursor = 'pointer'; tb.title = 'Switch variant';
+  const tb = el('button'); tb.type='button';tb.textContent=p.title;tb.insertAdjacentHTML('beforeend', ' <svg style="width:14px;height:14px;vertical-align:middle;margin-left:4px" viewBox="0 0 24 24"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>');
+  tb.style.cursor = 'pointer';tb.setAttribute('aria-label','Switch variant'); tb.title = 'Switch variant';
   tb.onclick = (e) => {
    if (p.variants.length === 2) {
-    p.activeVariant = 1 - av; persistView(); refreshCard(p.id);
+    switchPageVariant(p,1-av);
    } else {
     e.stopPropagation(); 
     const m = $('menu-var-'+p.id);
@@ -2080,7 +2100,7 @@ function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),a=el('div'
    p.variants.forEach((v, i) => {
     const mi = el('button', 'mi'); mi.textContent = v.title;
     if (i === av) mi.style.background = 'var(--pc)';
-    mi.onclick = () => { p.activeVariant = i; persistView(); refreshCard(p.id); };
+    mi.onclick = () => { switchPageVariant(p,i); };
     vm.append(mi);
    });
    titleEl.append(vm);
@@ -2099,7 +2119,7 @@ function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),a=el('div'
     a.append(dd);
     h.append(gr,titleEl,a);
  } else {
-    const cp=el('button','btn tone',ic('copy')+'<span class="lbl">Copy</span>');cp.title='Copy';cp.setAttribute('aria-label','Copy page text');cp.onclick=()=>copyPage(p.id);
+    const cp=el('button','btn tone',ic('copy')+'<span class="lbl">Copy text</span>');cp.title='Copy this response to your chat';cp.setAttribute('aria-label','Copy page text');cp.onclick=()=>copyPage(p.id);
     const ed=el('button','ib ed-btn',ic('pen'));ed.title='Edit page';ed.onclick=()=>openEditPageModal(p.id);
     const edm=el('button','mi',ic('pen')+'Edit page');edm.onclick=()=>openEditPageModal(p.id);
     const ft=el('button','mi',ic('fit')+'Fit height to text');ft.title='Resize this page so all of its text shows';ft.onclick=()=>fitPageHeight(p.id);
@@ -2118,7 +2138,7 @@ function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),a=el('div'
 function refreshCard(id){/* redraw one page instead of the whole chapter */
  const p=appData.pages.find(x=>x.id===id),o=nodes.get(id);if(!p||!o||!o.parentNode){renderPages();return}
  const n=buildCard(p);o.replaceWith(n);nodes.set(id,n);if(p.x!==undefined)applyRect(p,n)}
-function renderPages(){const ws=$('ws'),wsc=$('wsc'),em=$('ws-empty'),chOn=appData.activeChapterId===DOC_CHATS_ID;$('chats').hidden=!chOn;
+function renderPages(){clearWidgetTimers();closeMenus();const ws=$('ws'),wsc=$('wsc'),em=$('ws-empty'),chOn=appData.activeChapterId===DOC_CHATS_ID;$('chats').hidden=!chOn;
  if(chOn){ws.hidden=true;em.hidden=true;wsc.innerHTML='';nodes.clear();renderChats();return}
  wsc.classList.add('nt');wsc.innerHTML='';nodes.clear();
  const ch=curChap();
@@ -2129,17 +2149,20 @@ function renderPages(){const ws=$('ws'),wsc=$('wsc'),em=$('ws-empty'),chOn=appDa
  cons.forEach(c=>wsc.append(buildBox(c,all.filter(p=>p.containerId===c.id))));
  all.filter(p=>!p.containerId).forEach(p=>{const n=buildCard(p);nodes.set(p.id,n);wsc.append(n)});
  layoutDirty=false;ensureLayout();applyAll();fitAll();
- em.hidden=!!(all.length||cons.length);em.textContent=ch.id===TOOLS_ID?'No widgets yet. Use + Add to add one.':'No pages yet. Use + Add to create one, or + Board for a board.';
+ em.hidden=!!(all.length||cons.length);em.textContent=ch.id===TOOLS_ID?'No widgets yet. Use + Add to add one.':'No pages yet. Use + Add to create one, or Paste page above. Right-click for quick actions.';
  void wsc.offsetWidth;wsc.classList.remove('nt');
  if(layoutDirty)persistLocal();if(window.SmartScheduleManager)SmartScheduleManager.refreshDots()}
-function closeMenus(){document.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show'))}
-function toggleDropdown(id,btn){document.querySelectorAll('.menu').forEach(m=>{if(m.id!=='menu-'+id)m.classList.remove('show')});const t=$('menu-'+id);if(!t)return;
- const open=!t.classList.contains('show');t.classList.toggle('show',open);
+function closeMenus(){document.querySelectorAll('.menu.show').forEach(m=>{m.classList.remove('show');if(m._trigger)m._trigger.setAttribute('aria-expanded','false')})}
+function placeMenu(m,x,y){const w=m.offsetWidth,h=m.offsetHeight;m.style.left=clamp(x,8,Math.max(8,innerWidth-w-8))+'px';m.style.top=clamp(y,8,Math.max(8,innerHeight-h-8))+'px'}
+function toggleDropdown(id,btn){const t=$('menu-'+id);if(!t)return;const open=!t.classList.contains('show');closeMenus();
+ t.classList.toggle('show',open);
+ t.setAttribute('role','menu');t.querySelectorAll('.mi').forEach(b=>b.setAttribute('role','menuitem'));
+ if(btn){t._trigger=btn;btn.setAttribute('aria-haspopup','menu');btn.setAttribute('aria-expanded',String(open))}
  if(open&&btn){const r=btn.getBoundingClientRect(),w=t.offsetWidth,h=t.offsetHeight;/* menus are fixed-position so scrolling containers never clip them */
   const l=Math.min(Math.max(8,r.right-w),innerWidth-w-8);let tp=r.bottom+6;if(tp+h>innerHeight-8)tp=Math.max(8,r.top-h-6);
-  t.style.left=l+'px';t.style.top=tp+'px'}}
+  placeMenu(t,l,tp)}else if(open){placeMenu(t,parseFloat(t.style.left)||8,parseFloat(t.style.top)||8)}}
 document.addEventListener('click',closeMenus);
-addEventListener('scroll',closeMenus,true);
+addEventListener('scroll',e=>{if(!e.target.closest?.('.menu'))closeMenus()},true);
 addEventListener('resize',()=>{closeMenus();if(!$('ws').hidden)fitAll()});
 $('books').addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){e.preventDefault();e.currentTarget.scrollLeft+=e.deltaY}},{passive:false});
 /* modals */
@@ -2163,9 +2186,9 @@ function openEditBookModal(id){const b=appData.books.find(x=>x.id===id);if(!b)re
 function saveBook(){const id=$('book-id-input').value,t=$('book-title-input').value.trim();if(!t)return;
  if(id){appData.books.find(b=>b.id===id).name=t}else{captureView(appData.activeBookId);const b={id:'b_'+Date.now(),name:t};appData.books.push(b);appData.activeBookId=b.id;appData.activeChapterId=''}
  persistLocal();closeModal('book-modal');renderAll();$('books').scrollLeft=1e6*(id?0:1)}
-async function deleteBook(){const id=$('book-id-input').value;if(!await askConfirm('Delete this book with all its chapters and pages?','Delete book'))return;
+async function deleteBook(){const id=$('book-id-input').value;if(appData.books.length<2||!appData.books.some(b=>b.id===id))return;if(!await askConfirm('Delete this book with all its chapters and pages?','Delete book'))return;
  const ch=appData.chapters.filter(c=>c.bookId===id).map(c=>c.id);appData.pages=appData.pages.filter(p=>!ch.includes(p.chapterId));appData.containers=appData.containers.filter(c=>!ch.includes(c.chapterId));appData.chapters=appData.chapters.filter(c=>c.bookId!==id);appData.books=appData.books.filter(b=>b.id!==id);
- delete viewMem[id];saveViewMem();selectBook(appData.books[0].id);closeModal('book-modal');showToast('Book deleted.')}
+ delete viewMem[id];saveViewMem();if(id===appData.activeBookId){appData.activeBookId='';selectBook(appData.books[0].id)}else renderAll();persistLocal();closeModal('book-modal');showToast('Book deleted.')}
 
 /* ---- books: move, download as .txt, import from .txt ---- */
 function bookIdx(id){return appData.books.findIndex(b=>b.id===id)}
@@ -2185,7 +2208,7 @@ function downloadBook(id){const o=bookClip(id);if(!o)return;
 function importBookFile(ev){const f=ev.target.files[0];ev.target.value='';if(!f)return;const r=new FileReader();
  r.onerror=()=>showToast('Could not read that file.');
  r.onload=()=>{let o=null;try{o=JSON.parse(r.result)}catch(e){}
-  if(!o||o.app!==CLIP_TAG||o.type!=='book'){showToast(o&&(o.appData||o.books)?'That is a full backup. Use Settings > Data & files > Import Data.':'That file is not a downloaded book.');return}
+  if(!o||o.app!==CLIP_TAG||o.type!=='book'||!Array.isArray(o.chapters)||!o.chapters.every(validChapterClip)){showToast(o&&(o.appData||o.books)?'That is a full backup. Use Settings > Data & files > Import Data.':'That file is not a downloaded book.');return}
   const old=appData.activeBookId;if(appData.books.some(b=>b.id===old))captureView(old);
   let name=String(o.name||'Imported book').trim()||'Imported book';if(appData.books.some(b=>b.name===name))name+=' (Imported)';
   const bid='b_'+rid();appData.books.push({id:bid,name});
@@ -2196,7 +2219,7 @@ function importBookFile(ev){const f=ev.target.files[0];ev.target.value='';if(!f)
  r.readAsText(f)}
 /* chapters */
 function openAddChapterModal(){$('chapter-modal-title').textContent='Add Chapter';['id','name','desc','link'].forEach(k=>$('chapter-'+k+'-input').value='');openModal('chapter-modal')}
-function openEditChapterModal(){const c=curChap();if(!c)return;$('chapter-modal-title').textContent='Edit Chapter';$('chapter-id-input').value=c.id;$('chapter-name-input').value=c.name;$('chapter-desc-input').value=c.description||'';$('chapter-link-input').value=c.referenceLink||'';openModal('chapter-modal')}
+function openEditChapterModal(id){const c=typeof id==='string'?appData.chapters.find(c=>c.id===id):curChap();if(!c||isDoc(c.id)||c.id===TOOLS_ID)return;$('chapter-modal-title').textContent='Edit Chapter';$('chapter-id-input').value=c.id;$('chapter-name-input').value=c.name;$('chapter-desc-input').value=c.description||'';$('chapter-link-input').value=c.referenceLink||'';openModal('chapter-modal')}
 function saveChapter(){const id=$('chapter-id-input').value,name=$('chapter-name-input').value.trim(),d=$('chapter-desc-input').value.trim(),l=$('chapter-link-input').value.trim();if(!name)return;
  if(id){Object.assign(appData.chapters.find(c=>c.id===id),{name,description:d,referenceLink:l})}else{const c={id:'c_'+Date.now(),bookId:appData.activeBookId,name,description:d,referenceLink:l};appData.chapters.push(c);appData.activeChapterId=c.id}
  persistLocal();closeModal('chapter-modal');renderAll()}
@@ -2204,10 +2227,10 @@ function duplicateChapter(id){const s=appData.chapters.find(c=>c.id===id);if(!s)
  appData.chapters.push({id:nid,bookId:s.bookId,name:s.name+' (Copy)',description:s.description,referenceLink:s.referenceLink});
  const map={};appData.containers.filter(c=>c.chapterId===id).forEach(c=>{const k='k_'+rid();map[c.id]=k;appData.containers.push(Object.assign({},c,{id:k,chapterId:nid}))});
  appData.pages.filter(p=>p.chapterId===id).forEach(p=>appData.pages.push(Object.assign({id:'p_'+rid(),chapterId:nid,containerId:map[p.containerId]||'',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h},widgetProps(p))));
- appData.activeChapterId=nid;persistLocal();renderAll();showToast('Chapter duplicated.')}
+ appData.activeBookId=s.bookId;appData.activeChapterId=nid;persistLocal();renderAll();showToast('Chapter duplicated.')}
 async function deleteChapter(id){if(!await askConfirm('Delete this chapter and its pages?','Delete chapter'))return;
  appData.chapters=appData.chapters.filter(c=>c.id!==id);appData.pages=appData.pages.filter(p=>p.chapterId!==id);appData.containers=appData.containers.filter(c=>c.chapterId!==id);
- const r=appData.chapters.filter(c=>c.bookId===appData.activeBookId);appData.activeChapterId=r.length?r[0].id:'';persistLocal();renderAll();showToast('Chapter deleted.')}
+ if(appData.activeChapterId===id){const r=appData.chapters.filter(c=>c.bookId===appData.activeBookId);appData.activeChapterId=r.length?r[0].id:''}persistLocal();renderAll();showToast('Chapter deleted.')}
 /* pages */
 let activeEditor = null;
 document.addEventListener('focusin', e => {
@@ -2280,7 +2303,7 @@ function savePage(){const id=$('page-id-input').value, isVar = $('page-variant-c
  let nid='';
  if(id){
   const pg=appData.pages.find(p=>p.id===id);
-  if(pg.content!==content || pg.variants) delete varVals[id];
+  if(pg.content!==content || pg.variants){delete varVals[id];delete variantVals[id]}
   if(isVar){
    activeVariant = pg.activeVariant || 0;
    if (activeVariant >= variants.length) activeVariant = 0;
@@ -2295,7 +2318,9 @@ function savePage(){const id=$('page-id-input').value, isVar = $('page-variant-c
 function duplicatePage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;const nid='p_'+Date.now();
  appData.pages.push(Object.assign({id:nid,chapterId:p.chapterId,containerId:p.containerId||'',title:p.title+' (Copy)',content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p)));
  persistLocal();renderHero();renderPages();revealNode(nid);showToast('Page duplicated.')}
-function deletePage(id){delete varVals[id];appData.pages=appData.pages.filter(p=>p.id!==id);persistLocal();renderHero();renderPages();showToast('Page deleted.')}
+function deletePage(id){const i=appData.pages.findIndex(p=>p.id===id);if(i<0)return;const p=appData.pages[i],vals=varVals[id],variants=variantVals[id];delete varVals[id];delete variantVals[id];appData.pages.splice(i,1);persistLocal();renderHero();renderPages();
+ showUndo('Page deleted',()=>{if(!appData.chapters.some(c=>c.id===p.chapterId)&&!isDoc(p.chapterId)&&p.chapterId!==TOOLS_ID){showToast('The chapter no longer exists.');return false}
+ if(!appData.pages.some(x=>x.id===id)){if(p.containerId&&!appData.containers.some(c=>c.id===p.containerId))p.containerId='';appData.pages.splice(Math.min(i,appData.pages.length),0,p);if(vals)varVals[id]=vals;if(variants)variantVals[id]=variants;persistLocal();renderHero();renderPages()}})}
 /* ---------- freeform layout: pages and boards share one fine grid ---------- */
 let layoutDirty=false,ps=null,editMode=false;/* ps = active drag / resize */
 const nodes=new Map();/* page / board id -> element */
@@ -2510,15 +2535,16 @@ function applyColors(n,border,bg){const s=n.style;
  if(border)s.setProperty('--cb',border);else s.removeProperty('--cb');
  if(bg){s.setProperty('--cbg',bg);s.setProperty('--cfg',inkFor(bg))}else{s.removeProperty('--cbg');s.removeProperty('--cfg')}}
 function buildBox(c,pages){const box=el('section','cbox fi'),bar=el('div','cbar'),body=el('div','cin'),can=el('div','bcan');
- box.dataset.cid=c.id;box.setAttribute('aria-label',c.name);applyColors(box,c.border,c.bg);
+ box.dataset.cid=c.id;box.tabIndex=0;box.setAttribute('aria-label',c.name);applyColors(box,c.border,c.bg);
  const mv=el('span','cgrip',ic('move'));mv.tabIndex=0;mv.setAttribute('role','button');mv.title='Drag the board to move it. Alt + arrows resize.';mv.setAttribute('aria-label','Move board '+c.name);mv.addEventListener('keydown',e=>gripKey(e,c.id));
  const nm=el('span','cname');nm.textContent=c.name;nm.title=c.name;
  const cn=el('span','ccount',pages.length+(pages.length===1?' page':' pages'));
  const ed=el('button','ib sm',ic('pen'));ed.title='Edit board';ed.setAttribute('aria-label','Edit board');ed.onclick=()=>openEditContainerModal(c.id);
  const dd=el('div','dd'),db=el('button','ib sm',ic('dots')),m=el('div','menu');m.id='menu-'+c.id;db.title='More';db.setAttribute('aria-label','More board actions');db.onclick=e=>{e.stopPropagation();toggleDropdown(c.id,db)};
+ const pa=el('button','mi',ic('paste')+'Paste page here');pa.onclick=()=>startPaste('page',{chapterId:c.chapterId,containerId:c.id});
  const ad=el('button','mi',ic('plus')+'Add page here');ad.onclick=()=>openAddPageModal(c.id);
  const de=el('button','mi del',ic('trash')+'Delete board');de.onclick=()=>deleteContainer(c.id);
- m.append(ad,de);dd.append(db,m);bar.append(mv,nm,cn,ed,dd);
+ m.append(ad,pa,de);dd.append(db,m);bar.append(mv,nm,cn,ed,dd);
  can.dataset.zone=c.id;
  if(!pages.length)can.append(el('div','bempty','Drag pages here, or use the menu to add one.'));
  pages.forEach(p=>{const n=buildCard(p);nodes.set(p.id,n);can.append(n)});
@@ -2573,6 +2599,11 @@ function parseOpts(tok){const out=[];
  walk(tok.slice(1,-1));return out}
 const phOf=t=>t==='[XXX]'?'XXX':t;
 const varVals={};
+const variantVals={};
+function switchPageVariant(p,vi){if(!p.variants||!Number.isInteger(vi)||!p.variants[vi])return;
+ const values=variantVals[p.id]||(variantVals[p.id]={});values[p.activeVariant||0]=varVals[p.id]||{};
+ p.activeVariant=vi;p.title=p.variants[vi].title;p.content=p.variants[vi].content;varVals[p.id]=values[vi]||(values[vi]={});
+ persistView();refreshCard(p.id)}
 
 function getVarKind(tok) {
  if(VKIND[tok]) return VKIND[tok];
@@ -2690,7 +2721,8 @@ function composeSpiel(p){const vals=varVals[p.id]||{},src=p.content||'';let i=0,
   out+=r}
  return{text:out+src.slice(last),blank}}
 function copyPage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;const r=composeSpiel(p);
- copyText(r.text,r.blank?'Copied. '+r.blank+(r.blank>1?' variables are':' variable is')+' still blank.':'Copied to clipboard.')}
+ return copyText(r.text,r.blank?'Copied. '+r.blank+(r.blank>1?' variables are':' variable is')+' still blank.':'Copied to clipboard.',()=>{
+ const card=nodes.get(id);if(card){card.classList.remove('copy-ok');void card.offsetWidth;card.classList.add('copy-ok');setTimeout(()=>card.classList.remove('copy-ok'),600)}})}
 /* ---------- Documentation chats: up to 3 customers at once ----------
    Each chat holds working COPIES of templates, so filling one in never touches the template itself or another chat.
    Chats live only in sessionStorage: they survive a refresh, are cleared when the tab closes, and are never part of appData, so they never sync or get backed up. */
@@ -2767,10 +2799,7 @@ function nicePop(e,text){let x,y;/* above the click, or above the mouse when the
  else if(_mouse.on){x=_mouse.x;y=_mouse.y}else{x=innerWidth/2;y=innerHeight/2}
  const d=document.createElement('div');d.className='nice-pop'+(text?' long':'');d.textContent=text||'Nice';
  d.style.left=Math.max(40,Math.min(innerWidth-40,x))+'px';d.style.top=Math.max(50,y)+'px';document.body.append(d);setTimeout(()=>d.remove(),text?2300:1000)}
-function copyOpening(e){const t=openingText();if(!t){showToast('No Opening found in General. Add one, or set your name in Settings.');return}
- const ok=()=>nicePop(e);
- if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(ok).catch(()=>{fallbackCopy(t,'Opening spiel copied.');ok()});
- else{fallbackCopy(t,'Opening spiel copied.');ok()}}
+function copyOpening(e){const t=openingText();if(!t){showToast('No Opening found in General. Add one, or set your name in Settings.');return}return copyText(t,false,()=>nicePop(e))}
 
 /* search every template (board name + template or variant title + Notations / What if), one row per variant */
 function docIndex(){const cn={};appData.containers.forEach(k=>{cn[k.id]=k.name});const out=[];
@@ -2785,8 +2814,8 @@ function docSearch(q){const t=q.toLowerCase().split(/\s+/).filter(Boolean);if(!t
 function chatCard(chat,p,root){
  const card=el('div','cp'),h=el('div','cp-h'),t=el('div','cp-t');t.textContent=p.title;
  const cp=el('button','btn tone',ic('copy')+'<span>Copy</span>');cp.title='Copy this note';cp.setAttribute('aria-label','Copy '+p.title);
- cp.onclick=()=>{const r=composeSpiel(p);copyText(r.text,r.blank?'Copied. '+r.blank+(r.blank>1?' variables are':' variable is')+' still blank.':'Copied to clipboard.');
-  if(!chat.noted&&isNotation(p)){chat.noted=true;chatSave();if(root._flag)root._flag()}};
+ cp.onclick=()=>{const r=composeSpiel(p);return copyText(r.text,r.blank?'Copied. '+r.blank+(r.blank>1?' variables are':' variable is')+' still blank.':'Copied to clipboard.',()=>{
+  if(!chat.noted&&isNotation(p)){chat.noted=true;chatSave();if(root._flag)root._flag()}})};
  const ed=el('button','ib sm',ic('pen'));ed.title='Edit the template';ed.setAttribute('aria-label','Edit template '+p.title);
  ed.onclick=()=>{if(appData.pages.some(x=>x.id===p.src))openEditPageModal(p.src);else showToast('The original template no longer exists.')};
  const rm=el('button','ib sm',ic('trash'));rm.title='Clear this template';rm.setAttribute('aria-label','Clear '+p.title);
@@ -2912,49 +2941,136 @@ function onVarInput(v,e){const k=v.dataset.k;
 /* Enter inside a variable copies that page (never for Documentation pages or chat copies) */
 function enterCopy(v,card){card=card||v.closest('.card');const p=appData.pages.find(x=>x.id===v.dataset.pid);if(!p||!card||isDoc(p.chapterId)||!window.copyHit)return;window.copyHit(p,card)}
 /* copy */
-function copyText(t,msg){msg=msg||'Copied to clipboard.';if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(()=>showToast(msg)).catch(()=>fallbackCopy(t,msg));else fallbackCopy(t,msg)}
-function fallbackCopy(t,msg){const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;left:-9999px';document.body.appendChild(a);a.select();try{document.execCommand('copy');showToast(msg||'Copied to clipboard.')}catch(e){showToast('Copy failed.')}a.remove()}
+async function writeClipboard(t){
+ try{if(navigator.clipboard?.writeText&&window.isSecureContext){await navigator.clipboard.writeText(String(t));return true}}catch(e){}
+ return fallbackCopy(String(t))}
+function fallbackCopy(t){const active=document.activeElement,sel=getSelection(),ranges=[];
+ if(sel)for(let i=0;i<sel.rangeCount;i++)ranges.push(sel.getRangeAt(i).cloneRange());
+ const field=active&&typeof active.selectionStart==='number'?{start:active.selectionStart,end:active.selectionEnd}:null;
+ const a=document.createElement('textarea');a.value=t;a.readOnly=true;a.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(a);a.select();let ok=false;
+ try{ok=document.execCommand('copy')===true}catch(e){}finally{a.remove();if(active?.isConnected)active.focus({preventScroll:true});
+ if(field)active.setSelectionRange(field.start,field.end);else if(sel&&ranges.every(r=>r.commonAncestorContainer.isConnected)){sel.removeAllRanges();ranges.forEach(r=>sel.addRange(r))}}
+ return ok}
+async function copyText(t,msg,onSuccess){const ok=await writeClipboard(t);if(ok){if(msg!==false)showToast(msg||'Copied to clipboard.');if(onSuccess)onSuccess()}else showToast('Copy failed. Select the text and use your browser’s Copy command.');return ok}
 /* copy / paste whole pages and chapters */
 const CLIP_TAG='paano-ba-yan';
+// Keep organizational copies separate from the response sent to the system clipboard.
+// Memory only: customer/template data is not added to persistent clipboard storage.
+let appClipboard=null;
 function rid(){return Date.now()+'_'+Math.random().toString(36).slice(2,6)}
 function copyPageData(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
- copyText(JSON.stringify(Object.assign({app:CLIP_TAG,type:'page',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p))),'Page copied. Use Paste page inside any chapter.')}
+ return copyStructure(Object.assign({app:CLIP_TAG,type:'page',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p)))}
+async function copyStructure(o){const t=JSON.stringify(o);appClipboard=t;const ok=await writeClipboard(t);
+ if(appClipboard===t)showToast((o.type==='page'?'Page':'Chapter')+' copied. '+(ok?'':'Available in this tab. ')+(o.type==='page'?'Use Paste page or right-click a board.':'Use Paste chapter below + Chapter.'));return true}
 function chapterClip(id){const c=appData.chapters.find(x=>x.id===id);if(!c)return null;
  const cons=appData.containers.filter(k=>k.chapterId===id);
  return {app:CLIP_TAG,type:'chapter',ver:2,name:c.name,description:c.description||'',referenceLink:c.referenceLink||'',
   containers:cons.map(k=>({name:k.name,x:k.x,y:k.y,w:k.w,h:k.h,border:k.border||'',bg:k.bg||''})),
   pages:appData.pages.filter(p=>p.chapterId===id).map(p=>Object.assign({title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h,container:cons.findIndex(k=>k.id===p.containerId)},widgetProps(p)))}}
-function copyChapterData(id){const o=chapterClip(id);if(!o)return;copyText(JSON.stringify(o),'Chapter copied. Use Paste chapter in any book.')}
-function parseClip(t){try{const o=JSON.parse(t);return o&&o.app===CLIP_TAG?o:null}catch(e){return null}}
+function copyChapterData(id){const o=chapterClip(id);if(o)return copyStructure(o)}
+function validPageClip(p){return p&&typeof p==='object'&&typeof p.title==='string'&&typeof p.content==='string'&&
+ (!p.variants||(Array.isArray(p.variants)&&p.variants.every(v=>v&&typeof v.title==='string'&&typeof v.content==='string')))}
+function validChapterClip(c){return c&&typeof c==='object'&&typeof c.name==='string'&&Array.isArray(c.pages)&&c.pages.every(validPageClip)&&
+ (!c.containers||(Array.isArray(c.containers)&&c.containers.every(k=>k&&typeof k==='object')))}
+function clipPageProps(p){const variants=Array.isArray(p.variants)&&p.variants.length?structuredClone(p.variants):null;
+ const activeVariant=variants&&Number.isInteger(p.activeVariant)&&p.activeVariant>=0&&p.activeVariant<variants.length?p.activeVariant:0;
+ return Object.assign({title:variants?variants[activeVariant].title:p.title||'Untitled',content:variants?variants[activeVariant].content:p.content||'',variants,activeVariant,
+ w:num(p.w)===undefined?undefined:clamp(num(p.w),MIN_PW,MAX_U),h:num(p.h)===undefined?undefined:clamp(num(p.h),MIN_PH,MAX_U)},widgetProps(p))}
+function parseClip(t){try{const o=JSON.parse(t);return o&&o.app===CLIP_TAG&&((o.type==='page'&&validPageClip(o))||(o.type==='chapter'&&validChapterClip(o)))?o:null}catch(e){return null}}
 /* builds one chapter (with its boards and pages) from a copied-chapter object and returns its id */
 function addChapterFromClip(o,bookId){
  const nid='c_'+rid();
  appData.chapters.push({id:nid,bookId:bookId,name:String(o.name||'Untitled'),description:String(o.description||''),referenceLink:String(o.referenceLink||'')});
  const v2=o.ver>=2,f=v2?1:1/GRID;/* older copies stored board geometry in pixels */
  const kids=(Array.isArray(o.containers)?o.containers:[]).map(k=>{const n={id:'k_'+rid(),chapterId:nid,name:String(k.name||'Board'),x:num((+k.x||0)*f),y:num((+k.y||0)*f),w:Math.max(MIN_BW,num((+k.w||(v2?DEF_BW:420))*f)||DEF_BW),h:Math.max(MIN_BH,num((+k.h||(v2?DEF_BH:300))*f)||DEF_BH),border:hex(k.border),bg:hex(k.bg),mig:v2?undefined:true};appData.containers.push(n);return n.id});
- (Array.isArray(o.pages)?o.pages:[]).forEach(p=>appData.pages.push(Object.assign({id:'p_'+rid(),chapterId:nid,containerId:kids[p.container]||'',title:String(p.title||'Untitled'),content:String(p.content||''),variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:num(p.x),y:num(p.y),w:num(p.w),h:num(p.h)},widgetProps(p))));
+ (Array.isArray(o.pages)?o.pages:[]).forEach(p=>appData.pages.push(Object.assign({id:'p_'+rid(),chapterId:nid,containerId:kids[p.container]||'',x:num(p.x),y:num(p.y)},clipPageProps(p))));
  return nid}
-let pasteKind='';
-async function startPaste(kind){
- if(kind==='page'&&!curChap()){showToast('Select a chapter first.');return}
- let t=null;
- try{if(navigator.clipboard&&navigator.clipboard.readText&&window.isSecureContext)t=await navigator.clipboard.readText()}catch(e){t=null}
- if(t===null){pasteKind=kind;$('paste-modal-title').textContent='Paste '+kind;$('paste-input').value='';openModal('paste-modal');setTimeout(()=>$('paste-input').focus(),30);return}
- applyPaste(t,kind)}
-function confirmPaste(){const t=$('paste-input').value;if(applyPaste(t,pasteKind))closeModal('paste-modal')}
-function applyPaste(t,kind){const o=parseClip(t);
- if(!o){showToast('Nothing to paste. Copy a '+kind+' first.');return false}
- if(o.type!==kind){showToast(kind==='chapter'?'That is a copied page. Use Paste page inside a chapter.':'That is a copied chapter. Use Paste chapter next to + Chapter.');return false}
- if(kind==='page'){if(!curChap()){showToast('Select a chapter first.');return false}if(appData.activeChapterId===TOOLS_ID&&!o.isWidget){showToast('Tools only holds widgets.');return false}
-  appData.pages.push(Object.assign({id:'p_'+rid(),chapterId:appData.activeChapterId,containerId:'',title:String(o.title||'Untitled'),content:String(o.content||''),variants:o.variants?JSON.parse(JSON.stringify(o.variants)):null,activeVariant:o.activeVariant||0,w:num(o.w),h:num(o.h)},widgetProps(o)));
-  persistLocal();renderHero();renderPages();showToast('Page pasted.');return true}
- const nid=addChapterFromClip(o,appData.activeBookId);
- appData.activeChapterId=nid;persistLocal();renderAll();showToast('Chapter pasted.');return true}
+let pasteKind='auto',pasteDestination=null;
+function getPasteTarget(target={}){return {bookId:target.bookId??appData.activeBookId,chapterId:target.chapterId??appData.activeChapterId,containerId:target.containerId||''}}
+function describePasteTarget(target){const c=appData.chapters.find(c=>c.id===target.chapterId)||DOC_CHAPS.find(c=>c.id===target.chapterId)||(target.chapterId===TOOLS_ID?TOOLS_CHAP:null),b=appData.books.find(b=>b.id===target.bookId),board=appData.containers.find(c=>c.id===target.containerId);
+ return 'Pages → '+(c?c.name:'select a chapter')+(board?' / '+board.name:'')+' · Chapters → '+(b?b.name:'select a book')}
+function openPasteDialog(kind,target,text=''){pasteKind=kind;pasteDestination=target;$('paste-modal-title').textContent=kind==='auto'?'Paste page or chapter':'Paste '+kind;
+ $('paste-destination').textContent=describePasteTarget(target);$('paste-input').value=text;openModal('paste-modal');setTimeout(()=>$('paste-input').focus(),30)}
+async function startPaste(kind='auto',target={},fromSystem=false){closeMenus();const dest=getPasteTarget(target),cached=parseClip(appClipboard);
+ if(!fromSystem&&cached&&(kind==='auto'||kind===cached.type))return applyPaste(appClipboard,kind,dest);
+ let t=null;try{if(navigator.clipboard?.readText&&window.isSecureContext)t=await navigator.clipboard.readText()}catch(e){}
+ if(t!==null&&parseClip(t))return applyPaste(t,kind,dest);
+ openPasteDialog(kind,dest,t||'')}
+function confirmPaste(){if(applyPaste($('paste-input').value,pasteKind,pasteDestination))closeModal('paste-modal')}
+function applyPaste(t,kind='auto',target=getPasteTarget()){const o=parseClip(t);target=target||getPasteTarget();
+ if(!o){showToast('Use Copy page or Copy chapter first. This is not valid template data.');return false}
+ if(kind!=='auto'&&o.type!==kind){showToast(o.type==='page'?'This is a page. Choose Paste page in the workspace.':'This is a chapter. Choose Paste chapter below + Chapter.');return false}
+ if(!appData.books.some(b=>b.id===target.bookId)){showToast('The destination book no longer exists.');return false}
+ if(o.type==='page'){
+  const c=appData.chapters.find(c=>c.id===target.chapterId&&c.bookId===target.bookId)||DOC_LIB.find(c=>c.id===target.chapterId)||(target.chapterId===TOOLS_ID?TOOLS_CHAP:null);
+  if(!c){showToast('Select a chapter for this page first.');return false}
+  if(c.id===TOOLS_ID&&!o.isWidget){showToast('Tools only holds widgets.');return false}
+  const board=target.containerId&&appData.containers.find(c=>c.id===target.containerId&&c.chapterId===target.chapterId);
+  if(target.containerId&&!board){showToast('The destination board no longer exists.');return false}
+  const p=Object.assign({id:'p_'+rid(),chapterId:c.id,containerId:board?board.id:''},clipPageProps(o));appData.pages.push(p);
+  appData.activeBookId=target.bookId;appData.activeChapterId=c.id;persistLocal();renderAll();revealNode(p.id);showToast('Page pasted into '+(board?board.name:c.name)+'.');return true}
+ const nid=addChapterFromClip(o,target.bookId);appData.activeBookId=target.bookId;appData.activeChapterId=nid;persistLocal();renderAll();showToast('Chapter pasted.');return true}
+/* Shared quick actions. Native text selection and input menus remain available. */
+function editingTarget(t){return t instanceof Element&&!!t.closest('input,textarea,select,[contenteditable]:not([contenteditable="false"]),.var')}
+function contextDestination(t){const board=t.closest('.cbox[data-cid]'),chapter=t.closest('.chip-ch[data-id]'),book=t.closest('.tab[data-id]');
+ if(chapter){const c=appData.chapters.find(c=>c.id===chapter.dataset.id);if(c)return getPasteTarget({bookId:c.bookId,chapterId:c.id})}
+ if(book)return getPasteTarget({bookId:book.dataset.id,chapterId:''});
+ return getPasteTarget({containerId:board?board.dataset.cid:''})}
+function resetPageFields(p){const vals=varVals[p.id];if(!vals||!Object.keys(vals).length){showToast('No filled fields to clear.');return}
+ const vi=p.activeVariant||0;varVals[p.id]={};if(variantVals[p.id])variantVals[p.id][vi]=varVals[p.id];refreshCard(p.id);
+ showUndo('Fields cleared',()=>{if(!appData.pages.some(x=>x.id===p.id))return false;if(p.variants){const vv=variantVals[p.id]||(variantVals[p.id]={});vv[vi]=vals}
+ if((p.activeVariant||0)===vi){varVals[p.id]=vals;refreshCard(p.id)}})}
+function showContextMenu(t,x,y,keyboard=false){
+ const card=t.closest('.card[data-pid]'),board=t.closest('.cbox[data-cid]'),chapter=t.closest('.chip-ch[data-id]'),book=t.closest('.tab[data-id]');
+ if(!card&&!board&&!chapter&&!book&&!t.closest('#ws,#ws-empty,.hero,main'))return false;
+ if(appData.activeChapterId===DOC_CHATS_ID&&!chapter&&!book)return false;
+ closeMenus();let m=$('menu-context');if(!m){m=el('div','menu');m.id='menu-context';m.setAttribute('role','menu');document.body.append(m)}m.innerHTML='';
+ const dest=contextDestination(t),trigger=card||board||chapter||book||$('paste-main-btn');m._trigger=trigger;
+ const label=text=>{const n=el('div','menu-label');n.textContent=text;m.append(n);m.setAttribute('aria-label',text+' actions')};
+ const add=(name,icon,fn,danger=false)=>{const b=el('button','mi'+(danger?' del':''),ic(icon));b.type='button';b.setAttribute('role','menuitem');b.append(document.createTextNode(name));b.onclick=()=>{closeMenus();fn()};m.append(b)};
+ const sep=()=>m.append(el('div','menu-sep'));
+ if(card){const p=appData.pages.find(p=>p.id===card.dataset.pid);if(!p)return false;label('Page · '+p.title);
+  if(!p.isWidget){add('Copy text','copy',()=>copyPage(p.id));add('Edit page','pen',()=>openEditPageModal(p.id))}
+  add('Copy page','copy',()=>copyPageData(p.id));add('Duplicate page','dup',()=>duplicatePage(p.id));
+  add('Paste page here','paste',()=>startPaste('page',dest));
+  if(!p.isWidget){sep();add('Fit height to text','fit',()=>fitPageHeight(p.id));add('Clear filled fields','trash',()=>resetPageFields(p))}
+  sep();add('Delete page','trash',()=>deletePage(p.id),true);
+ }else if(chapter){const c=appData.chapters.find(c=>c.id===chapter.dataset.id);if(!c)return false;label('Chapter · '+c.name);
+  add('Paste page into this chapter','paste',()=>startPaste('page',dest));add('Copy chapter','copy',()=>copyChapterData(c.id));add('Duplicate chapter','dup',()=>duplicateChapter(c.id));
+  add('Edit chapter','pen',()=>openEditChapterModal(c.id));sep();add('Delete chapter','trash',()=>deleteChapter(c.id),true);
+ }else if(book){const b=appData.books.find(b=>b.id===book.dataset.id);if(!b)return false;label('Book · '+b.name);
+  add('Paste chapter into this book','paste',()=>startPaste('chapter',dest));add('Edit book','pen',()=>openEditBookModal(b.id));add('Download book','copy',()=>downloadBook(b.id));
+ }else{const c=board&&appData.containers.find(c=>c.id===board.dataset.cid);label(c?'Board · '+c.name:'Workspace');
+  add('Paste page here','paste',()=>startPaste('page',dest));
+  if(appData.activeChapterId!==TOOLS_ID)add('Add page here','plus',()=>openAddPageModal(c?c.id:''));
+  if(c){add('Edit board','pen',()=>openEditContainerModal(c.id));sep();add('Delete board','trash',()=>deleteContainer(c.id),true)}
+ }
+ sep();add('Paste from system clipboard…','paste',()=>startPaste('auto',dest,true));
+ m.classList.add('show');placeMenu(m,x,y);if(keyboard)m.querySelector('.mi').focus({preventScroll:true});return true}
+document.addEventListener('contextmenu',e=>{
+ if(e.shiftKey||!document.documentElement.classList.contains('unlocked')||document.querySelector('.ov.open')||editingTarget(e.target)||e.target.closest('a,.menu,.widget-ui')||!getSelection().isCollapsed)return;
+ if(showContextMenu(e.target,e.clientX,e.clientY))e.preventDefault()});
+document.addEventListener('keydown',e=>{
+ if(e.isComposing||!document.documentElement.classList.contains('unlocked'))return;
+ const m=document.querySelector('.menu.show');
+ if(m){const buttons=[...m.querySelectorAll('.mi:not(:disabled)')],i=buttons.indexOf(document.activeElement);
+  if(['ArrowDown','ArrowUp','Home','End','Escape','Tab'].includes(e.key)){
+   if(e.key==='Escape'||e.key==='Tab'){closeMenus();if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();m._trigger?.focus({preventScroll:true})}return}
+   e.preventDefault();e.stopImmediatePropagation();const n=e.key==='Home'?0:e.key==='End'?buttons.length-1:i<0?(e.key==='ArrowDown'?0:buttons.length-1):(i+(e.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length;buttons[n]?.focus({preventScroll:true});return}
+ }
+ if(editingTarget(e.target)||document.querySelector('.ov.open'))return;
+ if(e.key==='ContextMenu'||(e.shiftKey&&e.key==='F10')){const r=e.target.getBoundingClientRect();if(showContextMenu(e.target,r.left+12,r.top+12,true))e.preventDefault()}
+ if((e.ctrlKey||e.metaKey)&&!e.altKey&&!e.shiftKey&&e.key.toLowerCase()==='c'&&getSelection().isCollapsed){const card=e.target.closest('.card[data-pid]');if(card){e.preventDefault();copyPage(card.dataset.pid)}}
+},true);
+document.addEventListener('paste',e=>{
+ if(!document.documentElement.classList.contains('unlocked')||document.querySelector('.ov.open')||editingTarget(e.target)||e.target.closest('.chat'))return;
+ const raw=e.clipboardData?.getData('text/plain'),text=parseClip(raw)?raw:appClipboard;
+ if(parseClip(text)){e.preventDefault();applyPaste(text,'auto',contextDestination(e.target))}});
 /* save */
 function generateUpdatedHtmlString(){const c=document.documentElement.cloneNode(true);if(window.lockClean)window.lockClean(c);/* strip transient UI so the saved file reopens clean */
- c.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));c.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show'));c.querySelectorAll('.ghost').forEach(n=>n.remove());c.querySelector('body').classList.remove('edit','dragging-page','rszing');c.classList.remove('lite','flat-isl');['books','chs','wsc','hacts'].forEach(i=>{const n=c.querySelector('#'+i);if(n)n.innerHTML=''});
+ c.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));c.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show'));c.querySelectorAll('.ghost,.copy-pop,#menu-context').forEach(n=>n.remove());c.querySelector('body').classList.remove('edit','dragging-page','rszing');c.classList.remove('lite','flat-isl');['books','chs','wsc','hacts','chats'].forEach(i=>{const n=c.querySelector('#'+i);if(n)n.innerHTML=''});
  const t=c.querySelector('#toast');if(t){t.className='';t.textContent=''}
- return '<!DOCTYPE html>\n'+c.outerHTML.replace(/\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//,()=>'/*DATA_START*/'+JSON.stringify(appData,null,2)+'/*DATA_END*/')}
+ return '<!DOCTYPE html>\n'+c.outerHTML.replace(/\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//,()=>'/*DATA_START*/'+JSON.stringify(appData,null,2).replace(/</g,'\\u003c')+'/*DATA_END*/')}
 async function saveDirectToFile(){const h=generateUpdatedHtmlString(),fn=fileName()+'.html';
  try{if('showSaveFilePicker' in window){if(!fileHandle||handleName!==fn){fileHandle=await showSaveFilePicker({suggestedName:fn,types:[{description:'HTML File',accept:{'text/html':['.html']}}]});handleName=fn}
   const w=await fileHandle.createWritable();await w.write(h);await w.close();showToast('Saved to file.')}else exportUpdatedHtmlFile()}
@@ -2971,10 +3087,16 @@ function backupJSON(){let a='';try{a=localStorage.getItem('ataraxia_avatar')||''
   return JSON.stringify({appData:appData,lockData:{c:null,a:a}},null,2)}
 function exportAppData(){const url=URL.createObjectURL(new Blob([backupJSON()],{type:'application/json'})),a=document.createElement('a');
   a.href=url;a.download=fileName()+'_backup.json';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);showToast('Data exported.')}
+function validAppData(d){return d&&typeof d==='object'&&!Array.isArray(d)&&
+ Array.isArray(d.books)&&d.books.every(b=>b&&typeof b.id==='string'&&typeof b.name==='string')&&
+ Array.isArray(d.chapters)&&d.chapters.every(c=>c&&typeof c.id==='string'&&typeof c.bookId==='string'&&typeof c.name==='string')&&
+ Array.isArray(d.pages)&&d.pages.every(p=>validPageClip(p)&&typeof p.id==='string'&&typeof p.chapterId==='string')&&
+ (d.containers===undefined||(Array.isArray(d.containers)&&d.containers.every(c=>c&&typeof c.id==='string'&&typeof c.chapterId==='string')))}
 function importAppData(event){const file=event.target.files[0];if(!file)return;const reader=new FileReader();
   reader.onload=function(e){try{const o=JSON.parse(e.target.result);let d,av='';
       if(o.appData){d=o.appData;av=(o.lockData&&o.lockData.a)||''}else if(o.books&&o.pages){d=o}else throw new Error('Invalid format');
-      if(window.adoptData)window.adoptData(d);else{appData=d;applyTheme();applySiteName(true);renderAll()}
+      if(!validAppData(d))throw new Error('Invalid format');
+      if(window.adoptData)window.adoptData(d);else{load(d);applyTheme();applySiteName(true);renderAll()}
       persistLocal();/* pushes the imported data to the cloud and the auto-save files */
       if(av&&window.setAvatar)window.setAvatar(av);
       showToast('Import successful!')}catch(error){showToast('Error: Invalid backup file.')}
@@ -3078,13 +3200,13 @@ window.setAvatar=saveAvatar;
 
 /* ---------- cloud sync (Realtime Database, one JSON string per account) ---------- */
 const uref=p=>DB.ref(db,'ataraxia/users/'+uid+(p?'/'+p:''));
-const calm=()=>!document.querySelector('.ov.open')&&!ps&&!editMode;/* never swap the data while you are editing or dragging */
+const calm=()=>!document.querySelector('.ov.open,.menu.show')&&!ps&&!editMode&&!editingTarget(document.activeElement);/* never swap the data while you are editing or dragging */
 function paintInd(){let t='';/* sync status now only surfaces as an error on the island pill */
  if(uid&&!/^(Synced|Syncing|Waiting)/.test(syncTxt))t=/^Offline/.test(syncTxt)?'Sync: offline':'Sync: will retry';
  if(window.SmartScheduleManager)SmartScheduleManager.syncNote(t)}
 function paintAcct(){paintInd();G('acct-st').textContent=uid?'Signed in as '+name+'. '+syncTxt:offline?'Offline mode. Changes are saved on this device only.':'Not signed in.';G('logout').hidden=!uid;G('recov').hidden=!uid}
 function setSync(t){syncTxt=t;paintAcct()}
-function adopt(o){applying=true;try{wr(KDATA,JSON.stringify(o));load();applyTheme();applySiteName(true);renderAll()}finally{applying=false}fsSoon()}
+function adopt(o){if(!validAppData(o))throw new Error('Invalid workspace data');applying=true;try{_undo.length=0;paintUndo();Object.keys(varVals).filter(id=>!chats.some(c=>c.pages.some(p=>p.id===id))).forEach(id=>delete varVals[id]);Object.keys(variantVals).forEach(id=>delete variantVals[id]);appClipboard=null;load(o);persistView();flushLocal();applyTheme();applySiteName(true);renderAll()}finally{applying=false}fsSoon()}
 window.adoptData=adopt;
 function keepView(o){if(typeof appData!=='object'||!appData)return;const bs=o.books||[],cs=o.chapters||[],ab=appData.activeBookId,ac=appData.activeChapterId;
  if(!bs.some(b=>b.id===ab))return;o.activeBookId=ab;
@@ -3458,9 +3580,7 @@ function flash(id,a){const n=$('wsc').querySelector('[data-'+(a||'pid')+'="'+id+
 let cpNext=false;/* set only while Enter opens a result: that page gets copied */
 function copyPop(blank,host){document.querySelectorAll('.copy-pop').forEach(n=>n.remove());const d=document.createElement('div');d.className='copy-pop'+(host?' in':'');d.textContent='Copied!';
  if(blank){const s=document.createElement('small');s.textContent=blank+(blank>1?' variables are':' variable is')+' still blank';d.append(s)}(host||document.body).append(d);setTimeout(()=>d.remove(),1200)}/* host = the page card that was copied: the pop-up sits in its centre */
-function copyHit(p,host){const r=composeSpiel(p),ok=()=>copyPop(r.blank,host);
- const old=()=>{const a=document.createElement('textarea');a.value=r.text;a.style.cssText='position:fixed;left:-9999px';document.body.appendChild(a);a.select();let y=false;try{y=document.execCommand('copy')}catch(e){}a.remove();if(y)ok();else showToast('Copy failed.')};
- if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(r.text).then(ok).catch(old);else old()}
+function copyHit(p,host){const r=composeSpiel(p);return copyText(r.text,false,()=>copyPop(r.blank,host))}
 window.copyHit=copyHit;/* also used by Enter inside a variable */
 function focusFirstVar(n){/* highlights the first variable to fill in (its placeholder is selected, so typing replaces it) */
  const v=n.querySelector('.var[contenteditable]:not(.filled)')||n.querySelector('.var:not(.filled)')||n.querySelector('.var');if(v)v.focus({preventScroll:true})}
@@ -3468,7 +3588,7 @@ function go(h){const c=h.ch,cp=cpNext&&!isDoc(c.id);cpNext=false;/* never for Do
  if(isDoc(c.id))openDocChapter(c.id);
  else{if(appData.activeBookId!==c.bookId)selectBook(c.bookId);
   if(appData.activeChapterId!==c.id){appData.activeChapterId=c.id;persistView();renderChapters();renderHero();renderPages()}}
- if(h.p){const p=h.p;if(h.vn&&(p.activeVariant||0)!==h.vi){p.activeVariant=h.vi;persistView();renderPages()}setTimeout(()=>{flash(p.id);const n=$('wsc').querySelector('.card[data-pid="'+p.id+'"]');if(p.content&&scanVars(p.content).length){if(n)focusFirstVar(n)}else if(cp)copyHit(p,n)},100)}else if(h.b)setTimeout(()=>flash(h.b.id,'cid'),100)
+ if(h.p){const p=h.p;if(h.vn&&(p.activeVariant||0)!==h.vi){switchPageVariant(p,h.vi);}setTimeout(()=>{flash(p.id);const n=$('wsc').querySelector('.card[data-pid="'+p.id+'"]');if(p.content&&scanVars(p.content).length){if(n)focusFirstVar(n)}else if(cp)copyHit(p,n)},100)}else if(h.b)setTimeout(()=>flash(h.b.id,'cid'),100)
  close()}
 function mv(d){const a=[...hitsEl.querySelectorAll('.isl-hit')];if(!a.length)return;if(a[cur])a[cur].classList.remove('cur');
  cur=cur<0?(d>0?0:a.length-1):(cur+d+a.length)%a.length;a[cur].classList.add('cur');a[cur].scrollIntoView({block:'nearest'})}
