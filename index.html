@@ -79,6 +79,34 @@ main{flex:1;min-width:0;min-height:0;overflow-y:auto;padding:8px 24px 40px;scrol
 .chat-name::placeholder{color:inherit;opacity:.55}
 .chat-name:focus{border-bottom-style:solid}
 .chat-h .ib{color:inherit}
+.chat{container-type:inline-size}
+/* the global input[type=text] rule (box look, width:100%) is more specific than a plain class, so these use input.chat-name to win.
+   One row whenever it fits: label, name (takes all spare room), policy, date, trash/close at the far right. The flag gets its own thin line under it. */
+.chat-h{flex-wrap:wrap;gap:6px;padding:6px 8px 6px 14px}
+.chat-h b{order:0}
+.chat-h input.chat-name{width:auto;flex:1 1 110px;min-width:90px;height:30px;padding:0 10px;font-size:14px;border-radius:10px}
+.chat-h input.chat-name:not(.chat-fld){order:1}
+.chat-h input.chat-fld{flex:0 1 auto;min-width:86px}/* shrinks a little before anything wraps */
+.chat-h input.chat-fld.pol{order:2;width:108px}/* 00 0000 000 */
+.chat-h input.chat-fld.eff{order:3;width:100px}/* XX/XX/XXXX */
+.chat-acts{order:4;display:flex;flex:none;margin-left:auto}
+.chat-br{display:none}
+.chat-flag{order:9;flex:0 0 100%;font-size:11.5px;font-weight:600;opacity:.85;padding:0 2px;white-space:nowrap}
+.chat-flag::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:1px}
+@container (max-width:440px){/* too narrow for one row: a small grid. Row 1 = label + name, row 2 = policy + trash, row 3 = date + close */
+ .chat-h{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:6px 6px}
+ .chat-acts{display:contents}
+ .chat-h b{grid-area:1/1}
+ .chat-h input.chat-name:not(.chat-fld){grid-area:1/2/2/4}
+ .chat-h input.chat-fld.pol{grid-area:2/1/3/3;width:auto;min-width:0}
+ .chat-h input.chat-fld.eff{grid-area:3/1/4/3;width:auto;min-width:0}
+ .chat-acts .ib:first-child{grid-area:2/3;justify-self:center}
+ .chat-acts .ib:last-child{grid-area:3/3;justify-self:center}
+ .chat-flag{grid-area:4/1/5/4}}
+.chat-flag[hidden]{display:none}
+.nice-pop.long{animation-duration:2.2s}
+.nice-pop{white-space:nowrap;max-width:80vw;overflow:hidden;text-overflow:ellipsis;position:fixed;z-index:200;pointer-events:none;background:var(--p);color:var(--on-p);padding:4px 13px;border-radius:999px;font-size:13px;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.18);animation:nicePop .95s ease-out forwards}
+@keyframes nicePop{0%{opacity:0;transform:translate(-50%,-80%) scale(.8)}15%{opacity:1;transform:translate(-50%,-150%) scale(1)}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-230%)}}
 .chat-s{padding:10px 12px 6px;flex:none}
 .chat-s input{width:100%;height:36px;border-radius:999px;border:1px solid var(--line);background:var(--card);padding:0 14px;outline:none;font-size:14px}
 .chat-s input:focus{border-color:var(--p)}
@@ -120,6 +148,10 @@ main{flex:1;min-width:0;min-height:0;overflow-y:auto;padding:8px 24px 40px;scrol
 .sguide{position:absolute;pointer-events:none;z-index:6;border-radius:3px}
 .sguide.gap{background:color-mix(in srgb,var(--p) 26%,transparent)}
 .sguide.line{background:var(--p);opacity:.85}
+.ph-search{position:relative;display:inline-block;width:16px;height:22px;padding:0;margin:0;vertical-align:-3px;background:none;color:var(--mut);cursor:pointer;transition:color .15s}
+.ph-search svg{position:absolute;right:9px;top:0;width:22px;height:22px;stroke-width:2}/* the layout box stays 16px so Workspace lines up with the boards; the icon itself hangs into the page margin on the left */
+.ph-search:hover{color:var(--txt)}
+.ph-search:focus-visible{outline:2px solid var(--p);outline-offset:3px;border-radius:6px}
 .ph .pt:focus-visible{outline:2px solid var(--p);outline-offset:3px;border-radius:6px}
 #save-layout[hidden]{display:none}
 #ws-empty{margin:0 0 10px}
@@ -329,6 +361,8 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
 .wc{position:absolute;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2);pointer-events:none}
 .wrows{display:grid;gap:12px;margin-top:16px}
 .wrow{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;align-items:end}
+.wrow .whex{width:98px;margin-left:auto;padding:5px 9px;font-size:13px;border-radius:10px;font-family:ui-monospace,Consolas,monospace;text-transform:uppercase}
+.wrow .whex.bad{border-color:var(--danger);box-shadow:0 0 0 1px var(--danger)}
 .wrow b{grid-column:1/-1;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
 .wrow b i{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
 .wrow label{font-size:11px;margin:0 0 3px;color:var(--mut);font-weight:500}
@@ -523,6 +557,68 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .pv-ev{display:flex;gap:10px;font-size:13.5px;align-items:baseline;padding:2px 2px}.pv-ev .t{flex:none;width:158px;opacity:.65;white-space:nowrap}.pv-ev .n{flex:1;min-width:0;overflow-wrap:anywhere}.pv-ev .d{flex:none;width:84px;text-align:right;opacity:.65}
 .pv-ev.break .n{color:var(--isl-ok)}.pv-ev.lunch .n{color:#ffb340}.pv-ev .has-note{cursor:help;text-decoration:underline dotted;text-underline-offset:3px}
 .pv-row{display:flex;gap:8px;align-items:center}#isl-pv .isl-er{gap:6px;padding-bottom:6px}
+/* ---- GLOBAL SEARCH ("/"): the island glides to the centre and widens, the clock row stays on top, then the search bar drops in; results only open (vertically) once something is typed ---- */
+#isl-scrim{position:fixed;inset:0;z-index:29;background:rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .4s}
+#isl-scrim.on{opacity:1;pointer-events:auto}
+#isl-root{--srch-top:clamp(14px,20vh,170px);--srch-w:min(680px,calc(100vw - 20px))}
+#isl-root.srch{z-index:35;left:50%!important;right:auto!important;top:var(--srch-top)!important;bottom:auto!important;transform:translateX(-50%)}
+#isl-root.srch #island{width:var(--srch-w);-webkit-backdrop-filter:blur(20px) saturate(1.3);backdrop-filter:blur(20px) saturate(1.3)}
+#isl-root.srch #island:hover{transform:none}
+#isl-root.srch #isl-pv{display:none}
+#isl-root.srch .isl-bd{order:0}
+#isl-root.srch .isl-pill{order:1;cursor:default}
+#isl-root.srch .isl-lbl{display:flex}
+#isl-root.srch .isl-sub{order:2}
+#island>.isl-s{position:relative;z-index:1;flex:none;order:3}
+.isl-s{display:grid;grid-template-rows:0fr;opacity:0;visibility:hidden;transition:grid-template-rows .45s var(--isl-ease),opacity .2s,visibility 0s .45s}
+#isl-root.srch .isl-s{grid-template-rows:1fr;opacity:1;visibility:visible;transition:grid-template-rows .45s var(--isl-ease) .3s,opacity .25s .3s,visibility 0s}
+.isl-s>div{overflow:hidden;min-height:0}
+.isl-s-in{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px}
+.isl-s-bar{display:flex;align-items:center;gap:10px;height:46px;padding:0 14px;border-radius:16px;background:rgba(127,127,127,.16);border:1px solid rgba(255,255,255,.28);cursor:text}
+.isl-s-bar svg{width:18px;height:18px;flex:none;opacity:.7;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.isl-s-bar input{flex:1;min-width:0;height:100%;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;color:inherit;font-size:16px;outline:none}
+.isl-s-bar input::placeholder{color:inherit;opacity:.5}
+.isl-s-bar kbd{font:600 11px/1 inherit;padding:4px 7px;border-radius:7px;background:rgba(127,127,127,.25);opacity:.7}
+.isl-sr{display:grid;grid-template-rows:0fr;opacity:0;visibility:hidden;transition:grid-template-rows .5s var(--isl-ease),opacity .25s,visibility 0s .5s}
+.isl-sr.on{grid-template-rows:1fr;opacity:1;visibility:visible;transition:grid-template-rows .5s var(--isl-ease),opacity .3s .1s,visibility 0s}
+.isl-sr>div{overflow:hidden;min-height:0}
+.isl-sr-in{display:flex;flex-direction:column;gap:10px}
+.isl-tabs{display:flex;flex-wrap:wrap;gap:6px}
+.isl-tb{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 14px;border-radius:999px;background:rgba(127,127,127,.2);color:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s,transform .15s}
+.isl-tb:hover{background:rgba(127,127,127,.32)}.isl-tb:active{transform:scale(.95)}
+.isl-tb.on{background:var(--isl-fg);color:var(--bg)}.isl-tb.z:not(.on){opacity:.45}
+.isl-tb i{font-style:normal;font-size:11.5px;opacity:.7}
+.isl-tb.sm{height:26px;padding:0 11px;font-size:12px}
+.isl-hits{display:flex;flex-direction:column;gap:8px;max-height:max(150px,calc(100vh - var(--srch-top) - 310px));overflow-y:auto;padding-right:2px;scrollbar-width:thin}
+.isl-hit{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:14px;background:rgba(127,127,127,.16);cursor:pointer;outline:none}
+.isl-hit:hover,.isl-hit:focus-visible,.isl-hit.cur{background:rgba(127,127,127,.3)}
+.isl-hit .w{font-size:11.5px;opacity:.6}.isl-hit .w:empty{display:none}
+.isl-hit .t{font-size:14.5px;font-weight:700;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.isl-hit .tg{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:rgba(127,127,127,.28)}
+.isl-oc{display:flex;gap:10px;font-size:12.5px;line-height:1.4;align-items:baseline}
+.isl-oc em{flex:none;width:112px;font-style:normal;font-size:11px;opacity:.55}
+.isl-oc span{min-width:0;overflow-wrap:anywhere;opacity:.9}
+.isl-hit mark,.isl-oc mark{background:var(--isl-near);color:#1d1b20;border-radius:3px;padding:0 1px}
+.srch-flash{animation:srch-flash 2s ease-out}
+@keyframes srch-flash{0%,45%{box-shadow:0 0 0 3px var(--p),0 0 26px 4px var(--p)}100%{box-shadow:0 0 0 0 transparent}}
+@media(max-width:600px){.isl-oc em{width:78px}}
+/* time zone picker */
+#tzp{position:fixed;z-index:55;display:flex;flex-direction:column;gap:6px;padding:8px;max-width:calc(100vw - 16px);border-radius:16px;background:var(--card);color:var(--txt);border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.3)}
+#tzp[hidden]{display:none}
+#tzp input{width:100%;height:36px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--surf);color:inherit;font-size:14px;outline:none;box-shadow:none}
+#tzp input:focus{border-color:var(--p)}
+.tzp-l{max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;scrollbar-width:thin}
+.tzp-i{display:flex;justify-content:space-between;align-items:baseline;gap:10px;width:100%;padding:7px 10px;border-radius:9px;background:none;color:inherit;font-size:13px;text-align:left;cursor:pointer}
+.tzp-i small{opacity:.6;font-size:11.5px;flex:none}
+.tzp-i.cur,.tzp-i:hover{background:var(--pc);color:var(--on-pc)}
+.tzp-i.on b::after{content:" \2713"}
+.tzp-n{padding:8px 10px;opacity:.6;font-size:13px}
+/* "Copied!" pop-up in the middle of the screen (search: Enter on a page) */
+.copy-pop{position:fixed;left:50%;top:50%;z-index:210;pointer-events:none;transform:translate(-50%,-50%);padding:6px 16px;border-radius:999px;background:rgba(127,127,127,.28);background:color-mix(in srgb,var(--card) 45%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);border:1px solid rgba(255,255,255,.22);box-shadow:0 6px 20px rgba(0,0,0,.16);color:var(--txt);font-size:13px;font-weight:600;letter-spacing:.01em;white-space:nowrap;text-align:center;animation:copyPop 1.1s ease forwards}
+.copy-pop.in{position:absolute;z-index:30}
+.copy-pop small{display:block;margin-top:1px;font-size:10.5px;font-weight:500;opacity:.65}
+html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--card)}
+@keyframes copyPop{0%{opacity:0;transform:translate(-50%,-46%) scale(.92)}14%{opacity:1;transform:translate(-50%,-50%) scale(1)}78%{opacity:1}100%{opacity:0;transform:translate(-50%,-52%) scale(.98)}}
 </style>
 <body class="" style="--rc: nwse-resize;">
 <div id="lock" role="dialog" aria-modal="true" aria-label="Login">
@@ -551,7 +647,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 </div>
 <div id="thpanel" hidden>
  <h3>Theme colors</h3>
- <p class="hint">Drag the dot around each ring to pick a color. The site updates live.</p>
+ <p class="hint">Drag the dot around each ring to pick a color, or type a HEX code. The site updates live.</p>
  <div id="thwheel"></div>
  <div class="th-act"><button class="btn out" type="button" id="th-cancel">Cancel</button><button class="btn fill" type="button" id="th-save">Save</button></div>
 </div>
@@ -586,7 +682,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
    </div>
    <div class="acts" id="hacts"><button class="btn xs fill">Edit info</button><div class="dd"><button class="ib sm" title="More" aria-label="More chapter actions"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-ch"><button class="mi" title="Paste a copied page into this chapter"><svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>Paste page</button><button class="mi" title="Copy this chapter and its pages so you can paste it into any book"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy chapter</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate chapter</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete chapter</button></div></div></div>
   </section>
-  <div class="ph"><h2><span class="pt on" id="pt-ws" role="button" tabindex="0" title="Your chapter workspace" onclick="closeTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeTools()}">Workspace</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-tools" role="button" tabindex="0" title="Your widgets, available from any chapter" onclick="openTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTools()}">Tools</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-docs" role="button" tabindex="0" title="Your documentation, available from any book" onclick="openDocs()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocs()}">Documentation</span><span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button class="btn tone" id="add-board-btn" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" id="add-main-btn" onclick="openAddHubModal()">+ Add</button><div class="pt-sub" id="pt-sub" hidden></div></div>
+  <div class="ph"><h2><button type="button" class="ph-search" id="ph-search" title="Search every page (press /)" aria-label="Search" onclick="window.openSearch&amp;&amp;window.openSearch()"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button><span class="pt on" id="pt-ws" role="button" tabindex="0" title="Your chapter workspace" onclick="closeTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeTools()}">Workspace</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-tools" role="button" tabindex="0" title="Your widgets, available from any chapter" onclick="openTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTools()}">Tools</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-docs" role="button" tabindex="0" title="Your documentation, available from any book" onclick="openDocs()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocs()}">Documentation</span><span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button class="btn tone" id="add-board-btn" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" id="add-main-btn" onclick="openAddHubModal()">+ Add</button><div class="pt-sub" id="pt-sub" hidden></div></div>
   <div class="empty" id="ws-empty" hidden="">No pages yet. Use + Add to create one, or + Board for a board.</div>
   <div id="chats" hidden></div>
   <div id="ws"><div id="wsc" data-zone="" class="" style="height: 400px; min-width: max(100%, 664px);"></div></div>
@@ -599,6 +695,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
  <div class="mb">
   <div class="tp on" data-t="general">
    <section class="sec"><div><label for="site-name-input">Website name</label><input type="text" id="site-name-input" maxlength="40" autocomplete="off"><p class="hint">Shown at the top left and used as the file name when you save.</p></div></section>
+   <section class="sec"><div><label for="agent-name-input">Your name</label><input type="text" id="agent-name-input" maxlength="40" autocomplete="off" placeholder="Ataraxia"><p class="hint">Used in the opening spiel that is copied when you close or clear a chat. Leave it empty to use the name already written in the Opening page of General ("This is ...").</p></div></section>
     <section class="sec"><div><label>Break reminders</label><p class="hint">Used by the live clock island at the bottom right. Breaks are 15 min and lunch is 1 hour, so you only enter when each one starts. Reminders are automatic: 10 min before a break or lunch starts, and 2 min (break) / 5 min (lunch) before it ends.</p>
      <div class="set-grid">
       <div><label for="set-early">Allow taking a break early up to (minutes before)</label><input type="number" id="set-early" min="0" max="180"></div>
@@ -756,7 +853,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 </div></div>
 
 <!-- Smart Island: live clock + break tracker + schedule (bottom right). Content is filled in by SmartScheduleManager. -->
-<div id="isl-root"><div id="island" role="region" aria-label="Live clock and breaks" data-tone="">
+<div id="isl-scrim"></div><div id="isl-root"><div id="island" role="region" aria-label="Live clock and breaks" data-tone="">
   <div class="isl-bd"><div id="isl-body"></div></div>
   <div class="isl-pill" id="isl-pill" role="button" tabindex="0" aria-expanded="false" aria-label="Open schedule">
     <div class="isl-clk"><span id="isl-pre"></span><span id="isl-a">--</span><span class="isl-dots"><i></i><i></i><i></i></span><span id="isl-b">--</span><small id="isl-ap"></small></div>
@@ -765,6 +862,10 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
     <button type="button" class="isl-end" id="isl-end">End shift</button>
   </div>
   <div class="isl-sub" id="isl-sub"></div>
+  <div class="isl-s" id="isl-s" role="search"><div><div class="isl-s-in">
+  <label class="isl-s-bar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><input id="isl-q" type="text" placeholder="Search every page by title or content" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Global search"><kbd>esc</kbd></label>
+  <div class="isl-sr" id="isl-sr"><div><div class="isl-sr-in"><div class="isl-tabs" id="isl-tabs" role="tablist"></div><div class="isl-cap" id="isl-chcap" hidden></div><div class="isl-tabs" id="isl-chs"></div><div class="isl-hits" id="isl-hits"></div></div></div></div>
+</div></div></div>
 </div><div id="isl-pv" hidden role="region" aria-label="Upcoming schedule"></div></div>
 <script id="data-script">const INITIAL_DATA = /*DATA_START*/{
   "activeBookId": "b_asc",
@@ -924,7 +1025,7 @@ function ensureTools(){/* first run only: every widget starts in Tools. Ones you
 const DOC_BOOK={"chapters":[{"name":"Notations","description":"Notations, for completed endorsements","containers":[{"name":"Common","x":2,"y":2,"w":131,"h":48,"border":"","bg":""},{"name":"Make a payment/Payment extension","x":2,"y":52,"w":67,"h":40,"border":"","bg":""},{"name":"Address - Mailing/All","x":135,"y":2,"w":63,"h":48,"border":"","bg":""},{"name":"Reinstatement","x":126,"y":52,"w":72,"h":40,"border":"","bg":""},{"name":"Autopay - EZP Enrollment/RCC","x":151,"y":94,"w":47,"h":52,"border":"","bg":""},{"name":"WSR - Agent change/Refund/Mileage","x":71,"y":52,"w":53,"h":40,"border":"","bg":""},{"name":"Account Endorsements","x":2,"y":94,"w":147,"h":52,"border":"","bg":""},{"name":"Driver & Occupant - Add/Remove","x":2,"y":148,"w":119,"h":59,"border":"","bg":""},{"name":"Vehicle - Add/Remove/Update/Suspend/Restore","x":123,"y":148,"w":75,"h":59,"border":"","bg":""}],"pages":[{"title":"Termination","content":"Customer Name: XXX\nRequested Action: Termination request\nCompleted Action: Termination: XXX\nReason for Termination: XXX \nEffective Date of New Coverage: XX/XX/XXXX\nNew Company Provided: [Yes]\nIf Yes, New Company: XXX\nEffective Date of Termination: XX/XX/XXXX\nPending EZP or RCC Withdrawal within Next 48 Hours: [No]\nInformed of Possible Tag or Plate Requirement and Potential Fees (MD, SC, WV): [No]","variants":null,"activeVariant":0,"x":55,"y":2,"w":73,"h":39,"container":0},{"title":"General","content":"Name: XXX\nReason for Inquiry: XXX\nDid you provide due dates/amounts to customer? [Yes]\nAdditional Explanation Provided: [Yes]\nInformation/Advice Provided: XXX","variants":null,"activeVariant":0,"x":2,"y":2,"w":51,"h":39,"container":0},{"title":"Made a payment","content":"Customer Name: XXX\nAmount Paid: $XXX\nPayment Method: XXX\nIf Scheduled Payment: [N/A | Yes]\nWas Current Amount Due Paid in Full? [Yes]\nConfirmation Number: [000 000000] \nIf No - Customer Informed of Remaining Balance and Due Date: [No]","variants":[{"title":"Made a payment","content":"Customer Name: XXX\nAmount Paid: $XXX\nPayment Method: XXX\nIf Scheduled Payment: [N/A | Yes]\nWas Current Amount Due Paid in Full? [Yes]\nConfirmation Number: [000 000000] \nIf No - Customer Informed of Remaining Balance and Due Date: [No]"},{"title":"Payment Extension","content":"Policy Number: [00 0000 000]\nCustomer Name: XXX\nInquired About: Payment extension\nDid you provide due date and amount due to customer? [Yes]\nAdditional Explanation Provided: [Yes]\nInformation/Advice Provided: XXX\nProvided a 7-day extension until XX/XX/XXXX"}],"activeVariant":0,"x":2,"y":2,"w":63,"h":30,"container":1},{"title":"Change address - Mailing","content":"Name: XXX\nRequested Address Change: [Yes]\nAddress Type: Mailing\nEffective Date: XX/XX/XXXX\nReason for Change: XXX\nUpdated Premium: $XXX\nIf Auto Policy, Was Vehicle Usage Reviewed? [No]\nIf Auto Policy, Was Vehicle Reviewed? [No]\nWas Pre-Complete eSign or Point of Sale required: [No]\nWere Trailing Document(s) discussed? [No]","variants":[{"title":"Change address - Mailing","content":"Name: XXX\nRequested Address Change: [Yes]\nAddress Type: Mailing\nEffective Date: XX/XX/XXXX\nReason for Change: XXX\nUpdated Premium: $XXX\nIf Auto Policy, Was Vehicle Usage Reviewed? [No]\nIf Auto Policy, Was Vehicle Reviewed? [No]\nWas Pre-Complete eSign or Point of Sale required: [No]\nWere Trailing Document(s) discussed? [No]"},{"title":"Change address - All","content":"Name: XXX\nRequested Address Change: [Yes]\nAddress Type: Mailing, Residence, and Garaging\nEffective Date: XX/XX/XXXX\nReason for Change: XXX\nUpdated Premium: $XXX\nIf Auto Policy, Was Vehicle Usage Reviewed? [No]\nIf Auto Policy, Was Vehicle Reviewed? [No]\nWas Pre-Complete eSign or Point of Sale required: [No]\nWere Trailing Document(s) discussed? [No]"}],"activeVariant":0,"x":2,"y":2,"w":59,"h":38,"container":2},{"title":"Reinstatement not eligable","content":"Customer Name: XXX\nReason for Reinstatement:  Doesn’t Qualify for Reinstatement\nIf NB Rejection  Is the Rejection TDOC Related?  [No]\nIf Doesn’t Qualify for Reinstatement  Reason: XXX\nWas the Chat Transferred?  [Yes]\nDepartment Transferred To: Licensed team","variants":null,"activeVariant":0,"x":2,"y":2,"w":68,"h":30,"container":3},{"title":"EZP Enrollment","content":"Name: XXX\nWhat Was the Request: XXX\nWas IPS Messaging Read? [Yes]\nIs There a Balance Due? [Yes]\nIf Yes, Informed Customer of the Remaining Balance and Due Date: [Yes]\nWere Impacts of Adding EZP Discussed? [Yes]","variants":[{"title":"EZP Enrollment","content":"Name: XXX\nWhat Was the Request: XXX\nWas IPS Messaging Read? [Yes]\nIs There a Balance Due? [Yes]\nIf Yes, Informed Customer of the Remaining Balance and Due Date: [Yes]\nWere Impacts of Adding EZP Discussed? [Yes]"},{"title":"RCC","content":"Name: XXX\nPolicy Number: [00 0000 000]\nRequest: XXX\nBalance: $XXX\nImpact: XXX"}],"activeVariant":0,"x":2,"y":2,"w":43,"h":43,"container":4},{"title":"Agent Change","content":"Name: XXX\nRequest: Agency Change\nReason: XXX\nCompleted Request: [Yes]\nPolicy: XXX\nReference Number: XXX","variants":[{"title":"General","content":"Name: XXX\nSubject of Inquiry: XXX\nInformation Provided: XXX\nReference Number: XXX"},{"title":"Agent Change","content":"Name: XXX\nRequest: Agency Change\nReason: XXX\nCompleted Request: [Yes]\nPolicy: XXX\nReference Number: XXX"},{"title":"Refund","content":"Policy: XXX\nName: XXX\nRequested a Refund Due to: XXX\nWSR/Follow-Up Task Submitted: [Yes]\nType of Task Submitted: WSR\nRequired: XXX"},{"title":"Mileage update/Dispute","content":"Name: XXX\nSubject of Inquiry: Mileage Dispute\nInformation Provided: XXX\nVehicle: XXX\nReference: XXX"}],"activeVariant":1,"x":2,"y":2,"w":49,"h":31,"container":5},{"title":"Name update","content":"Name: XXX\nEffective Date: XX/XX/XXXX\nName of Driver/Occupant Being Updated: XXX\nRequest Name Correction: [Yes]\nChange Due to Marital Status: [No]\nMarital Status Updated: [No]\nDriver Removed from Policy: [No]\nDid Premium Change: [No]\nReason: XXX","variants":null,"activeVariant":0,"x":2,"y":2,"w":43,"h":43,"container":6},{"title":"LienHolder/Interested party","content":"Name: XXX\nReason for Update: XXX\nEffective Date: XX/XX/XXXX\nType of 3rd Party: XXX\nMake and Model: XXX\nLender Details: XXX","variants":null,"activeVariant":0,"x":47,"y":2,"w":47,"h":43,"container":6},{"title":"Add Driver","content":"Customer Name: XXX\nName of Driver: XXX\nEffective date: XX/XX/XXXX\nWhat Was Requested: Add Driver\nDriver Usage/Assignment Updated? [No]\nUsage Class: [No]\nDriver Usage/Assignment: N/A\nVehicle/Item Usage: [No]\nWas a coverage change needed: [No]\nWas Pre-Complete eSign or Point of Sale required? [No]\nWere Trailing Document(s) discussed? [No]\nDifference from Previous Premium: $XXX","variants":[{"title":"Add Driver","content":"Customer Name: XXX\nName of Driver: XXX\nEffective date: XX/XX/XXXX\nWhat Was Requested: Add Driver\nDriver Usage/Assignment Updated? [No]\nUsage Class: [No]\nDriver Usage/Assignment: N/A\nVehicle/Item Usage: [No]\nWas a coverage change needed: [No]\nWas Pre-Complete eSign or Point of Sale required? [No]\nWere Trailing Document(s) discussed? [No]\nDifference from Previous Premium: $XXX"},{"title":"Remove a Driver","content":"Name: XXX\nWhat Was Requested: Remove Driver\nEffective Date: XX/XX/XXXX\nName of Driver/Occupant Being Removed: XXX\nType of Update: Remove Driver\nReason: XXX\nWas Driver Eligible to Be Removed? [Yes]\nWas Vehicle Usage Updated? [No]\nWas a Coverage Change Needed? [No]\nDid Premium Change? [Yes]\nIf Yes, \nWas PreComplete eSign or Point of Sale Required? [Yes]\nWere Trailing Documents Discussed? [No]\nIs Proof Required? [Yes]"}],"activeVariant":0,"x":2,"y":2,"w":55,"h":50,"container":7},{"title":"Remove Occupant","content":"Name: XXX\nWhat Was Requested: Remove Driver\nEffective Date: XX/XX/XXXX\nName of Driver/Occupant Being Removed: XXX\nType of Update: Remove Occupant\nReason: XXX\nWas Driver Eligible to Be Removed? [Yes]\nWas Vehicle Usage Updated? [No]\nWas a Coverage Change Needed? [No]\nDid Premium Change? [Yes]\nIf Yes, \nWas PreComplete eSign or Point of Sale Required? [Yes]\nWere Trailing Documents Discussed? [No]\nIs Proof Required? [Yes]","variants":[{"title":"Add Occupant","content":"Customer Name: XXX\nName of Occupant: XXX\nWhat Was Requested: Add Occupant\nWas Dwelling Information Reviewed?  [No]\nWas Coverage Information Reviewed? [No]\nEffective Date: XX/XX/XXXX\nUpdated Premium: $XXX\nWas Pre-Complete eSign or Point of Sale Required?  [No]\nWere Trailing Documents Discussed? [No]\nIf Yes, Which Trailing Documents Were Discussed: [No]\nIf No, Was a Follow-Up Submitted? [No]"},{"title":"Remove Occupant","content":"Name: XXX\nWhat Was Requested: Remove Driver\nEffective Date: XX/XX/XXXX\nName of Driver/Occupant Being Removed: XXX\nType of Update: Remove Occupant\nReason: XXX\nWas Driver Eligible to Be Removed? [Yes]\nWas Vehicle Usage Updated? [No]\nWas a Coverage Change Needed? [No]\nDid Premium Change? [Yes]\nIf Yes, \nWas PreComplete eSign or Point of Sale Required? [Yes]\nWere Trailing Documents Discussed? [No]\nIs Proof Required? [Yes]"}],"activeVariant":1,"x":59,"y":2,"w":57,"h":50,"container":7},{"title":"Update coverage","content":"Name: XXX\nYear/Make/Model of item updated: XXX\nRequested to Update: XXX\nEffective Date: XX/XX/XXXX\nUpdated Premium: $XXX\nWhat was requested match coverage: [No]\nIf yes,\nDid Customer Decline/Remove Any Coverage? [Yes]\nWas Pre-Complete eSign or Point of Sale Required? [No]\nWere Trailing Documents Discussed? [No]","variants":null,"activeVariant":0,"x":96,"y":2,"w":49,"h":43,"container":6},{"title":"Remove","content":"Name: XXX\nRequested Removal Item: XXX\nYear/Make/Model of item removed: XXX\nEffective Date: XX/XX/XXXX\nReason: XXX\nWas Vehicle Usage Reviewed? [No]\nDid Customer Decline/Remove Any Coverages? [No]\nDifference from Current Premium: $XXX\nFor All Other States, Was Customer Informed of Plate/Tag Requirements and Potential Fees? [No]\nWere Trailing Document(s) discussed? [No]\nWas Pre-Complete eSign or Point of Sale required? [No]","variants":[{"title":"Add","content":"Name: XXX\nRequested to Add Vehicle\nYear/Make/Model: XXX\nEffective Date: XX/XX/XXXX\nCustomer Requested Additional Coverage: [No]\nCustomer Declined or Removed Coverages: [No]\nMatched Coverages from Another Vehicle: [Yes]\nIf Yes,  \nDriver Usage/Assignment reviewed?: [No]\nDifference from Current Premium: $XXX\nWere Trailing Document(s) discussed? [No]\nWas Pre-Complete eSign or Point of Sale required? [No]"},{"title":"Update","content":"Customer Name: XXX\nWhat was requested: Update vehicle\nEffective Date: XX/XX/XXXX\nYear/Make/Model of item updated: XXX\nFeature updated: XXX\nDifference from current premium: $XXX\nWas Pre-Complete eSign or Point of Sale required? [No]\nWere Trailing Document(s) discussed? [No]"},{"title":"Remove","content":"Name: XXX\nRequested Removal Item: XXX\nYear/Make/Model of item removed: XXX\nEffective Date: XX/XX/XXXX\nReason: XXX\nWas Vehicle Usage Reviewed? [No]\nDid Customer Decline/Remove Any Coverages? [No]\nDifference from Current Premium: $XXX\nFor All Other States, Was Customer Informed of Plate/Tag Requirements and Potential Fees? [No]\nWere Trailing Document(s) discussed? [No]\nWas Pre-Complete eSign or Point of Sale required? [No]"},{"title":"Suspend","content":"Customer Name: XXX\nWhat Was Requested: Suspend\nEffective Date: XX/XX/XXXX\nYear/Make/Model of Item: XXX\nWas Customer Eligible Based on State Guidelines? [Yes]\nIf Yes, Was Comprehensive Coverage Added? [No] – [Already on policy | Added]\nWas 30-Day Minimum Discussed? [No]\nUpdated Premium: $XXX\nWas Customer Informed of Possible Tag/Plate Requirement and Potential Fees? [No]"},{"title":"Restore","content":"Customer Name: XXX\nWhat was requested: Reinstatement \nEffective date: XX/XX/XXXX\nYear/Make/Model of item: XXX\nDid you match coverage to what vehicle has prior to suspension: [No]\nDid customer decline/remove any coverages: [No]\nWas 30 day minimum discussed: [No]\nUpdated Premium: $XXX"}],"activeVariant":2,"x":2,"y":2,"w":71,"h":50,"container":8},{"title":"Escalation","content":"Customer's Name: XXX\nCustomer's Initial Reason for Calling: XXX\nManager/Leader Requested: XXX\nReason Customer Requested a Manager/Leader: XXX\nName of Leader/Coaching Partner Who Will Take the Escalation: XXX","variants":null,"activeVariant":0,"x":200,"y":2,"w":40,"h":48,"container":-1},{"title":"Discount Applied","content":"Customer Name: XXX\nYear/Make/Model of item updated: XXX\nEffective Date: XX/XX/XXXX\nWhat was requested: Add discount\nUpdated premium: $XXX\nWas Pre-Complete eSign or Point of Sale required? [No]\nWere Trailing Document(s) discussed? [No]","variants":null,"activeVariant":0,"x":200,"y":52,"w":40,"h":39,"container":-1}]},{"name":"What if","description":"These documentations are for What if scenarios, for quotations and stuff.","containers":[{"name":"Vehicle","x":2,"y":2,"w":60,"h":49,"border":"","bg":""},{"name":"Driver / Occupant","x":64,"y":2,"w":45,"h":35,"border":"","bg":""},{"name":"Coverage","x":111,"y":2,"w":56,"h":43,"border":"","bg":""},{"name":"Address","x":64,"y":39,"w":45,"h":35,"border":"","bg":""}],"pages":[{"title":"Remove","content":"Customer Name: XXX\nWhat Was Requested: Remove item\nUpdated Premium: AMT\nYear/Make/Model of the Item to Be Removed:  XXX\nDid You Match Coverage from Another Item? [No]\nDid Customer Request Additional Coverages? [No]\nDid Customer Decline/Remove Any Coverages? [No]\nItem Use Type: [N/A|XXX]\nDid Operator Assignment and Percentage Change? [N/A|XXX]","variants":[{"title":"Add","content":"Customer Name: XXX\nWhat Was Requested: Add item\nUpdated Premium: $XXX\nYear/Make/Model of the Item to Be Added: XXX\nDid You Match Coverage from Another Item? [No]\nDid Customer Request Additional Coverages? [No]\nDid Customer Decline/Remove Any Coverages? [No]\nItem Use Type: [N/A|XXX]\nDid Operator Assignment and Percentage Change? [N/A|XXX]"},{"title":"Replace","content":"Customer Name: XXX\nWhat Was Requested: Replace item\nUpdated Premium: $XXX\nYear/Make/Model of Current Item: XXX\nYear/Make/Model of Replacement Item: XXX\nDid You Match Coverage from Another Item? [Yes]\nDid Customer Request Additional Coverages? [No]\nDid Customer Decline/Remove Any Coverages? [No]\nItem Use Type: [N/A|XXX]\nDid Operator Assignment and Percentage Change? [N/A|XXX]"},{"title":"Remove","content":"Customer Name: XXX\nWhat Was Requested: Remove item\nUpdated Premium: AMT\nYear/Make/Model of the Item to Be Removed:  XXX\nDid You Match Coverage from Another Item? [No]\nDid Customer Request Additional Coverages? [No]\nDid Customer Decline/Remove Any Coverages? [No]\nItem Use Type: [N/A|XXX]\nDid Operator Assignment and Percentage Change? [N/A|XXX]"}],"activeVariant":2,"x":2,"y":2,"w":55,"h":39,"container":0},{"title":"Add Driver","content":"Customer Name: XXX\nWhat Was Requested: Add driver\nUpdated Premium: $XXX\nName of Driver: XXX\nDriver Usage/Assignment Reviewed? [No]\nWas a Coverage Change Needed? [No]","variants":[{"title":"Add Driver","content":"Customer Name: XXX\nWhat Was Requested: Add driver\nUpdated Premium: $XXX\nName of Driver: XXX\nDriver Usage/Assignment Reviewed? [No]\nWas a Coverage Change Needed? [No]"},{"title":"Remove Driver","content":"Customer Name: XXX\nWhat Was Requested: Remove driver\nUpdated Premium: $XXX\nName of Driver: XXX\nDriver Usage/Assignment Reviewed? [No]\nWas a Coverage Change Needed? [No]"}],"activeVariant":0,"x":2,"y":2,"w":40,"h":25,"container":1},{"title":"Coverage","content":"Customer Name: XXX\nWhat Was Requested: XXX\nUpdated Premium: $XXX\nMake and Model: XXX\nDid You Match Coverage with Another Item? [No]\nWhat Coverages Were Updated? XXX\nDid Customer Decline/Remove Any Coverages? [No]","variants":null,"activeVariant":0,"x":2,"y":2,"w":51,"h":33,"container":2},{"title":"Address Change","content":"Customer Name: XXX\nWhat Was Requested: Change address\nUpdated Premium: $XXX\nNew Address: [N/A|XXX]\nIf Auto Policy: [N/A|XXX]\nDriver Usage/Assignment Reviewed? [No]","variants":null,"activeVariant":0,"x":2,"y":2,"w":40,"h":25,"container":3}]}]};
 const DOC_LIB=DOC_BOOK.chapters.map((c,i)=>({id:'__doc_'+i+'__',bookId:null,name:c.name,description:c.description||''}));/* the editable template boards: Notations, What if */
 const DOC_CHATS_ID='__doc_chats__';
-const DOC_CHATS={id:DOC_CHATS_ID,bookId:null,name:'Chats',description:'Up to 3 customers at once. Type the customer name once and it fills every Name field. Chats survive a refresh and clear when you close the tab.'};
+const DOC_CHATS={id:DOC_CHATS_ID,bookId:null,name:'Chats',description:'Up to 3 customers at once. Type the customer name, policy number and effective date once and they fill every matching field. Chats survive a refresh and clear when you close the tab.'};
 const DOC_CHAPS=[DOC_CHATS].concat(DOC_LIB);
 const isDoc=id=>DOC_CHAPS.some(c=>c.id===id);
 function ensureDocs(){/* first run only: fills Documentation. Pages you delete stay deleted */
@@ -993,7 +1094,7 @@ function load(){let s=null;try{s=localStorage.getItem('paano_ba_yan_data')}catch
 /* website name */
 function siteName(){return String(appData.settings.title||'').trim()||DEF_NAME}
 function fileName(){return siteName().replace(/[\\/:*?"<>|]/g,'').replace(/\s+/g,' ').trim().replace(/[. ]+$/,'')||'paano_ba_yan'}
-function applySiteName(fill){const n=siteName();$('brand').textContent=n;$('brand').title=n;document.title=n;if(fill)$('site-name-input').value=n}
+function applySiteName(fill){const n=siteName();$('brand').textContent=n;$('brand').title=n;document.title=n;if(fill){$('site-name-input').value=n;const a=$('agent-name-input');if(a){a.value=(appData.settings&&appData.settings.agentName)||'';a.placeholder='Ataraxia'}}}
 /* theme */
 function applyTheme(){const s=appData.settings,r=document.documentElement;
  const dark=s.mode==='dark'||s.mode==='black'||(s.mode==='auto'&&matchMedia('(prefers-color-scheme:dark)').matches);
@@ -1119,8 +1220,8 @@ const AlarmSound = {
       os.connect(g); g.connect(c.destination); os.start(t0 + o); os.stop(t0 + o + 0.26); });
     return true; },
   flash(msg) { clearInterval(this._ft); const base = this._base || (this._base = document.title); let on = false, n = 0;
-    this._ft = setInterval(() => { on = !on; document.title = on ? '\u23F0 ' + msg : base; if (++n > 60 || (!document.hidden && n > 6)) { clearInterval(this._ft); document.title = base; this._base = ''; } }, 700); },
-  fire(msg) { const played = this.beep(); if (!played || document.hidden) this.flash(msg); }
+    this._ft = setInterval(() => { on = !on; document.title = on ? msg : base; if (++n > 60 || (!document.hidden && n > 6)) { clearInterval(this._ft); document.title = base; this._base = ''; } }, 700); },
+  fire(msg, tab) { const played = this.beep(); if (!played || document.hidden) this.flash(tab || msg); } /* tab = the short text shown in the browser tab (no emoji); msg is the toast */
 };
 ['pointerdown', 'keydown', 'touchend'].forEach(ev => addEventListener(ev, () => { if (!AlarmSound.ready()) AlarmSound.unlock(); }, true)); /* any click or key on the page lets the browser play the alarm */
 
@@ -1470,13 +1571,13 @@ window.SmartScheduleManager = {
     if (this.open === 'remind' && !this._phase) this.open = ''; // tagged back (or the break is gone): the popup goes away
     if (this.open === 'alert' && (vm.mode !== 'due' || this.acked === (this.activeBreak && this.activeBreak.id))) this.open = '';
     /* ALARM, once per break: 1 minute before a tagged break ends, or before a scheduled break / lunch starts, unless you have acknowledged it (Got it, or a tap on the pill) */
-    let ak = '', am = '';
+    let ak = '', am = '', tm = ''; /* tm = what the browser tab says */
     if (t) { const E2 = t.end != null ? t.end : (t.limitAt || t.returnAt || now), R2 = t.returnBy != null ? t.returnBy : E2, nm = t.name || 'Break';
-      if (now >= Math.min(R2, E2 - U.alarmMs)) { ak = 'end|' + t.id + '|' + t.at; if (E2 - now <= U.alarmMs && E2 - (+t.at || 0) > U.alarmMs) am = E2 > now ? nm + ' ends in 1 minute' : nm + ' is over'; } }
+      if (now >= Math.min(R2, E2 - U.alarmMs)) { ak = 'end|' + t.id + '|' + t.at; if (E2 - now <= U.alarmMs && E2 - (+t.at || 0) > U.alarmMs) am = E2 > now ? nm + ' ends in 1 minute' : nm + ' is over'; tm = E2 > now ? 'Break almost over' : 'Break is over'; } }
     else if (this.activeBreak && (this.currentStatus === 'pre' || this.currentStatus === 'due')) { const b2 = this.activeBreak, due2 = this.currentStatus === 'due';
-      ak = 'pre|' + b2.id; if (due2 ? this.acked !== b2.id : b2.start - now <= U.alarmMs) am = due2 ? b2.name + ' is due' : b2.name + ' starts in 1 minute'; }
+      ak = 'pre|' + b2.id; if (due2 ? this.acked !== b2.id : b2.start - now <= U.alarmMs) am = due2 ? b2.name + ' is due' : b2.name + ' starts in 1 minute'; tm = b2.name + ', tag now'; }
     this._alarmKey = ak;
-    if (ak && am && !this._seen()[ak]) { this.alarmMark(ak); AlarmSound.fire(am); showToast(am); }
+    if (ak && am && !this._seen()[ak]) { this.alarmMark(ak); AlarmSound.fire(am, tm); showToast(am); }
     this._vm = vm; this.render(vm);
     [['set-early', 'earlyLimit']].forEach(([id, k]) => { const i = $(id); if (i && document.activeElement !== i) i.value = cfg[k]; });
   },
@@ -1566,8 +1667,9 @@ window.SmartScheduleManager = {
   };
   const save = () => { try { if (st) localStorage.setItem(KEY, JSON.stringify(st)); else localStorage.removeItem(KEY); } catch (e) {} };
   // re-pick the anchor edges from where the island sits now (same spot on screen, only the growth direction changes)
-  const settle = () => { const r = root.getBoundingClientRect(); st = fromRect(r, anchorFor(r)); apply(); save(); };
+  const settle = () => { if (root.classList.contains('srch')) return; const r = root.getBoundingClientRect(); st = fromRect(r, anchorFor(r)); apply(); save(); };
   const clamp = () => {
+    if (root.classList.contains('srch')) return;
     const r = root.getBoundingClientRect(), m = 8; let dx = 0, dy = 0;
     if (r.left < m) dx = m - r.left; else if (r.right > innerWidth - m) dx = innerWidth - m - r.right;
     if (r.top < m) dy = m - r.top; else if (r.bottom > innerHeight - m) dy = innerHeight - m - r.bottom;
@@ -1583,7 +1685,7 @@ window.SmartScheduleManager = {
   new ResizeObserver(() => { if (!drag) clamp(); }).observe(isl);
   addEventListener('resize', () => { clamp(); if (st) save(); });
 
-  isl.addEventListener('pointerdown', e => { if (e.button || e.target.closest('button,input,select,a')) return; drag = { sx: e.clientX, sy: e.clientY, on: false }; });
+  isl.addEventListener('pointerdown', e => { if (e.button || root.classList.contains('srch') || e.target.closest('button,input,select,a')) return; drag = { sx: e.clientX, sy: e.clientY, on: false }; });
   isl.addEventListener('pointermove', e => {
     if (!drag) return; const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
     if (!drag.on && Math.hypot(dx, dy) > 5) {
@@ -1671,6 +1773,9 @@ function cleanQuote(raw) {
   }
   return out.join('\n');
 }
+
+/* the new premium of the current term: the amount under "New Premium (after change)" ("... for 6-month policy"); not the renewal one */
+function quotePremium(text) { const m = /New\s+Premium[^\n]*\n\s*(\$[\d,]+\.\d{2})\s+for\s+\d+[- ]month/i.exec(text || ''); return m ? m[1] : ''; }
 
 /* time zone helpers for the calculator */
 function tzOffsetMs(ts, tz) {
@@ -1773,10 +1878,12 @@ function buildFormatterWidget(ui, p) {
     '<textarea class="w-input w-out" placeholder="Cleaned output..." readonly></textarea>' +
     '<button type="button" class="btn fill sm block w-go">Clean &amp; copy</button>';
   const inp = ui.querySelector('.w-in'), out = ui.querySelector('.w-out');
-  inp.addEventListener('input', () => { out.value = cleanQuote(inp.value); });
+  let lastPrem = '';
+  inp.addEventListener('input', () => { out.value = cleanQuote(inp.value); const pr = quotePremium(out.value); if (pr && pr !== lastPrem) quotePremiumToChat(pr); lastPrem = pr; });
   ui.querySelector('.w-go').onclick = () => {
     out.value = cleanQuote(inp.value);
     if (!out.value) { showToast('Paste a quote first.'); return; }
+    const pr = quotePremium(out.value); if (pr) quotePremiumToChat(pr); lastPrem = pr;
     copyText(out.value, 'Cleaned & copied to clipboard!');
   };
 }
@@ -1786,14 +1893,22 @@ function buildFormatterWidget(ui, p) {
    entries of that day (Break, Lunch, Meeting, Training, ...). The scheduler runs on US Eastern time; everything is converted to PH time,
    which turns the 10 AM - 7 PM block into the real overnight shift (10 PM - 7 AM) on ONE clean day instead of two split days.
    Later the island will read it through ScheduleImporter.toIslandItems(...) (already prepared, not connected yet). */
+/* every IANA time zone + fixed UTC offsets (UTC-12 ... UTC+14), sorted by offset; the original entries stay first. Offsets in the labels are the ones in force today (named zones still follow daylight saving by themselves) */
+function schedTZList(base){
+ const fo=m=>{const a=Math.abs(m),h=Math.floor(a/60),mm=a%60;return 'UTC'+(m<0?'-':'+')+h+(mm?':'+String(mm).padStart(2,'0'):'')};
+ const off=id=>{try{const v=new Intl.DateTimeFormat('en-US',{timeZone:id,timeZoneName:'longOffset'}).formatToParts(new Date()).find(x=>x.type==='timeZoneName').value,m=/GMT([+\-\u2212])(\d\d):?(\d\d)?/.exec(v);return m?(m[1]==='+'?1:-1)*(+m[2]*60+(+m[3]||0)):0}catch(e){return null}};
+ const seen=new Set(base.map(t=>t.id)),extra=[];let ids=[];try{ids=Intl.supportedValuesOf('timeZone')}catch(e){}
+ ids=ids.concat('UTC');for(let h=-12;h<=14;h++)ids.push(h===0?'UTC':(h>0?'Etc/GMT-'+h:'Etc/GMT+'+(-h)));
+ ids.forEach(id=>{if(seen.has(id))return;seen.add(id);const o=off(id);if(o==null)return;const fixed=/^Etc\/GMT[+-]\d+$|^UTC$/.test(id),lab=fixed?fo(o)+' fixed \u00b7 no daylight saving':fo(o)+' \u00b7 '+id.replace(/_/g,' ');extra.push({id,label:lab,short:lab,off:o})});
+ extra.sort((a,b)=>a.off-b.off||a.id.localeCompare(b.id));base.forEach(t=>{t.off=off(t.id)});return base.concat(extra)}
 window.ScheduleImporter = {
   PH: 'Asia/Manila',
   DEFAULT_TZ: 'America/New_York',
-  TZ: [ // where the scheduler's clock is. Eastern follows daylight saving, so the gap to PH is 12 h now and 13 h after the clocks go back
+  TZ: schedTZList([ // where the scheduler's clock is. Eastern follows daylight saving, so the gap to PH is 12 h now and 13 h after the clocks go back
     { id: 'America/New_York', label: 'Eastern (EST/EDT, follows daylight saving)', short: 'Eastern (auto daylight saving)' },
     { id: 'Etc/GMT+4', label: 'UTC-4 fixed (always 12 h behind PH: AM becomes PM)', short: 'UTC-4 fixed (12 h flip)' },
     { id: 'Etc/GMT+5', label: 'UTC-5 fixed (always 13 h behind PH)', short: 'UTC-5 fixed (13 h gap)' }
-  ],
+  ]),
   TYPES: [ // how an entry is classified (first match wins). hide = the filler "SHIFT: CHAT AUX" blocks that just fill the gaps, not a specific schedule
     { re: /^SHIFT:/i, hide: true }, { re: /^break\b/i, type: 'break' }, { re: /^lunch\b/i, type: 'lunch' }
   ],
@@ -1911,7 +2026,7 @@ function buildScheduleImportWidget(ui, p) {
   const result = () => {
     if (!has() || pasting) { paste(); return; }
     const tz = p.importData.tz || SI.DEFAULT_TZ, days = SI.convertAll(p.importData.blocks, tz); cur = days; stat = SI.status(days, Date.now());
-    const off = days.length ? Math.round(tzOffsetMs(days[0].start, tz) / 36e5) : 0;
+    const off = days.length ? +(tzOffsetMs(days[0].start, tz) / 36e5).toFixed(2) : 0;
     ui.innerHTML = '<div class="si-bar"><div class="w-title w-ok">Schedule imported \u00b7 ' + days.length + (days.length === 1 ? ' day' : ' days') + '</div></div>' +
       days.map((d, i) => '<div class="si-day ' + stat[i] + '"><div class="si-h"><b>' + esc(d.weekday) + '<span class="si-st ' + stat[i] + '">' + SI.stLabel(stat[i]) + '</span></b><span>' + esc(d.label) + '</span></div>' +
         '<div class="si-shift"><span>Shift</span><b>' + esc(SI.range(d.start, d.end)) + '</b></div>' +
@@ -2585,7 +2700,7 @@ const CHAT_X='<svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>';
 function chatSave(){clearTimeout(_chatT);try{sessionStorage.setItem(CHAT_KEY,JSON.stringify(chats))}catch(e){}}
 function chatSaveSoon(){clearTimeout(_chatT);_chatT=setTimeout(chatSave,300)}
 function chatRestore(){let s=null;try{s=JSON.parse(sessionStorage.getItem(CHAT_KEY)||'null')}catch(e){}
- chats=(Array.isArray(s)?s:[]).slice(0,CHAT_MAX).filter(c=>c&&typeof c==='object').map(c=>({id:String(c.id||'c'+rid()),name:String(c.name||''),
+ chats=(Array.isArray(s)?s:[]).slice(0,CHAT_MAX).filter(c=>c&&typeof c==='object').map(c=>({id:String(c.id||'c'+rid()),name:String(c.name||''),policy:String(c.policy||''),eff:String(c.eff||''),prem:String(c.prem||''),noted:!!c.noted,
   pages:(Array.isArray(c.pages)?c.pages:[]).filter(p=>p&&typeof p.content==='string').map(p=>({id:String(p.id||'cp_'+rid()),src:p.src||'',title:String(p.title||''),content:p.content,
    variants:Array.isArray(p.variants)&&p.variants.length?p.variants:null,activeVariant:+p.activeVariant||0,vv:p.vv&&typeof p.vv==='object'?p.vv:{}}))}));
  chats.forEach(c=>c.pages.forEach(p=>{const a=p.activeVariant||0;varVals[p.id]=p.vv[a]||(p.vv[a]={})}))}/* a page's live values ARE p.vv[its active variant], so saving the chat saves them */
@@ -2595,24 +2710,67 @@ addEventListener('pagehide',chatSave);document.addEventListener('visibilitychang
 
 /* the "Name: XXX" / "Customer Name: XXX" / "Customer's Name: XXX" fields of a template (not "Name of Driver", not "Old name") */
 const NAME_LBL=/^\s*(?:customer[\u2019']?s?\s+name|name)\s*:\s*$/i;
-function nameIdx(content){const out=[];let i=0;
- for(const m of scanVars(content)){if(m.tok==='XXX'){const ls=content.lastIndexOf('\n',m.index-1)+1;if(NAME_LBL.test(content.slice(ls,m.index)))out.push(i)}i++}
+/* session fields: each one fills the template variables whose label matches (the variable must sit right after its label on the same line) */
+const CHAT_FIELDS={
+ name:{re:NAME_LBL,toks:['XXX']},
+ policy:{re:/^\s*policy(?:\s+(?:number|no\.?|#))?\s*:\s*$/i,toks:['XXX','[00 0000 000]']},
+ eff:{re:/^\s*effective\s+date\s*:\s*$/i,toks:['XX/XX/XXXX']},
+ prem:{re:/^\s*updated\s+premium\s*:\s*$/i,toks:['$XXX']}};/* prem comes from the Quote Formatter */
+function fieldIdx(content,key){const f=CHAT_FIELDS[key],out=[];let i=0;
+ for(const m of scanVars(content)){if(f.toks.includes(m.tok)){const ls=content.lastIndexOf('\n',m.index-1)+1;if(f.re.test(content.slice(ls,m.index)))out.push(i)}i++}
  return out}
-function chatFill(chat,p,vi){/* puts the chat's customer name into one variant's Name fields; returns that variant's values */
- const vals=p.vv[vi]||(p.vv[vi]={}),n=chat.name;if(!n)return vals;
- nameIdx(p.variants?p.variants[vi].content:p.content).forEach(i=>{if(vals[i]===undefined)vals[i]=n});return vals}
+function nameIdx(content){return fieldIdx(content,'name')}
+function chatFill(chat,p,vi){/* puts the chat's session fields into one variant's matching variables; returns that variant's values */
+ const vals=p.vv[vi]||(p.vv[vi]={}),src=p.variants?p.variants[vi].content:p.content;
+ Object.keys(CHAT_FIELDS).forEach(k=>{const n=chat[k];if(!n)return;fieldIdx(src,k).forEach(i=>{if(vals[i]===undefined)vals[i]=n})});
+ return vals}
 function chatOpenPage(chat,e){const s=e.page,vi=e.vi,v=s.variants&&s.variants.length?JSON.parse(JSON.stringify(s.variants)):null;
  const p={id:'cp_'+rid(),src:s.id,title:v?v[vi].title:s.title,content:v?v[vi].content:s.content,variants:v,activeVariant:vi,vv:{}};
  varVals[p.id]=chatFill(chat,p,vi);chat.pages.unshift(p);chatSave();return p}
 function chatVariant(chat,p,vi){p.activeVariant=vi;p.title=p.variants[vi].title;p.content=p.variants[vi].content;varVals[p.id]=chatFill(chat,p,vi);chatSave()}
-function chatRename(chat,root,n){/* typing the customer name updates every Name field that still holds the old name (or is empty); anything you typed yourself is left alone */
- const prev=chat.name;chat.name=n;
+function chatSet(chat,root,key,n){/* changing a session field updates every matching variable that still holds the old value (or is empty); anything you typed yourself is left alone */
+ const prev=chat[key]||'';chat[key]=n;
  chat.pages.forEach(p=>(p.variants?p.variants.map((_,i)=>i):[0]).forEach(vi=>{
-  const vals=p.vv[vi];if(!vals)return;/* a variant you never opened gets the name when you open it */
-  nameIdx(p.variants?p.variants[vi].content:p.content).forEach(i=>{const cur=vals[i];
+  const vals=p.vv[vi];if(!vals)return;/* a variant you never opened gets the value when you open it */
+  fieldIdx(p.variants?p.variants[vi].content:p.content,key).forEach(i=>{const cur=vals[i];
    if(cur===prev||(cur===undefined&&!prev)){if(n)vals[i]=n;else delete vals[i];
-    if(vi===(p.activeVariant||0)){const sp=root.querySelector('.var[data-pid="'+p.id+'"][data-i="'+i+'"]');if(sp){sp.textContent=n||sp.dataset.ph;sp.classList.toggle('filled',!!n)}}}})}));
+    if(vi===(p.activeVariant||0)){const sp=root&&root.querySelector('.var[data-pid="'+p.id+'"][data-i="'+i+'"]');if(sp){sp.textContent=n||sp.dataset.ph;sp.classList.toggle('filled',!!n)}}}})}));
  chatSaveSoon()}
+function chatRename(chat,root,n){chatSet(chat,root,'name',n)}
+const chatEmpty=c=>!c.name&&!c.policy&&!c.eff&&!c.prem&&!c.pages.length;
+function fmtPolicy(v){const d=v.replace(/\D/g,'');if(!/^[\d\s]*$/.test(v)||d.length>9)return v.trim();return[d.slice(0,2),d.slice(2,6),d.slice(6)].filter(Boolean).join(' ')}
+function fmtEff(v){if(!/^[\d/]*$/.test(v))return v.trim();return fmtDate(v.replace(/\D/g,'').slice(0,8))}
+let lastChatId='';
+/* a chat counts as documented once a template from Notations or What if has been copied from it */
+function isNotation(p){const sp=appData.pages.find(x=>x.id===p.src);return !!sp&&DOC_LIB.some(l=>l.id===sp.chapterId)}/* Notations and What if both count: a what-if is still documented */
+/* the Quote Formatter hands over the new premium: it goes into the chat you used last (or the only one open) */
+function quotePremiumToChat(amt){if(!chats.length){showToast('Open a chat in Documentation to receive the premium.');return''}
+ const chat=chats.find(c=>c.id===lastChatId)||chats[0],root=document.querySelector('.chat[data-id="'+chat.id+'"]');
+ chatSet(chat,root,'prem',amt);const lab=(chat.name.trim()||'Chat '+(chats.indexOf(chat)+1)).toUpperCase();nicePop(null,'Copied to '+lab);return lab}
+/* X / trash on a chat: copies the Opening spiel for the next customer and says Nice next to the mouse */
+/* the Opening page of the General chapter (of the open book first), e.g. "Thank you for contacting Allstate ... This is Gabriel and I'll be assisting you for today." */
+function findOpening(){const cs=appData.chapters||[],ab=appData.activeBookId,chap=p=>cs.find(c=>c.id===p.chapterId);
+ const all=appData.pages.filter(p=>!p.isWidget&&/^\s*opening\s*$/i.test(p.title||'')&&chap(p)),inBook=all.filter(p=>chap(p).bookId===ab);
+ const gen=l=>l.find(p=>/^\s*general\s*$/i.test(chap(p).name||''));
+ return gen(inBook)||inBook[0]||gen(all)||all[0]||null}
+const OPEN_NAME_RE=/(\bThis is\s+)(.+?)(?=\s+and\b|[.,!;\n]|$)/i;/* the name after "This is" */
+const OPEN_DEFAULT="Thank you for contacting Allstate where you're in good hands. This is {name} and I'll be assisting you for today.";
+function openingName(){const p=findOpening();if(!p)return'';const m=OPEN_NAME_RE.exec(composeSpiel(p).text),n=m?m[2].trim():'';return/^(XXX|\[.*\])$/.test(n)?'':n}
+/* the page's own text; if you set your name in Settings, that name replaces the one after "This is" */
+function openingText(){const p=findOpening(),me=String((appData.settings||{}).agentName||'').trim();let t=p?composeSpiel(p).text:'';
+ if(!t.trim())return me?OPEN_DEFAULT.replace('{name}',me):'';
+ if(me&&OPEN_NAME_RE.test(t))t=t.replace(OPEN_NAME_RE,(m,a)=>a+me);return t}
+const _mouse={x:0,y:0,on:false};addEventListener('pointermove',e=>{_mouse.x=e.clientX;_mouse.y=e.clientY;_mouse.on=true},{passive:true});
+function nicePop(e,text){let x,y;/* above the click, or above the mouse when there is no click (e.g. a keyboard paste) */
+ if(e&&(e.clientX||e.clientY)){x=e.clientX;y=e.clientY}
+ else if(e&&e.currentTarget&&e.currentTarget.getBoundingClientRect){const r=e.currentTarget.getBoundingClientRect();x=r.left+r.width/2;y=r.top}
+ else if(_mouse.on){x=_mouse.x;y=_mouse.y}else{x=innerWidth/2;y=innerHeight/2}
+ const d=document.createElement('div');d.className='nice-pop'+(text?' long':'');d.textContent=text||'Nice';
+ d.style.left=Math.max(40,Math.min(innerWidth-40,x))+'px';d.style.top=Math.max(50,y)+'px';document.body.append(d);setTimeout(()=>d.remove(),text?2300:1000)}
+function copyOpening(e){const t=openingText();if(!t){showToast('No Opening found in General. Add one, or set your name in Settings.');return}
+ const ok=()=>nicePop(e);
+ if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(ok).catch(()=>{fallbackCopy(t,'Opening spiel copied.');ok()});
+ else{fallbackCopy(t,'Opening spiel copied.');ok()}}
 
 /* search every template (board name + template or variant title + Notations / What if), one row per variant */
 function docIndex(){const cn={};appData.containers.forEach(k=>{cn[k.id]=k.name});const out=[];
@@ -2627,11 +2785,12 @@ function docSearch(q){const t=q.toLowerCase().split(/\s+/).filter(Boolean);if(!t
 function chatCard(chat,p,root){
  const card=el('div','cp'),h=el('div','cp-h'),t=el('div','cp-t');t.textContent=p.title;
  const cp=el('button','btn tone',ic('copy')+'<span>Copy</span>');cp.title='Copy this note';cp.setAttribute('aria-label','Copy '+p.title);
- cp.onclick=()=>{const r=composeSpiel(p);copyText(r.text,r.blank?'Copied. '+r.blank+(r.blank>1?' variables are':' variable is')+' still blank.':'Copied to clipboard.')};
+ cp.onclick=()=>{const r=composeSpiel(p);copyText(r.text,r.blank?'Copied. '+r.blank+(r.blank>1?' variables are':' variable is')+' still blank.':'Copied to clipboard.');
+  if(!chat.noted&&isNotation(p)){chat.noted=true;chatSave();if(root._flag)root._flag()}};
  const ed=el('button','ib sm',ic('pen'));ed.title='Edit the template';ed.setAttribute('aria-label','Edit template '+p.title);
  ed.onclick=()=>{if(appData.pages.some(x=>x.id===p.src))openEditPageModal(p.src);else showToast('The original template no longer exists.')};
  const rm=el('button','ib sm',ic('trash'));rm.title='Clear this template';rm.setAttribute('aria-label','Clear '+p.title);
- rm.onclick=()=>{const i=chat.pages.indexOf(p);if(i<0)return;chat.pages.splice(i,1);chatSave();card.remove();if(!chat.pages.length&&root._body)root._body();
+ rm.onclick=()=>{const i=chat.pages.indexOf(p);if(i<0)return;chat.pages.splice(i,1);chatSave();card.remove();if(!chat.pages.length&&root._body)root._body();if(root._flag)root._flag();
   showUndo('Template cleared',()=>{if(chat.pages.indexOf(p)<0){chat.pages.splice(Math.min(i,chat.pages.length),0,p);chatSave();const r=document.querySelector('.chat[data-id="'+chat.id+'"]');if(r&&r._body)r._body()}})};
  h.append(t,cp,ed,rm);card.append(h);
  if(p.variants&&p.variants.length>1){const vb=el('div','cp-v');
@@ -2643,10 +2802,18 @@ function chatEl(chat,idx){
  const root=el('section','chat');root.dataset.id=chat.id;
  const h=el('div','chat-h'),lb=el('b');lb.textContent='Chat '+(idx+1)+':';
  const nm=el('input','chat-name');nm.type='text';nm.placeholder='Customer name';nm.value=chat.name;nm.maxLength=80;nm.spellcheck=false;nm.autocomplete='off';nm.setAttribute('aria-label','Customer name for chat '+(idx+1));
- nm.oninput=()=>chatRename(chat,root,nm.value.trim());
- const x=el('button','ib sm',CHAT_X);x.title='Close this chat';x.setAttribute('aria-label','Close chat '+(idx+1));x.onclick=()=>closeChat(chat);
- const tr=el('button','ib sm',ic('trash'));tr.title='Clear this chat';tr.setAttribute('aria-label','Clear chat '+(idx+1));tr.onclick=()=>clearChat(chat);
- h.append(lb,nm,tr,x);
+ nm.oninput=()=>{chatRename(chat,root,nm.value.trim());root._flag()};
+ const fld=(key,ph,cls,fmt)=>{const i=el('input','chat-name chat-fld '+cls);i.type='text';i.placeholder=ph;i.value=chat[key]||'';i.maxLength=40;i.spellcheck=false;i.autocomplete='off';i.setAttribute('aria-label',ph+' for chat '+(idx+1));
+  i.oninput=()=>{if(i.selectionStart===i.value.length){const f=fmt(i.value);if(f!==i.value)i.value=f}chatSet(chat,root,key,i.value.trim());root._flag()};
+  i.onblur=()=>{const f=fmt(i.value);if(f!==i.value){i.value=f;chatSet(chat,root,key,f.trim())}};return i};
+ const pol=fld('policy','Policy no.','pol',fmtPolicy),eff=fld('eff','Eff. date','eff',fmtEff);
+ const flag=el('span','chat-flag');flag.textContent='Notation not yet written';flag.title='Copy a Notations or What if template to clear this';
+ root._flag=()=>{flag.hidden=!((chat.name||chat.pages.length)&&!chat.noted)};
+ root.addEventListener('focusin',()=>{lastChatId=chat.id});root.addEventListener('pointerdown',()=>{lastChatId=chat.id});
+ const x=el('button','ib sm',CHAT_X);x.title='Close this chat (copies the opening spiel)';x.setAttribute('aria-label','Close chat '+(idx+1));x.onclick=e=>{copyOpening(e);closeChat(chat)};
+ const tr=el('button','ib sm',ic('trash'));tr.title='Clear this chat (copies the opening spiel)';tr.setAttribute('aria-label','Clear chat '+(idx+1));tr.onclick=e=>{copyOpening(e);clearChat(chat)};
+ const acts=el('div','chat-acts');acts.append(tr,x);const br=el('span','chat-br');
+ h.append(lb,nm,pol,eff,flag,br,acts);
  const s=el('div','chat-s'),si=el('input');si.type='text';si.autocomplete='off';si.spellcheck=false;si.placeholder='Search templates (e.g. vehicle, payment)';si.setAttribute('aria-label','Search documentation for chat '+(idx+1));s.append(si);
  const res=el('div','chat-res');res.hidden=true;
  const body=el('div','chat-body'),ui=chatUI[chat.id]||(chatUI[chat.id]={sel:0,list:[]});
@@ -2658,23 +2825,24 @@ function chatEl(chat,idx){
   ui.list=docSearch(q).slice(0,40);res.hidden=false;ui.sel=Math.min(ui.sel,Math.max(0,ui.list.length-1));
   if(!ui.list.length){const n=el('div','chat-none');n.textContent='No template matches that.';res.append(n);return}
   ui.list.forEach((e,i)=>{const b=el('button',i===ui.sel?'sel':'');b.type='button';const a=el('span','rt'),c=el('span','rs');a.textContent=e.title;c.textContent=e.chap+' \u203a '+(e.board||'Other');b.append(a,c);b.onclick=()=>pick(e);res.append(b)})};
- const pick=e=>{chatOpenPage(chat,e);si.value='';ui.sel=0;paintRes();paintBody();body.scrollTop=0;renderHero()};
+ const pick=e=>{chatOpenPage(chat,e);si.value='';ui.sel=0;paintRes();paintBody();body.scrollTop=0;renderHero();root._flag()};
  si.oninput=()=>{ui.sel=0;paintRes()};
  si.onkeydown=e=>{
   if(e.key==='ArrowDown'||e.key==='ArrowUp'){if(!ui.list.length)return;e.preventDefault();ui.sel=(ui.sel+(e.key==='ArrowDown'?1:-1)+ui.list.length)%ui.list.length;paintRes();const b=res.children[ui.sel];if(b&&b.scrollIntoView)b.scrollIntoView({block:'nearest'})}
   else if(e.key==='Enter'){if(ui.list[ui.sel]){e.preventDefault();pick(ui.list[ui.sel])}}
   else if(e.key==='Escape'){si.value='';paintRes()}};
- root.append(h,s,res,body);paintBody();return root}
+ root.append(h,s,res,body);paintBody();root._flag();return root}
 function renderChats(){const box=$('chats');box.innerHTML='';
  if(!chats.length){const e=el('div','chats-none'),m=el('div');m.textContent='No chats open.';const b=el('button','btn fill','+ New chat');b.onclick=addChat;e.append(m,b);box.append(e);return}
  chats.forEach((c,i)=>box.append(chatEl(c,i)))}
 function addChat(){if(chats.length>=CHAT_MAX){showToast('Up to '+CHAT_MAX+' chats at once. Close one first.');return}
- const c={id:'c'+rid(),name:'',pages:[]};chats.push(c);chatSave();renderHero();renderChats();
+ const c={id:'c'+rid(),name:'',policy:'',eff:'',prem:'',noted:false,pages:[]};lastChatId=c.id;chats.push(c);chatSave();renderHero();renderChats();
  const n=document.querySelector('.chat[data-id="'+c.id+'"] .chat-name');if(n)n.focus()}
-function clearChat(chat){/* empties the chat (customer name and every template) but keeps the window */
- if(!chat.name&&!chat.pages.length){showToast('This chat is already empty.');return}
- const snap={name:chat.name,pages:chat.pages};chat.name='';chat.pages=[];chatSave();renderChats();
- showUndo('Chat cleared',()=>{chat.name=chat.name||snap.name;chat.pages=snap.pages.concat(chat.pages);chatSave();renderChats()})}
+function clearChat(chat){/* empties the chat (every field and every template) but keeps the window */
+ if(chatEmpty(chat))return;/* nothing to clear; the opening spiel was still copied */
+ const snap={name:chat.name,policy:chat.policy,eff:chat.eff,prem:chat.prem,noted:chat.noted,pages:chat.pages};
+ chat.name=chat.policy=chat.eff=chat.prem='';chat.noted=false;chat.pages=[];chatSave();renderChats();
+ showUndo('Chat cleared',()=>{['name','policy','eff','prem'].forEach(k=>{chat[k]=chat[k]||snap[k]});chat.noted=chat.noted||snap.noted;chat.pages=snap.pages.concat(chat.pages);chatSave();renderChats()})}
 function closeChat(chat){const i=chats.indexOf(chat);if(i<0)return;chats.splice(i,1);chatSave();renderHero();renderChats();
  showUndo('Chat closed',()=>{if(chats.length>=CHAT_MAX){showToast('All '+CHAT_MAX+' chat slots are in use. Close another chat first.');return false}
   chats.splice(Math.min(i,chats.length),0,chat);chatSave();renderHero();renderChats()})}
@@ -2736,10 +2904,13 @@ function onVarInput(v,e){const k=v.dataset.k;
  M.addEventListener('focusin',e=>{const v=vOf(e);if(v)setTimeout(()=>selectAllIn(v),0)});
  M.addEventListener('focusout',e=>{const v=vOf(e);if(v)finishVar(v)});
  M.addEventListener('click',e=>{const b=bOf(e);if(b)toggleBool(b)});
- M.addEventListener('keydown',e=>{const b=bOf(e);if(b){if(e.key===' '||e.key==='Enter'){e.preventDefault();toggleBool(b)}return}
-  const v=vOf(e);if(v&&(e.key==='Enter'||e.key==='Escape')){e.preventDefault();v.blur()}});
+ M.addEventListener('keydown',e=>{const b=bOf(e);if(b){if(e.key===' '){e.preventDefault();toggleBool(b)}else if(e.key==='Enter'){e.preventDefault();if(!e.repeat)enterCopy(b)}return}
+  const v=vOf(e);if(v&&(e.key==='Enter'||e.key==='Escape')){e.preventDefault();const c=v.closest('.card');v.blur();if(e.key==='Enter'&&!e.repeat)enterCopy(v,c);return}
+  const o=e.target&&e.target.classList&&e.target.classList.contains('opt')&&e.target.classList.contains('var')?e.target:null;if(o&&e.key==='Enter'){e.preventDefault();if(!e.repeat)enterCopy(o)}});
  M.addEventListener('paste',e=>{const v=vOf(e);if(!v)return;e.preventDefault();pasteIntoVar(v,(e.clipboardData||window.clipboardData).getData('text'))});
  M.addEventListener('input',e=>{const v=vOf(e);if(v)onVarInput(v,e)})})();
+/* Enter inside a variable copies that page (never for Documentation pages or chat copies) */
+function enterCopy(v,card){card=card||v.closest('.card');const p=appData.pages.find(x=>x.id===v.dataset.pid);if(!p||!card||isDoc(p.chapterId)||!window.copyHit)return;window.copyHit(p,card)}
 /* copy */
 function copyText(t,msg){msg=msg||'Copied to clipboard.';if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(()=>showToast(msg)).catch(()=>fallbackCopy(t,msg));else fallbackCopy(t,msg)}
 function fallbackCopy(t,msg){const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;left:-9999px';document.body.appendChild(a);a.select();try{document.execCommand('copy');showToast(msg||'Copied to clipboard.')}catch(e){showToast('Copy failed.')}a.remove()}
@@ -2791,6 +2962,7 @@ async function saveDirectToFile(){const h=generateUpdatedHtmlString(),fn=fileNam
 function exportUpdatedHtmlFile(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([generateUpdatedHtmlString()],{type:'text/html;charset=utf-8'}));a.download=fileName()+'.html';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);showToast('Downloaded updated file.')}
 load();applyTheme();applySiteName(true);renderAll();setEdit(false,true);$('ws').addEventListener('pointerdown',layoutDown);
 $('site-name-input').addEventListener('input',e=>{appData.settings.title=e.target.value;persistLocal();applySiteName(false)});
+$('agent-name-input').addEventListener('input',e=>{appData.settings.agentName=e.target.value;persistLocal()});
 $('site-name-input').addEventListener('change',e=>{if(!e.target.value.trim()){appData.settings.title=DEF_NAME;persistLocal()}applySiteName(true)});
 matchMedia('(prefers-color-scheme:dark)').addEventListener('change',applyTheme);
 
@@ -3039,6 +3211,12 @@ function x2h(x){const m=/^#?([0-9a-f]{6})$/i.exec(x||'');if(!m)return null;const
  if(d){s=d/(1-Math.abs(2*l-1));h=mx===r?((g-b)/d+(g<b?6:0)):mx===g?(b-r)/d+2:(r-g)/d+4;h*=60}return{h:Math.round(h)%360,s:Math.round(s*100),l:Math.round(l*100)}}
 function lum(o){const[r,g,b]=hsl2rgb(o.h,o.s,o.l).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*r+.7152*g+.0722*b}
 
+/* "#abc", "abc", "#A1B2C3" -> "#a1b2c3"; anything else -> "" */
+function normHex(v){const m=/^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(v||'').trim());if(!m)return'';let h=m[1].toLowerCase();if(h.length===3)h=h.split('').map(c=>c+c).join('');return'#'+h}
+/* "#rrggbb" -> {h,s,l} with decimals, so the same hex comes back out of h2x (x2h rounds to whole numbers and would drift by 1) */
+function hexToHsl(x){const m=/^#([0-9a-f]{6})$/i.exec(x||'');if(!m)return null;const n=parseInt(m[1],16),r=(n>>16&255)/255,g=(n>>8&255)/255,b=(n&255)/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn,l=(mx+mn)/2;let h=0,s=0;
+ if(d){s=d/(1-Math.abs(2*l-1));h=mx===r?((g-b)/d+(g<b?6:0)):mx===g?(b-r)/d+2:(r-g)/d+4;h*=60}
+ return{h:+(h%360).toFixed(3),s:+(s*100).toFixed(3),l:+(l*100).toFixed(3)}}
 /* ---------- color wheel: one ring per color, inner ring first ---------- */
 function makeWheel(host,defs,cb,opt){opt=opt||{};
  const n=defs.length,T=n>1?28:34,GAP=6,hole=n>1?36:44,size=2*(hole+n*T+(n-1)*GAP),mid=size/2;
@@ -3050,9 +3228,12 @@ function makeWheel(host,defs,cb,opt){opt=opt||{};
  const c=document.createElement('div'),cr=hole-8;c.className='wc';c.style.cssText='left:'+(mid-cr)+'px;top:'+(mid-cr)+'px;width:'+2*cr+'px;height:'+2*cr+'px';w.append(c);
  const rows=document.createElement('div');rows.className='wrows';
  const ctl=defs.map(d=>{const row=document.createElement('div');row.className='wrow';
-  row.innerHTML=(opt.hideName?'':'<b><i></i><span></span></b>')+'<div><label>Saturation</label><input type="range" min="0" max="100"></div><div><label>Lightness</label><input type="range" min="2" max="98"></div>';
-  const[sa,li]=row.querySelectorAll('input');if(!opt.hideName)row.querySelector('span').textContent=d.name;
-  sa.oninput=()=>{d.s=+sa.value;paint();cb()};li.oninput=()=>{d.l=+li.value;paint();cb()};rows.append(row);return{d,sa,li,dot:row.querySelector('i')}});
+  row.innerHTML='<b>'+(opt.hideName?'':'<i></i><span></span>')+'<input type="text" class="whex" maxlength="7" spellcheck="false" autocomplete="off" placeholder="#RRGGBB"></b><div><label>Saturation</label><input type="range" min="0" max="100"></div><div><label>Lightness</label><input type="range" min="2" max="98"></div>';
+  const hx=row.querySelector('.whex'),[sa,li]=row.querySelectorAll('input[type=range]');if(!opt.hideName)row.querySelector('span').textContent=d.name;
+  hx.setAttribute('aria-label','Hex code'+(opt.hideName?'':' for '+d.name));/* type or paste a HEX code (3 or 6 digits, # optional) */
+  hx.oninput=()=>{const o=hexToHsl(normHex(hx.value));hx.classList.toggle('bad',!o&&hx.value.trim()!=='');if(o){d.h=o.h;d.s=o.s;d.l=o.l;paint();cb()}};
+  hx.onfocus=()=>hx.select();hx.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();hx.blur()}};hx.onblur=()=>{hx.classList.remove('bad');hx.value=h2x(d.h,d.s,d.l)};
+  sa.oninput=()=>{d.s=+sa.value;paint();cb()};li.oninput=()=>{d.l=+li.value;paint();cb()};rows.append(row);return{d,sa,li,hx,dot:row.querySelector('i')}});
  function paint(){
   rings.forEach(o=>{const{h,s,l}=o.d,a=h*Math.PI/180;
    o.r.style.background='conic-gradient('+[0,60,120,180,240,300,360].map(x=>'hsl('+x+' '+s+'% '+l+'%)').join(',')+')';
@@ -3060,7 +3241,8 @@ function makeWheel(host,defs,cb,opt){opt=opt||{};
   const d0=defs[0];c.style.background='hsl('+d0.h+' '+d0.s+'% '+d0.l+'%)';
   ctl.forEach(x=>{const{h,s,l}=x.d;x.sa.value=s;x.li.value=l;
    x.sa.style.background='linear-gradient(90deg,hsl('+h+' 0% '+l+'%),hsl('+h+' 100% '+l+'%))';
-   x.li.style.background='linear-gradient(90deg,#000,hsl('+h+' '+s+'% 50%),#fff)';if(x.dot)x.dot.style.background='hsl('+h+' '+s+'% '+l+'%)'})}
+   x.li.style.background='linear-gradient(90deg,#000,hsl('+h+' '+s+'% 50%),#fff)';if(x.dot)x.dot.style.background='hsl('+h+' '+s+'% '+l+'%)';
+   if(x.hx&&document.activeElement!==x.hx)x.hx.value=h2x(h,s,l)})}
  let act=null;
  const move=e=>{const b=w.getBoundingClientRect();let h=Math.atan2(e.clientX-b.left-mid,-(e.clientY-b.top-mid))*180/Math.PI;if(h<0)h+=360;act.d.h=Math.round(h)%360;paint();cb()};
  w.onpointerdown=e=>{const b=w.getBoundingClientRect(),r=Math.hypot(e.clientX-b.left-mid,e.clientY-b.top-mid);if(r<hole-6)return;
@@ -3174,4 +3356,167 @@ paint()})();
 </script>
 
 
+<script>
+/* ---- GLOBAL SEARCH: "/" opens it from anywhere (not while typing, locked, or with a pop-up open). Esc closes. Titles are ranked first; pick a book tab, then a chapter, to see every word match and where it is ---- */
+(function(){
+const root=$('isl-root'),scrim=$('isl-scrim'),q=$('isl-q'),sr=$('isl-sr'),tabsEl=$('isl-tabs'),chsEl=$('isl-chs'),capEl=$('isl-chcap'),hitsEl=$('isl-hits');
+if(!root||!q)return;
+let pend=false,on=false,sel='',chapF='',res=null,re=null,tm=0,ft=0,cur=-1;
+const rx=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),ready=()=>typeof appData!=='undefined'&&appData&&Array.isArray(appData.pages);
+const locked=()=>{const l=$('lock');if(!l)return false;const c=getComputedStyle(l);return c.visibility!=='hidden'&&c.opacity!=='0'};
+const tag=t=>{const s=el('span','tg');s.textContent=t;return s};
+function flip(change){/* the island slides between its corner and the centre instead of jumping */
+ const a=root.getBoundingClientRect();change();if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+ const b=root.getBoundingClientRect(),s=root.style;s.transition='none';s.translate=(a.left-b.left)+'px '+(a.top-b.top)+'px';void root.offsetWidth;
+ s.transition='translate var(--isl-dur) var(--isl-ease)';s.translate='0px 0px';clearTimeout(ft);ft=setTimeout(()=>{s.transition='';s.translate=''},750)}
+function open(){const M=window.SmartScheduleManager;if(on||locked()||!ready()||(M&&M.open==='edit'))return;on=true;
+ if(M&&M.open==='panel'){M.open='';M.evaluate()}
+ flip(()=>{root.classList.add('srch');scrim.classList.add('on')});sel='';chapF='';q.value='';sr.classList.remove('on');q.focus({preventScroll:true})}
+window.openSearch=open;/* the magnifier next to Workspace */
+function close(){if(!on)return;on=false;clearTimeout(tm);q.blur();
+ flip(()=>{root.classList.remove('srch');scrim.classList.remove('on');sr.classList.remove('on')});
+ setTimeout(()=>{if(!on){q.value='';res=null}},800)}
+function mk(t,r){r=r||re;const f=document.createDocumentFragment();let l=0,m;r.lastIndex=0;
+ while((m=r.exec(t))){if(!m[0]){r.lastIndex++;continue}if(m.index>l)f.append(t.slice(l,m.index));const k=document.createElement('mark');k.textContent=m[0];f.append(k);l=m.index+m[0].length}
+ if(l<t.length)f.append(t.slice(l));return f}
+function occ(t,r){r=r||re;const o=[];let m;r.lastIndex=0;while((m=r.exec(t))){if(!m[0]){r.lastIndex++;continue}o.push({i:m.index,n:m[0].length})}return o}
+const distinct=(t,k)=>{const l=t.toLowerCase();return k.filter(x=>l.includes(x)).length};
+function search(raw){
+ const toks=[...new Set(raw.toLowerCase().split(/\s+/).filter(Boolean))].sort((a,b)=>b.length-a.length);
+ re=new RegExp(toks.map(rx).join('|'),'gi');
+ const gs=appData.books.map(b=>({id:b.id,name:b.name,hits:[]})),docs={id:'__docs__',name:'Docs',hits:[]},cont={};
+ (appData.containers||[]).forEach(k=>{cont[k.id]=k.name});
+ const chOf=id=>appData.chapters.find(c=>c.id===id)||DOC_CHAPS.find(c=>c.id===id);
+ const gOf=c=>c.bookId?gs.find(g=>g.id===c.bookId):(isDoc(c.id)&&c.id!==DOC_CHATS_ID?docs:null);
+ const words=raw.toLowerCase().split(/\s+/).filter(Boolean),allCh=appData.chapters.concat(DOC_LIB);let sc=null,best=0,rest=[],rre=null;
+ /* leading words that exactly match a chapter name = that chapter is the scope; the remaining words are searched inside it first */
+ allCh.forEach(c=>{const cw=c.name.toLowerCase().split(/\s+/).filter(Boolean),n=cw.length;
+  if(n&&n<words.length&&n>=best&&cw.every((w,i)=>w===words[i])){if(n>best){best=n;sc=new Set()}sc.add(c.id)}});
+ if(sc){rest=[...new Set(words.slice(best))].sort((a,b)=>b.length-a.length);rre=new RegExp(rest.map(rx).join('|'),'gi')}
+ allCh.forEach(c=>{const g=gOf(c);if(!g)return;const ts=distinct(c.name,toks);if(!ts)return;/* chapter names that match */
+  g.hits.push(sc&&sc.has(c.id)?{ch:c,ts:99,cs:0,k:1,sc:1,o:3,r:re}:{ch:c,ts,cs:0,k:1,r:re})});
+ (appData.containers||[]).forEach(k=>{const c=chOf(k.chapterId),g=c&&gOf(c);if(!g)return;/* board names */
+  const s=sc&&sc.has(c.id),ts=distinct(k.name,s?rest:toks);if(ts)g.hits.push({b:k,ch:c,ts,cs:0,k:1,sc:s?1:0,o:1,r:s?rre:re})});
+ appData.pages.forEach(p=>{if(p.isWidget)return;const c=chOf(p.chapterId),g=c&&gOf(c);if(!g)return;
+  const vs=p.variants&&p.variants.length?p.variants:[{title:p.title,content:p.content}];
+  vs.forEach((v,vi)=>{const title=String(v.title||''),body=String(v.content||''),base={p,vi,ch:c,board:cont[p.containerId]||'',title,body,vn:vs.length>1};
+   if(sc&&sc.has(c.id)){const t2=occ(title,rre).length,c2=occ(body,rre);/* inside the scoped chapter: only the remaining words count */
+    if(t2||c2.length){g.hits.push(Object.assign(base,{to:t2,co:c2,ts:distinct(title,rest),cs:distinct(body,rest),k:0,sc:1,o:2,r:rre}));return}}
+   const to=occ(title).length,co=occ(body);if(!to&&!co.length)return;
+   g.hits.push(Object.assign(base,{to,co,ts:distinct(title,toks),cs:distinct(body,toks),k:0,r:re}))})});
+ const all=gs.concat(docs.hits.length?[docs]:[]);/* scoped chapter first (chapter, boards, then pages), then titles, then content */
+ all.forEach(g=>g.hits.sort((a,b)=>(b.sc||0)-(a.sc||0)||(a.sc&&b.sc?a.o-b.o:0)||b.ts-a.ts||b.k-a.k||b.cs-a.cs||(b.co?b.co.length:0)-(a.co?a.co.length:0)));
+ return all}
+function card(h){const d=el('div','isl-hit'),w=el('div','w'),t=el('div','t');d.tabIndex=0;d.setAttribute('role','button');
+ if(h.b){w.textContent=h.ch.name;t.append(mk(h.b.name,h.r),tag('Board'))}
+ else if(h.p){w.textContent=[h.ch.name,h.board].filter(Boolean).join(' › ');t.append(mk(h.title||'Untitled',h.r));if(h.to)t.append(tag('Title'));if(h.vn)t.append(tag('Variant'))}
+ else{w.textContent=h.ch.description||'';t.append(mk(h.ch.name,h.r),tag('Chapter name'))}
+ d.append(w,t);const ml=h.body&&h.body.indexOf('\n')>=0;
+ (h.co||[]).slice(0,10).forEach(o=>{const pre=h.body.slice(0,o.i),wc=pre.split(/\s+/).filter(Boolean).length,s=Math.max(0,o.i-42),e=Math.min(h.body.length,o.i+o.n+70);
+  const txt=(s?'…':'')+h.body.slice(s,e).replace(/\s+/g,' ')+(e<h.body.length?'…':''),r=el('div','isl-oc'),lb=el('em'),sp=el('span');
+  lb.textContent='content · '+(ml?'line '+pre.split('\n').length+' · ':'')+'word '+(/\S$/.test(pre)?wc:wc+1);sp.append(mk(txt,h.r));r.append(lb,sp);d.append(r)});
+ if(h.co&&h.co.length>10){const m=el('div','isl-oc');m.textContent='+ '+(h.co.length-10)+' more matches in this page';d.append(m)}
+ d.onclick=()=>go(h);d.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();go(h)}};return d}
+function paint(explicit){tabsEl.textContent='';chsEl.textContent='';hitsEl.textContent='';cur=-1;
+ const gs=res,any=gs.some(g=>g.hits.length);
+ if(!any){capEl.hidden=true;const n=el('div','isl-p');n.style.padding='6px 4px';n.textContent='No matches for “'+q.value.trim()+'”.';hitsEl.append(n);return}
+ let g=gs.find(x=>x.id===sel);if(!g||(!explicit&&!g.hits.length))g=gs.find(x=>/^asc$/i.test(x.name.trim())&&x.hits.length)||gs.find(x=>x.hits.length);sel=g.id;
+ gs.forEach(x=>{const b=el('button','isl-tb'+(x.id===sel?' on':'')+(x.hits.length?'':' z'));b.type='button';b.setAttribute('role','tab');b.setAttribute('aria-selected',String(x.id===sel));
+  b.append(x.name,el('i','',String(x.hits.length)));b.onclick=()=>{sel=x.id;chapF='';paint(true)};tabsEl.append(b)});
+ const cm=new Map();g.hits.forEach(h=>{const e=cm.get(h.ch.id)||{ch:h.ch,n:0,ts:0};if(h.p)e.n++;e.ts=Math.max(e.ts,h.ts);cm.set(h.ch.id,e)});
+ const cl=[...cm.values()].sort((a,b)=>b.ts-a.ts);capEl.hidden=!cl.length;capEl.textContent='Chapters in '+g.name+' that match';
+ cl.forEach(e=>{const b=el('button','isl-tb sm'+(chapF===e.ch.id?' on':''));b.type='button';b.append(e.ch.name);if(e.n)b.append(el('i','',String(e.n)));
+  b.onclick=()=>{chapF=chapF===e.ch.id?'':e.ch.id;paint(true)};chsEl.append(b)});
+ const hs=g.hits.filter(h=>!chapF||h.ch.id===chapF);
+ if(!hs.length){const n=el('div','isl-p');n.style.padding='6px 4px';n.textContent='No matches in '+g.name+'.';hitsEl.append(n)}
+ hs.forEach(h=>hitsEl.append(card(h)));const f0=hitsEl.querySelector('.isl-hit');if(f0){f0.classList.add('cur');cur=0}}/* the top result is pre-selected: Enter opens it */
+/* DOCUMENTATION SHORTCUT: "doc / docs / document / documentation / note / notation" + a topic lists the matching Notations / What if templates; picking one (or Enter) drops it into the right Chat */
+const DOCKW=/^(docs?|documents?|documentation|notes?|notations?)\s+(.+)$/i,hasDet=c=>!!(c.name||c.policy||c.eff||c.prem);
+function plan(){/* first chat without customer details; else a new chat while there is room; else the chat you used last */
+ const free=chats.find(c=>!hasDet(c));if(free)return{chat:free,idx:chats.indexOf(free)};
+ if(chats.length<CHAT_MAX)return{chat:null,idx:chats.length,fresh:true};
+ const c=chats.find(x=>x.id===lastChatId)||chats[0];return{chat:c,idx:chats.indexOf(c),full:true}}
+function paintDoc(list,topic){tabsEl.textContent='';chsEl.textContent='';hitsEl.textContent='';cur=-1;
+ const pl=plan();capEl.hidden=false;capEl.textContent='Documentation · Enter adds the top one to '+(pl.fresh?'a new Chat '+(pl.idx+1):'Chat '+(pl.idx+1)+(pl.full?' (every chat has details)':''));
+ const r=new RegExp(topic.toLowerCase().split(/\s+/).filter(Boolean).sort((a,b)=>b.length-a.length).map(rx).join('|'),'gi');
+ list.forEach(e=>{const d=el('div','isl-hit'),w=el('div','w'),t=el('div','t');d.tabIndex=0;d.setAttribute('role','button');
+  w.textContent=e.chap+' › '+(e.board||'Other');t.append(mk(e.title,r));d.append(w,t);
+  d.onclick=()=>insertDoc(e);d.onkeydown=ev=>{if(ev.key==='Enter'){ev.preventDefault();insertDoc(e)}};hitsEl.append(d)});
+ const f0=hitsEl.querySelector('.isl-hit');if(f0){f0.classList.add('cur');cur=0}}
+function insertDoc(e){const pl=plan();let chat=pl.chat;
+ if(!chat){if(chats.length>=CHAT_MAX)return;chat={id:'c'+rid(),name:'',policy:'',eff:'',prem:'',noted:false,pages:[]};chats.push(chat)}
+ const n=chats.indexOf(chat)+1,dup=chat.pages.some(p=>p.src===e.page.id&&(p.activeVariant||0)===e.vi);lastChatId=chat.id;
+ if(!dup)chatOpenPage(chat,e);chatSave();goFixed(DOC_CHATS_ID);renderHero();renderChats();
+ showToast(dup?'“'+e.title+'” is already in Chat '+n+'.':'Added “'+e.title+'” to Chat '+n+(pl.full?' (every chat had details).':'.'));
+ setTimeout(()=>{const c=document.querySelector('.chat[data-id="'+chat.id+'"]');if(!c)return;c.scrollIntoView({block:'nearest',behavior:'smooth'});c.classList.remove('srch-flash');void c.offsetWidth;c.classList.add('srch-flash');setTimeout(()=>c.classList.remove('srch-flash'),2200)},100);
+ close()}
+function run(){pend=false;const raw=q.value.trim();if(!raw||!ready()){sr.classList.remove('on');res=null;return}
+ const dm=DOCKW.exec(raw),dl=dm?docSearch(dm[2]).slice(0,40):[];if(dl.length){res=null;paintDoc(dl,dm[2]);sr.classList.add('on');return}
+ res=search(raw);chapF='';paint(false);sr.classList.add('on')}/* only now does it grow downward */
+function flash(id,a){const n=$('wsc').querySelector('[data-'+(a||'pid')+'="'+id+'"]');if(!n)return;n.scrollIntoView({block:'center',inline:'center',behavior:'smooth'});
+ n.classList.remove('srch-flash');void n.offsetWidth;n.classList.add('srch-flash');setTimeout(()=>n.classList.remove('srch-flash'),2200)}
+let cpNext=false;/* set only while Enter opens a result: that page gets copied */
+function copyPop(blank,host){document.querySelectorAll('.copy-pop').forEach(n=>n.remove());const d=document.createElement('div');d.className='copy-pop'+(host?' in':'');d.textContent='Copied!';
+ if(blank){const s=document.createElement('small');s.textContent=blank+(blank>1?' variables are':' variable is')+' still blank';d.append(s)}(host||document.body).append(d);setTimeout(()=>d.remove(),1200)}/* host = the page card that was copied: the pop-up sits in its centre */
+function copyHit(p,host){const r=composeSpiel(p),ok=()=>copyPop(r.blank,host);
+ const old=()=>{const a=document.createElement('textarea');a.value=r.text;a.style.cssText='position:fixed;left:-9999px';document.body.appendChild(a);a.select();let y=false;try{y=document.execCommand('copy')}catch(e){}a.remove();if(y)ok();else showToast('Copy failed.')};
+ if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(r.text).then(ok).catch(old);else old()}
+window.copyHit=copyHit;/* also used by Enter inside a variable */
+function focusFirstVar(n){/* highlights the first variable to fill in (its placeholder is selected, so typing replaces it) */
+ const v=n.querySelector('.var[contenteditable]:not(.filled)')||n.querySelector('.var:not(.filled)')||n.querySelector('.var');if(v)v.focus({preventScroll:true})}
+function go(h){const c=h.ch,cp=cpNext&&!isDoc(c.id);cpNext=false;/* never for Documentation (Notations / What if) pages */
+ if(isDoc(c.id))openDocChapter(c.id);
+ else{if(appData.activeBookId!==c.bookId)selectBook(c.bookId);
+  if(appData.activeChapterId!==c.id){appData.activeChapterId=c.id;persistView();renderChapters();renderHero();renderPages()}}
+ if(h.p){const p=h.p;if(h.vn&&(p.activeVariant||0)!==h.vi){p.activeVariant=h.vi;persistView();renderPages()}setTimeout(()=>{flash(p.id);const n=$('wsc').querySelector('.card[data-pid="'+p.id+'"]');if(p.content&&scanVars(p.content).length){if(n)focusFirstVar(n)}else if(cp)copyHit(p,n)},100)}else if(h.b)setTimeout(()=>flash(h.b.id,'cid'),100)
+ close()}
+function mv(d){const a=[...hitsEl.querySelectorAll('.isl-hit')];if(!a.length)return;if(a[cur])a[cur].classList.remove('cur');
+ cur=cur<0?(d>0?0:a.length-1):(cur+d+a.length)%a.length;a[cur].classList.add('cur');a[cur].scrollIntoView({block:'nearest'})}
+q.addEventListener('input',()=>{pend=true;clearTimeout(tm);tm=setTimeout(run,70)});
+q.addEventListener('keydown',e=>{if(e.key==='ArrowDown'){e.preventDefault();mv(1)}else if(e.key==='ArrowUp'){e.preventDefault();mv(-1)}
+ else if(e.key==='Enter'){e.preventDefault();if(pend){clearTimeout(tm);run()}const a=hitsEl.querySelectorAll('.isl-hit'),x=a[cur]||a[0];if(x){cpNext=true;x.click();cpNext=false}}});
+scrim.addEventListener('click',close);
+document.addEventListener('keydown',e=>{
+ if(on){if(e.key==='Escape'){e.preventDefault();e.stopPropagation();close()}return}
+ if(e.key!=='/'||e.ctrlKey||e.metaKey||e.altKey||e.isComposing)return;
+ const t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+ if(document.querySelector('.ov.open')||locked())return;
+ e.preventDefault();open()},true);
+new MutationObserver(()=>{if(on&&locked())close()}).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
+})();
+</script>
+<script>
+/* searchable time zone picker for the Schedule Import widget and the island's schedule paste boxes: type "GMT+6", "UTC+5:30", "Dhaka", "EST"... */
+(function(){
+const SI=window.ScheduleImporter;if(!SI||!SI.TZ)return;
+const SEL='select.w-tz,#isl-ptz,#pv-ptz',mk=(t,c)=>{const e=document.createElement(t);if(c)e.className=c;return e};
+let pop,inp,list,sel=null,items=[],cur=0,hay=null;
+function prep(){if(hay)return;hay=new Map();const nm=(id,k)=>{try{return new Intl.DateTimeFormat('en-US',{timeZone:id,timeZoneName:k}).formatToParts(new Date()).find(x=>x.type==='timeZoneName').value}catch(e){return''}};
+ SI.TZ.forEach(t=>hay.set(t.id,(t.id.replace(/_/g,' ')+' '+t.id+' '+t.label+' '+nm(t.id,'short')+' '+nm(t.id,'long')).toLowerCase()))}
+function match(q){q=q.toLowerCase().replace(/[\u2212\u2013]/g,'-').replace(/\b(?:utc|gmt)\s*(?=[+-]\d)/g,'').trim();
+ const toks=q.split(/\s+/).filter(Boolean);if(!toks.length)return SI.TZ;const offs=[],txt=[];
+ toks.forEach(t=>{const m=/^([+-])(\d{1,2})(?::?(\d{2}))?$/.exec(t);if(m)offs.push((m[1]==='-'?-1:1)*(+m[2]*60+(+m[3]||0)));else txt.push(t)});
+ return SI.TZ.filter(t=>offs.every(o=>t.off===o)&&txt.every(w=>hay.get(t.id).includes(w)))}
+function paint(){const q=inp.value;items=match(q);list.textContent='';
+ if(!items.length){const n=mk('div','tzp-n');n.textContent='No time zone matches “'+q.trim()+'”.';list.append(n);cur=-1;return}
+ const v=sel&&sel.value;cur=q.trim()?0:Math.max(0,items.findIndex(t=>t.id===v));
+ items.forEach((t,i)=>{const b=mk('button','tzp-i'+(i===cur?' cur':'')+(t.id===v?' on':'')),a=mk('b'),s=mk('small');b.type='button';a.textContent=t.short||t.label;s.textContent=(t.short||'').includes(t.id.replace(/_/g,' '))?'':t.id;b.append(a,s);b.onclick=()=>pick(t);list.append(b)});
+ const c=list.querySelector('.cur');if(c)c.scrollIntoView({block:'nearest'})}
+function mv(d){if(!items.length)return;const bs=list.children;if(bs[cur])bs[cur].classList.remove('cur');cur=(cur+d+items.length)%items.length;bs[cur].classList.add('cur');bs[cur].scrollIntoView({block:'nearest'})}
+function close(back){if(!pop||pop.hidden)return;pop.hidden=true;if(back&&sel&&sel.isConnected)sel.focus({preventScroll:true})}
+function pick(t){if(!t||!sel)return;const s=sel.isConnected?sel:(sel.id&&document.getElementById(sel.id))||sel;
+ if(![...s.options].some(o=>o.value===t.id))s.add(new Option(t.short||t.label,t.id));s.value=t.id;close(true);s.dispatchEvent(new Event('change',{bubbles:true}))}
+function build(){pop=mk('div');pop.id='tzp';pop.hidden=true;inp=mk('input');inp.type='text';inp.placeholder='Search time zones (GMT+6, Dhaka, EST…)';inp.autocomplete='off';inp.spellcheck=false;inp.setAttribute('aria-label','Search time zones');
+ list=mk('div','tzp-l');pop.append(inp,list);document.body.append(pop);
+ pop.addEventListener('click',e=>e.stopPropagation());inp.addEventListener('input',paint);
+ inp.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();mv(e.key==='ArrowDown'?1:-1)}else if(e.key==='Enter'){e.preventDefault();pick(items[cur])}else if(e.key==='Escape'){e.preventDefault();e.stopPropagation();close(true)}});
+ document.addEventListener('pointerdown',e=>{if(!pop.hidden&&!pop.contains(e.target))close()},true);
+ addEventListener('resize',()=>close());addEventListener('scroll',e=>{if(!pop.hidden&&!pop.contains(e.target))close()},true)}
+function open(s){if(!pop)build();prep();sel=s;inp.value='';const r=s.getBoundingClientRect();pop.style.width=Math.min(Math.max(r.width,320),innerWidth-16)+'px';pop.hidden=false;paint();
+ const h=pop.offsetHeight;let t=r.bottom+6;if(t+h>innerHeight-8)t=Math.max(8,r.top-h-6);
+ pop.style.left=Math.min(Math.max(8,r.left),innerWidth-pop.offsetWidth-8)+'px';pop.style.top=t+'px';inp.focus({preventScroll:true})}
+document.addEventListener('mousedown',e=>{const s=e.target.closest&&e.target.closest(SEL);if(s){e.preventDefault();open(s)}},true);
+document.addEventListener('keydown',e=>{const t=e.target;if(t&&t.matches&&t.matches(SEL)&&(e.key==='Enter'||e.key===' '||e.key==='ArrowDown'||e.key==='ArrowUp')){e.preventDefault();open(t)}},true);
+})();
+</script>
 </body></html>
