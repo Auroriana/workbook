@@ -641,14 +641,14 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
 /* Team chat uses the existing pill palette and motion. */
 .pi{display:flex;flex-direction:column;gap:10px}.pi-title{font-size:14px;font-weight:600;color:var(--txt)}.pi-title small{font-weight:400;color:var(--mut);margin-left:8px}
 .pi-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.pi .hint{margin:0}
-.sec .pi-pick{position:relative;cursor:pointer;font-weight:500;color:var(--p)}.pi-pick input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.pi-pick:focus-within{box-shadow:0 0 0 2px var(--p)}
+.sec .pi-pick{position:relative;cursor:pointer;font-weight:500;color:var(--p);margin:0}.pi-pick input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.pi-pick:focus-within{box-shadow:0 0 0 2px var(--p)}
 .pi select{height:36px;border-radius:999px;border:1px solid var(--line);background:var(--surf);color:var(--txt);padding:0 14px;font-size:14px;outline:none;cursor:pointer}.pi select:focus{border-color:var(--p);box-shadow:0 0 0 1px var(--p)}
 .pi input.pi-alt{flex:1;min-width:160px;width:auto;height:36px;padding:0 14px;border-radius:999px;font-size:14px}
 #page-image-preview:empty,#page-image-library:empty{display:none}#page-image-preview img{border-radius:12px;border:1px solid var(--line)}#page-image-library .seg{align-items:center;justify-content:space-between;margin-top:6px}
 .page-cloud-image{margin:8px 0;min-height:40px}.page-cloud-image img{display:block;max-width:100%;height:auto;border-radius:8px}#page-image-preview img{max-height:180px}#page-image-library{max-height:180px;overflow:auto}
-#island.chat-open{width:min(420px,calc(100vw - 16px));border-radius:var(--isl-radius-open)}
-#island.chat-open:hover{transform:none}
-#island.chat-open>.isl-bd,#island.chat-open>.isl-sub{display:none}
+#island.chat-open,#island.mail-open{width:min(420px,calc(100vw - 16px));border-radius:var(--isl-radius-open)}
+#island.chat-open:hover,#island.mail-open:hover{transform:none}
+#island.chat-open>.isl-bd,#island.chat-open>.isl-sub,#island.mail-open>.isl-bd,#island.mail-open>.isl-sub{display:none}
 #team-panel{position:relative;z-index:2;padding:16px;max-height:calc(100dvh - 100px);overflow:auto;order:0}
 #team-panel[hidden]{display:none}#isl-root[data-v=top] #team-panel{order:4}
 .team-row{display:flex;align-items:center;gap:8px;margin:8px 0}.team-row>span,.team-row>b,.team-row>small{flex:1;overflow-wrap:anywhere}
@@ -659,6 +659,39 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
 #team-panel details{max-height:140px;overflow:auto}#team-panel summary{cursor:pointer}#team-toggle{flex-shrink:0;padding:6px}
 #team-toggle svg{fill:none;stroke:currentColor;stroke-width:1.7}
 #team-panel .team-row button{flex-shrink:0}#team-status{font-size:12px;margin:8px 0}#team-attachment:empty+button{display:none}
+/* MAIL: replaces the team chat in the pill. Same glass look as the island. */
+#mail-toggle{flex-shrink:0;padding:6px;position:relative}
+#mail-toggle svg{fill:none;stroke:currentColor;stroke-width:1.7}
+#mail-dot{position:absolute;top:-1px;right:-1px;width:10px;height:10px;border-radius:50%;background:var(--isl-late);box-shadow:0 0 0 2px rgba(255,255,255,.35);animation:isl-pop .45s var(--isl-ease);pointer-events:none}
+#mail-dot[hidden],#team-toggle[hidden]{display:none}
+#isl-root.srch #mail-toggle,#isl-root.srch #team-toggle{opacity:.4;cursor:default}/* search owns the island while it is open */
+#isl-root.srch #mail-panel,#isl-root.srch #team-panel{display:none}
+#mail-panel{position:relative;z-index:2;padding:16px;max-height:calc(100dvh - 100px);overflow:auto;order:0;display:flex;flex-direction:column;gap:10px}
+#mail-panel[hidden]{display:none}#isl-root[data-v=top] #mail-panel{order:4}
+#mail-panel [hidden]{display:none!important}
+.mail-top{display:flex;align-items:center;gap:8px}.mail-top b{flex:1;font-size:15px}
+.mail-tabs{display:flex;gap:6px}.mail-tabs .isl-btn{display:inline-flex;align-items:center;gap:6px}
+.mail-n{font-style:normal;min-width:16px;height:16px;padding:0 5px;border-radius:999px;background:var(--isl-late);color:#fff;font-size:10.5px;font-weight:700;line-height:16px;text-align:center}
+.mail-n:empty{display:none}
+#mail-list{display:flex;flex-direction:column;gap:6px;max-height:min(300px,36dvh);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-right:2px}
+.mail-row{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;text-align:left;padding:9px 12px 9px 26px;border:0;border-radius:14px;background:rgba(127,127,127,.14);color:inherit;font:inherit;cursor:pointer;transition:background .15s}
+.mail-row:hover,.mail-row:focus-visible{background:rgba(127,127,127,.28);outline:none}
+.mail-row .mt{font-size:13.5px;overflow-wrap:anywhere;opacity:.85}
+.mail-row .ms{font-size:11.5px;opacity:.6}
+.mail-row.new .mt{font-weight:700;opacity:1}
+.mail-row.new::before{content:'';position:absolute;left:11px;top:15px;width:7px;height:7px;border-radius:50%;background:var(--isl-late)}
+.mail-empty{padding:18px 8px;text-align:center;opacity:.6;font-size:13px}
+#mail-read{display:flex;flex-direction:column;gap:10px}
+.mail-t{font-size:15px;overflow-wrap:anywhere}.mail-meta{opacity:.65;font-size:12px}
+.mail-pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:180px;overflow:auto;scrollbar-width:thin;font-size:12px;padding:10px 12px;border-radius:14px;background:rgba(127,127,127,.14)}
+.mail-act{display:flex;flex-wrap:wrap;gap:6px}
+#mail-compose{display:flex;flex-direction:column;gap:10px}
+.mail-f{display:flex;align-items:center;gap:8px}.mail-f>span{flex:none;width:48px;opacity:.65;font-size:12px}
+.mail-f>b{min-width:0;overflow-wrap:anywhere;font-size:13.5px}.mail-f>small{flex:none;opacity:.6}
+#mail-to{min-width:0;flex:1}
+#mail-attrow>#mail-remove{margin-left:auto}
+#mail-status{font-size:12px;margin:0}#mail-status:empty{display:none}
+#mail-send:disabled{opacity:.45;cursor:default}
 </style>
 <body class="" style="--rc: nwse-resize;">
 <div id="lock" role="dialog" aria-modal="true" aria-label="Login">
@@ -922,9 +955,22 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
  <div class="team-row"><button type="button" class="isl-btn sm" id="team-share">Share copied item</button><button type="button" class="isl-btn sm" id="team-schedule">Schedule</button><button class="isl-btn pri" id="team-send">Send</button></div>
  <div class="team-row"><small id="team-attachment"></small><button type="button" class="isl-btn sm" id="team-remove" aria-label="Remove attachment">×</button></div></form>
 </section>
+  <section id="mail-panel" hidden aria-label="Mail">
+ <div class="mail-top"><b id="mail-h">Mail</b><button type="button" class="isl-btn sm pri" id="mail-new">Compose</button><button type="button" class="isl-btn sm" id="mail-close" aria-label="Close mail">×</button></div>
+ <div class="mail-tabs" id="mail-tabs" role="tablist" aria-label="Mailbox"><button type="button" class="isl-btn sm pri" role="tab" data-b="inbox" aria-selected="true">Inbox<i class="mail-n" id="mail-n"></i></button><button type="button" class="isl-btn sm" role="tab" data-b="sent" aria-selected="false">Sent</button></div>
+ <div id="mail-list" role="list" aria-label="Messages"></div>
+ <div id="mail-read" hidden></div>
+ <form id="mail-compose" hidden autocomplete="off">
+  <label class="mail-f"><span>To</span><input id="mail-to" class="isl-inp" maxlength="25" placeholder="Username" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Recipient username"></label>
+  <div class="mail-f"><span>Attach</span><button type="button" class="isl-btn sm" id="mail-pick-clip">Copied item</button><button type="button" class="isl-btn sm" id="mail-pick-sched">My schedule</button></div>
+  <div class="mail-f" id="mail-attrow" hidden><span>Title</span><b id="mail-att"></b><small id="mail-kind"></small><button type="button" class="isl-btn sm" id="mail-remove" aria-label="Remove attachment">×</button></div>
+  <div class="mail-act"><button class="isl-btn pri" id="mail-send" disabled>Send</button><button type="button" class="isl-btn" id="mail-cancel">Cancel</button></div>
+ </form>
+ <p id="mail-status" class="isl-p" role="status"></p>
+</section>
   <div class="isl-bd"><div id="isl-body"></div></div>
   <div class="isl-pill" id="isl-pill" role="button" tabindex="0" aria-expanded="false" aria-label="Open schedule">
-    <button type="button" class="isl-btn sm" id="team-toggle" title="Team chat" aria-label="Team chat" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M21 11a8 8 0 0 1-8 8H5l-4 3V11a10 10 0 0 1 20 0Z"/></svg></button><div class="isl-clk"><span id="isl-pre"></span><span id="isl-a">--</span><span class="isl-dots"><i></i><i></i><i></i></span><span id="isl-b">--</span><small id="isl-ap"></small></div>
+    <button type="button" class="isl-btn sm" id="mail-toggle" title="Mail" aria-label="Mail" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></svg><i id="mail-dot" hidden></i></button><button type="button" class="isl-btn sm" id="team-toggle" title="Team chat" aria-label="Team chat" aria-expanded="false" hidden><svg viewBox="0 0 24 24" width="18" height="18"><path d="M21 11a8 8 0 0 1-8 8H5l-4 3V11a10 10 0 0 1 20 0Z"/></svg></button><div class="isl-clk"><span id="isl-pre"></span><span id="isl-a">--</span><span class="isl-dots"><i></i><i></i><i></i></span><span id="isl-b">--</span><small id="isl-ap"></small></div>
     <div class="isl-lbl" id="isl-lbl" aria-live="polite"></div>
     <button type="button" class="isl-chk" id="isl-chk" aria-label="I'm back"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg></button>
     <button type="button" class="isl-end" id="isl-end">End shift</button>
@@ -3015,7 +3061,7 @@ function rid(){return Date.now()+'_'+Math.random().toString(36).slice(2,6)}
 function copyPageData(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
  return copyStructure(Object.assign({app:CLIP_TAG,type:'page',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p),pageImageProps(p)))}
 async function copyStructure(o){const t=JSON.stringify(o);appClipboard=t;const ok=await writeClipboard(t);
- const hints={page:'Use Paste page or right-click a board.',board:'Use Paste board in the destination chapter.',chapter:'Use Paste chapter beside + Chapter.',book:'Paste to add a new book, or share it in Team chat.'};
+ const hints={page:'Use Paste page or right-click a board.',board:'Use Paste board in the destination chapter.',chapter:'Use Paste chapter beside + Chapter.',book:'Paste to add a new book, or send it by Mail.'};
  if(appClipboard===t)showToast(o.type[0].toUpperCase()+o.type.slice(1)+' copied. '+(ok?'':'Available in this tab. ')+hints[o.type]);return true}
 function copyBoardData(id){const c=appData.containers.find(c=>c.id===id);if(!c)return;
  return copyStructure({app:CLIP_TAG,type:'board',ver:1,name:c.name,w:c.w,h:c.h,border:c.border||'',bg:c.bg||'',
@@ -3139,6 +3185,7 @@ document.addEventListener('paste',e=>{
 function generateUpdatedHtmlString(){const c=document.documentElement.cloneNode(true);if(window.lockClean)window.lockClean(c);/* strip transient UI so the saved file reopens clean */
  c.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));c.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show'));c.querySelectorAll('.ghost,.copy-pop,#menu-context').forEach(n=>n.remove());c.querySelector('body').classList.remove('edit','dragging-page','rszing');c.classList.remove('lite','flat-isl');['books','chs','wsc','hacts','chats'].forEach(i=>{const n=c.querySelector('#'+i);if(n)n.innerHTML=''});
  c.querySelector('#island')?.classList.remove('chat-open');const panel=c.querySelector('#team-panel');if(panel)panel.hidden=true;['team-messages','team-friends','team-status','team-attachment','page-image-preview','page-image-library','page-image-status'].forEach(id=>c.querySelector('#'+id)?.replaceChildren());const room=c.querySelector('#team-room');if(room)room.innerHTML='<option value="">Shared room</option>';c.querySelectorAll('#team-panel input,#team-panel textarea').forEach(n=>{n.textContent='';n.removeAttribute('value')});c.querySelector('#team-toggle')?.setAttribute('aria-expanded','false');
+ c.querySelector('#island')?.classList.remove('mail-open');const mp=c.querySelector('#mail-panel');if(mp)mp.hidden=true;['mail-list','mail-read','mail-att','mail-kind','mail-status','mail-n'].forEach(id=>c.querySelector('#'+id)?.replaceChildren());c.querySelectorAll('#mail-panel input').forEach(n=>n.removeAttribute('value'));const md=c.querySelector('#mail-dot');if(md)md.hidden=true;const mt=c.querySelector('#mail-toggle');if(mt){mt.setAttribute('aria-expanded','false');mt.setAttribute('aria-label','Mail');mt.title='Mail'}
  const t=c.querySelector('#toast');if(t){t.className='';t.textContent=''}
  return '<!DOCTYPE html>\n'+c.outerHTML.replace(/\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//,()=>'/*DATA_START*/'+JSON.stringify(appData,null,2).replace(/</g,'\\u003c')+'/*DATA_END*/')}
 async function saveDirectToFile(){const h=generateUpdatedHtmlString(),fn=fileName()+'.html';
@@ -3218,16 +3265,19 @@ renderPages();
 </script>
 
 <script id="team-chat-script">
+/* TEAM CHAT SWITCH: the chat is switched OFF (hidden, never opens, never contacts the server). All of its code is still here and unchanged.
+   Set this to true to bring it back: its icon returns to the pill next to the mail icon. Mail (below) does not depend on it. */
+const TEAM_CHAT_ENABLED = false;
 /* Messages and drafts live only in memory; the server owns storage and expiry. */
 window.TeamChat = (() => {
  const $ = id => document.getElementById(id), panel=$('team-panel');
  let opened=false, peer='', generation=0, timer=0, busy=false, messages=[], attachment=null, retryId=null, expiresAt=0, friends={};
- const request = body => window.cloudRequest('chat',body);
+ const request = body => TEAM_CHAT_ENABLED ? window.cloudRequest('chat',body) : Promise.reject(new Error('Team chat is switched off.'));
  const status = text => $('team-status').textContent=text;
  const button = (text,fn) => { const b=document.createElement('button');b.type='button';b.className='isl-btn sm';b.textContent=text;b.onclick=fn;return b; };
  function reset() { close(); peer='';messages=[];friends={};attachment=null;retryId=null;expiresAt=0;$('team-messages').replaceChildren();$('team-friends').replaceChildren();$('team-room').replaceChildren(new Option('Shared room',''));$('team-text').value='';$('team-user').value='';$('team-attachment').textContent='';status(''); }
  function close() { opened=false;generation++;clearTimeout(timer);panel.hidden=true;$('island').classList.remove('chat-open');$('team-toggle').setAttribute('aria-expanded','false'); }
- function open() { if(opened){close();return} opened=true;generation++;panel.hidden=false;$('island').classList.add('chat-open');$('team-toggle').setAttribute('aria-expanded','true');window.SmartScheduleManager.open='';window.SmartScheduleManager.evaluate();poll(); }
+ function open() { if(!TEAM_CHAT_ENABLED)return; if(opened){close();return} window.Mail?.close();opened=true;generation++;panel.hidden=false;$('island').classList.add('chat-open');$('team-toggle').setAttribute('aria-expanded','true');window.SmartScheduleManager.open='';window.SmartScheduleManager.evaluate();poll(); }
  function render() {
   const box=$('team-messages'),bottom=box.scrollHeight-box.scrollTop-box.clientHeight<60,scroll=box.scrollTop;
   box.replaceChildren();
@@ -3277,6 +3327,7 @@ window.TeamChat = (() => {
   try {await request({action:'send',peer:target,text,attachment:a,id:retryId});if(g===generation){if($('team-text').value===text)$('team-text').value='';if(attachment===a){attachment=null;$('team-attachment').textContent='';}retryId=null;await poll();}}
   catch(e){status(String(e.message||e));}finally{busy=false;$('team-send').disabled=false;}
  }
+ $('team-toggle').hidden=!TEAM_CHAT_ENABLED;
  $('team-toggle').addEventListener('keydown',e=>e.stopPropagation());
  $('isl-pill').addEventListener('click',e=>{if(!e.target.closest('#team-toggle'))close()},true);
  $('team-toggle').onclick=e=>{e.stopPropagation();open()};$('team-close').onclick=close;
@@ -3295,6 +3346,165 @@ window.TeamChat = (() => {
  // Expire even a cached conversation on an offline or sleeping tab.
  setInterval(()=>{if(expiresAt&&Date.now()>=expiresAt){messages=[];expiresAt=0;render();}},1000);
  return {open,close,reset};
+})();
+</script>
+
+<script id="mail-script">
+/* MAIL: replaces the team chat in the pill (the chat is still in the file, switched off by TEAM_CHAT_ENABLED in the script above).
+   You can send two things to another user, by username only: your Schedule, or a copied page / board / chapter / book.
+   The mail title is simply the name of what was sent ("Schedule" for a schedule). Mail is stored by the server (api/mail.js), never in this file.
+   The receiver gets a red dot on the mail icon until they open the mail. */
+window.Mail = (() => {
+ const $ = id => document.getElementById(id), panel=$('mail-panel'), tog=$('mail-toggle'), dot=$('mail-dot'), isl=$('island'), root=$('isl-root');
+ const KIND={schedule:'Schedule',page:'Page',board:'Board',chapter:'Chapter',book:'Book'};
+ let opened=false, view='inbox', box='inbox', lists={inbox:[],sent:[]}, unread=0, gen=0, last=0, polling=false, sending=false, draft=null, retryId=null, tone=isl.dataset.tone||'';
+ const unlocked = () => document.documentElement.classList.contains('unlocked');
+ const req = body => window.cloudRequest('mail',body);
+ const h = (tag,cls,text) => { const n=document.createElement(tag); if(cls)n.className=cls; if(text!==undefined)n.textContent=text; return n; };
+ const btn = (text,pri,fn) => { const b=h('button','isl-btn sm'+(pri?' pri':''),text); b.type='button'; b.onclick=fn; return b; };
+ const say = t => { $('mail-status').textContent=t||''; };
+ const fail = e => { const m=String(e&&e.message||e); say(/sign in online/i.test(m)?'Sign in online to use mail.':m); };
+ const normUser = s => { s=String(s||'').trim().replace(/^@/,'').toLowerCase(); return /^[a-z0-9_-]{3,24}$/.test(s)?s:''; };
+ const titleOf = a => a.type==='schedule' ? 'Schedule' : String(a.name||a.title||'Untitled').slice(0,120);
+ const when = at => { const d=new Date(at); return d.toDateString()===new Date().toDateString() ? d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}) : d.toLocaleDateString([],{month:'short',day:'numeric'}); };
+ const plural = (n,w) => n+' '+w+(n===1?'':'s');
+ const count = x => Array.isArray(x)?x.length:0;
+ const validSchedule = a => a&&a.type==='schedule'&&Array.isArray(a.items)&&Array.isArray(a.days)&&a.items.every(i=>i&&typeof i==='object')&&a.days.every(d=>d&&typeof d==='object');
+ const summary = a => a.type==='page' ? 'A page'+(count(a.variants)>1?' with '+plural(a.variants.length,'variant'):'')+'.'
+  : a.type==='board' ? 'A board with '+plural(count(a.pages),'page')+'.'
+  : a.type==='chapter' ? 'A chapter with '+plural(count(a.pages),'page')+(count(a.containers)?' in '+plural(a.containers.length,'board'):'')+'.'
+  : 'A book with '+plural(count(a.chapters),'chapter')+'.';
+ const schedulePreview = a => a.days.map(d=>d.iso+': '+new Date(d.start).toLocaleString()+' – '+new Date(d.end).toLocaleTimeString()).join('\n')+'\n'+a.items.map(i=>i.name+' · '+i.start+' · '+i.len+' min').join('\n');
+
+ /* red dot + unread counter */
+ function setUnread(n) { unread=Math.max(0,Number(n)||0); dot.hidden=!unread; const t=unread?'Mail, '+unread+' unread':'Mail'; tog.title=t; tog.setAttribute('aria-label',t); $('mail-n').textContent=unread||''; }
+
+ /* which part of the panel is showing: inbox / sent (lists), read, compose */
+ function show() {
+  const list=view==='inbox'||view==='sent';
+  $('mail-tabs').hidden=!list; $('mail-list').hidden=!list; $('mail-read').hidden=view!=='read'; $('mail-compose').hidden=view!=='compose'; $('mail-new').hidden=view==='compose';
+  $('mail-h').textContent=view==='compose'?'New mail':'Mail';
+  $('mail-tabs').querySelectorAll('button').forEach(b=>{ const on=b.dataset.b===box; b.classList.toggle('pri',on); b.setAttribute('aria-selected',String(on)); });
+ }
+ function paintList() {
+  const lb=$('mail-list'); lb.replaceChildren(); const items=lists[box];
+  if(!items.length){ lb.append(h('div','mail-empty',box==='inbox'?'Your inbox is empty. Mail sent to you shows up here.':'Nothing sent yet. Use Compose to send your schedule or a copied item.')); return; }
+  for(const m of items){
+   const r=h('button','mail-row'+(box==='inbox'&&!m.read?' new':'')); r.type='button';
+   r.append(h('span','mt',m.title),h('span','ms',(box==='inbox'?'From '+m.from:'To '+m.to)+' · '+(KIND[m.kind]||'Item')+' · '+when(m.at)));
+   r.onclick=()=>openMail(m); lb.append(r);
+  }
+ }
+ async function loadList(b,g) {
+  const r=await req({action:'list',box:b}); if(g!==gen)return;
+  lists[b]=Array.isArray(r.mails)?r.mails:[];
+  if(b==='inbox')setUnread(lists.inbox.filter(m=>!m.read).length);
+  if(opened&&view===b){ paintList(); say(''); }
+ }
+ function switchBox(b) { box=b; view=b; show(); paintList(); say(''); const g=gen; loadList(b,g).catch(e=>{ if(g===gen)fail(e); }); }
+
+ /* reading one mail */
+ async function openMail(m) {
+  const g=gen,b=box; view='read'; show(); $('mail-read').replaceChildren(h('div','mail-empty','Opening…')); say('');
+  try {
+   const r=await req({action:'get',box:b,id:m.id}); if(g!==gen||view!=='read')return;
+   if(b==='inbox'&&!m.read){ m.read=true; const x=lists.inbox.find(y=>y.id===m.id); if(x)x.read=true; setUnread(lists.inbox.filter(y=>!y.read).length); }
+   renderRead(m,b,r.attachment);
+  } catch(e) { if(g!==gen)return; fail(e); view=b; show(); paintList(); }
+ }
+ function renderRead(m,b,a) {
+  const rb=$('mail-read'); rb.replaceChildren();
+  rb.append(h('b','mail-t',m.title),h('small','mail-meta',(b==='inbox'?'From '+m.from:'To '+m.to)+' · '+new Date(m.at).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})));
+  const act=h('div','mail-act'), ok=a&&(a.type==='schedule'?validSchedule(a):!!parseClip(JSON.stringify(a)));
+  if(!ok) rb.append(h('p','isl-p','This item cannot be opened. It may have been sent from a different version of the app.'));
+  else if(a.type==='schedule'){ rb.append(h('div','mail-pre',schedulePreview(a))); act.append(btn('Use this schedule',true,()=>useSchedule(a))); }
+  else { rb.append(h('p','isl-p',summary(a))); act.append(btn('Copy to clipboard',true,()=>copyStructure(a))); }
+  if(b==='inbox')act.append(btn('Reply',false,()=>compose(m.from)));
+  act.append(btn('Delete',false,()=>del(m,b)),btn('Back',false,()=>switchBox(b)));
+  rb.append(act);
+ }
+ function useSchedule(a) {
+  if(!confirm('Replace your schedule with this one?'))return;
+  const M=window.SmartScheduleManager; M.importItems(structuredClone(a.items),{replace:true,days:structuredClone(a.days)});
+  if(a.importTz)M.cfg().importTz=a.importTz; persistLocal(); M.evaluate(); showToast('Schedule imported.');
+ }
+ async function del(m,b) {
+  if(!confirm('Delete this mail?'))return;
+  try { await req({action:'delete',box:b,id:m.id}); lists[b]=lists[b].filter(x=>x.id!==m.id); if(b==='inbox')setUnread(lists.inbox.filter(x=>!x.read).length); switchBox(b); }
+  catch(e) { fail(e); }
+ }
+
+ /* writing one mail: only a username and an attachment, the title is the name of what is attached */
+ function paintDraft() {
+  $('mail-attrow').hidden=!draft; $('mail-att').textContent=draft?titleOf(draft):''; $('mail-kind').textContent=draft?(KIND[draft.type]||''):'';
+  $('mail-send').disabled=sending||!draft||!normUser($('mail-to').value);
+ }
+ function stage(a) { draft=structuredClone(a); retryId=null; say(''); paintDraft(); }
+ function compose(to) {
+  view='compose'; draft=null; retryId=null; $('mail-to').value=to||''; say(''); paintDraft(); show();
+  (to?$('mail-pick-clip'):$('mail-to')).focus({preventScroll:true});
+ }
+ async function send(e) {
+  e.preventDefault(); const to=normUser($('mail-to').value); if(sending||!draft||!to)return;
+  sending=true; paintDraft(); const g=gen,a=draft; retryId=retryId||(crypto.randomUUID?crypto.randomUUID():rid());
+  try {
+   await req({action:'send',to,attachment:a,id:retryId}); if(g!==gen)return;
+   showToast('Sent to '+to+'.'); draft=null; retryId=null; switchBox('sent');
+  } catch(err) { fail(err); } finally { sending=false; paintDraft(); }
+ }
+
+ /* background check: keeps the red dot honest (every 30 s while closed, 10 s while open) */
+ async function poll() {
+  if(polling||!unlocked())return; polling=true; last=Date.now(); const g=gen;
+  try {
+   if(opened&&(view==='inbox'||view==='sent')){ await loadList(box,g); if(box==='sent'){ const r=await req({action:'status'}); if(g===gen)setUnread(r.unread); } }
+   else { const r=await req({action:'status'}); if(g===gen)setUnread(r.unread); }
+  } catch(e) { if(opened&&g===gen)fail(e); }
+  finally { polling=false; }
+ }
+
+ function open() {
+  if(opened){ close(); return; }
+  if(root.classList.contains('srch'))return;/* search owns the island while it is open */
+  const M=window.SmartScheduleManager;
+  if(M&&M.open==='edit'){ showToast('Finish editing the schedule first.'); return; }
+  window.TeamChat?.close();
+  opened=true; gen++; panel.hidden=false; isl.classList.add('mail-open'); tog.setAttribute('aria-expanded','true');
+  if(M){ M.open=''; M.evaluate(); }
+  show(); if(view==='inbox'||view==='sent')paintList(); say(''); poll();
+ }
+ function close() {
+  if(!opened&&panel.hidden)return;
+  opened=false; gen++; panel.hidden=true; isl.classList.remove('mail-open'); tog.setAttribute('aria-expanded','false');
+  if(view==='read')view=box;/* a half-written mail is kept for next time; an open message goes back to its list */
+ }
+ function reset() {
+  close(); lists={inbox:[],sent:[]}; box=view='inbox'; draft=null; retryId=null; sending=false; last=0; setUnread(0);
+  $('mail-list').replaceChildren(); $('mail-read').replaceChildren(); $('mail-to').value=''; say(''); paintDraft(); show();
+ }
+
+ tog.addEventListener('keydown',e=>e.stopPropagation());
+ tog.onclick=e=>{ e.stopPropagation(); open(); };
+ $('mail-close').onclick=close;
+ $('isl-pill').addEventListener('click',e=>{ if(!e.target.closest('#mail-toggle'))close(); },true);
+ panel.addEventListener('pointerdown',e=>e.stopPropagation()); panel.addEventListener('click',e=>e.stopPropagation());
+ panel.addEventListener('keydown',e=>{ if(e.key==='Escape'){ e.stopPropagation(); close(); tog.focus(); } });
+ $('mail-tabs').onclick=e=>{ const b=e.target.closest('button[data-b]'); if(b)switchBox(b.dataset.b); };
+ $('mail-new').onclick=()=>compose('');
+ $('mail-compose').onsubmit=send;
+ $('mail-to').oninput=()=>{ retryId=null; paintDraft(); };
+ $('mail-cancel').onclick=()=>{ draft=null; retryId=null; switchBox(box); };
+ $('mail-remove').onclick=()=>{ draft=null; retryId=null; paintDraft(); };
+ $('mail-pick-clip').onclick=()=>{ const a=parseClip(appClipboard); if(!a)return say('Copy a page, board, chapter or book first.'); stage(a); };
+ $('mail-pick-sched').onclick=()=>{ const c=window.SmartScheduleManager.cfg(); if(!c.items?.length&&!c.days?.length)return say('Import or create a schedule first.');
+  stage({type:'schedule',items:(c.items||[]).map(i=>({...i,len:Number(i.len)||ISLAND_UI.types[i.type]?.len||15})),days:c.days||[],importTz:c.importTz||'Asia/Manila'}); };
+ /* a break notice or overbreak needs the island body, so it closes the inbox when it first appears */
+ new MutationObserver(()=>{ const t=isl.dataset.tone||''; if(opened&&t!==tone&&(t==='warn'||t==='late'))close(); tone=t; }).observe(isl,{attributes:true,attributeFilter:['data-tone']});
+ setInterval(()=>{ if(!unlocked()||document.hidden)return; if(Date.now()-last>=(opened?10000:30000))poll(); },2000);
+ document.addEventListener('visibilitychange',()=>{ if(!document.hidden)poll(); });
+ window.addEventListener('online',()=>poll());
+ window.addEventListener('cloud-locked',reset);
+ return {open,close,reset,refresh:poll};
 })();
 </script>
 
@@ -3692,7 +3902,7 @@ function flip(change){/* the island slides between its corner and the centre ins
  s.transition='translate var(--isl-dur) var(--isl-ease)';s.translate='0px 0px';clearTimeout(ft);ft=setTimeout(()=>{s.transition='';s.translate=''},750)}
 function open(){const M=window.SmartScheduleManager;if(on||locked()||!ready()||(M&&M.open==='edit'))return;on=true;
  if(M&&M.open==='panel'){M.open='';M.evaluate()}
- window.TeamChat?.close();flip(()=>{root.classList.add('srch');scrim.classList.add('on')});sel='';chapF='';q.value='';sr.classList.remove('on');q.focus({preventScroll:true})}
+ window.TeamChat?.close();window.Mail?.close();flip(()=>{root.classList.add('srch');scrim.classList.add('on')});sel='';chapF='';q.value='';sr.classList.remove('on');q.focus({preventScroll:true})}
 window.openSearch=open;/* the magnifier next to Workspace */
 function close(){if(!on)return;on=false;clearTimeout(tm);q.blur();
  flip(()=>{root.classList.remove('srch');scrim.classList.remove('on');sr.classList.remove('on')});
