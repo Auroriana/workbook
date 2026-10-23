@@ -1,61 +1,76 @@
-/* Shared helpers for /api/chat, /api/media and /api/cleanup.
-   Files starting with "_" are not exposed as routes by Vercel.
-   If your existing api/signup.js already initialises firebase-admin, reuse that code here instead. */
+// Shared helpers. Files starting with "_" are not exposed as routes by Vercel.
 const admin = require('firebase-admin');
+const crypto = require('crypto');
 
-const DB_URL = process.env.FIREBASE_DATABASE_URL || 'https://ataraxia-77692-default-rtdb.asia-southeast1.firebasedatabase.app';
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)),
-    databaseURL: DB_URL,
-  });
-}
-const db = admin.database();
-const ROOT = 'ataraxia'; // same root the page already uses: ataraxia/users/<uid>
-const ref = p => db.ref(ROOT + '/' + p);
-
-const PH_OFFSET = 8 * 3600 * 1000; // Philippines is UTC+8 with no daylight saving
-const RESET_HOUR_PH = 8;          // chat resets every day at this Philippine clock hour (8 = 8:00 AM)
-/* The next daily reset (RESET_HOUR_PH o'clock Philippine time) after `t` (ms). Everything sent before it expires then. */
-const nextReset = (t = Date.now()) => {
-  const shift = PH_OFFSET - RESET_HOUR_PH * 3600000;
-  return (Math.floor((t + shift) / 86400000) + 1) * 86400000 - shift;
-};
-
-class HttpError extends Error { constructor(status, message) { super(message); this.status = status; } }
-const fail = (status, message) => { throw new HttpError(status, message); };
-
-const EMAIL_SUFFIX = '@ataraxia.app';
-const normUser = s => { s = String(s || '').trim().toLowerCase(); return /^[a-z0-9_-]{3,24}$/.test(s) ? s : ''; };
-
-/* Verifies the Firebase ID token the page sends as `token` and returns { uid, username }. */
-async function authenticate(token) {
-  if (typeof token !== 'string' || !token) fail(401, 'Sign in again.');
-  let d;
-  try { d = await admin.auth().verifyIdToken(token); } catch (e) { fail(401, 'Session expired. Sign in again.'); }
-  const email = String(d.email || '');
-  if (!email.endsWith(EMAIL_SUFFIX)) fail(403, 'Unsupported account.');
-  return { uid: d.uid, username: email.slice(0, -EMAIL_SUFFIX.length) };
-}
-
-/* Wraps a handler: POST only, JSON body, uniform { error } responses. */
-const route = handler => async (req, res) => {
-  res.setHeader('Cache-Control', 'no-store');
-  // CORS so the saved .html file opened from disk can call this API. Auth is the token in the body, not cookies.
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(204).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
-  try {
-    const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-    const me = await authenticate(body.token);
-    res.status(200).json(await handler(body, me));
-  } catch (e) {
-    if (e instanceof HttpError) return res.status(e.status).json({ error: e.message });
-    console.error(e);
-    res.status(500).json({ error: 'Server error' });
+function fb() {
+  if (!admin.apps.length) {
+    const raw = (process.env.FIREBASE_SERVICE_ACCOUNT || '').trim();
+    if (!raw) throw new Error('FIREBASE_SERVICE_ACCOUNT is not set');
+    const sa = JSON.parse(raw.startsWith('{') ? raw : Buffer.from(raw, 'base64').toString('utf8'));
+    admin.initializeApp({
+      credential: admin.credential.cert(sa),
+      databaseURL: process.env.FIREBASE_DATABASE_URL
+    });
   }
+  return admin;
+}
+
+const mail = u => u + '@ataraxia.app';
+const normUser = s => {
+  s = String(s || '').trim().toLowerCase();
+  return /^[a-z0-9_-]{3,24}$/.test(s) ? s : '';
 };
 
-module.exports = { admin, db, ref, route, fail, HttpError, normUser, nextReset, EMAIL_SUFFIX };
+// constant-time string compare
+const safeEq = (a, b) => {
+  const h = x => crypto.createHash('sha256').update(String(x)).digest();
+  return crypto.timingSafeEqual(h(a), h(b));
+};
+
+// recovery code: 20 chars from a 32-symbol alphabet = 100 bits
+const ALPHA = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function newCode() {
+  let s = '';
+  for (let i = 0; i < 20; i++) s += ALPHA[crypto.randomInt(ALPHA.length)];
+  return s.match(/.{5}/g).join('-');
+}
+const normCode = c => String(c || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+const hashCode = c => crypto.createHash('sha256').update(normCode(c)).digest('hex');
+
+async function storeCode(uid) {
+  const code = newCode();
+  await fb().database().ref('ataraxia/recovery/' + uid).set({ h: hashCode(code), at: Date.now() });
+  return code;
+}
+
+// best-effort throttle (in-memory, so it resets on cold starts and is per instance)
+const hits = new Map();
+function limited(key, max, windowMs) {
+  const now = Date.now();
+  const a = (hits.get(key) || []).filter(t => now - t < windowMs);
+  if (a.length >= max) { hits.set(key, a); return true; }
+  a.push(now); hits.set(key, a);
+  if (hits.size > 5000) for (const [k, v] of hits) if (!v.length || now - v[v.length - 1] > windowMs) hits.delete(k);
+  return false;
+}
+const ip = req => String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
+
+// CORS is open on purpose: access is gated by the secrets, not by origin
+function handler(fn) {
+  return async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Cache-Control', 'no-store');
+    if (req.method === 'OPTIONS') return res.status(204).end();
+    if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
+    let body = req.body;
+    if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }
+    body = body || {};
+    const fail = (code, error) => res.status(code).json({ error });
+    try { await fn(req, res, body, fail); }
+    catch (e) { console.error(e); fail(500, 'Server error. Check the function logs on Vercel.'); }
+  };
+}
+
+module.exports = { fb, mail, normUser, safeEq, newCode, normCode, hashCode, storeCode, limited, ip, handler };
