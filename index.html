@@ -274,7 +274,16 @@ textarea{resize:none;overflow:hidden;min-height:96px;display:block}
 .sw button.on{box-shadow:0 0 0 3px var(--p)}
 .hint{font-size:12.5px;color:var(--mut);margin-top:6px}
 .credit{font-size:11px;color:var(--mut);text-align:center;opacity:.8;margin-top:4px}
-.vbar{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px}.vbar label{margin:0 auto 0 0}.vbar .vl{font-size:12.5px;color:var(--mut)}
+.vbar{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+#page-modal .vbar{position:sticky;top:0;z-index:6;box-shadow:0 -12px 0 var(--bg),0 8px 10px -8px rgba(0,0,0,.3)}
+#vtabs{flex:none;display:flex;align-items:center;gap:8px;padding:10px 24px 0;border-top:1px solid var(--line);margin-top:8px}
+#vt-scroll{flex:1;min-width:0;display:flex;align-items:center;gap:4px;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;padding:4px 0}
+#vt-scroll button{flex:none;height:32px;min-width:36px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:var(--surf);color:var(--mut);font:inherit;font-size:14px;cursor:pointer;white-space:nowrap;font-variant-numeric:tabular-nums;transition:background .15s,color .15s}
+#vt-scroll button:hover{background:var(--surf);color:var(--txt)}
+#vt-scroll button.on{background:var(--pc);border-color:var(--p);color:var(--txt);font-weight:600}
+#vt-scroll button.vt-add{min-width:32px;width:32px;padding:0;font-size:20px;line-height:1;color:var(--p);background:transparent}
+#vtabs .vt-del{flex:none}
+@media(max-width:600px){#vtabs{padding:10px 12px 0}}.vbar label{margin:0 auto 0 0}.vbar .vl{font-size:12.5px;color:var(--mut)}
 /* container color pickers + preview */
 .cpick{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .csw{position:relative;width:30px;height:30px;border-radius:50%;border:2px solid var(--bg);box-shadow:0 0 0 1px var(--line);padding:0;flex:none;display:block;overflow:hidden}
@@ -428,15 +437,9 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
 .widget-ui .si-st{font-weight:700}.widget-ui .si-st.active{color:#2e9e5b}.widget-ui .si-st.finished{color:var(--mut);font-weight:600} /* "Wednesday - Active" / "Wednesday - Finished" */
 .btn.block{width:100%}
 .calc-output{background:var(--pc);color:var(--on-pc);padding:12px;border-radius:10px;font-size:14px;line-height:1.45}
-.widget-clock{white-space:nowrap;font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;text-align:center;margin:auto 0;padding:12px 0;transition:color .3s;color:var(--txt)}
-.widget-clock.text-red{color:var(--danger)}
-.widget-clock.text-muted{color:var(--mut)}
 /* chapter chip alert dot + break reminder panel */
 .status-dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--danger);margin-left:auto;box-shadow:0 0 4px var(--danger)}
 .chip-ch.on .status-dot{background:#fff;box-shadow:none}
-.widget-clock.pulse{animation:clock-pulse 1.2s ease-in-out infinite;text-shadow:0 0 14px var(--danger)}
-@keyframes clock-pulse{0%,100%{opacity:1}50%{opacity:.35}}
-@media(prefers-reduced-motion:reduce){.widget-clock.pulse{animation:none}}
 /* ================= SMART ISLAND (dynamic-island style pill, bottom right) =================
    Every knob below is a CSS variable so the look can be tuned in one place. */
 :root{
@@ -693,7 +696,7 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
    <button type="button" class="lk-lnk" data-for="login" data-go="reset">Forgot password?</button>
    <button type="button" class="lk-lnk" id="lk-switch" data-for="login">Switch accounts</button>
    <button type="button" class="lk-lnk" data-for="key signup reset" data-go="login">Back to login</button>
-   <button type="button" class="lk-lnk" id="lk-off" hidden>Continue offline</button>
+   <button type="button" class="lk-lnk" id="lk-off">Offline</button>
   </div>
  </form>
 </div>
@@ -809,12 +812,6 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
  <div class="mh"><span id="page-modal-title">Edit Page</span></div>
  <div class="mb"><input type="hidden" id="page-id-input"><input type="hidden" id="page-container-input">
   
-  <div style="display:flex; align-items:center; margin-bottom:12px;">
-   <label class="lk-keep" style="margin:0; font-weight:600; font-size:14px; cursor:pointer; display:flex; align-items:center; gap:8px;">
-    <input type="checkbox" id="page-variant-cb" onchange="toggleVariantMode(this.checked)" style="width:16px; height:16px; accent-color:var(--p);"> Variant page
-   </label>
-  </div>
-
   <div class="vbar" style="background:var(--surf); padding:8px 12px; border-radius:12px; margin-bottom:16px; border:1px solid var(--line); display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
    <span class="vl" style="margin-right:auto; font-weight:600;">Insert Variable:</span>
    <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('XXX')" title="Fill in anything">XXX</button>
@@ -837,9 +834,9 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
    <div class="pi-prev"><div id="page-image-preview"></div><button type="button" class="pi-trash" id="page-image-remove" title="Detach image" aria-label="Detach image"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6"/></svg></button></div>
    <p class="hint" id="page-image-status" role="status"></p>
    <div id="page-image-library"></div>
-   <p class="hint">Tip: Win + Shift + S, then Ctrl + V anywhere in this window. Your page text is never changed. 5 MB cloud per account; shared copies reuse the same image.</p>
+   <p class="hint">Win + Shift + S, then Ctrl + V anywhere in this window.</p>
   </section>
-  <div id="page-normal-edit">
+  <div id="page-normal-edit" style="display:flex;flex-direction:column;gap:16px">
    <div><label for="page-title-input">Title</label><input type="text" id="page-title-input" placeholder="e.g. Coverage - Renters/Homes"></div>
    <div>
     <label for="page-content-input">Content</label>
@@ -847,12 +844,8 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
     <p class="hint" style="margin-top:8px;">Y/N adds a Yes/No toggle. Type [Opt1|Opt2] for options, or [00 0000 000] to format numbers automatically.</p>
    </div>
   </div>
-
-  <div id="page-variant-edit" style="display:none; flex-direction:column; gap:12px">
-   <div id="variant-list" style="display:flex; flex-direction:column; gap:12px"></div>
-   <div><button type="button" class="btn tone sm" onclick="addVariantField()">+ Add Variant</button></div>
-  </div>
  </div>
+ <div id="vtabs"><div id="vt-scroll" role="tablist" aria-label="Page variants"></div><button type="button" class="ib sm vt-del" id="vt-del" title="Delete this variant" aria-label="Delete this variant" onclick="removeEditVariant()" hidden></button></div>
  <div class="mf"><button class="btn out" onclick="closeModal('page-modal')">Cancel</button><button class="btn fill" onclick="savePage()">Save Page</button></div>
 </div></div>
 
@@ -899,10 +892,6 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
     <div class="feat-thumb" onclick="addWidget('calc')">
       <svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
       <b>US/PH Calculator</b><p>Insurance 12:01 AM & conversions</p>
-    </div>
-    <div class="feat-thumb" onclick="addWidget('clock')">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
-      <b>Standalone Clock</b><p>Big clock synced to breaks</p>
     </div>
     <div class="feat-thumb" onclick="addWidget('formatter')">
       <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16m-7 6h7"></path></svg>
@@ -1078,8 +1067,8 @@ const GRID=8;/* px per grid unit. Positions and sizes are stored in grid units *
 /* Tools: one fixed chapter, shared by every book, that only holds widgets. It is never in appData.chapters, so it cannot be renamed, copied or deleted */
 const TOOLS_ID='__tools__';
 const TOOLS_CHAP={id:TOOLS_ID,bookId:null,name:'Tools',description:'Your widgets in one place. Move, resize or remove them, and add more with + Add.'};
-const WIDGET_DEFS={calc:{title:'Time Calculator',w:45},schedule:{title:'Smart Schedule',w:36},clock:{title:'Live Clock',w:30},formatter:{title:'Quote Formatter',w:55,h:48},scheduleimport:{title:'Schedule Import',w:60}};
-const DEFAULT_TOOLS=['calc','clock','formatter','scheduleimport'];
+const WIDGET_DEFS={calc:{title:'Time Calculator',w:45},schedule:{title:'Smart Schedule',w:36},formatter:{title:'Quote Formatter',w:55,h:48},scheduleimport:{title:'Schedule Import',w:60}};
+const DEFAULT_TOOLS=['calc','formatter','scheduleimport'];
 function newWidgetPage(type,chapterId){const d=WIDGET_DEFS[type]||{title:'Widget',w:45};
  return {id:'p_'+rid(),chapterId:chapterId,containerId:'',title:d.title,content:'',isWidget:true,widgetType:type,w:d.w,h:d.h}}
 function ensureTools(){/* first run only: every widget starts in Tools. Ones you delete stay deleted */
@@ -1152,6 +1141,7 @@ function load(data){let s=null;if(data===undefined)try{s=localStorage.getItem('p
  ensureTools();ensureDocs();
  appData.layoutVer=3;
  appData.breaks=Object.assign({earlyLimit:20,active:false},appData.breaks||{});/* break schedule + reminder minutes (used by the island) */
+ appData.pages=appData.pages.filter(p=>!(p.isWidget&&p.widgetType==='clock'));/* the Live Clock tool was removed */
  const oldW=appData.pages.filter(p=>p.isWidget&&p.widgetType==='schedule');/* the Smart Schedule widget now lives inside the island: migrate it once */
  if(oldW.length){const o=(oldW.find(p=>p.scheduleSettings&&p.scheduleSettings.active)||oldW[0]).scheduleSettings||{};
   if(!appData.breaks.active&&o.active)Object.assign(appData.breaks,{b1:o.b1||'',lunch:o.lunch||'',b2:o.b2||'',active:true});
@@ -1815,6 +1805,12 @@ function addWidget(type) {
 /* ---------- widgets: calculator, clock, smart schedule, quote formatter ---------- */
 const escAttr = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 const WIDGET_KEYS = ['isWidget', 'widgetType', 'calcMode', 'scheduleSettings', 'importData'];
+function applyVariantImage(p,vi){/* a page's own image field always mirrors the variant on show */
+ const im=p.variants&&p.variants[vi]?pageImageProps(p.variants[vi]).image:null;if(im)p.image=im;else delete p.image}
+function syncVariantImage(p){/* older pages kept one image for the whole page: hand it to every variant once, then follow the active variant */
+ if(!p.variants||!p.variants.length)return;const base=pageImageProps(p).image||null;
+ p.variants.forEach(v=>{if(v&&!('image' in v))v.image=base?{...base}:null});
+ const av=Number.isInteger(p.activeVariant)&&p.activeVariant>=0&&p.activeVariant<p.variants.length?p.activeVariant:0;applyVariantImage(p,av)}
 function pageImageProps(src){const i=src&&src.image;return i&&/^[a-f0-9]{64}\/[a-f0-9]{48}$/.test(i.key)?{image:{key:i.key,position:i.position==='above'?'above':'below',alt:String(i.alt||'').slice(0,200)}}:{}}
 /* copies the widget fields of a page so duplicated / copied / pasted widgets stay widgets */
 function widgetProps(src) {
@@ -1891,21 +1887,6 @@ function buildCalcWidget(ui, p) {
     if (mode.value === 'us2ph') out.innerHTML = 'That translates to<br><strong>' + fmt(wallToUtc(v, us), 'Asia/Manila') + ' (PH time)</strong>.';
     else out.innerHTML = 'That translates to<br><strong>' + fmt(wallToUtc(v, 'Asia/Manila'), us) + ' (' + usName + ')</strong>.';
   };
-}
-
-function buildClockWidget(ui, p) {
-  ui.innerHTML = '<div class="widget-clock">--:--:--</div>';
-  const disp = ui.firstChild, M = () => window.SmartScheduleManager;
-  const tick = () => {
-    disp.textContent = new Date().toLocaleTimeString('en-US');
-    /* same logic and timing as the notification: red whenever it is yellow/red (break due and untagged, or past/near your return time) */
-    const m = M(), on = !!(m && m.isActive), lv = on ? m.level : '';
-    disp.classList.toggle('text-red', !!lv);
-    disp.classList.toggle('pulse', lv === 'late');
-    disp.classList.toggle('text-muted', !lv && on && m.currentStatus === 'tagged');
-  };
-  tick();
-  window.widgetIntervals[p.id] = setInterval(() => { if (!disp.isConnected) { clearInterval(window.widgetIntervals[p.id]); return; } if (!document.hidden) tick(); }, 1000);
 }
 
 function buildScheduleWidget(ui, p) {
@@ -2114,7 +2095,7 @@ function renderWidgetUI(box, p) {
   if (window.widgetIntervals[p.id]) { clearInterval(window.widgetIntervals[p.id]); delete window.widgetIntervals[p.id]; }
   box.innerHTML = '';
   const ui = el('div', 'widget-ui');
-  const build = { calc: buildCalcWidget, clock: buildClockWidget, schedule: buildScheduleWidget, formatter: buildFormatterWidget, scheduleimport: buildScheduleImportWidget }[p.widgetType];
+  const build = { calc: buildCalcWidget, schedule: buildScheduleWidget, formatter: buildFormatterWidget, scheduleimport: buildScheduleImportWidget }[p.widgetType];
   if (build) build(ui, p); else ui.textContent = 'Unknown widget.';
   box.append(ui);
 }
@@ -2128,7 +2109,7 @@ function buildCard(p){const card=el('div','card fi'),h=el('div','ch'),a=el('div'
  if (p.variants && p.variants.length > 0) {
   const av=Number.isInteger(p.activeVariant)&&p.activeVariant>=0&&p.activeVariant<p.variants.length?p.activeVariant:0;p.activeVariant=av;
   p.title = p.variants[av].title;
-  p.content = p.variants[av].content;
+  p.content = p.variants[av].content;syncVariantImage(p);
   titleEl = el('div', 'dd ct');
   titleEl.style.display = 'inline-block'; titleEl.style.maxWidth = '100%'; titleEl.style.overflow = 'hidden'; titleEl.style.textOverflow = 'ellipsis'; titleEl.style.whiteSpace = 'nowrap';
   const tb = el('button'); tb.type='button';tb.textContent=p.title;tb.insertAdjacentHTML('beforeend', ' <svg style="width:14px;height:14px;vertical-align:middle;margin-left:4px" viewBox="0 0 24 24"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>');
@@ -2216,7 +2197,10 @@ addEventListener('scroll',e=>{if(!e.target.closest?.('.menu'))closeMenus()},true
 addEventListener('resize',()=>{closeMenus();if(!$('ws').hidden)fitAll()});
 $('books').addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){e.preventDefault();e.currentTarget.scrollLeft+=e.deltaY}},{passive:false});
 /* modals */
-function autosize(t){t.style.height='auto';t.style.height=t.scrollHeight+'px'}
+function autosize(t){/* collapsing the box to measure it used to clamp the modal's scroll and snap the view; remember every scroll position and put it back, so the browser only scrolls when the caret is really out of view */
+ const keep=[];for(let n=t.parentElement;n;n=n.parentElement)if(n.scrollTop)keep.push([n,n.scrollTop]);
+ t.style.height='auto';t.style.height=t.scrollHeight+'px';
+ for(const [n,y] of keep)if(n.scrollTop!==y)n.scrollTop=y}
 function openModal(id){$(id).classList.add('open');document.querySelectorAll('#'+id+' textarea').forEach(autosize);const f=$(id).querySelector('input[type=text]');if(f&&!f.value)setTimeout(()=>f.focus(),30)}
 function closeModal(id){$(id).classList.remove('open')}
 /* in-app confirmation: the browser's own confirm() can be blocked (embedded pages, "stop this page making dialogs"), which made Delete do nothing */
@@ -2287,82 +2271,54 @@ document.addEventListener('focusin', e => {
  if(e.target.tagName === 'TEXTAREA' || e.target.type === 'text') activeEditor = e.target;
 });
 
-function toggleVariantMode(on) {
- $('page-normal-edit').style.display = on ? 'none' : 'block';
- $('page-variant-edit').style.display = on ? 'flex' : 'none';
- if (on) {
-  const list = $('variant-list');
-  if (list.children.length > 0) {
-   const firstT = list.querySelector('.var-t'), firstC = list.querySelector('.var-c');
-   if (firstT && !firstT.value && firstC && !firstC.value) {
-    firstT.value = $('page-title-input').value;
-    firstC.value = $('page-content-input').value;
-    autosize(firstC);
-   }
-  }
- }
-}
-
-function addVariantField(t='', c='') {
- const wrap = el('div', 'sec');
- wrap.style.padding = '14px 16px'; wrap.style.position = 'relative'; wrap.style.borderRadius = '12px'; wrap.style.marginBottom = '8px';
- const delBtn = el('button', 'ib sm', ic('trash'));
- delBtn.style.position = 'absolute'; delBtn.style.right = '8px'; delBtn.style.top = '8px';
- delBtn.onclick = () => wrap.remove();
- 
- const lT = el('label'); lT.textContent = 'Variant Title';
- const iT = el('input', 'var-t'); iT.type = 'text'; iT.value = t; iT.placeholder = 'e.g. Coverage - Auto';
- iT.style.width = '100%'; iT.style.marginBottom = '12px'; iT.style.background = 'var(--bg)';
- 
- const lC = el('label'); lC.textContent = 'Variant Spiel';
- const iC = el('textarea', 'var-c'); iC.value = c; iC.placeholder = 'Type or paste the text for this variant...';
- iC.style.minHeight = '70px'; iC.style.width = '100%'; iC.style.background = 'var(--bg)';
- iC.oninput = () => autosize(iC);
- 
- wrap.append(delBtn, lT, iT, lC, iC);
- $('variant-list').append(wrap);
- setTimeout(() => autosize(iC), 10);
-}
+/* ---- page editor: one editor, one tab per variant. Each tab owns its title, text and image. ---- */
+let vs=[],vcur=0;
+const blankVariant=()=>({title:'',content:'',image:null});
+function vsCapture(){if(!vs[vcur])return;vs[vcur]={title:$('page-title-input').value,content:$('page-content-input').value,image:window.PageImages?.value()||null}}
+function vsLoad(i){vcur=i;const v=vs[i]||blankVariant();$('page-title-input').value=v.title;$('page-content-input').value=v.content;window.PageImages?.edit({image:v.image});autosize($('page-content-input'));renderVTabs()}
+function renderVTabs(){const box=$('vt-scroll');box.replaceChildren();
+ vs.forEach((_,i)=>{const b=el('button',i===vcur?'on':'');b.type='button';b.textContent=String(i+1);b.setAttribute('role','tab');b.setAttribute('aria-selected',i===vcur?'true':'false');b.title='Variant '+(i+1);b.onclick=()=>switchEditVariant(i);box.append(b)});
+ const add=el('button','vt-add');add.type='button';add.textContent='+';add.title='Add a variant';add.setAttribute('aria-label','Add a variant');add.onclick=addEditVariant;box.append(add);
+ const d=$('vt-del');d.innerHTML=ic('trash');d.hidden=vs.length<2;d.title='Delete variant '+(vcur+1);
+ const on=box.querySelector('.on');if(on){const l=on.offsetLeft-box.offsetLeft,r=l+on.offsetWidth;if(l<box.scrollLeft)box.scrollLeft=l-4;else if(r>box.scrollLeft+box.clientWidth)box.scrollLeft=r-box.clientWidth+4}}
+function switchEditVariant(i){if(i===vcur||!vs[i])return;if(window.PageImages?.uploading){showToast('Wait for the image upload to finish.');return}
+ vsCapture();vsLoad(i);const mb=$('page-modal').querySelector('.mb');if(mb)mb.scrollTop=0}
+function addEditVariant(){if(window.PageImages?.uploading){showToast('Wait for the image upload to finish.');return}
+ vsCapture();vs.push(blankVariant());vsLoad(vs.length-1);const mb=$('page-modal').querySelector('.mb');if(mb)mb.scrollTop=0;
+ const box=$('vt-scroll');box.scrollLeft=box.scrollWidth;$('page-title-input').focus()}
+async function removeEditVariant(){if(vs.length<2)return;if(window.PageImages?.uploading){showToast('Wait for the image upload to finish.');return}
+ if(!await askConfirm('Delete variant '+(vcur+1)+'? Its text and image are removed when you save the page.',null,'Delete variant'))return;
+ vsCapture();vs.splice(vcur,1);vsLoad(Math.min(vcur,vs.length-1))}
 
 function openAddPageModal(z){if(!appData.activeChapterId){showToast('Select a chapter first.');return}
- window.PageImages?.edit(null);$('page-modal-title').textContent='Add Page';['id','title','content'].forEach(k=>$('page-'+k+'-input').value='');$('page-container-input').value=typeof z==='string'?z:'';
- $('page-variant-cb').checked = false; toggleVariantMode(false);
- $('variant-list').innerHTML = ''; addVariantField('',''); addVariantField('','');
+ $('page-modal-title').textContent='Add Page';$('page-id-input').value='';$('page-container-input').value=typeof z==='string'?z:'';
+ vs=[blankVariant()];vsLoad(0);
  openModal('page-modal')}
 
 function openEditPageModal(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
- window.PageImages?.edit(p);$('page-modal-title').textContent='Edit Page';$('page-id-input').value=p.id;$('page-container-input').value=p.containerId||'';$('page-title-input').value=p.title;$('page-content-input').value=p.content;
- const isVar = p.variants && p.variants.length > 0;
- $('page-variant-cb').checked = isVar; toggleVariantMode(isVar);
- $('variant-list').innerHTML = '';
- if (isVar) p.variants.forEach(v => addVariantField(v.title, v.content)); else { addVariantField('',''); addVariantField('',''); }
+ $('page-modal-title').textContent='Edit Page';$('page-id-input').value=p.id;$('page-container-input').value=p.containerId||'';
+ if(p.variants&&p.variants.length>0){syncVariantImage(p);vs=p.variants.map(v=>({title:v.title,content:v.content,image:pageImageProps(v).image||null}))}
+ else vs=[{title:p.title,content:p.content,image:pageImageProps(p).image||null}];
+ vsLoad(0);
  openModal('page-modal')}
 
-function savePage(){if(window.PageImages?.uploading){showToast('Wait for the image upload to finish.');return}const id=$('page-id-input').value, isVar = $('page-variant-cb').checked;
- let title=$('page-title-input').value.trim(), content=$('page-content-input').value, variants=null, activeVariant=0;
- if (isVar) {
-  variants = [];
-  $('variant-list').querySelectorAll('.sec').forEach(n => {
-   const t = n.querySelector('.var-t').value.trim(), c = n.querySelector('.var-c').value;
-   if (t) variants.push({title: t, content: c});
-  });
-  if (variants.length === 0) return;
-  title = variants[0].title; content = variants[0].content;
- } else if (!title) return;
+function savePage(){if(window.PageImages?.uploading){showToast('Wait for the image upload to finish.');return}
+ vsCapture();const id=$('page-id-input').value;
+ let list=vs.map(v=>({title:v.title.trim(),content:v.content,image:pageImageProps(v).image||null}));
+ if(list.length>1){list=list.filter(v=>v.title||v.content.trim()||v.image);list.forEach((v,i)=>{if(!v.title)v.title='Variant '+(i+1)})}
+ if(!list.length||(list.length===1&&!list[0].title)){showToast('Add a title first.');return}
+ const variants=list.length>1?list.map(v=>({title:v.title,content:v.content,image:v.image})):null;
+ let activeVariant=0,title=list[0].title,content=list[0].content,image=list[0].image;
 
  let nid='';
  if(id){
   const pg=appData.pages.find(p=>p.id===id);
-  if(pg.content!==content || pg.variants){delete varVals[id];delete variantVals[id]}
-  if(isVar){
-   activeVariant = pg.activeVariant || 0;
-   if (activeVariant >= variants.length) activeVariant = 0;
-   title = variants[activeVariant].title; content = variants[activeVariant].content;
-  }
-  Object.assign(pg,{title, content, variants, activeVariant,image:window.PageImages?.value()||null});
+  if(variants){activeVariant=pg.activeVariant||0;if(activeVariant>=variants.length)activeVariant=0;title=variants[activeVariant].title;content=variants[activeVariant].content;image=variants[activeVariant].image}
+  if(pg.content!==content||pg.variants||variants){delete varVals[id];delete variantVals[id]}
+  Object.assign(pg,{title,content,variants,activeVariant,image});
  } else {
   nid='p_'+Date.now();
-  appData.pages.push({id:nid, chapterId:appData.activeChapterId, containerId:$('page-container-input').value||'', title, content, variants, activeVariant:0,image:window.PageImages?.value()||null});
+  appData.pages.push({id:nid,chapterId:appData.activeChapterId,containerId:$('page-container-input').value||'',title,content,variants,activeVariant:0,image});
  }
  persistLocal();closeModal('page-modal');renderHero();renderPages();if(nid)revealNode(nid)}
 function duplicatePage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;const nid='p_'+Date.now();
@@ -2654,7 +2610,7 @@ const varVals={};
 const variantVals={};
 function switchPageVariant(p,vi){if(!p.variants||!Number.isInteger(vi)||!p.variants[vi])return;
  const values=variantVals[p.id]||(variantVals[p.id]={});values[p.activeVariant||0]=varVals[p.id]||{};
- p.activeVariant=vi;p.title=p.variants[vi].title;p.content=p.variants[vi].content;varVals[p.id]=values[vi]||(values[vi]={});
+ p.activeVariant=vi;p.title=p.variants[vi].title;p.content=p.variants[vi].content;applyVariantImage(p,vi);varVals[p.id]=values[vi]||(values[vi]={});
  persistView();refreshCard(p.id)}
 
 function getVarKind(tok) {
@@ -2667,7 +2623,7 @@ function getVarKind(tok) {
 }
 
 function insertVar(kind,ev){
- const t = (activeEditor && activeEditor.closest('#page-modal')) ? activeEditor : $('page-content-input');
+ const t = (activeEditor && (activeEditor.id==='page-title-input'||activeEditor.id==='page-content-input'||(activeEditor.closest&&activeEditor.closest('#page-modal')&&activeEditor.id!=='page-image-alt'))) ? activeEditor : $('page-content-input');
  let s = TOK[kind] || kind; if(!s) return;
  if(kind==='YN'&&ev&&ev.shiftKey)s='[No]';/* Shift + click inserts [No] instead of [Yes] */
  const v=t.value,a=t.selectionStart,b=t.selectionEnd;
@@ -2808,10 +2764,10 @@ function chatFill(chat,p,vi){/* puts the chat's session fields into one variant'
  const vals=p.vv[vi]||(p.vv[vi]={}),src=p.variants?p.variants[vi].content:p.content;
  Object.keys(CHAT_FIELDS).forEach(k=>{const n=chat[k];if(!n)return;fieldIdx(src,k).forEach(i=>{if(vals[i]===undefined)vals[i]=n})});
  return vals}
-function chatOpenPage(chat,e){const s=e.page,vi=e.vi,v=s.variants&&s.variants.length?JSON.parse(JSON.stringify(s.variants)):null;
- const p={...pageImageProps(s),id:'cp_'+rid(),src:s.id,title:v?v[vi].title:s.title,content:v?v[vi].content:s.content,variants:v,activeVariant:vi,vv:{}};
+function chatOpenPage(chat,e){const s=e.page,vi=e.vi;syncVariantImage(s);const v=s.variants&&s.variants.length?JSON.parse(JSON.stringify(s.variants)):null;
+ const p={...pageImageProps(v?v[vi]:s),id:'cp_'+rid(),src:s.id,title:v?v[vi].title:s.title,content:v?v[vi].content:s.content,variants:v,activeVariant:vi,vv:{}};
  varVals[p.id]=chatFill(chat,p,vi);chat.pages.unshift(p);chatSave();return p}
-function chatVariant(chat,p,vi){p.activeVariant=vi;p.title=p.variants[vi].title;p.content=p.variants[vi].content;varVals[p.id]=chatFill(chat,p,vi);chatSave()}
+function chatVariant(chat,p,vi){p.activeVariant=vi;p.title=p.variants[vi].title;p.content=p.variants[vi].content;applyVariantImage(p,vi);varVals[p.id]=chatFill(chat,p,vi);chatSave()}
 function chatSet(chat,root,key,n){/* changing a session field updates every matching variable that still holds the old value (or is empty); anything you typed yourself is left alone */
  const prev=chat[key]||'';chat[key]=n;
  chat.pages.forEach(p=>(p.variants?p.variants.map((_,i)=>i):[0]).forEach(vi=>{
@@ -3546,8 +3502,7 @@ window.lockClean=c=>{c.classList.remove('unlocked');c.querySelectorAll('[inert]'
  ['lk-av','set-av'].forEach(id=>{const n=c.querySelector('#'+id);if(n)n.textContent=''});
  const k=c.querySelector('#lk-card');if(k){k.dataset.m='login';k.classList.remove('err','busy','soft')}
  const m=c.querySelector('#lk-msg');if(m){m.textContent='';m.className='lk-msg'}
- const o=c.querySelector('#lk-off');if(o)o.hidden=true;
- const cb=c.querySelector('#lk-codebox');if(cb)cb.textContent='';
+  const cb=c.querySelector('#lk-codebox');if(cb)cb.textContent='';
  ['acct-st','fs-html-st','fs-json-st'].forEach(id=>{const n=c.querySelector('#'+id);if(n)n.textContent=''});
  c.querySelectorAll('#lk-card input').forEach(n=>{n.removeAttribute('value');n.removeAttribute('checked')})};
 G('lk-card').addEventListener('submit',attempt);
