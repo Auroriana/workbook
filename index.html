@@ -645,7 +645,15 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
 .pi select{height:36px;border-radius:999px;border:1px solid var(--line);background:var(--surf);color:var(--txt);padding:0 14px;font-size:14px;outline:none;cursor:pointer}.pi select:focus{border-color:var(--p);box-shadow:0 0 0 1px var(--p)}
 .pi input.pi-alt{flex:1;min-width:160px;width:auto;height:36px;padding:0 14px;border-radius:999px;font-size:14px}
 #page-image-preview:empty,#page-image-library:empty{display:none}#page-image-preview img{border-radius:12px;border:1px solid var(--line)}#page-image-library .seg{align-items:center;justify-content:space-between;margin-top:6px}
-.page-cloud-image{margin:8px 0;min-height:40px}.page-cloud-image img{display:block;max-width:100%;height:auto;border-radius:8px}#page-image-preview img{max-height:180px}#page-image-library{max-height:180px;overflow:auto}
+.page-cloud-image{position:relative;width:fit-content;max-width:100%;margin:8px 0;min-height:40px}.page-cloud-image img{display:block;max-width:100%;height:auto;border-radius:8px}#page-image-preview img{max-height:180px}#page-image-library{max-height:180px;overflow:auto}
+/* enlarge icon on page images + the pop-up it opens */
+.page-img-zoom{position:absolute;top:8px;right:8px;width:30px;height:30px;display:grid;place-items:center;padding:0;border:0;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;cursor:zoom-in;opacity:.8;transition:opacity .15s,background .15s}
+.page-img-zoom:hover,.page-img-zoom:focus-visible{opacity:1;background:rgba(0,0,0,.78)}.page-img-zoom[hidden]{display:none}
+#img-lightbox{position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.82);cursor:zoom-out;animation:pop .15s ease-out}
+#img-lightbox[hidden]{display:none}
+#img-lightbox img{display:block;max-width:min(96vw,1600px);max-height:90dvh;object-fit:contain;border-radius:8px;box-shadow:0 12px 48px rgba(0,0,0,.5)}
+#img-lightbox .lb-x{position:absolute;top:max(12px,env(safe-area-inset-top));right:12px;width:40px;height:40px;border:0;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:26px;line-height:1;cursor:pointer}
+#img-lightbox .lb-x:hover,#img-lightbox .lb-x:focus-visible{background:rgba(255,255,255,.32)}
 #island.chat-open,#island.mail-open{width:min(420px,calc(100vw - 16px));border-radius:var(--isl-radius-open)}
 #island.chat-open:hover,#island.mail-open:hover{transform:none}
 #island.chat-open>.isl-bd,#island.chat-open>.isl-sub,#island.mail-open>.isl-bd,#island.mail-open>.isl-sub{display:none}
@@ -684,11 +692,27 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
 #mail-read{display:flex;flex-direction:column;gap:10px}
 .mail-t{font-size:15px;overflow-wrap:anywhere}.mail-meta{opacity:.65;font-size:12px}
 .mail-pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:180px;overflow:auto;scrollbar-width:thin;font-size:12px;padding:10px 12px;border-radius:14px;background:rgba(127,127,127,.14)}
+.mail-sched{display:flex;flex-direction:column;gap:8px;max-height:min(320px,40dvh);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.mail-day{display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-radius:14px;background:rgba(127,127,127,.14)}
+.mail-day>b{font-size:13px}.mail-day>small{opacity:.65;font-size:11.5px;margin-bottom:2px}
+.mail-ev{display:flex;gap:10px;align-items:baseline;font-size:12.5px}
+.mail-ev .t{flex:none;width:136px;opacity:.65;white-space:nowrap;font-variant-numeric:tabular-nums}
+.mail-ev .n{flex:1;min-width:0;overflow-wrap:anywhere}.mail-ev .d{flex:none;opacity:.55;font-size:11.5px;white-space:nowrap}
+.mail-ev.none{opacity:.55}
 .mail-act{display:flex;flex-wrap:wrap;gap:6px}
 #mail-compose{display:flex;flex-direction:column;gap:10px}
-.mail-f{display:flex;align-items:center;gap:8px}.mail-f>span{flex:none;width:48px;opacity:.65;font-size:12px}
+.mail-f{display:flex;align-items:center;gap:8px}.mail-f>span{flex:none;width:54px;opacity:.65;font-size:12px}
 .mail-f>b{min-width:0;overflow-wrap:anywhere;font-size:13.5px}.mail-f>small{flex:none;opacity:.6}
 #mail-to{min-width:0;flex:1}
+.mail-chips{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:4px 6px;border-radius:12px;background:rgba(127,127,127,.14);border:1px solid rgba(255,255,255,.4);cursor:text}
+.mail-chips:focus-within{box-shadow:0 0 0 2px rgba(127,127,127,.45)}
+.mail-chips .isl-inp{flex:1;min-width:84px;height:26px;padding:0 4px;border:0;background:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+.mail-chip{display:inline-flex;align-items:center;gap:1px;padding:2px 3px 2px 10px;border-radius:999px;background:rgba(127,127,127,.3);font-size:12.5px;max-width:100%;overflow-wrap:anywhere}
+.mail-chip button{border:0;background:none;color:inherit;cursor:pointer;font-size:15px;line-height:1;padding:0 5px;opacity:.65}.mail-chip button:hover,.mail-chip button:focus-visible{opacity:1}
+#mail-subj{flex:1}
+#mail-text{height:120px;resize:vertical;font-size:13px;min-height:70px;max-height:40dvh}
+.mail-who{font-size:12px;opacity:.75;overflow-wrap:anywhere}.mail-who b{opacity:.8}
+.mail-text{white-space:pre-wrap;overflow-wrap:anywhere;max-height:min(240px,34dvh);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;font-size:13px;line-height:1.4;padding:10px 12px;border-radius:14px;background:rgba(127,127,127,.14)}
 #mail-attrow>#mail-remove{margin-left:auto}
 #mail-status{font-size:12px;margin:0}#mail-status:empty{display:none}
 #mail-send:disabled{opacity:.45;cursor:default}
@@ -961,9 +985,12 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
  <div id="mail-list" role="list" aria-label="Messages"></div>
  <div id="mail-read" hidden></div>
  <form id="mail-compose" hidden autocomplete="off">
-  <label class="mail-f"><span>To</span><input id="mail-to" class="isl-inp" maxlength="25" placeholder="Username" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Recipient username"></label>
+  <div class="mail-f"><span>To</span><div class="mail-chips" id="mail-to-box"><input id="mail-to" class="isl-inp" maxlength="25" placeholder="Username" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Recipient usernames"></div><button type="button" class="isl-btn sm" id="mail-cc-show" aria-label="Add Cc recipients">Cc</button></div>
+  <div class="mail-f" id="mail-cc-row" hidden><span>Cc</span><div class="mail-chips" id="mail-cc-box"><input id="mail-cc" class="isl-inp" maxlength="25" placeholder="Username" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Cc usernames"></div></div>
+  <div class="mail-f"><span>Subject</span><input id="mail-subj" class="isl-inp" maxlength="120" placeholder="Subject (optional)" aria-label="Subject"></div>
+  <textarea id="mail-text" class="isl-inp" maxlength="5000" placeholder="Write a message" aria-label="Message"></textarea>
   <div class="mail-f"><span>Attach</span><button type="button" class="isl-btn sm" id="mail-pick-clip">Copied item</button><button type="button" class="isl-btn sm" id="mail-pick-sched">My schedule</button></div>
-  <div class="mail-f" id="mail-attrow" hidden><span>Title</span><b id="mail-att"></b><small id="mail-kind"></small><button type="button" class="isl-btn sm" id="mail-remove" aria-label="Remove attachment">×</button></div>
+  <div class="mail-f" id="mail-attrow" hidden><span>Attached</span><b id="mail-att"></b><small id="mail-kind"></small><button type="button" class="isl-btn sm" id="mail-remove" aria-label="Remove attachment">×</button></div>
   <div class="mail-act"><button class="isl-btn pri" id="mail-send" disabled>Send</button><button type="button" class="isl-btn" id="mail-cancel">Cancel</button></div>
  </form>
  <p id="mail-status" class="isl-p" role="status"></p>
@@ -3185,7 +3212,7 @@ document.addEventListener('paste',e=>{
 function generateUpdatedHtmlString(){const c=document.documentElement.cloneNode(true);if(window.lockClean)window.lockClean(c);/* strip transient UI so the saved file reopens clean */
  c.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));c.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show'));c.querySelectorAll('.ghost,.copy-pop,#menu-context').forEach(n=>n.remove());c.querySelector('body').classList.remove('edit','dragging-page','rszing');c.classList.remove('lite','flat-isl');['books','chs','wsc','hacts','chats'].forEach(i=>{const n=c.querySelector('#'+i);if(n)n.innerHTML=''});
  c.querySelector('#island')?.classList.remove('chat-open');const panel=c.querySelector('#team-panel');if(panel)panel.hidden=true;['team-messages','team-friends','team-status','team-attachment','page-image-preview','page-image-library','page-image-status'].forEach(id=>c.querySelector('#'+id)?.replaceChildren());const room=c.querySelector('#team-room');if(room)room.innerHTML='<option value="">Shared room</option>';c.querySelectorAll('#team-panel input,#team-panel textarea').forEach(n=>{n.textContent='';n.removeAttribute('value')});c.querySelector('#team-toggle')?.setAttribute('aria-expanded','false');
- c.querySelector('#island')?.classList.remove('mail-open');const mp=c.querySelector('#mail-panel');if(mp)mp.hidden=true;['mail-list','mail-read','mail-att','mail-kind','mail-status','mail-n'].forEach(id=>c.querySelector('#'+id)?.replaceChildren());c.querySelectorAll('#mail-panel input').forEach(n=>n.removeAttribute('value'));const md=c.querySelector('#mail-dot');if(md)md.hidden=true;const mt=c.querySelector('#mail-toggle');if(mt){mt.setAttribute('aria-expanded','false');mt.setAttribute('aria-label','Mail');mt.title='Mail'}
+ c.querySelector('#island')?.classList.remove('mail-open');const mp=c.querySelector('#mail-panel');if(mp)mp.hidden=true;['mail-list','mail-read','mail-att','mail-kind','mail-status','mail-n'].forEach(id=>c.querySelector('#'+id)?.replaceChildren());c.querySelectorAll('#mail-panel input').forEach(n=>n.removeAttribute('value'));c.querySelectorAll('#mail-panel .mail-chip').forEach(n=>n.remove());c.querySelectorAll('#mail-panel textarea').forEach(n=>{n.textContent=''});const msj=c.querySelector('#mail-subj');if(msj)msj.setAttribute('placeholder','Subject (optional)');const mcr=c.querySelector('#mail-cc-row');if(mcr)mcr.hidden=true;const mcs=c.querySelector('#mail-cc-show');if(mcs)mcs.hidden=false;const mar=c.querySelector('#mail-attrow');if(mar)mar.hidden=true;const md=c.querySelector('#mail-dot');if(md)md.hidden=true;const mt=c.querySelector('#mail-toggle');if(mt){mt.setAttribute('aria-expanded','false');mt.setAttribute('aria-label','Mail');mt.title='Mail'}
  const t=c.querySelector('#toast');if(t){t.className='';t.textContent=''}
  return '<!DOCTYPE html>\n'+c.outerHTML.replace(/\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//,()=>'/*DATA_START*/'+JSON.stringify(appData,null,2).replace(/</g,'\\u003c')+'/*DATA_END*/')}
 async function saveDirectToFile(){const h=generateUpdatedHtmlString(),fn=fileName()+'.html';
@@ -3239,8 +3266,19 @@ window.PageImages=(()=>{
  const pending=new Map();
  const observer=new IntersectionObserver(entries=>{for(const e of entries){if(!e.isIntersecting)continue;const load=pending.get(e.target);observer.unobserve(e.target);pending.delete(e.target);load?.();}});
  new MutationObserver(()=>{for(const fig of pending.keys())if(!fig.isConnected){observer.unobserve(fig);pending.delete(fig)}}).observe(document.body,{childList:true,subtree:true});
- function mount(box,p){const image=props(p).image;if(!image)return;const fig=document.createElement('figure');fig.className='page-cloud-image';const img=document.createElement('img');img.alt=image.alt||'Page image';img.loading='lazy';img.decoding='async';fig.append(img);if(image.position==='above')box.prepend(fig);else box.append(fig);
+ function mount(box,p){const image=props(p).image;if(!image)return;const fig=document.createElement('figure');fig.className='page-cloud-image';const img=document.createElement('img');img.alt=image.alt||'Page image';img.loading='lazy';img.decoding='async';const zoom=document.createElement('button');zoom.type='button';zoom.className='page-img-zoom';zoom.hidden=true;zoom.title='Enlarge image';zoom.setAttribute('aria-label','Enlarge image');zoom.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>';zoom.onclick=e=>{e.preventDefault();e.stopPropagation();enlarge(img,zoom)};img.addEventListener('load',()=>{zoom.hidden=false});fig.append(img,zoom);if(image.position==='above')box.prepend(fig);else box.append(fig);
   pending.set(fig,()=>url(image.key).then(u=>{if(img.isConnected)img.src=u}).catch(e=>{if(!fig.isConnected)return;const b=document.createElement('button');b.className='btn out sm';b.type='button';b.textContent='Load cloud image';b.title=String(e.message||e);b.onclick=()=>{cache.delete(image.key);url(image.key).then(u=>{img.src=u;b.remove()}).catch(e=>showToast(String(e.message||e)))};fig.append(b)}));observer.observe(fig);
+ }
+ /* Enlarge: shows the image big in a pop-up. Click anywhere, the x button or Esc closes it. */
+ let lb=null,lbFrom=null;
+ const lbKey=e=>{if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();lbClose()}else if(e.key==='Tab'){e.preventDefault();lb?.querySelector('.lb-x').focus({preventScroll:true})}};
+ function lbClose(){if(!lb||lb.hidden)return;lb.hidden=true;lb.querySelector('img').removeAttribute('src');document.removeEventListener('keydown',lbKey,true);const f=lbFrom;lbFrom=null;if(f&&f.isConnected)f.focus({preventScroll:true})}
+ function enlarge(img,from){
+  if(!img.src)return;
+  if(!lb){lb=document.createElement('div');lb.id='img-lightbox';lb.hidden=true;lb.setAttribute('role','dialog');lb.setAttribute('aria-modal','true');lb.setAttribute('aria-label','Enlarged image');
+   const big=document.createElement('img'),x=document.createElement('button');x.type='button';x.className='lb-x';x.setAttribute('aria-label','Close image');x.textContent='\u00d7';
+   lb.append(big,x);lb.addEventListener('click',lbClose);document.body.append(lb)}
+  const big=lb.querySelector('img');big.alt=img.alt||'Page image';big.src=img.src;lbFrom=from;lb.hidden=false;document.addEventListener('keydown',lbKey,true);lb.querySelector('.lb-x').focus({preventScroll:true});
  }
  async function encode(file){
   if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>12*1024*1024)throw new Error('Choose a JPEG, PNG or WebP under 12 MB.');
@@ -3258,7 +3296,7 @@ window.PageImages=(()=>{
  $('page-image-paste').onclick=async()=>{try{for(const it of await navigator.clipboard.read()){const t=it.types.find(x=>x.startsWith('image/'));if(t)return attach(shot(await it.getType(t)))}info('No image on the clipboard. Press Win + Shift + S, select an area, then try again.')}catch(e){info('The browser blocked clipboard access. Press Ctrl + V here instead.')}};
  $('page-image-remove').onclick=()=>{draft=null;$('page-image-preview').replaceChildren();info('Image detached. Save the page to keep this change.');};
  $('page-image-manage').onclick=async()=>{const list=$('page-image-library');list.replaceChildren();try{const r=await request({action:'list'});info(Math.ceil(r.images.reduce((n,i)=>n+i.size,0)/1024)+' KB of 5 MB used. Deleting affects all shared copies.');for(const i of r.images){const row=document.createElement('div'),label=document.createElement('span'),b=document.createElement('button');row.className='seg';label.textContent=i.name+' · '+Math.ceil(i.size/1024)+' KB';b.type='button';b.className='btn out sm';b.textContent='Delete from cloud';b.onclick=async()=>{if(!confirm('Permanently delete '+i.name+'? Every page and shared copy using this image will lose it.'))return;try{await request({action:'delete',key:i.key});cache.get(i.key)?.then(URL.revokeObjectURL,()=>{});cache.delete(i.key);if(draft?.key===i.key)draft=null;row.remove();info('Cloud image deleted.');}catch(e){info(String(e.message||e))}};row.append(label,b);list.append(row)}}catch(e){info(String(e.message||e))}};
- window.addEventListener('cloud-locked',()=>{epoch++;editorGeneration++;for(const v of cache.values())v.then(URL.revokeObjectURL,()=>{});cache.clear();draft=null;$('page-image-preview').replaceChildren();$('page-image-library').replaceChildren();document.querySelectorAll('.page-cloud-image img').forEach(i=>i.removeAttribute('src'));});
+ window.addEventListener('cloud-locked',()=>{epoch++;editorGeneration++;for(const v of cache.values())v.then(URL.revokeObjectURL,()=>{});cache.clear();draft=null;$('page-image-preview').replaceChildren();$('page-image-library').replaceChildren();lbClose();document.querySelectorAll('.page-cloud-image img').forEach(i=>i.removeAttribute('src'));document.querySelectorAll('.page-img-zoom').forEach(b=>{b.hidden=true});});
  return {edit,value,mount,props,get uploading(){return uploading}};
 })();
 renderPages();
@@ -3351,13 +3389,15 @@ window.TeamChat = (() => {
 
 <script id="mail-script">
 /* MAIL: replaces the team chat in the pill (the chat is still in the file, switched off by TEAM_CHAT_ENABLED in the script above).
-   You can send two things to another user, by username only: your Schedule, or a copied page / board / chapter / book.
-   The mail title is simply the name of what was sent ("Schedule" for a schedule). Mail is stored by the server (api/mail.js), never in this file.
+   A mail goes to one or more users by username (To) and optionally to others as Cc, like Gmail. It carries a written message, an attachment, or both:
+   an attachment is your Schedule or a copied page / board / chapter / book. Reply answers the sender; Reply all also writes to everyone else on the mail.
+   A received schedule is only displayed (day by day); it never touches the receiver's own schedule. Other items are copied to the clipboard to paste where they want.
+   The subject is optional: left empty it is the name of the attachment ("Schedule" for a schedule) or the first line of the message. Mail is stored by the server (api/mail.js), never in this file.
    The receiver gets a red dot on the mail icon until they open the mail. */
 window.Mail = (() => {
  const $ = id => document.getElementById(id), panel=$('mail-panel'), tog=$('mail-toggle'), dot=$('mail-dot'), isl=$('island'), root=$('isl-root');
- const KIND={schedule:'Schedule',page:'Page',board:'Board',chapter:'Chapter',book:'Book'};
- let opened=false, view='inbox', box='inbox', lists={inbox:[],sent:[]}, unread=0, gen=0, last=0, polling=false, sending=false, draft=null, retryId=null, tone=isl.dataset.tone||'';
+ const KIND={schedule:'Schedule',page:'Page',board:'Board',chapter:'Chapter',book:'Book',message:'Message'}, MAX_RCPT=10;
+ let opened=false, view='inbox', box='inbox', lists={inbox:[],sent:[]}, unread=0, gen=0, last=0, polling=false, sending=false, draft=null, retryId=null, rc={to:[],cc:[]}, ccOn=false, tone=isl.dataset.tone||'';
  const unlocked = () => document.documentElement.classList.contains('unlocked');
  const req = body => window.cloudRequest('mail',body);
  const h = (tag,cls,text) => { const n=document.createElement(tag); if(cls)n.className=cls; if(text!==undefined)n.textContent=text; return n; };
@@ -3367,6 +3407,7 @@ window.Mail = (() => {
  const normUser = s => { s=String(s||'').trim().replace(/^@/,'').toLowerCase(); return /^[a-z0-9_-]{3,24}$/.test(s)?s:''; };
  const titleOf = a => a.type==='schedule' ? 'Schedule' : String(a.name||a.title||'Untitled').slice(0,120);
  const when = at => { const d=new Date(at); return d.toDateString()===new Date().toDateString() ? d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}) : d.toLocaleDateString([],{month:'short',day:'numeric'}); };
+ const names = x => [].concat(x==null?[]:x).filter(Boolean).map(String);/* old mails have a single name, new ones a list */
  const plural = (n,w) => n+' '+w+(n===1?'':'s');
  const count = x => Array.isArray(x)?x.length:0;
  const validSchedule = a => a&&a.type==='schedule'&&Array.isArray(a.items)&&Array.isArray(a.days)&&a.items.every(i=>i&&typeof i==='object')&&a.days.every(d=>d&&typeof d==='object');
@@ -3374,7 +3415,38 @@ window.Mail = (() => {
   : a.type==='board' ? 'A board with '+plural(count(a.pages),'page')+'.'
   : a.type==='chapter' ? 'A chapter with '+plural(count(a.pages),'page')+(count(a.containers)?' in '+plural(a.containers.length,'board'):'')+'.'
   : 'A book with '+plural(count(a.chapters),'chapter')+'.';
- const schedulePreview = a => a.days.map(d=>d.iso+': '+new Date(d.start).toLocaleString()+' – '+new Date(d.end).toLocaleTimeString()).join('\n')+'\n'+a.items.map(i=>i.name+' · '+i.start+' · '+i.len+' min').join('\n');
+ /* a received schedule is only shown, never imported: one card per shift day, the entries in order */
+ const tzName = () => (window.ISLAND_UI&&ISLAND_UI.tz)||'Asia/Manila';
+ const fmtClock = m => { m=((Math.round(m)%1440)+1440)%1440; const hh=Math.floor(m/60); return (hh%12||12)+':'+String(m%60).padStart(2,'0')+(hh<12?' AM':' PM'); };
+ const clockMin = s => { const m=/^\s*(\d{1,2}):(\d{2})\s*([ap])?\.?m?\.?\s*$/i.exec(String(s==null?'':s)); if(!m)return null; let hh=+m[1]; const mm=+m[2]; if(mm>59||hh>24)return null; if(m[3]){ if(hh<1||hh>12)return null; hh=hh%12+(m[3].toLowerCase()==='p'?12:0); } return hh%24*60+mm; };
+ const zoned = (ts,o) => new Intl.DateTimeFormat('en-US',Object.assign({timeZone:tzName()},o)).format(new Date(ts));
+ const itemLen = it => { const T=(window.ISLAND_UI&&ISLAND_UI.types)||{}; return +it.len>0?Math.round(+it.len):((T[it.type]||T.other||{}).len||15); };
+ function evRow(it) {
+  const r=h('div','mail-ev'), k=clockMin(it.start), len=itemLen(it), note=it.note?String(it.note).slice(0,200):'';
+  r.append(h('span','t',k==null?String(it.start||'?').slice(0,20):fmtClock(k)+' – '+fmtClock(k+len)),h('span','n',String(it.name||'Untitled').slice(0,80)),h('span','d',len+' min'));
+  if(note)r.title=note; return r;
+ }
+ function dayCard(title,sub,items,base) {
+  const c=h('div','mail-day'); c.append(h('b','',title)); if(sub)c.append(h('small','',sub));
+  const key=it=>{ const k=clockMin(it.start); return k==null?Infinity:(base!=null&&k<base?k+1440:k); };
+  const rows=items.map((it,i)=>({it,i,k:key(it)})).sort((x,y)=>x.k-y.k||x.i-y.i);
+  if(!rows.length)c.append(h('div','mail-ev none','Nothing scheduled this day.')); else rows.forEach(x=>c.append(evRow(x.it)));
+  return c;
+ }
+ function scheduleView(a) {
+  const box=h('div','mail-sched'), used=new Set(), dayOf=it=>[].concat(it.day==null?[]:it.day).filter(Boolean).map(String);
+  const days=a.days.filter(d=>d&&d.iso&&+d.end>+d.start&&+d.start>0).sort((x,y)=>x.start-y.start);
+  for(const d of days){
+   const its=a.items.filter(it=>dayOf(it).includes(String(d.iso))); its.forEach(it=>used.add(it));
+   const base=clockMin(zoned(d.start,{hour:'2-digit',minute:'2-digit',hourCycle:'h23'}));
+   box.append(dayCard(zoned(d.start,{weekday:'long',month:'short',day:'numeric'}),'Shift '+zoned(d.start,{hour:'numeric',minute:'2-digit'})+' – '+zoned(d.end,{hour:'numeric',minute:'2-digit'}),its,base));
+  }
+  const rest=a.items.filter(it=>!used.has(it)), every=rest.filter(it=>!dayOf(it).length), other=rest.filter(it=>dayOf(it).length);
+  if(every.length)box.append(dayCard('Every shift','',every,null));
+  if(other.length)box.append(dayCard('Other entries','',other,null));
+  if(!box.children.length)box.append(h('div','mail-empty','This schedule is empty.'));
+  const f=document.createDocumentFragment(); f.append(box,h('small','mail-meta','Philippine time · view only, your own schedule is not changed.')); return f;
+ }
 
  /* red dot + unread counter */
  function setUnread(n) { unread=Math.max(0,Number(n)||0); dot.hidden=!unread; const t=unread?'Mail, '+unread+' unread':'Mail'; tog.title=t; tog.setAttribute('aria-label',t); $('mail-n').textContent=unread||''; }
@@ -3386,12 +3458,13 @@ window.Mail = (() => {
   $('mail-h').textContent=view==='compose'?'New mail':'Mail';
   $('mail-tabs').querySelectorAll('button').forEach(b=>{ const on=b.dataset.b===box; b.classList.toggle('pri',on); b.setAttribute('aria-selected',String(on)); });
  }
+ const shortNames = l => l.length>2 ? l[0]+', '+l[1]+' +'+(l.length-2) : l.join(', ');
  function paintList() {
   const lb=$('mail-list'); lb.replaceChildren(); const items=lists[box];
-  if(!items.length){ lb.append(h('div','mail-empty',box==='inbox'?'Your inbox is empty. Mail sent to you shows up here.':'Nothing sent yet. Use Compose to send your schedule or a copied item.')); return; }
+  if(!items.length){ lb.append(h('div','mail-empty',box==='inbox'?'Your inbox is empty. Mail sent to you shows up here.':'Nothing sent yet. Use Compose to write a message or send your schedule or a copied item.')); return; }
   for(const m of items){
    const r=h('button','mail-row'+(box==='inbox'&&!m.read?' new':'')); r.type='button';
-   r.append(h('span','mt',m.title),h('span','ms',(box==='inbox'?'From '+m.from:'To '+m.to)+' · '+(KIND[m.kind]||'Item')+' · '+when(m.at)));
+   r.append(h('span','mt',m.title),h('span','ms',(box==='inbox'?'From '+m.from:'To '+shortNames(names(m.to).concat(names(m.cc))))+' · '+(KIND[m.kind]||'Item')+' · '+when(m.at)));
    r.onclick=()=>openMail(m); lb.append(r);
   }
  }
@@ -3409,24 +3482,39 @@ window.Mail = (() => {
   try {
    const r=await req({action:'get',box:b,id:m.id}); if(g!==gen||view!=='read')return;
    if(b==='inbox'&&!m.read){ m.read=true; const x=lists.inbox.find(y=>y.id===m.id); if(x)x.read=true; setUnread(lists.inbox.filter(y=>!y.read).length); }
-   renderRead(m,b,r.attachment);
+   renderRead(r.mail||m,b,r);
   } catch(e) { if(g!==gen)return; fail(e); view=b; show(); paintList(); }
  }
- function renderRead(m,b,a) {
-  const rb=$('mail-read'); rb.replaceChildren();
-  rb.append(h('b','mail-t',m.title),h('small','mail-meta',(b==='inbox'?'From '+m.from:'To '+m.to)+' · '+new Date(m.at).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})));
-  const act=h('div','mail-act'), ok=a&&(a.type==='schedule'?validSchedule(a):!!parseClip(JSON.stringify(a)));
-  if(!ok) rb.append(h('p','isl-p','This item cannot be opened. It may have been sent from a different version of the app.'));
-  else if(a.type==='schedule'){ rb.append(h('div','mail-pre',schedulePreview(a))); act.append(btn('Use this schedule',true,()=>useSchedule(a))); }
-  else { rb.append(h('p','isl-p',summary(a))); act.append(btn('Copy to clipboard',true,()=>copyStructure(a))); }
-  if(b==='inbox')act.append(btn('Reply',false,()=>compose(m.from)));
+ function renderRead(m,b,r) {
+  const rb=$('mail-read'), a=r.attachment, text=String(r.text||''), you=r.you||''; rb.replaceChildren();
+  const who=(label,l)=>{ const d=h('div','mail-who'); d.append(h('b','',label),document.createTextNode(' '+l.join(', '))); return d; };
+  const to=names(m.to), cc=names(m.cc);
+  rb.append(h('b','mail-t',m.title),h('small','mail-meta',new Date(m.at).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})));
+  if(b==='inbox')rb.append(who('From',[m.from]));
+  if(to.length)rb.append(who('To',to)); if(cc.length)rb.append(who('Cc',cc));
+  if(text)rb.append(h('div','mail-text',text));
+  const act=h('div','mail-act');
+  if(a){
+   const ok=a.type==='schedule'?validSchedule(a):!!parseClip(JSON.stringify(a));
+   if(!ok) rb.append(h('p','isl-p','This attachment cannot be opened. It may have been sent from a different version of the app.'));
+   else if(a.type==='schedule') rb.append(scheduleView(a));
+   else { rb.append(h('p','isl-p',summary(a))); act.append(btn('Copy to clipboard',true,()=>copyStructure(a))); }
+  } else if(!text) rb.append(h('p','isl-p','This mail is empty.'));
+  if(b==='inbox'){
+   const others=to.concat(cc).filter(u=>u!==m.from&&u!==you);
+   act.append(btn('Reply',!a,()=>reply(m,text,you,false)));
+   if(others.length)act.append(btn('Reply all',false,()=>reply(m,text,you,true)));
+  }
   act.append(btn('Delete',false,()=>del(m,b)),btn('Back',false,()=>switchBox(b)));
   rb.append(act);
  }
- function useSchedule(a) {
-  if(!confirm('Replace your schedule with this one?'))return;
-  const M=window.SmartScheduleManager; M.importItems(structuredClone(a.items),{replace:true,days:structuredClone(a.days)});
-  if(a.importTz)M.cfg().importTz=a.importTz; persistLocal(); M.evaluate(); showToast('Schedule imported.');
+ /* Reply writes to the sender. Reply all keeps everyone else on the mail: the other To names stay in To, the Cc names stay in Cc. The original text is quoted below the cursor. */
+ function reply(m,text,you,all) {
+  const skip=u=>u===you||u===m.from, to=[m.from], cc=[];
+  if(all){ names(m.to).filter(u=>!skip(u)).forEach(u=>to.push(u)); names(m.cc).filter(u=>!skip(u)&&!to.includes(u)).forEach(u=>cc.push(u)); }
+  const head=new Date(m.at).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+', '+m.from+' wrote:';
+  const quote=text?'\n\n'+head+'\n'+text.slice(0,600).split('\n').map(l=>'> '+l).join('\n'):'';
+  compose({to,cc,subject:('Re: '+String(m.title||'').replace(/^(re:\s*)+/i,'')).slice(0,120),text:quote});
  }
  async function del(m,b) {
   if(!confirm('Delete this mail?'))return;
@@ -3434,22 +3522,57 @@ window.Mail = (() => {
   catch(e) { fail(e); }
  }
 
- /* writing one mail: only a username and an attachment, the title is the name of what is attached */
+ /* writing one mail: recipients (To, optional Cc), an optional subject, a message and/or an attachment */
+ function paintRcpt() {
+  for(const f of ['to','cc']){
+   const bx=$('mail-'+f+'-box'), inp=$('mail-'+f); bx.querySelectorAll('.mail-chip').forEach(n=>n.remove());
+   for(const u of rc[f]){
+    const c=h('span','mail-chip'), x=h('button','','×'); c.append(h('span','',u)); x.type='button'; x.setAttribute('aria-label','Remove '+u);
+    x.onclick=()=>{ rc[f]=rc[f].filter(y=>y!==u); retryId=null; paintRcpt(); inp.focus({preventScroll:true}); };
+    c.append(x); bx.insertBefore(c,inp);
+   }
+  }
+  $('mail-cc-row').hidden=!(ccOn||rc.cc.length); $('mail-cc-show').hidden=!$('mail-cc-row').hidden;
+  paintDraft();
+ }
+ /* turns typed text into chips: names are split at spaces, commas or semicolons; a name already in the other field moves here */
+ function addRcpt(f,raw) {
+  const other=f==='to'?'cc':'to';
+  for(const t of String(raw||'').split(/[\s,;]+/)){
+   if(!t)continue; const u=normUser(t); if(!u){ say('Not a valid username: '+t.slice(0,30)); continue; }
+   if(rc[f].includes(u))continue; rc[other]=rc[other].filter(x=>x!==u);
+   if(rc.to.length+rc.cc.length>=MAX_RCPT){ say('You can send to at most '+MAX_RCPT+' people at once.'); break; }
+   rc[f].push(u);
+  }
+  retryId=null; paintRcpt();
+ }
+ const firstLine = t => (String(t).split('\n').find(l=>l.trim())||'').trim().slice(0,80);
  function paintDraft() {
   $('mail-attrow').hidden=!draft; $('mail-att').textContent=draft?titleOf(draft):''; $('mail-kind').textContent=draft?(KIND[draft.type]||''):'';
-  $('mail-send').disabled=sending||!draft||!normUser($('mail-to').value);
+  $('mail-subj').placeholder=(draft?titleOf(draft):firstLine($('mail-text').value))||'Subject (optional)';
+  $('mail-send').disabled=sending||!(rc.to.length||$('mail-to').value.trim())||!($('mail-text').value.trim()||draft);
  }
  function stage(a) { draft=structuredClone(a); retryId=null; say(''); paintDraft(); }
- function compose(to) {
-  view='compose'; draft=null; retryId=null; $('mail-to').value=to||''; say(''); paintDraft(); show();
-  (to?$('mail-pick-clip'):$('mail-to')).focus({preventScroll:true});
+ function clearDraft() {
+  draft=null; retryId=null; rc={to:[],cc:[]}; ccOn=false;
+  ['mail-to','mail-cc','mail-subj','mail-text'].forEach(id=>{ $(id).value=''; }); paintRcpt();
+ }
+ function compose(o) {
+  o=o||{}; clearDraft(); view='compose'; say('');
+  ccOn=!!(o.cc&&o.cc.length); addRcpt('to',(o.to||[]).join(' ')); addRcpt('cc',(o.cc||[]).join(' '));
+  $('mail-subj').value=o.subject||''; $('mail-text').value=o.text||''; paintDraft(); show();
+  if(o.to&&o.to.length){ const t=$('mail-text'); t.focus({preventScroll:true}); t.setSelectionRange(0,0); t.scrollTop=0; } else $('mail-to').focus({preventScroll:true});
  }
  async function send(e) {
-  e.preventDefault(); const to=normUser($('mail-to').value); if(sending||!draft||!to)return;
-  sending=true; paintDraft(); const g=gen,a=draft; retryId=retryId||(crypto.randomUUID?crypto.randomUUID():rid());
+  e.preventDefault(); if(sending)return;
+  for(const f of ['to','cc']){ const i=$('mail-'+f); if(i.value.trim()){ addRcpt(f,i.value); i.value=''; } }
+  const text=$('mail-text').value.trim();
+  if(!rc.to.length)return say('Add at least one recipient in To.');
+  if(!text&&!draft)return say('Write a message or attach something.');
+  sending=true; paintDraft(); const g=gen, to=rc.to.slice(), cc=rc.cc.slice(); retryId=retryId||(crypto.randomUUID?crypto.randomUUID():rid());
   try {
-   await req({action:'send',to,attachment:a,id:retryId}); if(g!==gen)return;
-   showToast('Sent to '+to+'.'); draft=null; retryId=null; switchBox('sent');
+   await req({action:'send',to,cc,subject:$('mail-subj').value.trim(),text,attachment:draft||null,id:retryId});
+   showToast('Sent to '+shortNames(to.concat(cc))+'.'); clearDraft(); if(g===gen)switchBox('sent');
   } catch(err) { fail(err); } finally { sending=false; paintDraft(); }
  }
 
@@ -3480,7 +3603,7 @@ window.Mail = (() => {
  }
  function reset() {
   close(); lists={inbox:[],sent:[]}; box=view='inbox'; draft=null; retryId=null; sending=false; last=0; setUnread(0);
-  $('mail-list').replaceChildren(); $('mail-read').replaceChildren(); $('mail-to').value=''; say(''); paintDraft(); show();
+  $('mail-list').replaceChildren(); $('mail-read').replaceChildren(); clearDraft(); say(''); show();
  }
 
  tog.addEventListener('keydown',e=>e.stopPropagation());
@@ -3490,10 +3613,21 @@ window.Mail = (() => {
  panel.addEventListener('pointerdown',e=>e.stopPropagation()); panel.addEventListener('click',e=>e.stopPropagation());
  panel.addEventListener('keydown',e=>{ if(e.key==='Escape'){ e.stopPropagation(); close(); tog.focus(); } });
  $('mail-tabs').onclick=e=>{ const b=e.target.closest('button[data-b]'); if(b)switchBox(b.dataset.b); };
- $('mail-new').onclick=()=>compose('');
+ $('mail-new').onclick=()=>compose();
  $('mail-compose').onsubmit=send;
- $('mail-to').oninput=()=>{ retryId=null; paintDraft(); };
- $('mail-cancel').onclick=()=>{ draft=null; retryId=null; switchBox(box); };
+ for(const f of ['to','cc']){
+  const inp=$('mail-'+f), commit=()=>{ if(inp.value.trim()){ const v=inp.value; inp.value=''; addRcpt(f,v); } };
+  inp.addEventListener('keydown',e=>{
+   if(e.key==='Enter'||e.key===','||e.key===';'||e.key===' '){ e.preventDefault(); commit(); }
+   else if(e.key==='Backspace'&&!inp.value&&rc[f].length){ rc[f].pop(); retryId=null; paintRcpt(); }
+  });
+  inp.addEventListener('input',()=>{ retryId=null; if(/[\s,;]/.test(inp.value))commit(); else paintDraft(); });
+  inp.addEventListener('blur',commit);
+  $('mail-'+f+'-box').addEventListener('click',e=>{ if(e.target===e.currentTarget)inp.focus(); });
+ }
+ $('mail-cc-show').onclick=()=>{ ccOn=true; paintRcpt(); $('mail-cc').focus({preventScroll:true}); };
+ $('mail-subj').oninput=$('mail-text').oninput=()=>{ retryId=null; paintDraft(); };
+ $('mail-cancel').onclick=()=>{ clearDraft(); switchBox(box); };
  $('mail-remove').onclick=()=>{ draft=null; retryId=null; paintDraft(); };
  $('mail-pick-clip').onclick=()=>{ const a=parseClip(appClipboard); if(!a)return say('Copy a page, board, chapter or book first.'); stage(a); };
  $('mail-pick-sched').onclick=()=>{ const c=window.SmartScheduleManager.cfg(); if(!c.items?.length&&!c.days?.length)return say('Import or create a schedule first.');
