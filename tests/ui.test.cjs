@@ -207,6 +207,26 @@ test('invalid backups are rejected before replacing current data',async t=>{
  }),{rejected:true,unchanged:true});
 });
 
+test('search reveals five results then ten more and resets on query changes',async t=>{
+ const p=await app(t);
+ await p.evaluate(()=>{
+  for(let i=0;i<18;i++)appData.pages.push({id:'batch-'+i,chapterId:appData.activeChapterId,title:'Batchneedle '+i,content:'Batchneedle response',x:0,y:i*10,w:30,h:10});
+  window.openSearch();
+ });
+ const q=p.locator('#isl-q'),hits=p.locator('.isl-hits .isl-hit');
+ await q.fill('Batchneedle');
+ await p.waitForFunction(()=>document.querySelectorAll('.isl-hits .isl-hit').length===5);
+ const titles=await hits.locator('.t').allTextContents();
+ await p.getByRole('button',{name:'Show more (10)',exact:true}).click();
+ assert.equal(await hits.count(),15);
+ assert.deepEqual((await hits.locator('.t').allTextContents()).slice(0,5),titles);
+ await p.getByRole('button',{name:'Show more (3)',exact:true}).click();
+ assert.equal(await hits.count(),18);
+ assert.equal(await p.getByRole('button',{name:/Show more/}).count(),0);
+ await q.fill('Batchneedle response');
+ await p.waitForFunction(()=>document.querySelectorAll('.isl-hits .isl-hit').length===5);
+});
+
 test('variant picker clicks restore the matching filled fields',async t=>{
  const p=await app(t);
  await p.evaluate(()=>{const p={id:'picker-test',chapterId:appData.activeChapterId,title:'Name',content:'Name: XXX',variants:[{title:'Name',content:'Name: XXX'},{title:'Policy',content:'Policy: XXX'}],activeVariant:0};appData.pages.push(p);renderPages()});
