@@ -231,6 +231,31 @@ test('workspace and tools zoom independently and survive a reload',async t=>{
  assert.equal(await p.locator('#workspace-zoom-range').inputValue(),'100');
 });
 
+test('chapter zoom buttons remember each chapter independently',async t=>{
+ const p=await app(t);
+ const ids=await p.evaluate(()=>appData.chapters.filter(c=>c.bookId===appData.activeBookId).slice(0,2).map(c=>c.id));
+ assert.equal(ids.length,2);
+ const select=async id=>p.evaluate(id=>{appData.activeChapterId=id;renderHero();renderPages()},id);
+ await select(ids[0]);
+ await p.getByRole('button',{name:'Zoom out',exact:true}).click();
+ assert.equal(await p.locator('#workspace-zoom-range').inputValue(),'95');
+ await select(ids[1]);
+ assert.equal(await p.locator('#workspace-zoom-range').inputValue(),'100');
+ await p.getByRole('button',{name:'Zoom in',exact:true}).click();
+ assert.equal(await p.locator('#workspace-zoom-range').inputValue(),'105');
+ await select(ids[0]);
+ assert.equal(await p.locator('#workspace-zoom-range').inputValue(),'95');
+ await p.reload();await p.locator('#lk-off').click();await p.locator('#lock').waitFor({state:'hidden'});
+ await select(ids[1]);
+ assert.equal(await p.locator('#workspace-zoom-range').inputValue(),'105');
+ await select(ids[0]);
+ assert.equal(await p.locator('#workspace-zoom-range').inputValue(),'95');
+ await p.evaluate(()=>setWorkspaceZoom(50));
+ assert.equal(await p.locator('#chapter-zoom-out').isDisabled(),true);
+ await p.evaluate(()=>setWorkspaceZoom(150));
+ assert.equal(await p.locator('#chapter-zoom-in').isDisabled(),true);
+});
+
 test('resizing a page at half zoom follows the pointer in grid units',async t=>{
  const p=await app(t);
  await p.evaluate(()=>{
