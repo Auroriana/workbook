@@ -207,6 +207,45 @@ test('invalid backups are rejected before replacing current data',async t=>{
  }),{rejected:true,unchanged:true});
 });
 
+test('workspace and tools zoom independently and survive a reload',async t=>{
+ const p=await app(t);
+ const set=async value=>p.locator('#workspace-zoom-range').evaluate((n,v)=>{n.value=v;n.dispatchEvent(new Event('input',{bubbles:true}))},String(value));
+ const card=p.locator('.card').first(),before=await card.boundingBox();
+ await set(50);
+ assert.ok(Math.abs((await card.boundingBox()).width-before.width*.5)<1);
+ await p.evaluate(()=>openTools());
+ assert.equal(await p.locator('#workspace-zoom-range').inputValue(),'100');
+ await set(150);
+ await p.evaluate(()=>closeTools());
+ assert.equal(await p.locator('#workspace-zoom-range').inputValue(),'50');
+ await p.reload();
+ await p.locator('#lk-off').click();
+ await p.locator('#lock').waitFor({state:'hidden'});
+ assert.equal(await p.locator('#workspace-zoom-range').inputValue(),'50');
+ await p.evaluate(()=>openTools());
+ assert.equal(await p.locator('#workspace-zoom-range').inputValue(),'150');
+ await p.evaluate(()=>openDocs());
+ assert.equal(await p.locator('#workspace-zoom').isVisible(),false);
+ await p.evaluate(()=>closeTools());
+ await p.locator('#workspace-zoom-reset').click();
+ assert.equal(await p.locator('#workspace-zoom-range').inputValue(),'100');
+});
+
+test('resizing a page at half zoom follows the pointer in grid units',async t=>{
+ const p=await app(t);
+ await p.evaluate(()=>{
+  appData.pages.push({id:'zoom-resize',chapterId:appData.activeChapterId,title:'Zoom resize',content:'Test',x:2,y:2,w:40,h:20});
+  renderPages();setWorkspaceZoom(50);setEdit(true,true);
+ });
+ const handle=p.locator('.card[data-pid="zoom-resize"] .rz[data-d="se"]');
+ const r=await handle.boundingBox();
+ const before=await p.evaluate(()=>{const d=appData.pages.find(x=>x.id==='zoom-resize');return {w:d.w,h:d.h}});
+ await p.mouse.move(r.x+r.width/2,r.y+r.height/2);
+ await p.mouse.down();await p.mouse.move(r.x+r.width/2+40,r.y+r.height/2+40,{steps:5});await p.mouse.up();
+ const after=await p.evaluate(()=>{const d=appData.pages.find(x=>x.id==='zoom-resize');return {w:d.w,h:d.h}});
+ assert.deepEqual(after,{w:before.w+10,h:before.h+10});
+});
+
 test('search reveals five results then ten more and resets on query changes',async t=>{
  const p=await app(t);
  await p.evaluate(()=>{

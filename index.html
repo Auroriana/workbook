@@ -158,6 +158,20 @@ main{flex:1;min-width:0;min-height:0;overflow-y:auto;padding:8px 24px 40px;scrol
 #ws{position:relative;overflow-x:auto;overflow-y:hidden;border-radius:14px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
 #wsc{position:relative;min-width:100%;min-height:320px}
 #wsc.nt .fi{transition:none}
+.workspace-zoom{position:fixed;right:max(18px,env(safe-area-inset-right));bottom:var(--zoom-bottom,30px);z-index:20;display:flex;align-items:center;gap:10px;padding:8px 0;color:var(--mut);font-size:12px;opacity:0;transition:opacity .2s ease}
+.workspace-zoom.visible,.workspace-zoom:has(:focus-visible){opacity:1}
+@media(prefers-reduced-motion:reduce){.workspace-zoom{transition:none}}
+.workspace-zoom[hidden]{display:none}
+.workspace-zoom label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.workspace-zoom input{appearance:none;-webkit-appearance:none;width:96px;height:24px;min-width:0;padding:0;border:0;background:transparent;box-shadow:none;cursor:pointer}
+.workspace-zoom input::-webkit-slider-runnable-track{height:3px;border-radius:99px;background:var(--line)}
+.workspace-zoom input::-moz-range-track{height:3px;border-radius:99px;background:var(--line)}
+.workspace-zoom input::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:11px;height:11px;margin-top:-4px;border:0;border-radius:50%;background:var(--p)}
+.workspace-zoom input::-moz-range-thumb{width:11px;height:11px;border:0;border-radius:50%;background:var(--p)}
+.workspace-zoom button{min-width:46px;height:28px;padding:0 6px;border-radius:999px;background:transparent;color:var(--mut);font:inherit;font-variant-numeric:tabular-nums;cursor:pointer}
+.workspace-zoom button:hover{color:var(--p)}
+.workspace-zoom input:focus-visible{outline:2px solid var(--p);outline-offset:3px;border-radius:99px}
+#wsc .menu{zoom:calc(1 / var(--workspace-zoom,1))}
 .fi{position:absolute;scroll-margin:90px 0 24px;transition:left .16s ease,top .16s ease,width .16s ease,height .16s ease}
 .fi.rsz{transition:none}
 /* grid shows only while moving / editing */
@@ -763,6 +777,7 @@ html.lite .copy-pop{-webkit-backdrop-filter:none;backdrop-filter:none;background
   </section>
   <div class="ph"><h2><button type="button" class="ph-search" id="ph-search" title="Search every page (press /)" aria-label="Search" onclick="window.openSearch&amp;&amp;window.openSearch()"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button><span class="pt on" id="pt-ws" role="button" tabindex="0" title="Your chapter workspace" onclick="closeTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeTools()}">Workspace</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-tools" role="button" tabindex="0" title="Your widgets, available from any chapter" onclick="openTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTools()}">Tools</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-docs" role="button" tabindex="0" title="Your documentation, available from any book" onclick="openDocs()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocs()}">Documentation</span><span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button type="button" class="ib paste-action" id="paste-main-btn" onclick="startPaste()" title="Paste page, board, chapter or book" aria-label="Paste page, board, chapter or book"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg></button><button class="btn tone" id="add-board-btn" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" id="add-main-btn" onclick="openAddHubModal()">+ Add</button><div class="pt-sub" id="pt-sub" hidden></div></div>
   <div class="empty" id="ws-empty" hidden="">No pages yet. Use + Add to create one, or + Board for a board.</div>
+  <div class="workspace-zoom" id="workspace-zoom"><label for="workspace-zoom-range">Zoom</label><input id="workspace-zoom-range" type="range" min="50" max="150" step="5" value="100" aria-label="Workspace zoom" oninput="setWorkspaceZoom(this.value)"><button type="button" id="workspace-zoom-reset" onclick="setWorkspaceZoom(100)" title="Reset zoom to 100%">100%</button></div>
   <div id="chats" hidden></div>
   <div id="ws"><div id="wsc" data-zone="" class="" style="height: 400px; min-width: max(100%, 664px);"></div></div>
  </div></main><div id="hbar"><div id="hthumb"></div></div></div>
@@ -2291,7 +2306,16 @@ function buildCard(p){if(p.isWidget&&p.widgetType==='image')return buildImageCar
 function refreshCard(id){/* redraw one page instead of the whole chapter */
  const p=appData.pages.find(x=>x.id===id),o=nodes.get(id);if(!p||!o||!o.parentNode){renderPages();return}
  const n=buildCard(p);o.replaceWith(n);nodes.set(id,n);if(p.x!==undefined)applyRect(p,n)}
-function renderPages(){clearWidgetTimers();closeMenus();const ws=$('ws'),wsc=$('wsc'),em=$('ws-empty'),chOn=appData.activeChapterId===DOC_CHATS_ID;$('chats').hidden=!chOn;
+const ZOOM_KEY='ataraxia_workspace_zoom';
+let zoomPrefs={};try{const z=JSON.parse(localStorage.getItem(ZOOM_KEY)||'{}');if(z&&typeof z==='object'&&!Array.isArray(z))zoomPrefs=z}catch(e){}
+function workspaceZoom(){if(isDoc(appData.activeChapterId))return 1;const n=Number(zoomPrefs[appData.activeChapterId===TOOLS_ID?'tools':'workspace']);return Number.isFinite(n)&&n>=50&&n<=150?n/100:1}
+function syncWorkspaceZoom(){const z=workspaceZoom(),doc=isDoc(appData.activeChapterId),input=$('workspace-zoom-range');
+ $('workspace-zoom').hidden=doc;input.value=String(Math.round(z*100));input.setAttribute('aria-label',appData.activeChapterId===TOOLS_ID?'Tools zoom':'Workspace zoom');input.setAttribute('aria-valuetext',input.value+'%');
+ $('workspace-zoom-reset').textContent=input.value+'%';$('wsc').style.zoom=z;$('wsc').style.setProperty('--workspace-zoom',z)}
+function setWorkspaceZoom(value){if(isDoc(appData.activeChapterId))return;const n=Number(value);if(!Number.isFinite(n))return;if(ps)cancelPs();closeMenus();
+ zoomPrefs[appData.activeChapterId===TOOLS_ID?'tools':'workspace']=clamp(Math.round(n/5)*5,50,150);syncWorkspaceZoom();fitAll();
+ try{localStorage.setItem(ZOOM_KEY,JSON.stringify(zoomPrefs))}catch(e){showToast('Zoom changed, but device storage is unavailable. It could not be remembered.')}}
+function renderPages(){clearWidgetTimers();closeMenus();syncWorkspaceZoom();const ws=$('ws'),wsc=$('wsc'),em=$('ws-empty'),chOn=appData.activeChapterId===DOC_CHATS_ID;$('chats').hidden=!chOn;
  if(chOn){ws.hidden=true;em.hidden=true;wsc.innerHTML='';nodes.clear();renderChats();return}
  wsc.classList.add('nt');wsc.innerHTML='';nodes.clear();
  const ch=curChap();
@@ -2514,7 +2538,7 @@ function areaItems(key){const cid=appData.activeChapterId;
  return appData.pages.filter(p=>p.chapterId===cid&&!p.containerId).concat(getCons())}
 function boardCols(c){return Math.max(8,Math.floor((c.w*GRID-4)/GRID))}
 function areaCols(key,ex){let m=0;areaItems(key).forEach(i=>{if(i!==ex&&i.x!==undefined)m=Math.max(m,i.x+i.w)});
- let vw=0;if(key){const n=nodes.get(key),b=n&&n.querySelector('.cin');vw=b?b.clientWidth:0}else vw=$('ws').clientWidth;
+ let vw=0;if(key){const n=nodes.get(key),b=n&&n.querySelector('.cin');vw=b?b.clientWidth:0}else vw=$('ws').clientWidth/workspaceZoom();
  return Math.max(Math.floor(vw/GRID),m,1)}
 /* nothing may overlap: whatever collides with the fixed item (or an item already settled) is pushed down */
 function settle(items,fixed,frozen,cmp){const fz=frozen||[];
@@ -2548,7 +2572,7 @@ function sizePages(pages,cols,pad){pages.forEach(p=>{const n=nodes.get(p.id);if(
  if(!(p.w>0)){p.w=Math.max(MIN_PW,Math.min(DEF_PW,cols-2*pad));layoutDirty=true}
  if(!(p.h>0)){/* no saved height: fit the text, up to a cap */n.style.transition='none';n.style.width=p.w*GRID+'px';n.style.height='auto';const px=n.offsetHeight;n.style.height='';n.style.width='';n.style.transition='';p.h=clamp(Math.ceil(px/GRID),MIN_PH,DEF_MAXH);layoutDirty=true}
 })}
-function ensureLayout(){const cid=appData.activeChapterId,cons=getCons(),wc=Math.max(24,Math.floor($('ws').clientWidth/GRID));
+function ensureLayout(){const cid=appData.activeChapterId,cons=getCons(),wc=Math.max(24,Math.floor($('ws').clientWidth/workspaceZoom()/GRID));
  const loose=appData.pages.filter(p=>p.chapterId===cid&&!p.containerId);
  sizePages(loose,wc,PAD);
  packItems(loose.concat(cons.filter(c=>!c.mig)),wc,PAD);
@@ -2606,15 +2630,15 @@ function psBegin(){const r=ps.host.getBoundingClientRect();ps.on=true;
   document.body.style.setProperty('--rc',{n:'ns-resize',s:'ns-resize',e:'ew-resize',w:'ew-resize',ne:'nesw-resize',sw:'nesw-resize',nw:'nwse-resize',se:'nwse-resize'}[ps.rz])}
  else{document.body.classList.add('dragging-page');ps.ox=ps.sx-r.left;ps.oy=ps.sy-r.top;
   const g=ps.host.cloneNode(true);g.querySelectorAll('.menu,.rz').forEach(n=>n.remove());g.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));
-  g.removeAttribute('data-pid');g.removeAttribute('data-cid');g.classList.remove('fi','zone-on','ph-drag');g.classList.add('ghost');g.style.width=r.width+'px';g.style.height=r.height+'px';
+  g.removeAttribute('data-pid');g.removeAttribute('data-cid');g.classList.remove('fi','zone-on','ph-drag');g.classList.add('ghost');g.style.width=r.width/workspaceZoom()+'px';g.style.height=r.height/workspaceZoom()+'px';g.style.transformOrigin='top left';
   document.body.append(g);ps.ghost=g;ps.host.classList.add('ph-drag');placeGhost()}
  ps.raf=requestAnimationFrame(psTick)}
-function placeGhost(){ps.ghost.style.transform='translate('+(ps.x-ps.ox)+'px,'+(ps.y-ps.oy)+'px)'+(ps.kind==='page'?' rotate(1.2deg)':'')}
+function placeGhost(){ps.ghost.style.transform='translate('+(ps.x-ps.ox)+'px,'+(ps.y-ps.oy)+'px) scale('+workspaceZoom()+')'+(ps.kind==='page'?' rotate(1.2deg)':'')}
 function psTick(){if(!ps||!ps.on)return;autoScroll();const k=ps.x+'|'+ps.y+'|'+document.querySelector('main').scrollTop+'|'+$('ws').scrollLeft;if(k!==ps.lk){ps.lk=k;preview()}ps.raf=requestAnimationFrame(psTick)}
 function pickArea(){if(ps.kind!=='page')return '';const wr=$('wsc').getBoundingClientRect(),b0=ps.r0;
- const cl=ps.x-ps.ox,ct=ps.y-ps.oy,cw=b0.w*GRID,chh=b0.h*GRID;let best='',bo=0;
+ const unit=GRID*workspaceZoom(),cl=ps.x-ps.ox,ct=ps.y-ps.oy,cw=b0.w*unit,chh=b0.h*unit;let best='',bo=0;
  for(const s of ps.base){if(s.pg)continue;/* boards, at their resting spots */
-  const l=wr.left+s.x*GRID,t=wr.top+s.y*GRID,r=l+s.w*GRID,b=t+s.h*GRID;
+  const l=wr.left+s.x*unit,t=wr.top+s.y*unit,r=l+s.w*unit,b=t+s.h*unit;
   if(ps.x>=l&&ps.x<=r&&ps.y>=t&&ps.y<=b)return s.d.id;
   const o=Math.max(0,Math.min(r,cl+cw)-Math.max(l,cl))*Math.max(0,Math.min(b,ct+chh)-Math.max(t,ct));
   if(o>bo){bo=o;best=s.d.id}}
@@ -2622,7 +2646,7 @@ function pickArea(){if(ps.kind!=='page')return '';const wr=$('wsc').getBoundingC
 /* where the item would land, snapped to the grid; everything it overlaps is pushed down out of the way */
 function preview(final){const d=ps.d,b=ps.r0;restoreBase();let key,r,sn=null,cv=null;const snap=snapOn();
  document.querySelectorAll('.sguide').forEach(n=>n.remove());
- if(ps.rz){key=keyOf(d);const z=ps.rz,m=minsOf(d),dx=Math.round((ps.x-ps.sx)/GRID),dy=Math.round((ps.y-ps.sy)/GRID);
+ if(ps.rz){key=keyOf(d);const z=ps.rz,m=minsOf(d),dx=Math.round((ps.x-ps.sx)/(GRID*workspaceZoom())),dy=Math.round((ps.y-ps.sy)/(GRID*workspaceZoom()));
   let w=b.w,h=b.h,x=b.x,y=b.y;
   if(z.includes('e'))w=b.w+dx;if(z.includes('w'))w=b.w-dx;if(z.includes('s'))h=b.h+dy;if(z.includes('n'))h=b.h-dy;
   w=clamp(w,m[0],MAX_U);h=clamp(h,m[1],MAX_U);
@@ -2646,7 +2670,7 @@ function preview(final){const d=ps.d,b=ps.r0;restoreBase();let key,r,sn=null,cv=
  else{key=pickArea();cv=key?nodes.get(key).querySelector('.bcan'):$('wsc');
   if(ps.host.parentNode!==cv)cv.append(ps.host);
   const cr=cv.getBoundingClientRect(),cols=areaCols(key,d),lo=(snap&&key)?SNAP_GAP:0;/* inside a board, keep the fixed gap to its edges */
-  const x=clamp(Math.round((ps.x-ps.ox-cr.left)/GRID),lo,Math.max(lo,cols-b.w-lo)),y=Math.max(lo,Math.round((ps.y-ps.oy-cr.top)/GRID));
+  const x=clamp(Math.round((ps.x-ps.ox-cr.left)/(GRID*workspaceZoom())),lo,Math.max(lo,cols-b.w-lo)),y=Math.max(lo,Math.round((ps.y-ps.oy-cr.top)/(GRID*workspaceZoom())));
   r={x,y,w:b.w,h:b.h};
   if(snap)sn=snapRect(d,key,r,cols,lo);
   if(isPage(d))d.containerId=key;
@@ -3797,6 +3821,21 @@ chs.addEventListener('pointerdown',e=>{const g=e.target.closest('.cgrip');if(!g|
  g.addEventListener('pointermove',mv);g.addEventListener('pointerup',end);g.addEventListener('pointercancel',end);place(e.clientY)});
 
 /* ---------- workspace horizontal scrollbar ---------- */
+/* Reveal the bare zoom controls on interaction, then fade them out when idle. */
+const zoomControl=$('workspace-zoom'),zoomIsland=$('isl-root');let zoomFrame=0;
+let zoomIdle=0;
+function revealZoom(){zoomControl.classList.add('visible');clearTimeout(zoomIdle);zoomIdle=setTimeout(()=>zoomControl.classList.remove('visible'),1800)}
+['pointerenter','pointermove','pointerdown','input','click'].forEach(type=>zoomControl.addEventListener(type,revealZoom));
+zoomControl.addEventListener('pointerleave',()=>{clearTimeout(zoomIdle);zoomIdle=setTimeout(()=>zoomControl.classList.remove('visible'),500)});
+/* Keep the controls in the bottom-right, clear of the movable clock. */
+function placeZoom(){if(zoomFrame)return;zoomFrame=requestAnimationFrame(()=>{zoomFrame=0;if(zoomControl.hidden)return;
+ const z=zoomControl.getBoundingClientRect(),r=zoomIsland.getBoundingClientRect();
+ const overlap=!zoomIsland.classList.contains('srch')&&r.bottom>innerHeight/2&&r.right>z.left-10&&r.left<z.right+10;
+ zoomControl.style.setProperty('--zoom-bottom',Math.max(30,overlap?innerHeight-r.top+10:30)+'px')})}
+addEventListener('resize',placeZoom);
+new MutationObserver(placeZoom).observe(zoomIsland,{attributes:true,attributeFilter:['style','class','data-h','data-v']});
+new MutationObserver(placeZoom).observe(zoomControl,{attributes:true,attributeFilter:['hidden']});
+if(window.ResizeObserver){const zo=new ResizeObserver(placeZoom);zo.observe($('island'));zo.observe(zoomControl)}placeZoom();
 const ws=$('ws'),bar=$('hbar'),th=$('hthumb');
 let uq=0;function upd(){if(!uq)uq=requestAnimationFrame(()=>{uq=0;updNow()})}
 function updNow(){const sw=ws.scrollWidth,cw=ws.clientWidth;if(sw<=cw+1){bar.style.display='none';return}
