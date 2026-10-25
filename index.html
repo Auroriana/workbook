@@ -605,7 +605,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 #island[data-ot="1"] .isl-clk{color:var(--isl-late)}
 #island[data-ot="1"] .isl-lbl{align-self:stretch;border-right:1px solid var(--isl-edge);margin-right:2px} /* the divider between the two halves */
 /* preview island: a second glass island beside the main one (Upcoming button) */
-#isl-pv{position:absolute;bottom:0;right:calc(100% + 10px);width:460px;max-width:calc(100vw - 24px);max-height:min(84vh,780px);--pv-dx:16px;--pv-dy:0px;transform-origin:right bottom;overflow-x:hidden;overflow-y:auto;color:var(--isl-fg);background:var(--isl-bg);border:1px solid var(--isl-edge);border-radius:var(--isl-radius-open);-webkit-backdrop-filter:blur(var(--isl-blur)) saturate(var(--isl-sat));backdrop-filter:blur(var(--isl-blur)) saturate(var(--isl-sat));box-shadow:0 18px 40px rgba(0,0,0,.16);font-variant-numeric:tabular-nums;animation:isl-pv-in .45s var(--isl-ease);scrollbar-width:thin}
+#isl-pv{position:absolute;z-index:4;bottom:0;right:calc(100% + 10px);width:460px;max-width:calc(100vw - 24px);max-height:min(84vh,780px);--pv-dx:16px;--pv-dy:0px;transform-origin:right bottom;overflow-x:hidden;overflow-y:auto;color:var(--isl-fg);background:var(--isl-bg);border:1px solid var(--isl-edge);border-radius:var(--isl-radius-open);-webkit-backdrop-filter:blur(var(--isl-blur)) saturate(var(--isl-sat));backdrop-filter:blur(var(--isl-blur)) saturate(var(--isl-sat));box-shadow:0 18px 40px rgba(0,0,0,.16);font-variant-numeric:tabular-nums;animation:isl-pv-in .45s var(--isl-ease);scrollbar-width:thin}
 #isl-pv[hidden]{display:none}
 @keyframes isl-pv-in{from{opacity:0;transform:translate(var(--pv-dx),var(--pv-dy)) scale(.94)}}
 @keyframes isl-pv-out{to{opacity:0;transform:translate(var(--pv-dx),var(--pv-dy)) scale(.94)}}
@@ -768,30 +768,85 @@ body{font-family:var(--ff,"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Ar
 @keyframes isl-ring-warn{0%,100%{box-shadow:0 18px 40px rgba(0,0,0,.16),0 0 0 1.5px color-mix(in srgb,var(--isl-near) 95%,transparent),0 0 18px color-mix(in srgb,var(--isl-near) 55%,transparent)}50%{box-shadow:0 18px 40px rgba(0,0,0,.16),0 0 0 1.5px color-mix(in srgb,var(--isl-near) 25%,transparent),0 0 4px color-mix(in srgb,var(--isl-near) 10%,transparent)}}
 @keyframes isl-ring{0%,100%{box-shadow:0 18px 40px rgba(0,0,0,.16),0 0 0 1.5px color-mix(in srgb,var(--isl-late) 95%,transparent),0 0 18px color-mix(in srgb,var(--isl-late) 55%,transparent)}50%{box-shadow:0 18px 40px rgba(0,0,0,.16),0 0 0 1.5px color-mix(in srgb,var(--isl-late) 25%,transparent),0 0 4px color-mix(in srgb,var(--isl-late) 10%,transparent)}}
 html.isl-liquid #island,html.isl-liquid #isl-root.srch #island{-webkit-backdrop-filter:blur(calc(var(--isl-blur,10px)*.35)) url(#isl-liq) saturate(1.6) brightness(1.06);backdrop-filter:blur(calc(var(--isl-blur,10px)*.35)) url(#isl-liq) saturate(1.6) brightness(1.06);box-shadow:inset 0 1px 1px rgba(255,255,255,.65),inset 0 -1px 1px rgba(255,255,255,.25),inset 0 0 18px rgba(255,255,255,.2),0 18px 40px rgba(0,0,0,.18)}
-#isl-fx{display:none;position:absolute;inset:0;z-index:0;pointer-events:none;overflow:visible}#isl-root.fx-on #isl-fx{display:block}
-#isl-fx .st{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}
-#isl-fx .st path{fill:none;stroke:#2f6b3a;stroke-width:3;stroke-linecap:round;vector-effect:non-scaling-stroke}#isl-fx .st .t2{stroke:#4f9b5a;stroke-width:1.6}
-#isl-fx .fl{position:absolute;right:-18px;bottom:calc(100% - 20px);width:calc(64px*var(--fx-s,1));aspect-ratio:100/140;transform:scale(var(--sx,1),var(--sy,1))}
-#isl-root[data-h=left]{--sx:-1}#isl-root[data-v=top]{--sy:-1}
-#isl-root[data-h=left] #isl-fx .fl{right:auto;left:-18px}#isl-root[data-v=top] #isl-fx .fl{bottom:auto;top:calc(100% - 20px)}
-#isl-root.srch{--sy:1}#isl-root.srch #isl-fx .fl{top:auto;bottom:calc(100% - 20px)}
-#isl-fx .fl svg{display:block;width:100%;height:100%;overflow:visible;transform-origin:50% 100%;animation:fxBloom 1.1s cubic-bezier(.3,1.5,.5,1) both,fxSway 5s ease-in-out 1.2s infinite}
-#isl-fx .pt{fill:var(--fx-c,#e11d2e)}#isl-fx .sh{fill:url(#fxg)}#isl-fx .sm{fill:var(--fx-c,#e11d2e);stroke:var(--fx-c,#e11d2e);stroke-width:1.2;stroke-linecap:round}
-@keyframes fxBloom{from{transform:scale(.05) rotate(-35deg);opacity:0}to{transform:none;opacity:1}}
-@keyframes fxSway{50%{transform:rotate(3deg)}}@keyframes fxBeat{50%{transform:scale(1.14)}}
-#isl-root:has(#island[data-tone=warn]) #isl-fx .fl svg{animation:fxBeat 1s ease-in-out infinite;filter:drop-shadow(0 0 7px var(--isl-near))}
-#isl-root:has(#island[data-tone=late]) #isl-fx .fl svg{animation:fxBeat .55s ease-in-out infinite;filter:drop-shadow(0 0 8px var(--isl-late))}
-html.lite #isl-fx .fl svg{animation:none!important}
-#isl-fx .st path{stroke:var(--fx-c,#fff);stroke-width:1.8}#isl-fx .st .t2{opacity:.5}
-#isl-fx .pt{fill:var(--fx-c,#fff);stroke:var(--fx-o,#000);stroke-width:.7;stroke-linejoin:round}#isl-fx .sh{display:none}
-#isl-fx .sm{fill:var(--fx-c,#fff);stroke:var(--fx-c,#fff);stroke-width:1}
-#isl-root:has(#island[data-tone=warn]) #isl-fx .fl svg,#isl-root:has(#island[data-tone=late]) #isl-fx .fl svg{filter:none}
-#isl-fx .sl{fill:none;stroke:var(--fx-c,#fff);stroke-width:1.3;stroke-linecap:round}
-#isl-fx .fl,#isl-root[data-h=left] #isl-fx .fl,#isl-root[data-v=top] #isl-fx .fl,#isl-root.srch #isl-fx .fl{width:calc(170px*var(--fx-s,1));aspect-ratio:200/120}
-#isl-fx .fl{right:-24px;bottom:calc(100% - 20px)}
-#isl-root[data-h=left] #isl-fx .fl{right:auto;left:-24px}
-#isl-root[data-v=top] #isl-fx .fl{bottom:auto;top:calc(100% - 20px)}
-#isl-root.srch #isl-fx .fl{top:auto;bottom:calc(100% - 20px)}
+/* ---- pill effect: spider lilies ---- */
+#isl-fx{display:none;position:absolute;inset:0;z-index:3;pointer-events:none;overflow:visible;--fx-dip:3px}/* drawn IN FRONT of the island (island is z-index 1). Anchored to the island's top edge, which it follows when the island opens */
+#isl-root.fx-on #isl-fx{display:block}
+#isl-fx .lil{position:absolute;top:0;left:calc(100% - var(--o)*1px);width:calc(var(--w)*1px*var(--fx-s,1));margin-left:calc(var(--w)*-.5px*var(--fx-s,1));aspect-ratio:340/190;transform-origin:50% 86.84%;transform:translateY(calc(-86.84% + var(--fx-dip) + var(--cy,0px))) rotate(var(--tilt,0deg))}
+#isl-fx.sl .lil{left:calc(var(--o)*1px)}
+#isl-root[data-v=top]:not(.srch) #isl-fx .lil{top:100%;transform:translateY(calc(-86.84% - var(--fx-dip) - var(--cy,0px))) scaleY(-1) rotate(var(--tilt,0deg))}
+#isl-fx .lil svg{display:block;width:100%;height:100%;overflow:visible}
+#isl-fx g{transform-box:view-box;transform-origin:0 0}
+#isl-fx .pt path{fill:var(--fx-c);stroke:var(--fx-o);stroke-width:1.5;stroke-linejoin:round;paint-order:stroke}
+#isl-fx .pt .un{fill:var(--fx-d)}
+#isl-fx .sg path,#isl-fx .sg ellipse{fill:var(--fx-c);stroke:none}
+#isl-fx .hub{fill:var(--fx-d);stroke:none}
+/* motion: bloom in, lean toward the cursor, sway, stamens drift, petals breathe, and a heartbeat when an alert is on */
+#isl-fx .lean{transform:rotate(calc(var(--lean,0)*var(--amp,3)*1deg));transition:transform .9s cubic-bezier(.2,.9,.3,1)}
+#isl-root.fx-nolean #isl-fx{--lean:0!important}
+#isl-fx .sway{animation:fxSway calc(var(--sd,6s)*var(--fx-t,1)) ease-in-out infinite;animation-delay:var(--dl,0s)}
+#isl-fx .grow{animation:fxBloom 1.4s cubic-bezier(.25,1.4,.5,1) both;animation-delay:calc(var(--i,0)*120ms)}
+#isl-fx .sg{animation:fxSg calc(4.6s*var(--fx-t,1)) ease-in-out infinite alternate;animation-delay:calc(var(--k,0)*-1.15s + var(--dl,0s))}
+#isl-fx .pt{animation:fxPt calc(5.8s*var(--fx-t,1)) ease-in-out infinite alternate;animation-delay:calc(var(--k,0)*-.8s + var(--dl,0s))}
+#isl-root:has(#island[data-tone=warn]) #isl-fx .beat{animation:fxBeat 1.1s ease-in-out infinite}
+#isl-root:has(#island[data-tone=late]) #isl-fx .beat{animation:fxBeat .6s ease-in-out infinite}
+#isl-fx .em{position:absolute;top:0;left:calc(100% - var(--o)*1px);width:4px;height:4px;margin:-2px 0 0 -2px;border-radius:50%;background:var(--fx-c);box-shadow:0 0 6px 1px var(--fx-c);opacity:0;animation:fxEm calc(var(--ed,5s)*var(--fx-t,1)) ease-out infinite;animation-delay:var(--edl,0s)}
+#isl-root[data-v=top]:not(.srch){--ey:-1}
+#isl-root[data-v=top]:not(.srch) #isl-fx .em{top:100%}
+#isl-root.fx-noem #isl-fx .em{display:none}
+@keyframes fxBloom{0%{transform:scale(.04) rotate(-26deg);opacity:0}40%{opacity:1}100%{transform:scale(1) rotate(0)}}
+@keyframes fxSway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}}
+@keyframes fxSg{from{transform:rotate(calc(var(--a,2)*-1deg))}to{transform:rotate(calc(var(--a,2)*1deg))}}
+@keyframes fxPt{from{transform:rotate(calc(var(--a,1.5)*-1deg)) scale(.985)}to{transform:rotate(calc(var(--a,1.5)*1deg)) scale(1.03)}}
+@keyframes fxBeat{0%,100%{transform:scale(1)}45%{transform:scale(1.1)}}
+@keyframes fxEm{0%{opacity:0;transform:translate(0,calc(-8px*var(--ey,1))) scale(.8)}14%{opacity:.95}100%{opacity:0;transform:translate(var(--ex,8px),calc(-92px*var(--ey,1))) scale(.15)}}
+#isl-fx .lil.off{display:none}
+.isl-sw{flex:none;position:relative;width:42px;height:28px;border-radius:999px;background:rgba(127,127,127,.3);transition:background .25s}
+.isl-sw::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.35);transition:transform .25s var(--isl-ease)}
+.isl-sw.on{background:var(--fx-c,#c62d33)}
+.isl-sw.on::after{transform:translateX(14px)}
+.isl-sw:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+#isl-fx .pt path,#isl-fx .sg path,#isl-fx .sg ellipse,#isl-fx .hub{pointer-events:visiblePainted;cursor:pointer}/* the lilies can be clicked even though the layer around them lets clicks through */
+#isl-root.fx-bl #isl-fx .lil{transition:left .8s var(--isl-ease),width .8s var(--isl-ease),margin-left .8s var(--isl-ease),transform .8s var(--isl-ease)}/* a lily that is already out glides to its new spot when the next one sprouts */
+#isl-root.fx-bl .isl-dots i.done,#isl-root.fx-bl .isl-dots i.live{background:var(--fx-c);box-shadow:0 0 0 1px color-mix(in srgb,var(--fx-o) 45%,transparent)}/* finished breaks wear the flower color */
+#isl-root.fx-nodots .isl-dots{gap:3px;transform:translateY(2px)}/* a real colon: both dots sit inside the height of the digits */
+#isl-root.fx-nolily #isl-fx .lil{display:none!important}
+#isl-root.fx-nodots .isl-dots i:nth-child(2){display:none}
+#isl-root.fx-nodots .isl-dots i{background:currentColor!important;opacity:.55;animation:none!important;box-shadow:none!important}/* plain colon: two quiet dots */
+html.lite #isl-fx .em{display:none}
+html.lite #isl-fx *{animation:none!important}
+/* ---- theme editor: compact rows ---- */
+#thpanel{width:min(430px,calc(100vw - 16px))}
+#thpanel .stabs.tt{padding:0 0 10px;gap:4px;flex-wrap:wrap;overflow:visible}
+#thpanel .stabs.tt button{height:30px;padding:0 13px;font-size:12.5px}
+.tpane{display:flex;flex-direction:column;gap:10px}
+.tgrp{background:var(--surf);border-radius:16px;padding:8px 12px 4px}
+.tgt{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);padding:2px 0 2px}
+.trow{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;padding:7px 0;min-height:38px}
+.trow+.trow{border-top:1px solid var(--line)}
+.trow>label{flex:none;width:92px;margin:0;font-size:12.5px;font-weight:600;color:var(--txt)}
+.trow>.ctl{flex:1 1 150px;min-width:0;display:flex;flex-wrap:wrap;gap:5px;align-items:center;justify-content:flex-end}
+.trow.blk{display:block}
+.trow .cw{flex:0 0 100%;width:100%;margin:4px 0 2px;padding:10px;background:var(--card)}
+.trow .cpick{gap:6px;justify-content:flex-end}
+#thpanel .csw{width:22px;height:22px;border-width:2px}
+.trow input[type=range]{flex:1;min-width:90px;height:18px;padding:0;border:0;background:none;accent-color:var(--p);box-shadow:none!important}
+.trow .tv{width:44px;text-align:right;font-size:11.5px;color:var(--mut);font-variant-numeric:tabular-nums}
+.tchips{display:flex;flex-wrap:wrap;gap:5px;width:100%}
+.tchips .btn{gap:6px;padding:0 10px}
+.tchips .btn i{flex:none;width:13px;height:13px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.35)}
+.tchips .tx{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;margin-right:-4px;font-size:12px;line-height:1;opacity:.8}
+.tchips .tx:hover{opacity:1;background:rgba(127,127,127,.3)}.tchips .tx[hidden]{display:none}
+.tcr{width:100%;margin-top:6px;font-size:11.5px;color:var(--mut)}.tcr b.bad{color:var(--danger)}
+.tgrp .thp button i{height:24px}
+#lkprev .cap{margin-top:6px;text-align:center;font-size:11px;color:var(--mut)}
+#isl-fx.sl .em{left:calc(var(--o)*1px)}
+#isl-root.fx-still #isl-fx{--lean:0!important}
+#isl-root.fx-still #isl-fx *{animation:none!important;transition:none!important}
+/* variable pills: room around the text so the first and last lines do not cut off a pill's border or focus ring */
+.card>.cc{padding:5px 10px 5px 4px;margin:-5px 0 -5px -4px}
+.cin .card>.cc{padding-right:6px}
+/* copy / search highlight: one calm, tight fade (no pulse, small glow that is not clipped at the edges) */
+@keyframes srch-flash{0%,55%{box-shadow:0 0 0 2px var(--p),0 0 8px 1px color-mix(in srgb,var(--p) 40%,transparent)}100%{box-shadow:0 0 0 0 transparent,0 0 0 0 transparent}}
 </style>
 <body class="" style="--rc: nwse-resize;">
 <div id="lock" role="dialog" aria-modal="true" aria-label="Login">
@@ -824,6 +879,7 @@ html.lite #isl-fx .fl svg{animation:none!important}
  <div id="thwheel"></div>
  <div class="th-act"><button class="btn out" type="button" id="th-cancel">Cancel</button><button class="btn fill" type="button" id="th-save">Save</button></div>
 </div>
+<div id="lkprev" hidden><div class="lkp"><div class="lkp-in"><small id="lkp-d"></small><b id="lkp-c"></b><div class="av" id="lkp-av"></div><small id="lkp-u">username</small><div class="pw">Password</div></div></div><div class="cap">Lock screen preview</div></div>
 <div id="toast" role="status" class=""></div>
 <div id="undo" role="status" aria-live="polite"></div>
 <div id="szbadge" style="display: none; left: 1325px; top: 612px;">280 × 216 px</div>
@@ -1059,7 +1115,7 @@ html.lite #isl-fx .fl svg{animation:none!important}
 </div></div>
 
 <!-- Smart Island: live clock + break tracker + schedule (bottom right). Content is filled in by SmartScheduleManager. -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="isl-liq" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".011 .02" numOctaves="2" seed="4" result="n"/><feDisplacementMap id="isl-dm" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></svg><div id="isl-scrim"></div><div id="isl-root"><div id="isl-fx" aria-hidden="true"><div class="fl"><svg viewBox="0 0 200 120"><defs><g id="fxh"><path class="sl" d="M0 0C20 -6 50 -20 70 -46"/><ellipse class="sm" cx="70" cy="-46" rx="3" ry="1.5" transform="rotate(-52 70 -46)"/><path class="sl" d="M0 0C14 -14 36 -34 50 -68"/><ellipse class="sm" cx="50" cy="-68" rx="3" ry="1.5" transform="rotate(-68 50 -68)"/><path class="sl" d="M0 0C6 -22 18 -46 26 -82"/><ellipse class="sm" cx="26" cy="-82" rx="3" ry="1.5" transform="rotate(-77 26 -82)"/><path class="pt" d="M0 0C22 -2 48 -2 62 -12C70 -18 68 -30 58 -28C64 -22 58 -17 52 -14C38 -7 20 -5 0 0Z"/><path class="pt" d="M0 0C14 -14 32 -30 46 -44C52 -50 50 -62 40 -60C46 -54 42 -48 36 -42C26 -32 12 -16 0 0Z"/><path class="pt" d="M0 0C4 -16 12 -34 18 -48C21 -56 14 -66 6 -62C11 -57 9 -52 6 -46C2 -34 -2 -18 0 0Z"/></g><g id="fxf"><use href="#fxh"/><use href="#fxh" transform="scale(-1 1)"/></g></defs><use href="#fxf" transform="translate(8 118) rotate(-22) scale(.38)"/><use href="#fxf" transform="translate(192 118) rotate(22) scale(.38)"/><use href="#fxf" transform="translate(44 114) rotate(-10) scale(.62)"/><use href="#fxf" transform="translate(156 114) rotate(10) scale(.62)"/><use href="#fxf" transform="translate(100 112)"/></svg></div></div><div id="island" role="region" aria-label="Live clock and breaks" data-tone="">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="isl-liq" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".011 .02" numOctaves="2" seed="4" result="n"/><feDisplacementMap id="isl-dm" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></svg><div id="isl-scrim"></div><div id="isl-root"><div id="isl-fx" aria-hidden="true"></div><div id="island" role="region" aria-label="Live clock and breaks" data-tone="">
   <!-- ==== MAIL+CHAT REMOVED [2/6 PANEL] - the Mail panel (Inbox / Sent / Chat tabs, compose form and the Global chat panel) was here. Paste block "2/6 PANEL" from mail-and-chat-removed.txt in this spot: inside <div id="island">, directly before <div class="isl-bd">. ==== -->
   <div class="isl-bd"><div id="isl-body"></div></div>
   <div class="isl-pill" id="isl-pill" role="button" tabindex="0" aria-expanded="false" aria-label="Open schedule">
@@ -1698,6 +1754,16 @@ window.SmartScheduleManager = {
   back() { this.backNow(); },
   backNow() { const s = this.loadState(); s.tagged = null; this.saveState(); this.open = ''; this.evaluate(); },
   say(t) { this.flash = t; if (this.open !== 'edit') this.open = 'panel'; clearTimeout(this.flashT); this.flashT = setTimeout(() => { this.flash = ''; this.evaluate(); }, ISLAND_UI.flashMs); this.evaluate(); },
+  fxSw() { /* null = no switch (effect locked or not chosen); otherwise 'on' / 'off' = lilies follow the breaks */
+    const I = ((window.appData || appData).settings || {}).isl || {}; let ok = false; try { ok = localStorage.getItem('ataraxia_fx_ok') === '1'; } catch (e) {}
+    if (!ok || !(I.fx === 'lily' || I.fx === 'break')) return null; return I.fxb === 'on' || I.fx === 'break' ? 'on' : 'off';
+  },
+  swHTML() { const m = this.fxSw(); return m ? '<button type="button" class="isl-sw' + (m === 'on' ? ' on' : '') + '" role="switch" aria-checked="' + (m === 'on') + '" aria-label="Follow breaks" data-a="fxfollow"></button>' : ''; },
+  toggleFollow() {
+    const d = window.appData || appData, st = d.settings, I = st.isl = st.isl || {}, on = I.fxb === 'on' || I.fx === 'break';
+    if (on) { delete I.fxb; if (I.fx === 'break') I.fx = 'lily'; } else I.fxb = 'on';
+    persistLocal(); if (window.applyIsland) window.applyIsland(I); this._bk = ''; this.evaluate();
+  },
   startShift() {
     const s = this.loadState(), now = Date.now();
     /* pressing it again mid-shift must not move the start (that would push every break to tomorrow). Once the 9 hours are up it simply begins the next shift */
@@ -1798,11 +1864,12 @@ window.SmartScheduleManager = {
     el.dataset.tone = err ? 'late' : vm.tone; el.dataset.chk = vm.chk && !err ? '1' : ''; el.dataset.ot = vm.mode === 'ot' && !err ? '1' : ''; el.classList.toggle('open', !!this.open);
     set('isl-pre', vm.pre); set('isl-a', vm.a); set('isl-b', vm.b); set('isl-ap', vm.ap);
     el.querySelectorAll('.isl-dots i').forEach((d, i) => { const c = vm.dots[i] || 'wait'; if (d.className !== c) d.className = c; });
+    if (window.FX && window.FX.setDone) window.FX.setDone(vm.dots.map(x => x === 'done')); // break lilies: one sprouts per finished break
     set('isl-lbl', err ? this.err + ' · tap to dismiss' : vm.lbl, true);
     const sub = $('isl-sub'); set('isl-sub', err ? '' : vm.sub); sub.classList.toggle('on', !!vm.sub && !err);
     $('isl-pill').setAttribute('aria-expanded', !!this.open);
     /* the flash message is updated in place (not part of the key below) so showing/hiding it never rebuilds the editor and wipes what you were typing */
-    const key = [this.open, this.acked, this.cfg().active, (this.cfg().days || []).length, this.loadState().shiftStart, this._over, this._phase, this._openB.map(b => b.id).join(), this._sched.map(r => r.iid + r.name + r.type + r.s + r.e).join()].join('~');
+    const key = [this.open, this.fxSw(), this.acked, this.cfg().active, (this.cfg().days || []).length, this.loadState().shiftStart, this._over, this._phase, this._openB.map(b => b.id).join(), this._sched.map(r => r.iid + r.name + r.type + r.s + r.e).join()].join('~');
     if (key !== this._bk) { this._bk = key; $('isl-body').innerHTML = this.bodyHTML(vm); }
     const fl = $('isl-fl'); if (fl) { fl.hidden = !this.flash; if (fl.textContent !== this.flash) fl.textContent = this.flash; }
     const om = $('isl-otm'); if (om && this._over) { const t = this.otText(this._otMs); if (om.textContent !== t) om.textContent = t; } // overtime in the panel counts up in place
@@ -1828,7 +1895,7 @@ window.SmartScheduleManager = {
     else rows = '<div class="isl-list">' + this._openB.map(b => { const out = b.start >= this._shiftEnd; return '<div class="isl-item"><div><div>' + escAttr(b.name) + '</div><span>' + this.phFmt(b.start) + ' \u2013 ' + this.phFmt(b.end) + (out ? ' \u00b7 outside shift' : '') + '</span>' + note(b.note) + '</div>' + (out ? '' : '<button class="isl-btn sm" data-a="early" data-id="' + escAttr(b.id) + '">Take early</button>') + '</div>'; }).join('') + '</div>';
     const tagBox = '<div class="isl-cap">Other Tag</div><div class="isl-row"><input class="isl-inp" id="isl-cn" placeholder="e.g. Bathroom" maxlength="24"><input class="isl-inp num" id="isl-cm" type="number" min="1" max="480" value="' + ISLAND_UI.customDefaultMin + '" aria-label="Minutes"><button class="isl-btn sm" data-a="custom">Go</button></div>';
     const running = st.shiftStart && !this._over;
-    return '<div class="isl-in"><div class="isl-row sp"><b>' + (ask ? 'Schedule' : 'This shift') + '</b><div class="isl-row">' + (wk.n ? '<button class="isl-btn sm" data-a="preview" title="Preview the upcoming days">Upcoming</button>' : '') + '<button class="isl-btn sm" data-a="edit" aria-label="Edit schedule" title="Edit schedule"><svg viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button></div></div>' + fl + rows + (ask ? '' : tagBox +
+    return '<div class="isl-in"><div class="isl-row sp"><b>' + (ask ? 'Schedule' : 'This shift') + '</b><div class="isl-row">' + (wk.n ? '<button class="isl-btn sm" data-a="preview" title="Preview the upcoming days">Upcoming</button>' : '') + this.swHTML() + '<button class="isl-btn sm" data-a="edit" aria-label="Edit schedule" title="Edit schedule"><svg viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button></div></div>' + fl + rows + (ask ? '' : tagBox +
       '<div class="isl-row sp"><button class="isl-btn sm" data-a="start">' + (running ? 'Shift started \u00b7 ' + this.phFmt(st.shiftStart) : 'Start shift') + '</button><button class="isl-btn sm" data-a="end">End shift</button></div>') + '</div>';
   }
 };
@@ -1844,7 +1911,7 @@ window.SmartScheduleManager = {
       else if (a === 'backed') M.backNow(); else if (a === 'tag') M.tagNow(); else if (a === 'early') M.takeEarly(b.dataset.id);
       else if (a === 'edit') M.openEdit(); else if (a === 'cancel') { M.draft = null; M.open = 'panel'; M.evaluate(); } else if (a === 'save') M.saveSchedule();
       else if (a === 'custom') M.customTag($('isl-cn').value.trim(), $('isl-cm').value);
-      else if (a === 'start') M.startShift(); else if (a === 'end') M.endShift(); else if (a === 'import') M.importPasted(); else if (a === 'preview') M.togglePV();
+      else if (a === 'fxfollow') M.toggleFollow(); else if (a === 'start') M.startShift(); else if (a === 'end') M.endShift(); else if (a === 'import') M.importPasted(); else if (a === 'preview') M.togglePV();
       return; }
     if (e.target.closest('#isl-pill')) { M.ackAlarm(); if (M.err && !M.errSeen) { M.errSeen = true; M.err = ''; } else M.open = M.open ? '' : 'panel'; M.evaluate(); }
   });
@@ -3355,7 +3422,7 @@ document.addEventListener('paste',e=>{
  if(parseClip(text)){e.preventDefault();applyPaste(text,'auto',contextDestination(e.target))}});
 /* save */
 function generateUpdatedHtmlString(){const c=document.documentElement.cloneNode(true);if(window.lockClean)window.lockClean(c);/* strip transient UI so the saved file reopens clean */
- c.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));c.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show'));c.querySelectorAll('.ghost,.copy-pop,#menu-context').forEach(n=>n.remove());c.querySelector('body').classList.remove('edit','dragging-page','rszing');c.classList.remove('lite','flat-isl');['books','chs','wsc','hacts','chats'].forEach(i=>{const n=c.querySelector('#'+i);if(n)n.innerHTML=''});
+ c.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));c.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show'));c.querySelectorAll('.ghost,.copy-pop,#menu-context').forEach(n=>n.remove());c.querySelector('body').classList.remove('edit','dragging-page','rszing');c.classList.remove('lite','flat-isl');['books','chs','wsc','hacts','chats','isl-fx','thwheel'].forEach(i=>{const n=c.querySelector('#'+i);if(n)n.innerHTML=''});
  /* ==== MAIL+CHAT REMOVED [6/6 SAVE CLEANUP] - two cleanup lines for the mail and chat panels were here (the page-image cleanup below stays). Replace this comment line with block 6a, and the next comment line with block 6b. ==== */
  ['page-image-preview','page-image-library','page-image-status'].forEach(id=>c.querySelector('#'+id)?.replaceChildren());
  /* ==== MAIL+CHAT REMOVED [6/6 SAVE CLEANUP, line 6b] - paste block 6b here ==== */
@@ -3616,6 +3683,8 @@ window.cloudRequest=async(path,body={})=>{
  if(!document.documentElement.classList.contains('unlocked')||!auth?.currentUser)throw new Error('Sign in online to use cloud chat.');
  return api(path,{...body,token:await auth.currentUser.getIdToken()});
 };
+/* checks the master key on the server (same check the sign-up screen uses). Used to unlock the spider lily island effect */
+window.checkMasterKey=async k=>{k=String(k||'');if(!k)throw 'Enter the master key';await api('key',{key:k});return true};
 /* ---------- login screen ---------- */
 const DEFMSG={login:'Log in to your account',key:'Enter the master key to continue',signup:'Create your account',reset:'Reset with your recovery code or the master key',code:'Save this recovery code now. It is shown once and is how you reset your password yourself'};
 function msg(t,bad){const m=G('lk-msg');m.textContent=t;m.classList.toggle('bad',!!bad)}
@@ -3804,6 +3873,82 @@ G('lk-stay').checked=rd(KP)==='1';setMode(rd(KS)?'login':'key','signup');setLock
  AU.onAuthStateChanged(auth,u=>{if(manual||softLock)return;if(u){if(rd(KP)===null){AU.signOut(auth).catch(()=>{});return}enter(u).catch(()=>setLocked(false))}else if(uid){uid=null;entered=null;if(brkUnsub){brkUnsub();brkUnsub=null}paintAcct();setLocked(true)}})})();
 })();
 </script>
+<script id="fx-script">
+/* ---- pill effect: spider lilies (red spider lily / higanbana). Ribbon petals that twist and curl, long thin stamens with small anthers, built from curves so every lily is a little different ---- */
+(function(){
+const host=document.getElementById('isl-fx'),root=document.getElementById('isl-root');if(!host||!root)return;
+const sin=Math.sin,cos=Math.cos,PI=Math.PI,D=PI/180,f1=n=>Math.round(n*10)/10;
+let seed=1;const rnd=()=>{seed=(seed*48271)%2147483647;return seed/2147483647},rr=(a,b)=>a+(b-a)*rnd();
+/* a turtle walks along the centre line of a ribbon: heading is measured from straight up (positive = right), kf(s) is the curvature at s (0..1) */
+function walk(a0,len,n,kf){const ds=len/n,pts=[{x:0,y:0,th:a0*D,k:kf(0)}];let x=0,y=0,th=a0*D;
+ for(let i=1;i<=n;i++){const k=kf((i-.5)/n);th+=k*ds;x+=sin(th)*ds;y-=cos(th)*ds;pts.push({x,y,th,k})}return pts}
+/* outline of a ribbon of varying width along pts[i0..i1]; the width never exceeds the bend radius so the inner edge cannot fold over itself */
+function ribbon(pts,wf,i0,i1){const L=[],R=[],n=pts.length-1;
+ for(let i=i0;i<=i1;i++){const p=pts[i];let w=wf(i/n)/2;const lim=.92/Math.max(1e-4,Math.abs(p.k));if(w>lim)w=lim;
+  const nx=cos(p.th)*w,ny=sin(p.th)*w;L.push(f1(p.x+nx)+' '+f1(p.y+ny));R.push(f1(p.x-nx)+' '+f1(p.y-ny))}
+ return 'M'+L.join('L')+'L'+R.reverse().join('L')+'Z'}
+/* one curling, twisting petal. side: +1 right, -1 left. The part after the twist is the underside of the ribbon (a little darker) */
+function petal(side,c,j){const a=side*(c.a+rr(-4,4)),len=c.L*rr(.93,1.07),cs=c.cs,body=side*c.b,curl=side*c.c*rr(.92,1.08),n=34,tw=c.tw;
+ const pts=walk(a,len,n,s=>s<cs?body/(len*cs):curl*(1+2*((s-cs)/(1-cs)))/(2*(1-cs)*len));
+ const wm=c.w*rr(.92,1.08),prof=t=>{const g=Math.min(1,t/.3);return(.12+.88*sin(g*PI/2))*(t>.7?1-.5*((t-.7)/.3):1)},
+  pin=t=>1-.8*Math.exp(-Math.pow((t-tw)/.04,2)),wf=t=>wm*prof(t)*pin(t),i1=Math.round(tw*n);
+ return '<g class="pt" style="--k:'+j+';--a:'+f1(rr(1.1,2.1))+'"><path d="'+ribbon(pts,wf,0,n)+'"/><path class="un" d="'+ribbon(pts,wf,i1,n)+'"/></g>'}
+/* one long thin stamen that arcs up and out, with a small anther on the tip */
+function stamen(a0,len){const n=18,turn=-(a0*D)*.64;
+ const pts=walk(a0,len,n,s=>turn/len*(.25+1.5*s)),e=pts[n],wb=rr(4.6,5.8),wf=t=>wb*(1-.66*t);
+ const ax=e.x+sin(e.th)*2.6,ay=e.y-cos(e.th)*2.6;
+ return '<path d="'+ribbon(pts,wf,0,n)+'"/><ellipse cx="'+f1(ax)+'" cy="'+f1(ay)+'" rx="5.6" ry="2.5" transform="rotate('+f1(e.th/D-90)+' '+f1(ax)+' '+f1(ay)+')"/>'}
+const PET=[{a:6,L:112,b:.4,c:-4.1,cs:.3,w:11,tw:.5},{a:34,L:122,b:.35,c:-4.3,cs:.3,w:13,tw:.48},{a:66,L:128,b:.2,c:-4.2,cs:.3,w:14,tw:.46},{a:98,L:116,b:-.1,c:-3.8,cs:.32,w:13,tw:.5}];
+const STA=[[8,168],[26,158],[44,162],[62,150],[80,156],[98,146],[116,132]];
+function lily(sd){seed=sd;let pt='',L1='',L2='',R2='',R1='';
+ [0,1,2,3].forEach(i=>{pt+=petal(-1,PET[i],i)+petal(1,PET[i],i+4)});
+ STA.forEach(([a,l],i)=>{const A=a+rr(-3,3),sl=stamen(-A,l*rr(.92,1.06)),sr=stamen(A,l*rr(.92,1.06));if(i>=4){L1+=sl;R1+=sr}else{L2+=sl;R2+=sr}});
+ const g=(k,a,s)=>'<g class="sg" style="--k:'+k+';--a:'+a+'">'+s+'</g>';
+ return '<svg viewBox="-170 -165 340 190" aria-hidden="true"><g class="lean"><g class="sway"><g class="beat"><g class="grow">'+g(0,2.6,L1)+g(1,2,L2)+g(2,2,R2)+g(3,2.6,R1)+pt+'<circle class="hub" r="3.6"/></g></g></g></g></svg>'}
+/* The three lilies are bundled into ONE corner of the pill: the big one sits at the very corner, the two small ones right next to it. o = distance in px from that corner to the middle of each lily, w = width in px, t = lean in degrees.
+   Offsets are fixed px (not %), so when the island opens, closes or goes into search the lilies stay bundled instead of spreading out. Outer ones are drawn first (behind), the big one last */
+const DEF=[{o:100,w:92,t:-18,y:0},{o:4,w:92,t:16,y:0},{o:50,w:156,t:20,y:0}];/* default placement of the 3 lilies: o = distance from the corner (px), w = width (px), t = lean (deg), y = height (px, + = away from the island) */
+let built='';
+/* the pill's corner is rounded: a lily this close to the corner sits a little lower so it still rests on the pill instead of floating above the curve */
+const drop=(d,R)=>d<=0?R:d>=R?0:R-Math.sqrt(R*R-(R-d)*(R-d));
+const cfgOf=(pos,i)=>{const q=(pos&&pos[i])||{},d=DEF[i],g=k=>(q[k]!=null&&q[k]!==''&&isFinite(+q[k]))?+q[k]:d[k];return{o:g('o'),w:g('w'),t:g('t'),y:g('y')}};
+/* BREAK LILIES: one lily sprouts for each finished break. Fixed spots (distance px / height px / size px / tilt deg) */
+const BL={A1:{o:22,w:140,t:0,y:0},A2:{o:41,w:90,t:-18,y:0},B:{o:12,w:180,t:33,y:0},C:{o:0,w:90,t:90,y:0}};
+const ROLE=[0,2,1];/* lily 0 = 1st break (dot 1), lily 1 = 2nd break (dot 3), lily 2 = the big one, lunch (dot 2) */
+const DK='ataraxia_fx_done',curShift=()=>{try{return+JSON.parse(localStorage.getItem('ataraxia_break_state')).shiftStart||0}catch(e){return 0}};
+/* how many breaks are finished is remembered for the running shift, so a reload shows the right lilies straight away */
+let done=(()=>{try{const o=JSON.parse(localStorage.getItem(DK));if(o&&o.k&&o.k===curShift()&&Array.isArray(o.d))return[!!o.d[0],!!o.d[1],!!o.d[2]]}catch(e){}return[false,false,false]})();
+let bl=false,curSide='right',curR=28,curPos=null;
+function apply(){const m=curSide==='left'?-1:1;
+ host.querySelectorAll('.lil').forEach((d,i)=>{let c,show=true;
+  if(bl){show=!!done[ROLE[i]];c=i===0?(done[1]?BL.A2:BL.A1):i===1?BL.C:BL.B}else c=cfgOf(curPos,i);
+  d.classList.toggle('off',!show);/* display:none -> shown replays the bloom */
+  d.style.setProperty('--o',c.o);d.style.setProperty('--w',c.w);d.style.setProperty('--tilt',(c.t*m)+'deg');
+  d.style.setProperty('--cy',(drop(c.o,curR)-c.y).toFixed(1)+'px');d.style.setProperty('--amp',c.w>120?2:4)})}
+function ensure(side,pos,brk){side=side==='left'?'left':'right';
+ const R=parseFloat(getComputedStyle(root).getPropertyValue('--isl-radius'))||28,key=side+'|'+R;
+ curSide=side;curR=R;curPos=pos;bl=!!brk;
+ if(built!==key){built=key;/* the flowers are only rebuilt when the side or corner radius changes, so dragging a position slider does not replay the bloom */
+  host.classList.toggle('sl',side==='left');
+  host.querySelectorAll('.lil').forEach(x=>x.remove());const first=host.querySelector('.em');
+  DEF.forEach((c,i)=>{const d=document.createElement('div');d.className='lil';
+   d.style.cssText='--i:'+(2-i)*.6+';--sd:'+rr(5.4,8).toFixed(1)+'s;--dl:-'+rr(0,8).toFixed(1)+'s';
+   d.innerHTML=lily(101+i*37+21);host.insertBefore(d,first)})}
+ apply()}
+function setDone(d){d=[!!d[0],!!d[1],!!d[2]];if(d.every((v,i)=>v===done[i]))return;done=d;try{localStorage.setItem(DK,JSON.stringify({k:curShift(),d}))}catch(e){}if(bl&&host.querySelector('.lil'))apply()}
+/* drifting embers (the "fire flower"), rising from the same corner */
+for(let i=0;i<6;i++){const e=document.createElement('i');e.className='em';
+ e.style.cssText='--o:'+(8+i*10+rr(-3,3)).toFixed(1)+';--ex:'+rr(-18,18).toFixed(0)+'px;--ed:'+rr(3.6,6.4).toFixed(1)+'s;--edl:-'+rr(0,6).toFixed(1)+'s';host.append(e)}
+/* the lilies lean toward the mouse */
+let lt=0;
+addEventListener('pointermove',e=>{if(lt||!root.classList.contains('fx-on'))return;const x=e.clientX;
+ lt=requestAnimationFrame(()=>{lt=0;const r=root.getBoundingClientRect(),dx=(x-(r.left+r.width/2))/Math.max(240,innerWidth*.3);host.style.setProperty('--lean',Math.max(-1,Math.min(1,dx)).toFixed(2))})},{passive:true});
+document.documentElement.addEventListener('mouseleave',()=>host.style.setProperty('--lean','0'));
+host.addEventListener('click',e=>{const l=e.target.closest&&e.target.closest('.lil');if(!l)return;e.stopPropagation();
+ const gs=[...host.querySelectorAll('.lil .grow')];gs.forEach(g=>{g.style.animation='none'});void host.getBoundingClientRect();gs.forEach(g=>{g.style.animation=''})});/* click a lily: every lily blooms again */
+window.FX={ensure,DEF,setDone};
+})();
+</script>
 <script id="ux-script">
 
 (function(){
@@ -3874,12 +4019,15 @@ function derive(c){const o=Object.assign({},c),bg=o.bg||'#f7f6fb',hb=hexToHsl(bg
  o.danger=o.danger||(dk?'#f2b8b5':'#b3261e');return o}
 function migrate(t){if(t.v)return t;const m=t.main,a=t.accent,s=t.second;return{v:2,c:{bg:h2x(m.h,m.s,m.l),p:h2x(a.h,a.s,a.l),pc:h2x(s.h,s.s,s.l)},lock:null,ui:{}}}
 const FF={serif:['Serif (Georgia)','Georgia,"Times New Roman",serif'],classic:['Classic (Times)','"Times New Roman",Times,serif'],book:['Book (Palatino)','"Palatino Linotype",Palatino,"Book Antiqua",serif'],slab:['Slab','Rockwell,"Roboto Slab","Courier New",serif'],mono:['Mono','ui-monospace,Consolas,"Courier New",monospace'],type:['Typewriter','"Courier New",Courier,monospace'],round:['Rounded','"Trebuchet MS","Segoe UI",system-ui,sans-serif'],verdana:['Verdana','Verdana,Geneva,sans-serif'],tahoma:['Tahoma','Tahoma,Geneva,sans-serif'],humanist:['Humanist','"Gill Sans","Gill Sans MT",Calibri,"Trebuchet MS",sans-serif'],geo:['Geometric','"Century Gothic","Avenir Next",Futura,"Trebuchet MS",sans-serif'],cond:['Condensed','"Arial Narrow","Roboto Condensed","Helvetica Neue",sans-serif'],clean:['Arial','Arial,Helvetica,sans-serif'],casual:['Casual','"Comic Sans MS","Chalkboard SE","Comic Neue",cursive'],script:['Script','"Segoe Script","Brush Script MT","Lucida Handwriting",cursive'],impact:['Bold display','Impact,"Arial Black","Helvetica Neue",sans-serif']};
-function fromPrime(t){const x=hexToHsl(normHex(t.prime)||'#7a5af8'),h=x.h,s=Math.max(10,x.s),m=t.mode||'light',dk=m!=='light',L=(v,a,b)=>Math.min(b,Math.max(a,v)),c={};
- if(m==='light'){c.bg=h2x(h,s*.5,97);c.bg2=h2x(h,s*.4,93);c.card='#ffffff';c.line=h2x(h,s*.25,84);c.pc=h2x(h,s*.55,90)}
- else if(m==='dark'){c.bg=h2x(h,s*.22,10);c.bg2=h2x(h,s*.22,13);c.card=h2x(h,s*.22,17);c.line=h2x(h,s*.15,29);c.pc=h2x(h,s*.4,27)}
- else{c.bg='#000000';c.bg2='#0b0b0c';c.card='#141416';c.line='#2a2a2e';c.pc=h2x(h,s*.4,20)}
- c.p=h2x(h,s,dk?L(x.l,54,66):L(x.l,34,50));
- const lk={c1:h2x(h,55,m==='light'?34:m==='dark'?24:14),c2:h2x(h,55,m==='light'?16:m==='dark'?10:4),ang:160,a:.8,blur:36};
+const OVR=['bg','bg2','card','line','txt','mut','p','pc','danger'];
+function fromPrime(t){const x=hexToHsl(normHex(t.prime)||'#7a5af8'),h=x.h,s=Math.max(10,x.s),m=t.mode||'light',dk=m!=='light',L=(v,a,b)=>Math.min(b,Math.max(a,v)),k=Math.max(0,Math.min(3,+t.tint||0)),Q=v=>Math.min(100,v),c={};
+ /* k = how strongly the prime color tints the surfaces: 0 soft, 1 rich, 2 bold, 3 max */
+ if(m==='light'){c.bg=h2x(h,Q(s*(.5+.34*k)),97-2.6*k);c.bg2=h2x(h,Q(s*(.4+.34*k)),93-3.2*k);c.card=k?h2x(h,Q(s*.45*k),100-1.2*k):'#ffffff';c.line=h2x(h,Q(s*(.25+.2*k)),84-4*k);c.pc=h2x(h,Q(s*(.55+.3*k)),90-4.5*k)}
+ else if(m==='dark'){c.bg=h2x(h,Q(s*(.22+.22*k)),10+k*.6);c.bg2=h2x(h,Q(s*(.22+.22*k)),13+k);c.card=h2x(h,Q(s*(.22+.22*k)),17+k*1.2);c.line=h2x(h,Q(s*(.15+.2*k)),29+k);c.pc=h2x(h,Q(s*(.4+.25*k)),27+k*1.5)}
+ else{c.bg='#000000';c.bg2=k?h2x(h,Q(s*.5*k),4+k):'#0b0b0c';c.card=k?h2x(h,Q(s*.45*k),7+k*1.3):'#141416';c.line=k?h2x(h,Q(s*.3*k),17+k*2):'#2a2a2e';c.pc=h2x(h,Q(s*(.4+.25*k)),20+k*2)}
+ c.p=h2x(h,s,dk?L(x.l,47,62):L(x.l,30,50));
+ const ls=Math.max(55,Math.min(95,s*.95)),lk={c1:h2x(h,ls,m==='light'?34:m==='dark'?24:14),c2:h2x(h,ls,m==='light'?16:m==='dark'?10:4),ang:160,a:.8,blur:36};
+ const ov=t.over||{};OVR.forEach(q=>{const v=normHex(ov[q]);if(v)c[q]=v});/* fine-tuned colors win over the built ones */
  return{v:2,c,lock:Object.assign(lk,t.lock||{}),ui:t.ui||{}}}
 window.applyCustom=function(t,force){if(window.__themeEdit&&!force)return;if(!force)applyIsland(appData.settings.isl);const r=document.documentElement,set=(k,v)=>r.style.setProperty(k,v);
  TK.forEach(k=>r.style.removeProperty(k));if(!t)return;if(t.v===3){r.classList.toggle('dark',t.mode!=='light');r.classList.toggle('black',t.mode==='black');t=fromPrime(t)}else t=migrate(t);
@@ -3888,25 +4036,31 @@ window.applyCustom=function(t,force){if(window.__themeEdit&&!force)return;if(!fo
  set('--card',d.card);set('--line',d.line);set('--bar',rg(d.bg2,.92));set('--txt',d.txt);set('--mut',d.mut);
  set('--p',d.p);set('--on-p',d.onp);set('--pc',d.pc);set('--on-pc',d.onpc);set('--danger',d.danger);set('--h',Math.round(hexToHsl(d.p).h));
  const L=t.lock;if(L){const mid=mix(L.c1,L.c2,.5);set('--lk1',rg(L.c1,L.a));set('--lk2',rg(L.c2,L.a));set('--lk1s',L.c1);set('--lk2s',L.c2);
-  set('--lk-ang',L.ang+'deg');set('--lk-blur',L.blur+'px');set('--lk-fg',CR('#ffffff',mid)>=CR('#1d1b20',mid)?'#ffffff':'#1d1b20')}
+  set('--lk-ang',L.ang+'deg');set('--lk-blur',L.blur+'px');set('--lk-fg',normHex(L.fg)||(CR('#ffffff',mid)>=CR('#1d1b20',mid)?'#ffffff':'#1d1b20'))}
  const U=t.ui||{},R={sharp:[6,6,6,10,4,4],soft:[999,30,26,34,18,22]}[U.rad];
  if(R)R.forEach((v,i)=>set('--r'+i,v+'px'));if(U.fc){const n=String(U.fc).replace(/[^\w \-]/g,'').trim();if(n)set('--ff','"'+n+'",system-ui,sans-serif')}else if(U.ff&&FF[U.ff])set('--ff',FF[U.ff][1]);if(U.cs)set('--cs',U.cs+'px');
  if(U.sh)set('--sh',{soft:'0 2px 10px rgba(0,0,0,.14)',strong:'0 6px 22px rgba(0,0,0,.32)'}[U.sh])};
 /* starter presets: name : background, background 2, card, accent, highlight [, lock top, lock bottom] */
 const ISH={soft:[18,20],sharp:[8,10]};
+const fxOK=()=>{try{return localStorage.getItem('ataraxia_fx_ok')==='1'}catch(e){return false}};/* this device has been unlocked with the master key */
 window.applyIsland=function(I){I=I||{};const rt=$('isl-root'),r=document.documentElement,set=(k,v)=>r.style.setProperty(k,v);
- ['--isl-near','--isl-late','--isl-ok','--isl-radius','--isl-radius-open','--isl-bg','--isl-blur','--fx-c','--fx-o','--fx-s'].forEach(k=>r.style.removeProperty(k));
+ ['--isl-near','--isl-late','--isl-ok','--isl-radius','--isl-radius-open','--isl-bg','--isl-blur','--fx-c','--fx-o','--fx-d','--fx-s','--fx-t'].forEach(k=>r.style.removeProperty(k));
  if(I.warn)set('--isl-near',I.warn);if(I.late)set('--isl-late',I.late);if(I.ok)set('--isl-ok',I.ok);
  if(ISH[I.shape]){set('--isl-radius',ISH[I.shape][0]+'px');set('--isl-radius-open',ISH[I.shape][1]+'px')}
  const clr=I.glass==='clear';
- if(I.tint||I.ta!=null||clr)set('--isl-bg','rgb('+RGB(I.tint||'#ffffff').join(' ')+'/'+((I.ta!=null?I.ta:clr?3:10)/100)+')');
+ if(I.tint||I.ta!=null||clr)set('--isl-bg','rgb('+RGB(normHex(I.tint)||'#ffffff').join(' ')+'/'+((I.ta!=null?I.ta:clr?3:10)/100)+')');
  if(I.blur!=null||clr)set('--isl-blur',(I.blur!=null?I.blur:2)+'px');
  r.classList.toggle('isl-liquid',I.glass==='liquid');
- if(rt)rt.classList.toggle('fx-on',I.fx==='lily');{const w=I.fxc!=='black';set('--fx-c',w?'#fff':'#000');set('--fx-o',w?'#000':'#fff')}if(I.fxs)set('--fx-s',I.fxs/100);
+ /* spider lilies: red like the reference unless you pick another color; the outline (the thin gaps between ribbons) is white on a dark flower and black on a light one */
+ const on=(I.fx==='lily'||I.fx==='break'||I.fx==='ember')&&fxOK(),fc=I.fxc==='white'?'#ffffff':I.fxc==='black'?'#000000':(normHex(I.fxc)||'#c62d33');
+ if(rt){rt.classList.toggle('fx-on',on);rt.classList.toggle('fx-noem',I.fxe==='off');rt.classList.toggle('fx-nolean',I.fxl==='off');rt.classList.toggle('fx-still',I.fxm==='off');rt.classList.toggle('fx-bl',on&&I.fx!=='ember'&&(I.fxb==='on'||I.fx==='break'));rt.classList.toggle('fx-nolily',I.fx==='ember');rt.classList.toggle('fx-nodots',I.fxd==='off')}
+ set('--fx-c',fc);set('--fx-o',normHex(I.fxo)||(LU(fc)>.55?'#000000':'#ffffff'));set('--fx-d',mix(fc,'#000000',LU(fc)>.55?.14:.2));
+ if(I.fxs)set('--fx-s',I.fxs/100);set('--fx-t',{calm:1.6,lively:.62}[I.fxm]||1);
+ if(on&&window.FX)window.FX.ensure(I.fxk,I.fxp,I.fx!=='ember'&&(I.fxb==='on'||I.fx==='break'));
  const dm=$('isl-dm');if(dm)dm.setAttribute('scale',I.glass==='liquid'?(I.ls||28):0)};
 applyIsland(appData.settings.isl);
 const mk=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
-const FAMS={};`Red:Pure red ff1a1a|Crimson dc143c|Scarlet ff2400|Cherry d2042d|Ruby c4002b|Blood 9b0a1a|Fire ff3b1f
+const FAMS={};`Red:Vivid e60000|Crimson d1122a|Scarlet ff2a1a|Cherry c8102e|Ruby aa001e|Blood 7f0000|Poppy e8281e|Fire ff3b1f|Lava d63a14
 Orange:Tangerine f97316|Amber f5a524|Sunset f06a1d|Copper c8743a|Apricot ffa94d|Rust c2410c|Ember e8590c
 Yellow:Gold d4af37|Lemon e6c200|Honey e9a820|Mustard c9a227|Sand d9c08a|Butter f2d45c|Citrine e4c800
 Green:Forest 2f9e5b|Emerald 10b981|Moss 6b8f2a|Lime 84cc16|Sage 8fae8b|Matcha 7aa33a|Jade 00a86b
@@ -3918,55 +4072,127 @@ Neutral:Graphite 6b7280|Slate 64748b|Stone 8a8578|Silver a1a1aa|Charcoal 52525b|
 let prev=null,prevI,cur=null,S=null,R=[],fam='Purple',wh=null;
 function setTab(t){document.querySelectorAll('#stabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));document.querySelectorAll('.tp').forEach(p=>p.classList.toggle('on',p.dataset.t===t))}
 $('stabs').onclick=e=>{const b=e.target.closest('button');if(b)setTab(b.dataset.t)};
-function endTheme(){window.__themeEdit=false;$('thpanel').hidden=true;openModal('settings-modal');setTab('look')}
-function go(){cur={v:3,prime:S.prime,mode:S.mode,lock:Object.keys(S.lock).length?Object.assign({},S.lock):undefined,ui:Object.assign({},S.ui)};
+function endTheme(){window.__themeEdit=false;$('thpanel').hidden=true;$('lkprev').hidden=true;openModal('settings-modal');setTab('look')}
+function go(){cur={v:3,prime:S.prime,mode:S.mode,tint:S.tint||undefined,over:Object.keys(S.over).length?Object.assign({},S.over):undefined,lock:Object.keys(S.lock).length?Object.assign({},S.lock):undefined,ui:Object.assign({},S.ui)};
  applyCustom(cur,true);appData.settings.isl=Object.keys(S.isl).length?clone(S.isl):undefined;applyIsland(S.isl);R.forEach(f=>f())}
-const lk=()=>fromPrime({prime:S.prime,mode:S.mode}).lock;
-const uiSet=(k,v)=>{if(v)S.ui[k]=v;else delete S.ui[k]},iSet=(k,v)=>{if(v)S.isl[k]=v;else delete S.isl[k]};
-function sec(p,t,sub){const d=mk('div','sec');d.append(mk('label','',t));if(sub)d.append(mk('p','hint',sub));p.append(d);return d}
-function seg(p,t,opts,get,put){const d=sec(p,t),w=mk('div','seg');w.style.marginTop='6px';
- const bs=opts.map(([v,x])=>{const b=mk('button','btn xs out',x);b.type='button';b.onclick=()=>{put(v);go()};w.append(b);return[v,b]});d.append(w);
+const lk=()=>fromPrime({prime:S.prime,mode:S.mode,tint:S.tint}).lock;
+const eff=k=>derive(fromPrime({prime:S.prime,mode:S.mode,tint:S.tint,over:S.over}).c)[k];
+const uiSet=(k,v)=>{if(v)S.ui[k]=v;else delete S.ui[k]},iSet=(k,v)=>{if(v)S.isl[k]=v;else delete S.isl[k]},lSet=(k,v)=>{if(v)S.lock[k]=v;else delete S.lock[k]};
+/* compact rows: a group is a rounded card, every setting is one line (label on the left, controls on the right) */
+function grp(p,t){const g=mk('div','tgrp');if(t)g.append(mk('div','tgt',t));p.append(g);return g}
+function row(g,t,tip){const r=mk('div','trow'),l=mk('label','',t),c=mk('div','ctl');if(tip)r.title=tip;r.append(l,c);g.append(r);return{r,c}}
+function seg(g,t,opts,get,put){const{c}=row(g,t),bs=opts.map(([v,x])=>{const b=mk('button','btn xs out',x);b.type='button';b.onclick=()=>{put(v);go()};c.append(b);return[v,b]});
  R.push(()=>bs.forEach(([v,b])=>{const on=get()===v;b.classList.toggle('fill',on);b.classList.toggle('out',!on)}))}
-function sel(p,t,opts,get,put){const d=sec(p,t),s=mk('select');s.style.cssText='width:100%;height:36px;margin-top:6px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--txt);padding:0 10px';
- opts.forEach(([v,x])=>{const o=mk('option','',x);o.value=v;if(FF[v])o.style.fontFamily=FF[v][1];s.append(o)});s.onchange=()=>{put(s.value);go()};d.append(s);R.push(()=>{s.value=get()})}
-function rng(p,t,mn,mx,st,get,put){const d=sec(p,t),i=mk('input');i.type='range';i.min=mn;i.max=mx;i.step=st;i.style.cssText='width:100%;margin-top:6px';i.oninput=()=>{put(+i.value);go()};d.append(i);R.push(()=>{i.value=get()})}
-function cols(p,t,items){const d=sec(p,t),w=mk('div','seg'),hw=mk('div','cw');hw.hidden=true;hw.style.background='var(--card)';let open=-1;w.style.marginTop='6px';
- items.forEach(([n,get,put],k)=>{const b=mk('button','btn xs out'),dot=mk('i');b.type='button';dot.style.cssText='width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.3)';b.append(dot,n);
-  b.onclick=()=>{if(open===k){hw.hidden=true;open=-1;R.forEach(f=>f());return}open=k;hw.hidden=false;const o=hexToHsl(get()),dd={name:n,h:o.h,s:o.s,l:o.l};makeWheel(hw,[dd],()=>{put(h2x(dd.h,dd.s,dd.l));go()},{hideName:true});R.forEach(f=>f())};
-  w.append(b);R.push(()=>{dot.style.background=get();b.classList.toggle('fill',open===k);b.classList.toggle('out',open!==k)})});d.append(w,hw)}
-function drawWheel(){const o=hexToHsl(S.prime),d={name:'Prime',h:o.h,s:o.s,l:o.l};makeWheel(wh,[d],()=>{S.prime=h2x(d.h,d.s,d.l);go()},{hideName:true})}
-function build(){const H=$('thwheel');H.textContent='';R=[];
- const bar=mk('div','stabs'),panes=[0,1,2].map(()=>{const d=mk('div');d.style.cssText='flex-direction:column;gap:10px';return d});bar.style.padding='0 0 12px';
- ['Colors','Lock screen','Island'].forEach((n,i)=>{const b=mk('button',i?'':'on',n);b.type='button';b.onclick=()=>{[...bar.children].forEach((x,j)=>x.classList.toggle('on',j===i));panes.forEach((q,j)=>q.style.display=j===i?'flex':'none')};bar.append(b)});
- panes.forEach((q,j)=>q.style.display=j?'none':'flex');H.append(bar,...panes);const[A,B,C]=panes;
- seg(A,'Mode',[['light','Light'],['dark','Dark'],['black','Black']],()=>S.mode,v=>{S.mode=v});
- const pw=sec(A,'Prime color','Pick one color. Backgrounds, cards, text and accents are all built from it, and adapt to the mode.');wh=mk('div');pw.append(wh);drawWheel();
- const ps=sec(A,'Presets'),fr=mk('div','seg'),gr=mk('div','thp'),fb={};fr.style.margin='6px 0';ps.append(fr,gr);
+function sel(g,t,opts,get,put){const{c}=row(g,t),s=mk('select');s.style.cssText='width:100%;height:32px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--txt);padding:0 10px';
+ opts.forEach(([v,x])=>{const o=mk('option','',x);o.value=v;if(FF[v])o.style.fontFamily=FF[v][1];s.append(o)});s.onchange=()=>{put(s.value);go()};c.append(s);R.push(()=>{s.value=get()})}
+function rng(g,t,mn,mx,st,get,put,fmt){const{c}=row(g,t),i=mk('input'),o=mk('span','tv');i.type='range';i.min=mn;i.max=mx;i.step=st;i.setAttribute('aria-label',t);i.oninput=()=>{put(+i.value);go()};c.append(i,o);R.push(()=>{i.value=get();o.textContent=fmt?fmt(+i.value):i.value})}
+/* color row: an optional "automatic" swatch, a few quick colors, and a rainbow swatch that opens the color wheel (with sliders and a HEX box) right under the row */
+function pick(g,t,get,put,pre,o){o=o||{};const{r,c}=row(g,t,o.tip),box=mk('div','cpick'),hw=mk('div','cw');hw.hidden=true;c.append(box);r.append(hw);
+ const sw=(cls,col,ti)=>{const b=mk('button','csw '+cls);b.type='button';b.title=ti;b.setAttribute('aria-label',t+': '+ti);if(col)b.style.background=col;box.append(b);return b},items=[];
+ if(o.auto){const b=sw('def','',o.auto);b.onclick=()=>{put('');go();if(!hw.hidden)wheel()};items.push([b,v=>!v])}
+ pre.forEach(col=>{const b=sw('',col,col);b.onclick=()=>{put(col);go();if(!hw.hidden)wheel()};items.push([b,v=>v===col])});
+ const cu=sw('custom','','Custom color (color wheel)');
+ const wheel=()=>{const x=hexToHsl(normHex(get())||normHex(o.fb&&o.fb())||'#888888'),d={name:t,h:x.h,s:x.s,l:x.l};makeWheel(hw,[d],()=>{put(h2x(d.h,d.s,d.l));go()},{hideName:true})};
+ cu.onclick=()=>{hw.hidden=!hw.hidden;if(!hw.hidden)wheel();R.forEach(f=>f())};
+ R.push(()=>{const v=normHex(get());items.forEach(([b,f])=>b.classList.toggle('on',f(v)));const cust=!!v&&!pre.includes(v);cu.classList.toggle('on',cust||!hw.hidden);cu.style.background=cust?v:''})}
+const OVK=[['bg','Background'],['bg2','Sidebar & bar'],['card','Cards'],['line','Lines'],['txt','Text'],['mut','Muted text'],['p','Accent'],['pc','Highlight'],['danger','Alert']];
+function tune(p){const g=grp(p,'Fine-tune colors'),r=mk('div','trow blk'),box=mk('div','tchips'),hw=mk('div','cw'),info=mk('div','tcr');hw.hidden=true;let open='';r.append(box,hw,info);g.append(r);
+ OVK.forEach(([k,n])=>{const b=mk('button','btn xs out'),dot=mk('i'),x=mk('span','tx','\u21ba');b.type='button';x.setAttribute('role','button');x.title='Reset '+n;x.hidden=true;b.append(dot,n,x);
+  x.onclick=e=>{e.stopPropagation();delete S.over[k];if(open===k){open='';hw.hidden=true}go()};
+  b.onclick=()=>{if(open===k){open='';hw.hidden=true;R.forEach(f=>f());return}open=k;hw.hidden=false;const o=hexToHsl(eff(k)),d={name:n,h:o.h,s:o.s,l:o.l};makeWheel(hw,[d],()=>{S.over[k]=h2x(d.h,d.s,d.l);go()},{hideName:true});R.forEach(f=>f())};
+  box.append(b);R.push(()=>{dot.style.background=eff(k);x.hidden=!S.over[k];b.classList.toggle('fill',open===k);b.classList.toggle('out',open!==k)})});
+ R.push(()=>{const c1=CR(eff('txt'),eff('bg')),c2=CR(eff('onp'),eff('p')),f=(n,v)=>{const s=mk('span','',n+' '),b=mk('b',v<4.5?'bad':'',v.toFixed(1)+':1');s.append(b);return s};info.textContent='';info.append(f('Text',c1),' \u00b7 ',f('Button',c2),v4(c1,c2)?'':'  (below 4.5:1 is hard to read)')});
+ const v4=(a,b)=>a>=4.5&&b>=4.5;
+ const rs=mk('button','btn xs tone','Reset fine-tuning');rs.type='button';rs.style.margin='8px 0 6px';rs.onclick=()=>{S.over={};open='';hw.hidden=true;go()};r.append(rs)}
+function presets(p){const g=grp(p,'Presets'),r=mk('div','trow blk'),fr=mk('div','seg'),gr=mk('div','thp'),fb={};fr.style.marginBottom='8px';r.append(fr,gr);g.append(r);let key='';
  Object.keys(FAMS).forEach(f=>{const b=mk('button','btn xs out',f);b.type='button';b.onclick=()=>{fam=f;go()};fr.append(b);fb[f]=b});
- R.push(()=>{Object.keys(fb).forEach(f=>{fb[f].classList.toggle('fill',f===fam);fb[f].classList.toggle('out',f!==fam)});gr.textContent='';
-  FAMS[fam].forEach(([n,c])=>{const b=mk('button'),i=mk('i'),d=derive(fromPrime({prime:c,mode:S.mode}).c);b.type='button';b.title=n;
-   i.style.background='linear-gradient(90deg,'+d.bg+' 0 30%,'+d.card+' 30% 52%,'+d.pc+' 52% 70%,'+d.p+' 70%)';b.append(i,n);b.onclick=()=>{S.prime=c;go();drawWheel()};gr.append(b)})});
- seg(A,'Corners',[['','Default'],['sharp','Sharp'],['soft','Soft']],()=>S.ui.rad||'',v=>uiSet('rad',v));
- seg(A,'Shadow',[['','None'],['soft','Soft'],['strong','Strong']],()=>S.ui.sh||'',v=>uiSet('sh',v));
- rng(A,'Text size',13,18,1,()=>S.ui.cs||15,v=>{S.ui.cs=v});
- sel(A,'Font',[['','System default']].concat(Object.entries(FF).map(([k,v])=>[k,v[0]])),()=>S.ui.fc?'':(S.ui.ff||''),v=>{delete S.ui.fc;uiSet('ff',v)});
- const pv=mk('div','lkp');pv.style.height='210px';pv.innerHTML='<div class="lkp-in"><small>Wednesday, October 14</small><b>9:18</b><div class="av"></div><small>username</small><div class="pw">Password</div></div>';B.append(pv);
- cols(B,'Gradient',[['Top',()=>S.lock.c1||lk().c1,v=>{S.lock.c1=v}],['Bottom',()=>S.lock.c2||lk().c2,v=>{S.lock.c2=v}]]);
- rng(B,'Blur',0,60,2,()=>S.lock.blur==null?lk().blur:S.lock.blur,v=>{S.lock.blur=v});
- rng(B,'Angle',0,360,5,()=>S.lock.ang==null?160:S.lock.ang,v=>{S.lock.ang=v});
- const lr=mk('button','btn tone sm','Match prime color');lr.type='button';lr.onclick=()=>{S.lock={};go()};B.append(lr);
- seg(C,'Glass',[['','Frosted'],['clear','Clear'],['liquid','Liquid']],()=>S.isl.glass||'',v=>iSet('glass',v));
- seg(C,'Shape',[['','Pill'],['soft','Soft'],['sharp','Sharp']],()=>S.isl.shape||'',v=>iSet('shape',v));
- rng(C,'Frost',0,40,1,()=>S.isl.blur==null?10:S.isl.blur,v=>{S.isl.blur=v});
- cols(C,'Alert colors',[['Heads-up',()=>S.isl.warn||'#ffd60a',v=>{S.isl.warn=v}],['Overbreak',()=>S.isl.late||'#ff453a',v=>{S.isl.late=v}],['Done',()=>S.isl.ok||'#30d158',v=>{S.isl.ok=v}]]);
- seg(C,'Effect',[['','None'],['lily','Spider lily']],()=>S.isl.fx||'',v=>iSet('fx',v));
- seg(C,'Effect color',[['white','Pure white'],['black','Pure black']],()=>S.isl.fxc==='black'?'black':'white',v=>{S.isl.fxc=v});
- rng(C,'Effect size',60,150,5,()=>S.isl.fxs||100,v=>{S.isl.fxs=v});
- const ir=mk('button','btn out sm','Reset island');ir.type='button';ir.onclick=()=>{S.isl={};go()};C.append(ir)}
+ R.push(()=>{Object.keys(fb).forEach(f=>{fb[f].classList.toggle('fill',f===fam);fb[f].classList.toggle('out',f!==fam)});
+  const k=fam+'|'+S.mode;if(k===key)return;key=k;gr.textContent='';
+  FAMS[fam].forEach(([n,c])=>{const b=mk('button'),i=mk('i'),d=derive(fromPrime({prime:c,mode:S.mode,tint:2}).c);b.type='button';b.title=n;
+   i.style.background='linear-gradient(90deg,'+d.bg+' 0 24%,'+d.card+' 24% 42%,'+d.pc+' 42% 60%,'+d.p+' 60%)';b.append(i,n);
+   b.onclick=()=>{S.prime=c;S.tint=2;S.over={};go();drawWheel()};gr.append(b)})})}
+function drawWheel(){const o=hexToHsl(S.prime),d={name:'Prime',h:o.h,s:o.s,l:o.l};makeWheel(wh,[d],()=>{S.prime=h2x(d.h,d.s,d.l);go()},{hideName:true})}
+const P_WARN=['#ffd60a','#ff9f0a','#ff6b35','#fff176'],P_LATE=['#ff453a','#e11d2e','#ff2d55','#b3001b'],P_OK=['#30d158','#00e5a0','#a3e635','#64b5f6'],
+ P_LILY=['#c62d33','#e11d2e','#ff4d4d','#ff8fa3','#ffffff','#000000','#ffd60a','#a855f7'],P_OUT=['#ffffff','#000000','#5a0b10','#ffe5e5'],P_TINT=['#ffffff','#000000','#ffe5e5','#dbeafe','#f3e8ff'],
+ P_LK=['#7f1d1d','#b91c1c','#1e3a8a','#4c1d95','#065f46','#0f172a','#9d174d'],P_LKF=['#ffffff','#1d1b20','#ffe9e9','#fff7d6'];
+function tickPrev(){const d=new Date(),a=localStorage.getItem('ataraxia_avatar'),av=$('lkp-av');
+ $('lkp-c').textContent=d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}).replace(/\s?[ap]\.?m\.?$/i,'');$('lkp-d').textContent=d.toLocaleDateString([],{weekday:'long',month:'long',day:'numeric'});
+ $('lkp-u').textContent=localStorage.getItem('ataraxia_last')||'username';
+ if(a&&/^data:image\//.test(a)){av.style.background='url('+a+') center/cover'}else av.style.background=''}
+setInterval(()=>{if(!$('lkprev').hidden)tickPrev()},5000);
+function build(){const H=$('thwheel');H.textContent='';R=[];
+ const bar=mk('div','stabs tt'),names=['Colors','Style','Lock screen','Island'],panes=names.map(()=>mk('div','tpane'));
+ const show=i=>{[...bar.children].forEach((x,j)=>x.classList.toggle('on',j===i));panes.forEach((q,j)=>q.style.display=j===i?'flex':'none');$('lkprev').hidden=i!==2;if(i===2)tickPrev()};
+ names.forEach((n,i)=>{const b=mk('button','',n);b.type='button';b.onclick=()=>show(i);bar.append(b)});
+ H.append(bar,...panes);const[A,B,C,D]=panes;let g;
+ /* Colors */
+ g=grp(A,'Theme');
+ seg(g,'Mode',[['light','Light'],['dark','Dark'],['black','Black']],()=>S.mode,v=>{if(v!==S.mode)S.over={};S.mode=v});
+ seg(g,'Tint',[['0','Soft'],['1','Rich'],['2','Bold'],['3','Max']],()=>String(S.tint||0),v=>{S.tint=+v});
+ g=grp(A,'Prime color');{const r=mk('div','trow blk');wh=mk('div');r.append(wh);g.append(r);drawWheel()}
+ presets(A);tune(A);
+ /* Style */
+ g=grp(B,'Shape & type');
+ seg(g,'Corners',[['','Default'],['sharp','Sharp'],['soft','Soft']],()=>S.ui.rad||'',v=>uiSet('rad',v));
+ seg(g,'Shadow',[['','None'],['soft','Soft'],['strong','Strong']],()=>S.ui.sh||'',v=>uiSet('sh',v));
+ rng(g,'Text size',13,18,1,()=>S.ui.cs||15,v=>{S.ui.cs=v},v=>v+' px');
+ sel(g,'Font',[['','System default']].concat(Object.entries(FF).map(([k,v])=>[k,v[0]])),()=>S.ui.fc?'':(S.ui.ff||''),v=>{delete S.ui.fc;uiSet('ff',v)});
+ /* Lock screen (a live preview floats on the left while this tab is open) */
+ g=grp(C,'Gradient');
+ pick(g,'Top',()=>S.lock.c1||'',v=>lSet('c1',v),P_LK,{auto:'Match theme',fb:()=>lk().c1});
+ pick(g,'Bottom',()=>S.lock.c2||'',v=>lSet('c2',v),P_LK,{auto:'Match theme',fb:()=>lk().c2});
+ pick(g,'Text',()=>S.lock.fg||'',v=>lSet('fg',v),P_LKF,{auto:'Auto contrast',fb:()=>'#ffffff'});
+ rng(g,'Opacity',40,100,5,()=>Math.round((S.lock.a==null?.8:S.lock.a)*100),v=>{S.lock.a=v/100},v=>v+'%');
+ rng(g,'Blur',0,60,2,()=>S.lock.blur==null?lk().blur:S.lock.blur,v=>{S.lock.blur=v},v=>v+' px');
+ rng(g,'Angle',0,360,5,()=>S.lock.ang==null?160:S.lock.ang,v=>{S.lock.ang=v},v=>v+'\u00b0');
+ {const b=mk('button','btn tone xs','Match prime color');b.type='button';b.style.margin='8px 0 6px';b.onclick=()=>{S.lock={};go()};g.append(b)}
+ /* Island */
+ g=grp(D,'Glass');
+ seg(g,'Style',[['','Frosted'],['clear','Clear'],['liquid','Liquid']],()=>S.isl.glass||'',v=>iSet('glass',v));
+ seg(g,'Shape',[['','Pill'],['soft','Soft'],['sharp','Sharp']],()=>S.isl.shape||'',v=>iSet('shape',v));
+ rng(g,'Frost',0,40,1,()=>S.isl.blur==null?10:S.isl.blur,v=>{S.isl.blur=v},v=>v+' px');
+ pick(g,'Tint',()=>S.isl.tint||'',v=>iSet('tint',v),P_TINT,{auto:'Default',fb:()=>'#ffffff'});
+ rng(g,'Tint amount',0,40,1,()=>S.isl.ta==null?10:S.isl.ta,v=>{S.isl.ta=v},v=>v+'%');
+ g=grp(D,'Alert colors');
+ pick(g,'Heads-up',()=>S.isl.warn||'',v=>iSet('warn',v),P_WARN,{auto:'Default',fb:()=>'#ffd60a'});
+ pick(g,'Overbreak',()=>S.isl.late||'',v=>iSet('late',v),P_LATE,{auto:'Default',fb:()=>'#ff453a'});
+ pick(g,'Done',()=>S.isl.ok||'',v=>iSet('ok',v),P_OK,{auto:'Default',fb:()=>'#30d158'});
+ g=grp(D,'Break dots');
+ seg(g,'Dots',[['','3 break dots'],['off','Plain 2 dots']],()=>S.isl.fxd||'',v=>iSet('fxd',v));
+ g=grp(D,'Spider lilies');
+ {const{c}=row(g,'Master key'),pw=mk('input'),ub=mk('button','btn fill xs','Unlock'),lm=mk('div','tcr'),lr=g.lastChild,dflt='Locked. Enter the master key to use this effect.';
+  pw.type='password';pw.placeholder='Master key';pw.autocomplete='off';pw.spellcheck=false;pw.setAttribute('aria-label','Master key');pw.style.cssText='flex:1 1 110px;min-width:0;height:32px;padding:0 12px;border-radius:10px;font-size:13px';ub.type='button';
+  const msg=(t,bad)=>{lm.textContent=t;lm.style.color=bad?'var(--danger)':''};msg(dflt);
+  const go2=async()=>{const k=pw.value;if(!k){msg('Enter the master key.',1);return}ub.disabled=true;msg('Checking\u2026');
+   try{if(!window.checkMasterKey)throw 'Not ready yet. Try again in a moment.';await window.checkMasterKey(k);try{localStorage.setItem('ataraxia_fx_ok','1')}catch(e){}pw.value='';msg(dflt);go()}
+   catch(e){msg(typeof e==='string'?e:'Could not check the key.',1)}finally{ub.disabled=false}};
+  ub.onclick=go2;pw.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();go2()}};c.append(pw,ub);g.append(lm);
+  const n0=g.children.length;
+ seg(g,'Effect',[['','None'],['lily','Spider lilies'],['ember','Embers only']],()=>S.isl.fx||'',v=>iSet('fx',v));
+ pick(g,'Flower',()=>({white:'#ffffff',black:'#000000'}[S.isl.fxc]||S.isl.fxc||'#c62d33'),v=>iSet('fxc',v),P_LILY,{fb:()=>'#c62d33'});
+ pick(g,'Outline',()=>S.isl.fxo||'',v=>iSet('fxo',v),P_OUT,{auto:'Auto',fb:()=>'#ffffff'});
+ seg(g,'Corner',[['','Right'],['left','Left']],()=>S.isl.fxk||'',v=>iSet('fxk',v));
+ rng(g,'Size',60,160,5,()=>S.isl.fxs||100,v=>{S.isl.fxs=v},v=>v+'%');
+ seg(g,'Motion',[['off','Off'],['calm','Calm'],['','Normal'],['lively','Lively']],()=>S.isl.fxm||'',v=>iSet('fxm',v));
+ seg(g,'Embers',[['','On'],['off','Off']],()=>S.isl.fxe||'',v=>iSet('fxe',v));
+ seg(g,'Follow mouse',[['','On'],['off','Off']],()=>S.isl.fxl||'',v=>iSet('fxl',v));
+  const fxd=()=>window.FX.DEF,fxGet=(i,k)=>{const q=S.isl.fxp&&S.isl.fxp[i];return q&&q[k]!=null?q[k]:fxd()[i][k]},fxPut=(i,k,v)=>{const q=S.isl.fxp=S.isl.fxp||{};(q[i]=q[i]||{})[k]=v};
+ [['Lily 1 (small, back)'],['Lily 2 (small)'],['Lily 3 (big, front)']].forEach(([nm],i)=>{
+  g.append(mk('div','tgt',nm));
+  rng(g,'Distance',-60,220,1,()=>fxGet(i,'o'),v=>fxPut(i,'o',v),v=>v+' px');
+  rng(g,'Height',-60,80,1,()=>fxGet(i,'y'),v=>fxPut(i,'y',v),v=>v+' px');
+  rng(g,'Size',30,300,2,()=>fxGet(i,'w'),v=>fxPut(i,'w',v),v=>v+' px');
+  rng(g,'Tilt',-90,90,1,()=>fxGet(i,'t'),v=>fxPut(i,'t',v),v=>v+'\u00b0')});
+ {const b=mk('button','btn tone xs','Reset lily positions');b.type='button';b.style.margin='8px 0 6px';b.onclick=()=>{delete S.isl.fxp;go()};g.append(b)}
+  {const b=mk('button','btn out xs','Lock effect again');b.type='button';b.style.margin='8px 0 6px';b.onclick=()=>{try{localStorage.removeItem('ataraxia_fx_ok')}catch(e){}pw.value='';msg(dflt);go()};g.append(b)}
+  const ctl=[...g.children].slice(n0);
+  R.push(()=>{const ok=fxOK();lr.style.display=ok?'none':'';lm.style.display=ok?'none':'';ctl.forEach(n=>{n.style.display=ok?'':'none'})})}
+ {const b=mk('button','btn out xs','Reset island');b.type='button';b.style.margin='8px 0 6px';b.onclick=()=>{S.isl={};go()};g.append(b)}
+ show(0)}
 $('th-open').onclick=()=>{const s=appData.settings,t=s.theme,cl=document.documentElement.classList;prev=clone(t);prevI=clone(s.isl);
- let m=cl.contains('black')?'black':cl.contains('dark')?'dark':'light',pr=h2x(ACCENTS[s.accent]||257,60,52),lock={},ui={};
- if(t){if(t.v===3){pr=t.prime;m=t.mode}else{const d=derive(t.v?t.c:migrate(clone(t)).c);pr=d.p;m=LU(d.bg)<.18?'dark':'light'}lock=clone(t.lock)||{};ui=Object.assign({},t.ui||{})}
- S={prime:pr,mode:m,lock,ui,isl:clone(s.isl)||{}};closeModal('settings-modal');window.__themeEdit=true;$('thpanel').hidden=false;build();go()};
+ let m=cl.contains('black')?'black':cl.contains('dark')?'dark':'light',pr=h2x(ACCENTS[s.accent]||257,60,52),lock={},ui={},tint=0,over={};
+ if(t){if(t.v===3){pr=t.prime;m=t.mode;tint=t.tint||0;over=clone(t.over)||{}}else{const d=derive(t.v?t.c:migrate(clone(t)).c);pr=d.p;m=LU(d.bg)<.18?'dark':'light'}lock=clone(t.lock)||{};ui=Object.assign({},t.ui||{})}
+ S={prime:pr,mode:m,tint,over,lock,ui,isl:clone(s.isl)||{}};if(S.isl.fx==='break'){S.isl.fx='lily';S.isl.fxb='on'}closeModal('settings-modal');window.__themeEdit=true;$('thpanel').hidden=false;build();go()};
 $('th-save').onclick=()=>{appData.settings.theme=cur;persistLocal();endTheme();applyTheme();showToast('Theme saved.')};
 $('th-cancel').onclick=()=>{appData.settings.isl=prevI;endTheme();applyTheme()};
 $('th-reset').onclick=()=>{delete appData.settings.theme;persistLocal();applyTheme();showToast('Custom theme turned off.')};
