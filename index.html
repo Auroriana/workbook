@@ -192,6 +192,7 @@ body.edit #wsc,body.edit .bcan{background-image:linear-gradient(var(--gm) 1px,tr
 .card,.cbox{-webkit-touch-callout:none}
 .card.n1 .lbl{display:none}.card.n1 .ca .btn{padding:0 11px;gap:0;margin-right:0}
 .card.n2 .ed-btn{display:none}
+.kb{flex:none;align-self:center;margin-right:6px;padding:1px 9px;border-radius:999px;background:var(--pc);color:var(--on-pc);font-size:11px;font-weight:600;white-space:nowrap;cursor:help}.card.n2 .kb{display:none}
 .grip{display:none;flex:none;width:26px;height:34px;margin:0 0 0 -10px;border-radius:9px;place-items:center;color:var(--mut);cursor:grab;user-select:none;-webkit-user-select:none}
 body.edit .grip{display:grid}
 .grip svg{width:16px;height:16px;fill:currentColor;stroke:none}
@@ -483,6 +484,8 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
 .widget-ui .sum-aht{display:flex;flex-direction:column;gap:12px}
 .widget-ui .sum-th{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .widget-ui .sum-hist{max-height:190px;overflow-y:auto;padding-right:2px}
+.widget-ui .sum-hist .w-time{gap:6px}.widget-ui .sum-hist .w-time>span{flex:1;min-width:0;overflow-wrap:anywhere}.widget-ui .sum-hist .w-time .ib{flex:none}
+.btn:disabled{opacity:.45;cursor:default;pointer-events:none}
 .sum-ar{display:flex;flex-direction:column;gap:4px;padding:10px 12px;margin-bottom:8px;border-radius:12px;background:var(--surf);border:1px solid var(--line);font-size:13px;color:var(--txt)}
 .sum-ar .t{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.sum-ar .t b{font-size:14px}.sum-ar .t span{font-size:11.5px;color:var(--mut)}
 .sum-ar .r{color:var(--mut);font-variant-numeric:tabular-nums}
@@ -970,7 +973,7 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
    </div>
    <div class="acts" id="hacts"><button class="btn xs fill">Edit info</button><div class="dd"><button class="ib sm" title="More" aria-label="More chapter actions"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button><div class="menu" id="menu-ch"><button class="mi" title="Paste a copied page into this chapter"><svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>Paste page</button><button class="mi" title="Copy this chapter and its pages so you can paste it into any book"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copy chapter</button><button class="mi"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14M18 7H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>Duplicate chapter</button><button class="mi del"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>Delete chapter</button></div></div></div>
   </section>
-  <div class="ph"><h2><button type="button" class="ph-search" id="ph-search" title="Search every page (press /)" aria-label="Search" onclick="window.openSearch&amp;&amp;window.openSearch()"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button><span class="pt on" id="pt-ws" role="button" tabindex="0" title="Your chapter workspace" onclick="closeTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeTools()}">Workspace</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-tools" role="button" tabindex="0" title="Your widgets, available from any chapter" onclick="openTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTools()}">Tools</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-docs" role="button" tabindex="0" title="Your documentation, available from any book" onclick="openDocs()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocs()}">Documentation</span><span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button type="button" class="ib paste-action" id="paste-main-btn" onclick="startPaste()" title="Paste page, board, chapter or book" aria-label="Paste page, board, chapter or book"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg></button><button type="button" class="ib paste-action" id="dl-tools-btn" onclick="downloadToolsBundle()" title="Download Quote Formatter + CSAT Calculator as one HTML file" aria-label="Download Quote Formatter and CSAT Calculator" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></button><span class="chapter-zoom" id="chapter-zoom" role="group" aria-label="Chapter zoom"><button type="button" class="ib" id="chapter-zoom-out" onclick="setWorkspaceZoom(Math.round(workspaceZoom()*100)-5)" title="Zoom out" aria-label="Zoom out">−</button><button type="button" class="ib" id="chapter-zoom-in" onclick="setWorkspaceZoom(Math.round(workspaceZoom()*100)+5)" title="Zoom in" aria-label="Zoom in">+</button></span><button class="btn tone" id="add-board-btn" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" id="add-main-btn" onclick="openAddHubModal()">+ Add</button><div class="pt-sub" id="pt-sub" hidden></div></div>
+  <div class="ph"><h2><button type="button" class="ph-search" id="ph-search" title="Search every page (press /)" aria-label="Search" onclick="window.openSearch&amp;&amp;window.openSearch()"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button><span class="pt on" id="pt-ws" role="button" tabindex="0" title="Your chapter workspace" onclick="closeTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeTools()}">Workspace</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-tools" role="button" tabindex="0" title="Your widgets, available from any chapter" onclick="openTools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTools()}">Tools</span><span class="pt-sep" aria-hidden="true"></span><span class="pt" id="pt-docs" role="button" tabindex="0" title="Your documentation, available from any book" onclick="openDocs()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocs()}">Documentation</span><span class="edit-hint" id="edit-hint" hidden="">Move mode · 8px grid</span></h2><button type="button" class="ib paste-action" id="paste-main-btn" onclick="startPaste()" title="Paste page, board, chapter or book" aria-label="Paste page, board, chapter or book"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg></button><button type="button" class="ib paste-action" id="dl-tools-btn" onclick="downloadToolsBundle()" title="Download Quote Formatter + CSAT Calculator as one HTML file" aria-label="Download Quote Formatter and CSAT Calculator" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></button><button type="button" class="ib paste-action" id="dl-docs-btn" onclick="downloadDocsHtml()" title="Download Documentation as a stand-alone HTML file" aria-label="Download Documentation as HTML" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></button><button type="button" class="btn tone" id="undo-chat-btn" onclick="undoLastChat()" title="No cleared chats to restore" disabled hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5M4 9h10.5a5.5 5.5 0 0 1 0 11H11"></path></svg><span>Undo</span></button><span class="chapter-zoom" id="chapter-zoom" role="group" aria-label="Chapter zoom"><button type="button" class="ib" id="chapter-zoom-out" onclick="setWorkspaceZoom(Math.round(workspaceZoom()*100)-5)" title="Zoom out" aria-label="Zoom out">−</button><button type="button" class="ib" id="chapter-zoom-in" onclick="setWorkspaceZoom(Math.round(workspaceZoom()*100)+5)" title="Zoom in" aria-label="Zoom in">+</button></span><button class="btn tone" id="add-board-btn" onclick="openAddContainerModal()" title="Add a board you can place anywhere in the workspace">+ Board</button><button class="btn fill" id="add-main-btn" onclick="openAddHubModal()">+ Add</button><div class="pt-sub" id="pt-sub" hidden></div></div>
   <div class="empty" id="ws-empty" hidden="">No pages yet. Use + Add to create one, or + Board for a board.</div>
   <div class="workspace-zoom" id="workspace-zoom"><label for="workspace-zoom-range">Zoom</label><input id="workspace-zoom-range" type="range" min="50" max="150" step="5" value="100" aria-label="Workspace zoom" oninput="setWorkspaceZoom(this.value)"><button type="button" id="workspace-zoom-reset" onclick="setWorkspaceZoom(100)" title="Reset zoom to 100%">100%</button></div>
   <div id="chats" hidden></div>
@@ -1099,6 +1102,14 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
     <p class="hint" style="margin-top:8px;">Y/N adds a Yes/No toggle. Type [Opt1|Opt2] for options, or [00 0000 000] to format numbers automatically.</p>
    </div>
   </div>
+ <section class="sec pi" id="page-key-sec">
+   <div class="pi-title">Keybind<small>optional</small></div>
+   <div class="pi-row">
+    <input type="text" id="page-key-input" class="pi-alt" readonly placeholder="Click here, then press your keys (e.g. Ctrl + 1)" aria-label="Keybind for this page" autocomplete="off">
+    <button type="button" class="btn out sm" id="page-key-clear" hidden>Clear</button>
+   </div>
+   <p class="hint" id="page-key-hint">Click the box, then hold Ctrl, Alt or Meta and press your keys together (for example Ctrl + 1, or Alt + C + 1). Pressing the same keys anywhere in the app copies this page (or the variant you are editing, if there are several). Backspace clears it.</p>
+  </section>
  </div>
  <div id="vtabs"><div id="vt-scroll" role="tablist" aria-label="Page variants"></div><button type="button" class="ib sm vt-del" id="vt-del" title="Delete this variant" aria-label="Delete this variant" onclick="removeEditVariant()" hidden></button></div>
  <div class="mf"><button class="btn out" onclick="closeModal('page-modal')">Cancel</button><button class="btn fill" onclick="savePage()">Save Page</button></div>
@@ -1147,6 +1158,15 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
  <div class="mh"><span>Archive</span></div>
  <div class="mb" id="sum-arch-body" style="max-height:60vh;overflow-y:auto"></div>
  <div class="mf"><button class="btn out" type="button" onclick="closeModal('sum-arch-modal')">Close</button></div>
+</div></div>
+
+<div class="ov" id="chatlog-modal"><div class="modal" style="max-width:420px">
+ <div class="mh"><span>Edit handling time</span></div>
+ <div class="mb"><input type="hidden" id="cl-id">
+  <div><label for="cl-name">Chat</label><input type="text" id="cl-name" maxlength="60" autocomplete="off"></div>
+  <div><label for="cl-time">Handling time</label><input type="text" id="cl-time" placeholder="mm:ss or h:mm:ss" autocomplete="off" spellcheck="false"><p class="hint">Type 5:30 for 5 min 30 sec, or 1:05:30 for 1 h 5 min 30 s. A plain number counts as minutes.</p></div>
+ </div>
+ <div class="mf"><button class="btn out" type="button" onclick="closeModal('chatlog-modal')">Cancel</button><button class="btn fill" type="button" onclick="saveChatLog()">Save</button></div>
 </div></div>
 
 <div class="ov" id="paste-modal"><div class="modal">
@@ -1390,12 +1410,12 @@ function ensureDocs(){/* first run only: fills Documentation. Pages you delete s
  if(appData.pages.some(p=>isDoc(p.chapterId))||appData.containers.some(k=>isDoc(k.chapterId))){appData.docSeeded=true;return}
  DOC_BOOK.chapters.forEach((c,i)=>{const cid=DOC_LIB[i].id;
   const kids=(c.containers||[]).map((k,j)=>{const n={id:'k_doc'+i+'_'+j,chapterId:cid,name:k.name,x:k.x,y:k.y,w:k.w,h:k.h,border:k.border||'',bg:k.bg||''};appData.containers.push(n);return n.id});
-  (c.pages||[]).forEach((p,j)=>appData.pages.push({id:'p_doc'+i+'_'+j,chapterId:cid,containerId:kids[p.container]||'',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h}))});
+  (c.pages||[]).forEach((p,j)=>appData.pages.push({id:'p_doc'+i+'_'+j,chapterId:cid,containerId:kids[p.container]||'',title:p.title,content:p.content,variants:p.variants?stripKeys(JSON.parse(JSON.stringify(p.variants))):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h}))});
  appData.docSeeded=true}
 function syncPh(){const t=appData.activeChapterId===TOOLS_ID,d=isDoc(appData.activeChapterId),w=!t&&!d;
  [['pt-ws',w],['pt-tools',t],['pt-docs',d]].forEach(([id,on])=>{$(id).classList.toggle('on',on);$(id).setAttribute('aria-pressed',String(on))});
  const k=appData.activeChapterId===DOC_CHATS_ID;/* Chats: + Add becomes + Chat, no boards, no move mode */
- $('paste-main-btn').hidden=k;$('dl-tools-btn').hidden=!t;$('paste-main-btn').title=t?'Paste widget':'Paste page, board, chapter or book';$('paste-main-btn').setAttribute('aria-label',$('paste-main-btn').title);$('add-board-btn').style.display=(t||k)?'none':'';$('add-main-btn').textContent=k?'+ Chat':'+ Add';$('edit-toggle').style.display=k?'none':'';
+ $('paste-main-btn').hidden=k;$('dl-tools-btn').hidden=!t;$('dl-docs-btn').hidden=!d;$('undo-chat-btn').hidden=!k;paintTrashBtn();$('paste-main-btn').title=t?'Paste widget':'Paste page, board, chapter or book';$('paste-main-btn').setAttribute('aria-label',$('paste-main-btn').title);$('add-board-btn').style.display=(t||k)?'none':'';$('add-main-btn').textContent=k?'+ Chat':'+ Add';$('edit-toggle').style.display=k?'none':'';
  const sub=$('pt-sub');sub.hidden=!d;sub.innerHTML='';/* second row, only inside Documentation: Notations | What if */
  if(d)DOC_CHAPS.forEach((c,i)=>{if(i)sub.append(el('span','pt-sep'));const b=el('span','pt'+(c.id===appData.activeChapterId?' on':''));b.textContent=c.name;b.setAttribute('role','button');b.tabIndex=0;b.title=c.description;
   b.onclick=()=>openDocChapter(c.id);b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDocChapter(c.id)}};sub.append(b)});
@@ -1406,8 +1426,8 @@ function goFixed(id){/* opens Tools or a Documentation chapter, remembering the 
  if(appData.activeChapterId!==TOOLS_ID&&!isDoc(appData.activeChapterId))appData.prevChapterId=appData.activeChapterId;
  appData.activeChapterId=id;persistView();renderChapters();renderHero();renderPages()}
 function openTools(){goFixed(TOOLS_ID)}
-function openDocs(){ensureDocs();goFixed(DOC_CHATS_ID);if(!chats.length)addChat('silent')}/* Documentation opens on your chats */
-function openDocChapter(id){if(!isDoc(id))return;goFixed(id);if(id===DOC_CHATS_ID&&!chats.length)addChat('silent')}
+function openDocs(){ensureDocs();goFixed(DOC_CHATS_ID)}/* Documentation opens on your chats */
+function openDocChapter(id){if(!isDoc(id))return;goFixed(id)}
 function closeTools(){/* Workspace button: back to the book's own chapters from Tools or Documentation */
  if(appData.activeChapterId!==TOOLS_ID&&!isDoc(appData.activeChapterId))return;
  const ch=appData.chapters.filter(c=>c.bookId===appData.activeBookId),back=ch.find(c=>c.id===appData.prevChapterId);
@@ -1420,10 +1440,10 @@ function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className
 function showToast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200)}
 /* Undo bar: things that clear something (no confirmation) are put back from here. Several in a row stack, newest first; the bar goes away after 8 seconds */
 const _undo=[];let _undoT=0;
-function showUndo(msg,fn){_undo.push({msg,fn});paintUndo()}
+function showUndo(msg,fn,label,ms){_undo.push({msg,fn,label,ms});paintUndo()}
 function paintUndo(){const u=$('undo');clearTimeout(_undoT);if(!_undo.length){u.classList.remove('show');return}
- const e=_undo[_undo.length-1];u.innerHTML='';const s=el('span');s.textContent=e.msg;const b=el('button');b.type='button';b.textContent='Undo';
- b.onclick=()=>{if(e.fn()!==false)_undo.pop();paintUndo()};u.append(s,b);u.classList.add('show');_undoT=setTimeout(()=>{_undo.length=0;paintUndo()},8000)}
+ const e=_undo[_undo.length-1];u.innerHTML='';const s=el('span');s.textContent=e.msg;const b=el('button');b.type='button';b.textContent=e.label||'Undo';
+ b.onclick=()=>{if(e.fn()!==false)_undo.pop();paintUndo()};u.append(s,b);u.classList.add('show');_undoT=setTimeout(()=>{_undo.length=0;paintUndo()},e.ms||8000)}
 let _pT=0,_pD=false;
 let storageWarning=false;
 function flushLocal(){clearTimeout(_pT);if(!_pD||window.__noFlush)return;try{localStorage.setItem('paano_ba_yan_data',JSON.stringify(appData));_pD=false;storageWarning=false}catch(e){if(!storageWarning){storageWarning=true;showToast('Device storage is full or blocked. Export a backup in Settings to keep your changes.')}}}
@@ -1441,6 +1461,7 @@ function load(data){let s=null;if(data===undefined)try{s=localStorage.getItem('p
  appData.containers.forEach(c=>{c.name=String(c.name||'Board');c.x=num(c.x);c.y=num(c.y);c.w=Math.max(MIN_BW,num(c.w)||DEF_BW);c.h=Math.max(MIN_BH,num(c.h)||DEF_BH);c.border=hex(c.border);c.bg=hex(c.bg)});
  appData.pages.forEach(p=>{p.x=num(p.x);p.y=num(p.y);p.w=num(p.w);p.h=num(p.h);if(p.w!==undefined)p.w=Math.max(MIN_PW,p.w);if(p.h!==undefined)p.h=Math.max(MIN_PH,p.h);p.containerId=p.containerId||''});
  ensureTools();ensureDocs();
+ appData.pages.forEach(p=>{if(p.key&&Array.isArray(p.variants)&&p.variants.length){const i=Number.isInteger(p.activeVariant)&&p.variants[p.activeVariant]?p.activeVariant:0;if(p.variants[i]&&!p.variants[i].key)p.variants[i].key=p.key;delete p.key}});
  appData.layoutVer=3;
  appData.breaks=Object.assign({earlyLimit:20,active:false},appData.breaks||{});/* break schedule + reminder minutes (used by the island) */
  appData.pages=appData.pages.filter(p=>!(p.isWidget&&p.widgetType==='clock'));/* the Live Clock tool was removed */
@@ -2679,9 +2700,10 @@ function buildCsatWidget(ui,p){
   ah.innerHTML='<div class="sum-th"><div class="w-title">Average Handling Time</div><button type="button" class="btn out xs sum-arch" title="Past months. Saved here automatically when a month ends."><svg viewBox="0 0 24 24"><path d="M3 4h18v4H3zM5 8v12h14V8M10 12h4"/></svg>Archive</button></div>'+
    '<div class="cs-tally"><div class="cs-box"><span class="w-label">Chats handled</span><b>'+n+'</b></div><div class="cs-box"><span class="w-label">Avg handling time</span><b>'+(n?M.clk(avg):'--:--')+'</b></div></div>'+
    '<div class="cs-tally"><div class="cs-box good"><span class="w-label">CSAT gained</span><b>'+sg(c)+'</b></div><div class="cs-box bad"><span class="w-label">DSAT gained</span><b>'+sg(d)+'</b></div></div>'+
-   '<div class="w-label">History</div><div class="w-list sum-hist">'+(n?L.slice().reverse().map(x=>'<div class="w-time" data-id="'+escAttr(x.id)+'"><span>'+escAttr(x.name)+' \u00b7 '+M.phFmt(x.at)+'</span><b>'+M.clk(x.ms)+'</b><button type="button" class="ib sm" title="Remove from history" aria-label="Remove '+escAttr(x.name)+' from history">'+ic('trash')+'</button></div>').join(''):'<div class="si-none">No chats finished yet.</div>')+'</div>';
+   '<div class="w-label">History</div><div class="w-list sum-hist">'+(n?L.slice().reverse().map(x=>'<div class="w-time" data-id="'+escAttr(x.id)+'"><span>'+escAttr(x.name)+' \u00b7 '+M.phFmt(x.at)+'</span><b>'+M.clk(x.ms)+'</b><button type="button" class="ib sm ed" title="Edit handling time" aria-label="Edit '+escAttr(x.name)+'">'+ic('pen')+'</button><button type="button" class="ib sm" title="Remove from history" aria-label="Remove '+escAttr(x.name)+' from history">'+ic('trash')+'</button></div>').join(''):'<div class="si-none">No chats finished yet.</div>')+'</div>';
   ah.querySelector('.sum-arch').onclick=openSumArchive;
-  ah.querySelectorAll('.w-time .ib').forEach(b=>b.onclick=async()=>{const id=b.closest('.w-time').dataset.id,x=(appData.chatLog||[]).find(y=>y.id===id);if(!x)return;
+  ah.querySelectorAll('.w-time .ed').forEach(b=>b.onclick=()=>openChatLogEdit(b.closest('.w-time').dataset.id));
+  ah.querySelectorAll('.w-time .ib:not(.ed)').forEach(b=>b.onclick=async()=>{const id=b.closest('.w-time').dataset.id,x=(appData.chatLog||[]).find(y=>y.id===id);if(!x)return;
    if(!await askConfirm('Remove "'+x.name+'" ('+M.clk(x.ms)+') from the history? It will no longer count toward your total or average.','Remove','Remove from history'))return;
    appData.chatLog=appData.chatLog.filter(y=>y.id!==id);persistLocal();refreshReports()});
   paintSumHead(ui,p)}
@@ -2739,6 +2761,17 @@ function sumRoll(quiet){
  if(stale){appData.pages.forEach(p=>{if(p.isWidget&&p.widgetType==='csat'&&p.csat){p.csat.total=0;p.csat.good=0}});appData.sumMonth=cur}
  appData.chatLog=(appData.chatLog||[]).filter(x=>x.at>=t0);appData.csatLog=(appData.csatLog||[]).filter(x=>x.t>=t0);
  persistLocal();if(!quiet)refreshSummary()}
+/* edit one finished chat in the Average Handling Time history */
+function parseHandle(s){s=String(s||'').trim().replace(/\s+/g,'');if(/^\d+(\.\d+)?$/.test(s))return Math.round(parseFloat(s)*60000);
+ const m=/^(\d+):(\d{1,2})(?::(\d{1,2}))?$/.exec(s);if(!m)return null;
+ const a=+m[1],b=+m[2],c=m[3]===undefined?null:+m[3];if(b>59||(c!==null&&c>59))return null;
+ return c===null?(a*60+b)*1000:((a*60+b)*60+c)*1000}
+function openChatLogEdit(id){const x=(appData.chatLog||[]).find(y=>y.id===id);if(!x)return;
+ $('cl-id').value=id;$('cl-name').value=x.name||'';$('cl-time').value=window.SmartScheduleManager.clk(x.ms);openModal('chatlog-modal');setTimeout(()=>{const t=$('cl-time');t.focus();t.select()},40)}
+function saveChatLog(){const id=$('cl-id').value,x=(appData.chatLog||[]).find(y=>y.id===id);if(!x){closeModal('chatlog-modal');return}
+ const ms=parseHandle($('cl-time').value);if(!ms||ms<1000||ms>86400000){showToast('Use a time like 5:30 (minutes:seconds), 1:05:30, or a number of minutes.');return}
+ const nm=$('cl-name').value.trim();x.ms=ms;if(nm)x.name=nm.slice(0,60);persistLocal();closeModal('chatlog-modal');refreshReports();showToast('Handling time updated.')}
+['cl-time','cl-name'].forEach(i=>$(i).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveChatLog()}}));
 function openSumArchive(){
  const A=(appData.sumArchive||[]).slice().sort((a,b)=>a.month<b.month?1:-1),
   mn=k=>new Date(k+'-01T12:00:00Z').toLocaleDateString('en-US',{month:'long',year:'numeric',timeZone:'UTC'}),
@@ -2823,7 +2856,7 @@ function buildCard(p){if(p.isWidget&&p.widgetType==='image')return buildImageCar
     const du=el('button','mi',ic('dup')+'Duplicate page');du.onclick=()=>duplicatePage(p.id);
     m.append(edm,ft,cpd,du,de);
     dd.append(db,m);
-    a.append(cp);if(UIP.dots())a.append(dd);
+    a.append(cp);if(UIP.dots())a.append(dd);{const sk=(p.variants&&p.variants.length?(p.variants[p.activeVariant||0]||{}).key:p.key)||'';if(sk){const kb=el('span','kb');kb.textContent=sk.split('+').join(' + ');kb.title='Press this anywhere to copy this '+(p.variants&&p.variants.length?'variant':'page');a.prepend(kb)}}
     h.append(gr,titleEl,a);
  }
  
@@ -2942,7 +2975,7 @@ function saveChapter(){const id=$('chapter-id-input').value,name=$('chapter-name
 function duplicateChapter(id){const s=appData.chapters.find(c=>c.id===id);if(!s)return;const nid='c_'+Date.now();
  appData.chapters.push({id:nid,bookId:s.bookId,name:s.name+' (Copy)',description:s.description,referenceLink:s.referenceLink});
  const map={};appData.containers.filter(c=>c.chapterId===id).forEach(c=>{const k='k_'+rid();map[c.id]=k;appData.containers.push(Object.assign({},c,{id:k,chapterId:nid}))});
- appData.pages.filter(p=>p.chapterId===id).forEach(p=>appData.pages.push(Object.assign({id:'p_'+rid(),chapterId:nid,containerId:map[p.containerId]||'',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h},widgetProps(p),pageImageProps(p))));
+ appData.pages.filter(p=>p.chapterId===id).forEach(p=>appData.pages.push(Object.assign({id:'p_'+rid(),chapterId:nid,containerId:map[p.containerId]||'',title:p.title,content:p.content,variants:p.variants?stripKeys(JSON.parse(JSON.stringify(p.variants))):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h},widgetProps(p),pageImageProps(p))));
  appData.activeBookId=s.bookId;appData.activeChapterId=nid;persistLocal();renderAll();showToast('Chapter duplicated.')}
 async function deleteChapter(id){if(!await askConfirm('Delete this chapter and its pages?','Delete chapter'))return;
  appData.chapters=appData.chapters.filter(c=>c.id!==id);appData.pages=appData.pages.filter(p=>p.chapterId!==id);appData.containers=appData.containers.filter(c=>c.chapterId!==id);
@@ -2963,9 +2996,9 @@ window.addEventListener('page-image-deleted',e=>{const key=e.detail&&e.detail.ke
  if(any){persistLocal();renderPages()}});
 /* ---- page editor: one editor, one tab per variant. Each tab owns its title, text and image. ---- */
 let vs=[],vcur=0;
-const blankVariant=()=>({title:'',content:'',image:null});
-function vsCapture(){if(!vs[vcur])return;vs[vcur]={title:$('page-title-input').value,content:$('page-content-input').value,image:window.PageImages?.value()||null}}
-function vsLoad(i){vcur=i;const v=vs[i]||blankVariant();$('page-title-input').value=v.title;$('page-content-input').value=v.content;window.PageImages?.edit({image:v.image});autosize($('page-content-input'));renderVTabs()}
+const blankVariant=()=>({title:'',content:'',image:null,key:''});
+function vsCapture(){if(!vs[vcur])return;vs[vcur]={title:$('page-title-input').value,content:$('page-content-input').value,image:window.PageImages?.value()||null,key:editKey}}
+function vsLoad(i){vcur=i;const v=vs[i]||blankVariant();$('page-title-input').value=v.title;$('page-content-input').value=v.content;window.PageImages?.edit({image:v.image});autosize($('page-content-input'));editKey=v.key||'';paintKey();{const sm=document.querySelector('#page-key-sec .pi-title small');if(sm)sm.textContent=vs.length>1?'variant '+(i+1):'optional'}renderVTabs()}
 function renderVTabs(){const box=$('vt-scroll');box.replaceChildren();
  vs.forEach((_,i)=>{const b=el('button',i===vcur?'on':'');b.type='button';b.textContent=String(i+1);b.setAttribute('role','tab');b.setAttribute('aria-selected',i===vcur?'true':'false');b.title='Variant '+(i+1);b.onclick=()=>switchEditVariant(i);box.append(b)});
  const add=el('button','vt-add');add.type='button';add.textContent='+';add.title='Add a variant';add.setAttribute('aria-label','Add a variant');add.onclick=addEditVariant;box.append(add);
@@ -2980,39 +3013,44 @@ async function removeEditVariant(){if(vs.length<2)return;if(window.PageImages?.u
  if(!await askConfirm('Delete variant '+(vcur+1)+'? Its text and image are removed when you save the page.',null,'Delete variant'))return;
  vsCapture();vs.splice(vcur,1);vsLoad(Math.min(vcur,vs.length-1))}
 
-function openAddPageModal(z){if(!appData.activeChapterId){showToast('Select a chapter first.');return}
+function openAddPageModal(z){if(!appData.activeChapterId){showToast('Select a chapter first.');return}editKey='';paintKey();
  $('page-modal-title').textContent='Add Page';window.PageImages?.refreshUsage();$('page-id-input').value='';$('page-container-input').value=typeof z==='string'?z:'';
  vs=[blankVariant()];vsLoad(0);
  openModal('page-modal')}
 
-function openEditPageModal(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
+function openEditPageModal(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;editKey=p.key||'';paintKey();
  $('page-modal-title').textContent='Edit Page';window.PageImages?.refreshUsage();$('page-id-input').value=p.id;$('page-container-input').value=p.containerId||'';
- if(p.variants&&p.variants.length>0){syncVariantImage(p);vs=p.variants.map(v=>({title:v.title,content:v.content,image:pageImageProps(v).image||null}))}
- else vs=[{title:p.title,content:p.content,image:pageImageProps(p).image||null}];
+ if(p.variants&&p.variants.length>0){syncVariantImage(p);vs=p.variants.map(v=>({title:v.title,content:v.content,image:pageImageProps(v).image||null,key:v.key||''}))}
+ else vs=[{title:p.title,content:p.content,image:pageImageProps(p).image||null,key:p.key||''}];
  vsLoad(0);
  openModal('page-modal')}
 
 function savePage(){if(window.PageImages?.uploading){showToast('Wait for the image upload to finish.');return}
  vsCapture();const id=$('page-id-input').value;
- let list=vs.map(v=>({title:v.title.trim(),content:v.content,image:pageImageProps(v).image||null}));
+ let list=vs.map(v=>({title:v.title.trim(),content:v.content,image:pageImageProps(v).image||null,key:v.key||''}));
  if(list.length>1){list=list.filter(v=>v.title||v.content.trim()||v.image);list.forEach((v,i)=>{if(!v.title)v.title='Variant '+(i+1)})}
  if(!list.length||(list.length===1&&!list[0].title)){showToast('Add a title first.');return}
- const variants=list.length>1?list.map(v=>({title:v.title,content:v.content,image:v.image})):null;
+ const variants=list.length>1?list.map(v=>Object.assign({title:v.title,content:v.content,image:v.image},v.key?{key:v.key}:{})):null;
+ const pageKey=variants?'':(list[0].key||'');/* one variant: the key sits on the page. Several: every variant has its own */
  let activeVariant=0,title=list[0].title,content=list[0].content,image=list[0].image;
 
- let nid='';
+ let nid='',clash=null;
+ {const cid=id?(appData.pages.find(p=>p.id===id)||{}).chapterId:appData.activeChapterId,bk=(appData.chapters.find(c=>c.id===cid)||{}).bookId,mine=list.map(v=>v.key).filter(Boolean),
+   keysOf=p=>p.variants&&p.variants.length?p.variants.map(v=>v&&v.key).filter(Boolean):(p.key?[p.key]:[]);
+  if(mine.length)clash=appData.pages.find(p=>p.id!==id&&!p.isWidget&&(appData.chapters.find(c=>c.id===p.chapterId)||{}).bookId===bk&&keysOf(p).some(k=>mine.some(m=>canon(m)===canon(k))))||null}
  if(id){
   const pg=appData.pages.find(p=>p.id===id);
   if(variants){activeVariant=pg.activeVariant||0;if(activeVariant>=variants.length)activeVariant=0;title=variants[activeVariant].title;content=variants[activeVariant].content;image=variants[activeVariant].image}
   if(pg.content!==content||pg.variants||variants){delete varVals[id];delete variantVals[id]}
-  Object.assign(pg,{title,content,variants,activeVariant,image});
+  Object.assign(pg,{title,content,variants,activeVariant,image});if(pageKey)pg.key=pageKey;else delete pg.key;
  } else {
   nid='p_'+Date.now();
-  appData.pages.push({id:nid,chapterId:appData.activeChapterId,containerId:$('page-container-input').value||'',title,content,variants,activeVariant:0,image});
+  appData.pages.push(Object.assign({id:nid,chapterId:appData.activeChapterId,containerId:$('page-container-input').value||'',title,content,variants,activeVariant:0,image},pageKey?{key:pageKey}:{}));
  }
- persistLocal();closeModal('page-modal');renderHero();renderPages();if(nid)revealNode(nid)}
+ persistLocal();closeModal('page-modal');renderHero();renderPages();if(nid)revealNode(nid);
+ if(clash)showToast('Saved. "'+clash.title+'" in this book uses the same keybind, so the one in the open chapter wins.')}
 function duplicatePage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;const nid='p_'+Date.now();
- appData.pages.push(Object.assign({id:nid,chapterId:p.chapterId,containerId:p.containerId||'',title:p.title+' (Copy)',content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p),pageImageProps(p)));
+ appData.pages.push(Object.assign({id:nid,chapterId:p.chapterId,containerId:p.containerId||'',title:p.title+' (Copy)',content:p.content,variants:p.variants?stripKeys(JSON.parse(JSON.stringify(p.variants))):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p),pageImageProps(p)));
  persistLocal();renderHero();renderPages();revealNode(nid);showToast('Page duplicated.')}
 function deletePage(id){const i=appData.pages.findIndex(p=>p.id===id);if(i<0)return;const p=appData.pages[i],vals=varVals[id],variants=variantVals[id];delete varVals[id];delete variantVals[id];appData.pages.splice(i,1);persistLocal();renderHero();renderPages();
  showUndo('Page deleted',()=>{if(!appData.chapters.some(c=>c.id===p.chapterId)&&!isDoc(p.chapterId)&&p.chapterId!==TOOLS_ID){showToast('The chapter no longer exists.');return false}
@@ -3440,7 +3478,7 @@ const CHAT_X='<svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>';
 function chatSave(){clearTimeout(_chatT);try{sessionStorage.setItem(CHAT_KEY,JSON.stringify(chats))}catch(e){}}
 function chatSaveSoon(){clearTimeout(_chatT);_chatT=setTimeout(chatSave,300)}
 function chatRestore(){let s=null;try{s=JSON.parse(sessionStorage.getItem(CHAT_KEY)||'null')}catch(e){}
- chats=(Array.isArray(s)?s:[]).slice(0,CHAT_MAX).filter(c=>c&&typeof c==='object').map(c=>({id:String(c.id||'c'+rid()),name:String(c.name||''),policy:String(c.policy||''),eff:String(c.eff||''),prem:String(c.prem||''),noted:!!c.noted,note:String(c.note||''),padMin:c.padMin===undefined?true:!!c.padMin,t0:+c.t0||0,hs:+c.hs||0,
+ chats=(Array.isArray(s)?s:[]).slice(0,CHAT_MAX).filter(c=>c&&typeof c==='object').map(c=>({id:String(c.id||'c'+rid()),name:String(c.name||''),policy:String(c.policy||''),eff:String(c.eff||''),prem:String(c.prem||''),noted:!!c.noted,note:String(c.note||''),padMin:c.padMin===undefined?true:!!c.padMin,opened:!!c.opened,t0:+c.t0||0,hs:+c.hs||0,
   pages:(Array.isArray(c.pages)?c.pages:[]).filter(p=>p&&typeof p.content==='string').map(p=>({id:String(p.id||'cp_'+rid()),src:p.src||'',title:String(p.title||''),content:p.content,
    variants:Array.isArray(p.variants)&&p.variants.length?p.variants:null,activeVariant:+p.activeVariant||0,vv:p.vv&&typeof p.vv==='object'?p.vv:{}}))}));
  chats.forEach(c=>c.pages.forEach(p=>{const a=p.activeVariant||0;varVals[p.id]=p.vv[a]||(p.vv[a]={})}))}/* a page's live values ARE p.vv[its active variant], so saving the chat saves them */
@@ -3487,7 +3525,7 @@ function chatLabel(c){const i=chats.indexOf(c),w=String(c.name||'').trim().split
 function openChatDocs(id,pad,name){const c=chats.find(x=>x.id===id);if(!c)return;lastChatId=id;if(pad)c.padMin=false;chatSave();goFixed(DOC_CHATS_ID);renderHero();renderChats();
  setTimeout(()=>{const r=document.querySelector('.chat[data-id="'+id+'"]');if(!r)return;r.scrollIntoView({block:'nearest',behavior:'smooth'});r.classList.remove('srch-flash');void r.offsetWidth;r.classList.add('srch-flash');setTimeout(()=>r.classList.remove('srch-flash'),1200);
   const t=pad?r.querySelector('.chat-pad textarea'):name?r.querySelector('.chat-name'):null;if(t)t.focus()},80)}
-function pillNewChat(e){let c=chats.find(x=>!x.t0);
+function pillNewChat(e){let c=chats.find(x=>!x.t0&&chatEmpty(x));
  if(!c){if(chats.length>=CHAT_MAX){showToast('Up to '+CHAT_MAX+' chats at once. Close one first.');return}
   c={id:'c'+rid(),name:'',policy:'',eff:'',prem:'',noted:false,note:'',padMin:true,pages:[],t0:0,hs:0};chats.push(c)}
  c.t0=Date.now();c.hs=0;copyOpening(e);chatSave();/* stays where you are: the arrow next to Hold in the island opens the scratch pad & docs */
@@ -3522,6 +3560,7 @@ function nicePop(e,text){let x,y;/* above the click, or above the mouse when the
  else if(_mouse.on){x=_mouse.x;y=_mouse.y}else{x=innerWidth/2;y=innerHeight/2}
  const d=document.createElement('div');d.className='nice-pop'+(text?' long':'');d.textContent=text||'Nice';
  d.style.left=Math.max(40,Math.min(innerWidth-40,x))+'px';d.style.top=Math.max(50,y)+'px';document.body.append(d);setTimeout(()=>d.remove(),text?2300:1000)}
+function openingOnce(chat,e){if(chatEmpty(chat)||chat.opened)return;chat.opened=true;chatSave();copyOpening(e)}/* the opening spiel is copied only the first time a chat with content is closed or cleared (an undo does not re-arm it) */
 function copyOpening(e){const t=openingText();if(!t){showToast('No Opening found in General. Add one, or set your name in Settings.');return}return copyText(t,false,()=>nicePop(e))}
 
 /* search every template (board name + template or variant title + Notations / What if), one row per variant */
@@ -3562,8 +3601,8 @@ function chatEl(chat,idx){
  const flag=el('span','chat-flag');flag.textContent='Notation not yet written';flag.title='Copy a Notations or What if template to clear this';
  root._flag=()=>{flag.hidden=!((chat.name||chat.pages.length)&&!chat.noted)};
  root.addEventListener('focusin',()=>{lastChatId=chat.id});root.addEventListener('pointerdown',()=>{lastChatId=chat.id});
- const x=el('button','ib sm',CHAT_X);x.title='Close this chat (copies the opening spiel)';x.setAttribute('aria-label','Close chat '+(idx+1));x.onclick=e=>{copyOpening(e);closeChat(chat)};
- const tr=el('button','ib sm',ic('trash'));tr.title='Clear this chat (copies the opening spiel)';tr.setAttribute('aria-label','Clear chat '+(idx+1));tr.onclick=e=>{copyOpening(e);clearChat(chat)};
+ const x=el('button','ib sm',CHAT_X);x.title='Close this chat (copies the opening spiel the first time)';x.setAttribute('aria-label','Close chat '+(idx+1));x.onclick=e=>{openingOnce(chat,e);closeChat(chat)};
+ const tr=el('button','ib sm',ic('trash'));tr.title='Clear this chat (copies the opening spiel the first time)';tr.setAttribute('aria-label','Clear chat '+(idx+1));tr.onclick=e=>{openingOnce(chat,e);clearChat(chat)};
  const acts=el('div','chat-acts');acts.append(tr,x);const br=el('span','chat-br');
  h.append(lb,nm,pol,eff,flag,br,acts);
  const s=el('div','chat-s'),si=el('input');si.type='text';si.autocomplete='off';si.spellcheck=false;si.placeholder='Search templates (e.g. vehicle, payment)';si.setAttribute('aria-label','Search documentation for chat '+(idx+1));s.append(si);
@@ -3608,12 +3647,27 @@ function addChat(a){if(chats.length>=CHAT_MAX){showToast('Up to '+CHAT_MAX+' cha
  const n=document.querySelector('.chat[data-id="'+c.id+'"] .chat-name');if(n)n.focus()}
 function clearChat(chat){/* empties the chat (every field and every template) but keeps the window */
  if(chatEmpty(chat)){if(chat.t0){endNote(chat);chat.t0=0;chatSave();renderChats()}return}
- const snap={name:chat.name,policy:chat.policy,eff:chat.eff,prem:chat.prem,note:chat.note||'',noted:chat.noted,pages:chat.pages,t0:chat.t0};
- chat.name=chat.policy=chat.eff=chat.prem=chat.note='';chat.noted=false;chat.pages=[];endNote(chat);chat.t0=0;chatSave();renderChats();
- showUndo('Chat cleared',()=>{['name','policy','eff','prem','note'].forEach(k=>{chat[k]=chat[k]||snap[k]});chat.noted=chat.noted||snap.noted;chat.t0=chat.t0||snap.t0;chat.pages=snap.pages.concat(chat.pages);chatSave();renderChats()})}
-function closeChat(chat){const i=chats.indexOf(chat);if(i<0)return;endNote(chat);chats.splice(i,1);chatSave();renderHero();renderChats();
- showUndo('Chat closed',()=>{if(chats.length>=CHAT_MAX){showToast('All '+CHAT_MAX+' chat slots are in use. Close another chat first.');return false}
-  chats.splice(Math.min(i,chats.length),0,chat);chatSave();renderHero();renderChats()})}
+ const ent=chatTrashPush(chat,chats.indexOf(chat));
+ endNote(chat);/* before the name is cleared, so the history keeps the customer name */
+ chat.name=chat.policy=chat.eff=chat.prem=chat.note='';chat.noted=false;chat.opened=false;chat.pages=[];chat.t0=0;chatSave();renderChats();
+ if(ent)showUndo('Chat cleared',()=>chatUndoEntry(ent))}
+function closeChat(chat){const i=chats.indexOf(chat);if(i<0)return;const ent=chatTrashPush(chat,i);endNote(chat);chats.splice(i,1);chatSave();renderHero();renderChats();if(ent)showUndo('Chat closed',()=>chatUndoEntry(ent))
+ }
+/* cleared / closed chats are kept (this tab only) so the Undo button can bring them back. A restored chat comes back WITHOUT a handling timer, so it never returns to the island pill */
+const CHAT_TRASH_KEY='ataraxia_chat_trash';let chatTrash=[];
+function trashSave(){try{sessionStorage.setItem(CHAT_TRASH_KEY,JSON.stringify(chatTrash))}catch(e){}}
+function trashRestore(){try{const s=JSON.parse(sessionStorage.getItem(CHAT_TRASH_KEY)||'null');chatTrash=(Array.isArray(s)?s:[]).filter(x=>x&&x.chat&&Array.isArray(x.chat.pages)).slice(-10)}catch(e){chatTrash=[]}}
+function paintTrashBtn(){const b=$('undo-chat-btn');if(!b)return;const n=chatTrash.length,s=b.querySelector('span');b.disabled=!n;if(s)s.textContent=n?'Undo ('+n+')':'Undo';b.title=n?'Restore the last cleared chat ('+n+' saved)':'No cleared chats to restore'}
+function chatTrashPush(chat,at){if(chatEmpty(chat))return null;const e={at,chat:JSON.parse(JSON.stringify(chat))};e.chat.t0=0;e.chat.hs=0;chatTrash.push(e);if(chatTrash.length>10)chatTrash.shift();trashSave();paintTrashBtn();return e}
+function chatUndo(e){const c=e.chat,slot=(chats[e.at]&&chatEmpty(chats[e.at])&&!chats[e.at].t0)?chats[e.at]:chats.find(x=>chatEmpty(x)&&!x.t0);let r;
+ if(slot){Object.assign(slot,{name:c.name,policy:c.policy,eff:c.eff,prem:c.prem,note:c.note,noted:c.noted,padMin:c.padMin,opened:!!c.opened,pages:c.pages,t0:0,hs:0});r=slot}
+ else if(chats.length<CHAT_MAX){r=Object.assign({},c,{id:'c'+rid(),t0:0,hs:0});chats.splice(Math.min(e.at,chats.length),0,r)}
+ else{showToast('All '+CHAT_MAX+' chat slots are in use. Close or clear a chat first.');return false}
+ r.pages.forEach(p=>{const a=p.activeVariant||0;if(!p.vv)p.vv={};varVals[p.id]=p.vv[a]||(p.vv[a]={})});
+ lastChatId=r.id;chatSave();renderHero();renderChats();return true}
+function chatUndoEntry(e){if(!chatTrash.includes(e))return true;if(!chatUndo(e))return false;chatTrash.splice(chatTrash.indexOf(e),1);trashSave();paintTrashBtn();return true}
+function undoLastChat(){const e=chatTrash[chatTrash.length-1];if(!e){showToast('No cleared chats to restore.');return}if(chatUndoEntry(e))showToast('Chat restored.')}
+trashRestore();
 
 function fmtDate(d){return d.length>4?d.slice(0,2)+'/'+d.slice(2,4)+'/'+d.slice(4):d.length>2?d.slice(0,2)+'/'+d.slice(2):d}
 function caretOff(v){const s=getSelection();if(!s.rangeCount||!v.contains(s.anchorNode))return null;const r=s.getRangeAt(0).cloneRange();r.selectNodeContents(v);r.setEnd(s.anchorNode,s.anchorOffset);return r.toString().length}
@@ -3696,13 +3750,14 @@ function fallbackCopy(t){const active=document.activeElement,sel=getSelection(),
  return ok}
 async function copyText(t,msg,onSuccess){const ok=await writeClipboard(t);if(ok){if(msg!==false)showToast(msg||'Copied to clipboard.');if(onSuccess)onSuccess()}else showToast('Copy failed. Select the text and use your browser’s Copy command.');return ok}
 /* copy / paste whole pages and chapters */
+function stripKeys(v){return Array.isArray(v)?v.map(x=>{if(!x||typeof x!=='object'||!('key' in x))return x;const r={...x};delete r.key;return r}):v}
 const CLIP_TAG='paano-ba-yan';
 // Keep organizational copies separate from the response sent to the system clipboard.
 // Memory only: customer/template data is not added to persistent clipboard storage.
 let appClipboard=null;
 function rid(){return Date.now()+'_'+Math.random().toString(36).slice(2,6)}
 function copyPageData(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;
- return copyStructure(Object.assign({app:CLIP_TAG,type:'page',title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p),pageImageProps(p)))}
+ return copyStructure(Object.assign({app:CLIP_TAG,type:'page',title:p.title,content:p.content,variants:p.variants?stripKeys(JSON.parse(JSON.stringify(p.variants))):null,activeVariant:p.activeVariant||0,w:p.w,h:p.h},widgetProps(p),pageImageProps(p)))}
 async function copyStructure(o){const t=JSON.stringify(o);appClipboard=t;const ok=await writeClipboard(t);
  const hints={page:'Use Paste page or right-click a board.',board:'Use Paste board in the destination chapter.',chapter:'Use Paste chapter beside + Chapter.',book:'Paste to add a new book, or send it by Mail.'};
  if(appClipboard===t)showToast(o.type[0].toUpperCase()+o.type.slice(1)+' copied. '+(ok?'':'Available in this tab. ')+hints[o.type]);return true}
@@ -3713,14 +3768,14 @@ function chapterClip(id){const c=appData.chapters.find(x=>x.id===id);if(!c)retur
  const cons=appData.containers.filter(k=>k.chapterId===id);
  return {app:CLIP_TAG,type:'chapter',ver:2,name:c.name,description:c.description||'',referenceLink:c.referenceLink||'',
   containers:cons.map(k=>({name:k.name,x:k.x,y:k.y,w:k.w,h:k.h,border:k.border||'',bg:k.bg||''})),
-  pages:appData.pages.filter(p=>p.chapterId===id).map(p=>Object.assign({title:p.title,content:p.content,variants:p.variants?JSON.parse(JSON.stringify(p.variants)):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h,container:cons.findIndex(k=>k.id===p.containerId)},widgetProps(p),pageImageProps(p)))}}
+  pages:appData.pages.filter(p=>p.chapterId===id).map(p=>Object.assign({title:p.title,content:p.content,variants:p.variants?stripKeys(JSON.parse(JSON.stringify(p.variants))):null,activeVariant:p.activeVariant||0,x:p.x,y:p.y,w:p.w,h:p.h,container:cons.findIndex(k=>k.id===p.containerId)},widgetProps(p),pageImageProps(p)))}}
 function copyChapterData(id){const o=chapterClip(id);if(o)return copyStructure(o)}
 function validPageClip(p){return p&&typeof p==='object'&&typeof p.title==='string'&&typeof p.content==='string'&&
  (!p.variants||(Array.isArray(p.variants)&&p.variants.every(v=>v&&typeof v.title==='string'&&typeof v.content==='string')))}
 function validChapterClip(c){return c&&typeof c==='object'&&typeof c.name==='string'&&Array.isArray(c.pages)&&c.pages.every(validPageClip)&&
  (!c.containers||(Array.isArray(c.containers)&&c.containers.every(k=>k&&typeof k==='object')))}
 function validBoardClip(c){return c&&typeof c==='object'&&typeof c.name==='string'&&Array.isArray(c.pages)&&c.pages.every(validPageClip)}
-function clipPageProps(p){const variants=Array.isArray(p.variants)&&p.variants.length?structuredClone(p.variants):null;
+function clipPageProps(p){const variants=Array.isArray(p.variants)&&p.variants.length?stripKeys(structuredClone(p.variants)):null;
  const activeVariant=variants&&Number.isInteger(p.activeVariant)&&p.activeVariant>=0&&p.activeVariant<variants.length?p.activeVariant:0;
  return Object.assign({title:variants?variants[activeVariant].title:p.title||'Untitled',content:variants?variants[activeVariant].content:p.content||'',variants,activeVariant,
  w:num(p.w)===undefined?undefined:clamp(num(p.w),MIN_PW,MAX_U),h:num(p.h)===undefined?undefined:clamp(num(p.h),MIN_PH,MAX_U)},widgetProps(p),pageImageProps(p))}
@@ -3843,6 +3898,53 @@ document.addEventListener('paste',e=>{
  if(!document.documentElement.classList.contains('unlocked')||document.querySelector('.ov.open')||editingTarget(e.target)||e.target.closest('.chat'))return;
  const raw=e.clipboardData?.getData('text/plain'),text=parseClip(raw)?raw:appClipboard;
  if(parseClip(text)){e.preventDefault();applyPaste(text,'auto',contextDestination(e.target))}});
+/* ---------- page keybinds: hold Ctrl / Alt / Meta (and Shift) and press one or more keys together, e.g. Ctrl + 1 or Alt + C + 1 ---------- */
+const KEY_PUNCT={Minus:'-',Equal:'=',Comma:',',Period:'.',Slash:'/',Semicolon:';',Quote:"'",Backquote:'`',BracketLeft:'[',BracketRight:']',Backslash:'\\',Space:'Space'};
+const KEY_RESERVED=['Ctrl+C','Ctrl+V','Ctrl+X','Ctrl+A','Ctrl+Z','Ctrl+Y','Ctrl+S'];
+const KEY_HINT='Click the box, then hold Ctrl, Alt or Meta and press your keys together (for example Ctrl + 1, or Alt + C + 1). Pressing the same keys anywhere in the app copies this page (or the variant you are editing, if there are several). Backspace clears it.';
+let editKey='',heldK=[],keyT=0;/* heldK = the non-modifier keys that are down right now, in the order they were pressed */
+function keyName(e){const c=e.code||'';
+ if(/^Digit\d$/.test(c))return c.slice(5);if(/^Numpad\d$/.test(c))return c.slice(6);if(/^Key[A-Z]$/.test(c))return c.slice(3);
+ if(/^F([1-9]|1[0-2])$/.test(c)||/^(Arrow(Up|Down|Left|Right)|Home|End|PageUp|PageDown|Insert)$/.test(c))return c;
+ return KEY_PUNCT[c]||''}
+const isMod=e=>['Control','Alt','Shift','Meta'].includes(e.key);
+function comboOf(e){const keys=heldK.map(x=>x.n);if(!keys.length)return '';
+ if(!(e.ctrlKey||e.altKey||e.metaKey)&&!(keys.length===1&&/^F\d/.test(keys[0])))return '';
+ const m=[];if(e.ctrlKey)m.push('Ctrl');if(e.altKey)m.push('Alt');if(e.shiftKey)m.push('Shift');if(e.metaKey)m.push('Meta');
+ const r=m.concat(keys).join('+');return KEY_RESERVED.includes(r)?'':r}
+const canon=k=>String(k||'').split('+').sort().join('+');/* the order you press the keys in does not matter */
+const subset=(a,b)=>{const t=b.split('+');return a.split('+').every(x=>t.includes(x))};
+addEventListener('keydown',e=>{const n=keyName(e);if(!n)return;
+ if(!(e.ctrlKey||e.altKey||e.metaKey)&&!/^F\d/.test(n)){heldK.length=0;return}
+ if(e.repeat)return;if(!heldK.some(x=>x.c===e.code))heldK.push({c:e.code,n})},true);
+addEventListener('keyup',e=>{const i=heldK.findIndex(x=>x.c===e.code);if(i>-1)heldK.splice(i,1)},true);
+addEventListener('blur',()=>{heldK.length=0});
+document.addEventListener('visibilitychange',()=>{heldK.length=0});
+function paintKey(){$('page-key-input').value=editKey?editKey.split('+').join(' + '):'';$('page-key-clear').hidden=!editKey}
+$('page-key-input').addEventListener('keydown',e=>{if(e.key==='Tab'||e.key==='Escape')return;e.preventDefault();e.stopPropagation();
+ if(e.key==='Backspace'||e.key==='Delete'){editKey='';paintKey();$('page-key-hint').textContent=KEY_HINT;return}
+ if(isMod(e))return;
+ const c=comboOf(e);/* every key still held counts, so Alt, then C, then 1 records Alt + C + 1. Letting go of everything starts a fresh one */
+ if(!c){$('page-key-hint').textContent='That combination cannot be used. Hold Ctrl, Alt or Meta while pressing a letter, number or other key (Ctrl + C, V, X, A, Z, Y and S are reserved).';return}
+ editKey=c;paintKey();$('page-key-hint').textContent=KEY_HINT});
+$('page-key-clear').onclick=()=>{editKey='';paintKey();$('page-key-hint').textContent=KEY_HINT};
+document.addEventListener('keydown',e=>{
+ if(e.repeat)return;clearTimeout(keyT);
+ if(isMod(e)||e.isComposing||!document.documentElement.classList.contains('unlocked')||document.querySelector('.ov.open')||editingTarget(e.target))return;
+ const c=comboOf(e);if(!c)return;
+ const cn=canon(c),all=[];
+ appData.pages.forEach(p=>{if(p.isWidget)return;if(p.variants&&p.variants.length)p.variants.forEach((v,i)=>{if(v&&v.key)all.push({p,vi:i,key:v.key})});else if(p.key)all.push({p,vi:0,key:p.key})});
+ const hits=all.filter(b=>canon(b.key)===cn);if(!hits.length)return;
+ const longer=all.some(b=>canon(b.key)!==cn&&subset(cn,canon(b.key)));/* e.g. Alt + C is also the start of Alt + C + 1 */
+ const ab=appData.activeBookId,inBook=p=>{const x=appData.chapters.find(k=>k.id===p.chapterId);return !!x&&x.bookId===ab};
+ const b=hits.find(x=>x.p.chapterId===appData.activeChapterId)||hits.find(x=>inBook(x.p))||hits[0];/* the open chapter wins, then the open book, then any book */
+ e.preventDefault();e.stopPropagation();
+ if(longer)keyT=setTimeout(()=>copyKeyHit(b.p,b.vi),300);else copyKeyHit(b.p,b.vi)},true);
+/* copies the variant a keybind belongs to. A variant that is not on show is copied with its own filled-in values, and the card is left as it is */
+function copyKeyHit(p,vi){const n=p.variants&&p.variants.length?p.variants.length:0,act=n&&Number.isInteger(p.activeVariant)&&p.activeVariant>=0&&p.activeVariant<n?p.activeVariant:0;
+ if(!n||vi===act)return copyPage(p.id);const v=p.variants[vi];if(!v)return;
+ const prev=varVals[p.id];varVals[p.id]=(variantVals[p.id]||{})[vi]||{};
+ try{return window.copyHit({id:p.id,title:v.title,content:v.content})}finally{if(prev===undefined)delete varVals[p.id];else varVals[p.id]=prev}}
 /* save */
 function generateUpdatedHtmlString(){const c=document.documentElement.cloneNode(true);if(window.lockClean)window.lockClean(c);/* strip transient UI so the saved file reopens clean */
  c.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));c.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show'));c.querySelectorAll('.ghost,.copy-pop,#menu-context').forEach(n=>n.remove());c.querySelector('body').classList.remove('edit','dragging-page','rszing');c.classList.remove('lite','flat-isl');['books','chs','wsc','hacts','chats','isl-fx','isl-chats','thwheel'].forEach(i=>{const n=c.querySelector('#'+i);if(n)n.innerHTML=''});
@@ -3856,6 +3958,288 @@ async function saveDirectToFile(){const h=generateUpdatedHtmlString(),fn=fileNam
   const w=await fileHandle.createWritable();await w.write(h);await w.close();showToast('Saved to file.')}else exportUpdatedHtmlFile()}
  catch(e){if(e.name!=='AbortError')exportUpdatedHtmlFile()}}
 function exportUpdatedHtmlFile(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([generateUpdatedHtmlString()],{type:'text/html;charset=utf-8'}));a.download=fileName()+'.html';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);showToast('Downloaded updated file.')}
+/* ---------- Documentation: stand-alone download ---------- */
+function docBundle(){return{chapters:DOC_LIB.map(lc=>{const bs=appData.containers.filter(k=>k.chapterId===lc.id);return{id:lc.id,name:lc.name,desc:lc.description||'',
+ boards:bs.map(k=>({id:k.id,name:k.name,border:k.border||'',bg:k.bg||''})),
+ pages:appData.pages.filter(p=>p.chapterId===lc.id&&!p.isWidget).map(p=>{const v=p.variants&&p.variants.length?p.variants.map(x=>({title:String(x.title||''),content:String(x.content||'')})):null,av=v?(Number.isInteger(p.activeVariant)&&p.activeVariant>=0&&p.activeVariant<v.length?p.activeVariant:0):0;
+  return{id:p.id,board:bs.some(k=>k.id===p.containerId)?p.containerId:'',title:v?v[av].title:String(p.title||''),content:v?v[av].content:String(p.content||''),variants:v,av}})}})}}
+function docSig(){const s=JSON.stringify(DOC_LIB.map(lc=>[lc.name,appData.containers.filter(k=>k.chapterId===lc.id).map(k=>[k.id,k.name,k.border||'',k.bg||'']),
+  appData.pages.filter(p=>p.chapterId===lc.id&&!p.isWidget).map(p=>[p.id,p.containerId||'',p.variants&&p.variants.length?p.variants.map(v=>[v.title,v.content]):[p.title,p.content]])]));/* variant switching and moving things around do not count as changes */
+ let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return (h>>>0).toString(36)+'.'+s.length}
+function downloadDocsHtml(){let html;try{html=docsStandaloneHtml()}catch(e){console.error(e);showToast('Could not build the Documentation file.');return}
+ const u=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'})),a=document.createElement('a');
+ a.href=u;a.download='documentation.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);
+ showToast('Documentation downloaded.')}
+const DS_CSS=String.raw`html,body{height:100%}
+body{display:flex;flex-direction:column;overflow:hidden}
+[hidden]{display:none!important}
+.dsa-h{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 20px;background:var(--bar);box-shadow:0 2px 0 var(--line);flex:none}
+.dsa-h h1{font-size:20px;font-weight:400;white-space:nowrap}
+.dsa-h .stabs{padding:0;flex:1;min-width:0}
+.dsa-m{flex:1;min-height:0;overflow-y:auto;padding:12px 20px 32px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+#chats{height:max(440px,calc(100vh - 118px));margin-top:0}
+.cp{color:var(--txt)}
+.dsa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;padding:12px;align-items:start}
+.dsa-m .cbox{box-shadow:none}
+.dsa-m .cin{overflow:visible}
+.dsa-m .cp-c{color:var(--mut)}
+.brand-f{text-align:center;font-size:10.5px;letter-spacing:.22em;color:var(--mut);opacity:.75;padding-top:18px}`;
+const DS_BODY=String.raw`<header class="dsa-h"><h1>Documentation</h1><div class="stabs" id="nav" role="tablist"></div>
+<button type="button" class="btn tone sm" id="undo-chat" disabled title="No cleared chats to restore"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg><span>Undo</span></button>
+<button type="button" class="btn tone sm" id="save-file" title="Save your template edits into this HTML file (Ctrl + S)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span>Save changes</span></button>
+<button type="button" class="btn fill sm" id="add-chat">+ Chat</button></header>
+<main class="dsa-m"><div id="chats"></div><div id="tpl" hidden></div><div class="brand-f">ataraxia</div></main>
+<div class="ov" id="page-modal"><div class="modal">
+ <div class="mh"><span id="page-modal-title">Edit template</span></div>
+ <div class="mb">
+  <div class="vbar" style="background:var(--surf);padding:8px 12px;border-radius:12px;margin-bottom:16px;border:1px solid var(--line);display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+   <span class="vl" style="margin-right:auto;font-weight:600">Insert Variable:</span>
+   <button type="button" class="btn xs tone" data-v="XXX" title="Fill in anything">XXX</button>
+   <button type="button" class="btn xs tone" data-v="DATE" title="Date format">DATE</button>
+   <button type="button" class="btn xs tone" data-v="AMT" title="Dollar amount">AMT</button>
+   <button type="button" class="btn xs tone" data-v="FMT" title="Formatted Number (e.g. Account)">[00 0000]</button>
+   <button type="button" class="btn xs tone" data-v="YN" title="Yes/No toggle. Hold Shift while clicking to insert [No] instead of [Yes]">Y/N</button>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:16px">
+   <div><label for="page-title-input">Title</label><input type="text" id="page-title-input" placeholder="e.g. Coverage - Renters/Homes"></div>
+   <div><label for="page-content-input">Content</label><textarea id="page-content-input" placeholder="Type or paste your text here..." style="min-height:90px"></textarea>
+   <p class="hint" style="margin-top:8px">Y/N adds a Yes/No toggle. Type [Opt1|Opt2] for options, or [00 0000 000] to format numbers automatically.</p></div>
+  </div>
+ </div>
+ <div id="vtabs"><div id="vt-scroll" role="tablist" aria-label="Template variants"></div><button type="button" class="ib sm vt-del" id="vt-del" title="Delete this variant" hidden></button></div>
+ <div class="mf"><button class="btn out danger" id="tpl-del" type="button" style="margin-right:auto" hidden>Delete</button><button class="btn out" id="tpl-cancel" type="button">Cancel</button><button class="btn fill" id="tpl-save" type="button">Save</button></div>
+</div></div>
+<div id="toast" role="status"></div><div id="undo" role="status" aria-live="polite"></div>`;
+const DS_JS=String.raw`var EMBED=/*EMBED_START*/null/*EMBED_END*/;
+var D=null,view='chats',vs=[],vcur=0,editCtx=null,activeEditor=null,delArm=0,shown={};
+var CHAT_MAX=3,chats=[],chatUI={},_ct=0,lastChatId='',chatTrash=[];
+var SKEY='ataraxia_docs_standalone',CKEY='ataraxia_docs_chats',TKEY='ataraxia_docs_chat_trash';
+var varVals={},_undo=[],_undoT=0;
+var NAME_LBL=/^\s*(?:customer[\u2019']?s?\s+name|name)\s*:\s*$/i;
+var CHAT_FIELDS={name:{re:NAME_LBL,toks:['XXX']},policy:{re:/^\s*policy(?:\s+(?:number|no\.?|#))?\s*:\s*$/i,toks:['XXX','[00 0000 000]']},eff:{re:/^\s*effective\s+date\s*:\s*$/i,toks:['XX/XX/XXXX']},prem:{re:/^\s*updated\s+premium\s*:\s*$/i,toks:['$XXX']}};
+var CHAT_X='<svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+function $(i){return document.getElementById(i)}
+function rid(){return Date.now()+'_'+Math.random().toString(36).slice(2,6)}
+document.addEventListener('focusin',function(e){var t=e.target;if(t&&(t.tagName==='TEXTAREA'||t.type==='text'))activeEditor=t});
+/* ---- data (the templates). A fresh download replaces edits made inside an older copy ---- */
+function loadD(){var s=null;try{s=JSON.parse(localStorage.getItem(SKEY)||'null')}catch(e){}
+ D=(s&&s.sig===EMBED.sig&&s.data&&Array.isArray(s.data.chapters))?s.data:JSON.parse(JSON.stringify(EMBED.data))}
+function saveD(){try{localStorage.setItem(SKEY,JSON.stringify({sig:EMBED.sig,data:D}))}catch(e){showToast('Could not save your edits in this browser.')}}
+function findTpl(id){for(var c=0;c<D.chapters.length;c++){var ps=D.chapters[c].pages;for(var i=0;i<ps.length;i++)if(ps[i].id===id)return{ch:D.chapters[c],p:ps[i],ci:c}}return null}
+function docIndex(){var out=[];D.chapters.forEach(function(ch,ci){var bn={};ch.boards.forEach(function(b){bn[b.id]=b.name});
+ ch.pages.forEach(function(p){var board=bn[p.board]||'',vl=p.variants&&p.variants.length?p.variants.map(function(v,i){return{vi:i,title:v.title}}):[{vi:0,title:p.title}];
+  vl.forEach(function(v){out.push({page:p,vi:v.vi,title:v.title,board:board,chap:ch.name,ci:ci,hay:(v.title+' '+board+' '+ch.name).toLowerCase(),th:v.title.toLowerCase()})})})});return out}
+function docSearch(q){var t=q.toLowerCase().split(/\s+/).filter(Boolean);if(!t.length)return[];
+ return docIndex().filter(function(e){return t.every(function(w){return e.hay.indexOf(w)>-1})}).map(function(e){return{e:e,s:t.filter(function(w){return e.th.indexOf(w)>-1}).length}}).sort(function(a,b){return b.s-a.s||a.e.ci-b.e.ci}).map(function(x){return x.e})}
+/* ---- chats (kept in this tab only, like in the app) ---- */
+function chatSave(){clearTimeout(_ct);try{sessionStorage.setItem(CKEY,JSON.stringify(chats))}catch(e){}}
+function chatSaveSoon(){clearTimeout(_ct);_ct=setTimeout(chatSave,300)}
+function chatRestore(){var s=null;try{s=JSON.parse(sessionStorage.getItem(CKEY)||'null')}catch(e){}
+ chats=(Array.isArray(s)?s:[]).slice(0,CHAT_MAX).filter(function(c){return c&&typeof c==='object'}).map(function(c){return{id:String(c.id||'c'+rid()),name:String(c.name||''),policy:String(c.policy||''),eff:String(c.eff||''),prem:String(c.prem||''),noted:!!c.noted,note:String(c.note||''),padMin:c.padMin===undefined?true:!!c.padMin,opened:!!c.opened,
+  pages:(Array.isArray(c.pages)?c.pages:[]).filter(function(p){return p&&typeof p.content==='string'}).map(function(p){return{id:String(p.id||'cp_'+rid()),src:p.src||'',title:String(p.title||''),content:p.content,variants:Array.isArray(p.variants)&&p.variants.length?p.variants:null,activeVariant:+p.activeVariant||0,vv:p.vv&&typeof p.vv==='object'?p.vv:{}}})}});
+ chats.forEach(function(c){c.pages.forEach(function(p){var a=p.activeVariant||0;varVals[p.id]=p.vv[a]||(p.vv[a]={})})})}
+function chatEmpty(c){return!c.name&&!c.policy&&!c.eff&&!c.prem&&!c.note&&!c.pages.length}
+function chatOpenPage(chat,e){var s=e.page,vi=e.vi,v=s.variants&&s.variants.length?JSON.parse(JSON.stringify(s.variants)):null;
+ var p={id:'cp_'+rid(),src:s.id,title:v?v[vi].title:s.title,content:v?v[vi].content:s.content,variants:v,activeVariant:vi,vv:{}};
+ varVals[p.id]=chatFill(chat,p,vi);chat.pages.unshift(p);chatSave();return p}
+function chatVariant(chat,p,vi){p.activeVariant=vi;p.title=p.variants[vi].title;p.content=p.variants[vi].content;varVals[p.id]=chatFill(chat,p,vi);chatSave()}
+function newChat(){var c={id:'c'+rid(),name:'',policy:'',eff:'',prem:'',noted:false,note:'',padMin:true,opened:false,pages:[]};lastChatId=c.id;chats.push(c);return c}
+function addChat(silent){if(chats.length>=CHAT_MAX){showToast('Up to '+CHAT_MAX+' chats at once. Close one first.');return}
+ var c=newChat();chatSave();renderChats();if(!silent){var n=document.querySelector('.chat[data-id="'+c.id+'"] .chat-name');if(n)n.focus()}}
+/* the opening spiel is copied only the first time a chat with content is closed or cleared */
+function openingOnce(chat){if(chatEmpty(chat)||chat.opened)return;chat.opened=true;chatSave();if(EMBED.opening)copyText(EMBED.opening,'Opening spiel copied.')}
+/* cleared / closed chats can be restored with Undo (this tab only) */
+function trashSave(){try{sessionStorage.setItem(TKEY,JSON.stringify(chatTrash))}catch(e){}}
+function trashRestore(){try{var s=JSON.parse(sessionStorage.getItem(TKEY)||'null');chatTrash=(Array.isArray(s)?s:[]).filter(function(x){return x&&x.chat&&Array.isArray(x.chat.pages)}).slice(-10)}catch(e){chatTrash=[]}}
+function paintTrash(){var b=$('undo-chat'),n=chatTrash.length,s=b.querySelector('span');b.disabled=!n;if(s)s.textContent=n?'Undo ('+n+')':'Undo';b.title=n?'Restore the last cleared chat ('+n+' saved)':'No cleared chats to restore'}
+function trashPush(chat,at){if(chatEmpty(chat))return null;var e={at:at,chat:JSON.parse(JSON.stringify(chat))};chatTrash.push(e);if(chatTrash.length>10)chatTrash.shift();trashSave();paintTrash();return e}
+function chatUndo(e){var c=e.chat,slot=(chats[e.at]&&chatEmpty(chats[e.at]))?chats[e.at]:chats.filter(chatEmpty)[0],r;
+ if(slot){Object.assign(slot,{name:c.name,policy:c.policy,eff:c.eff,prem:c.prem,note:c.note,noted:c.noted,padMin:c.padMin,opened:!!c.opened,pages:c.pages});r=slot}
+ else if(chats.length<CHAT_MAX){r=Object.assign({},c,{id:'c'+rid()});chats.splice(Math.min(e.at,chats.length),0,r)}
+ else{showToast('All '+CHAT_MAX+' chat slots are in use. Close or clear a chat first.');return false}
+ r.pages.forEach(function(p){var a=p.activeVariant||0;if(!p.vv)p.vv={};varVals[p.id]=p.vv[a]||(p.vv[a]={})});
+ lastChatId=r.id;chatSave();if(view==='chats')renderChats();return true}
+function chatUndoEntry(e){if(chatTrash.indexOf(e)<0)return true;if(!chatUndo(e))return false;chatTrash.splice(chatTrash.indexOf(e),1);trashSave();paintTrash();return true}
+function undoLast(){var e=chatTrash[chatTrash.length-1];if(!e){showToast('No cleared chats to restore.');return}if(chatUndoEntry(e)){showToast('Chat restored.');setView('chats')}}
+function clearChat(chat){if(chatEmpty(chat))return;var ent=trashPush(chat,chats.indexOf(chat));
+ chat.name=chat.policy=chat.eff=chat.prem=chat.note='';chat.noted=false;chat.opened=false;chat.pages=[];chatSave();renderChats();
+ if(ent)showUndo('Chat cleared',function(){return chatUndoEntry(ent)})}
+function closeChat(chat){var i=chats.indexOf(chat);if(i<0)return;var ent=trashPush(chat,i);chats.splice(i,1);chatSave();renderChats();
+ if(ent)showUndo('Chat closed',function(){return chatUndoEntry(ent)})}
+function chatCard(chat,p,root){
+ var card=el('div','cp'),h=el('div','cp-h'),t=el('div','cp-t');t.textContent=p.title;
+ var cp=el('button','btn tone',ic('copy')+'<span>Copy</span>');cp.title='Copy this note';cp.setAttribute('aria-label','Copy '+p.title);
+ cp.onclick=function(){var r=composeSpiel(p);return copyText(r.text,r.blank?'Copied. '+r.blank+(r.blank>1?' variables are':' variable is')+' still blank.':'Copied to clipboard.',function(){
+  if(!chat.noted&&isNotation(p)){chat.noted=true;chatSave();if(root._flag)root._flag()}})};
+ var ed=el('button','ib sm',ic('pen'));ed.title='Edit the template';ed.setAttribute('aria-label','Edit template '+p.title);
+ ed.onclick=function(){if(findTpl(p.src))openEdit(p.src);else showToast('The original template no longer exists.')};
+ var rm=el('button','ib sm',ic('trash'));rm.title='Clear this template';rm.setAttribute('aria-label','Clear '+p.title);
+ rm.onclick=function(){var i=chat.pages.indexOf(p);if(i<0)return;chat.pages.splice(i,1);chatSave();card.remove();if(!chat.pages.length&&root._body)root._body();if(root._flag)root._flag();
+  showUndo('Template cleared',function(){if(chat.pages.indexOf(p)<0){chat.pages.splice(Math.min(i,chat.pages.length),0,p);chatSave();var r=document.querySelector('.chat[data-id="'+chat.id+'"]');if(r&&r._body)r._body()}})};
+ h.append(t,cp,ed,rm);card.append(h);
+ if(p.variants&&p.variants.length>1){var vb=el('div','cp-v');
+  p.variants.forEach(function(v,i){var b=el('button',i===(p.activeVariant||0)?'on':'');b.type='button';b.textContent=v.title;
+   b.onclick=function(){if(i===(p.activeVariant||0))return;chatVariant(chat,p,i);card.replaceWith(chatCard(chat,p,root))};vb.append(b)});card.append(vb)}
+ var c=el('div','cp-c');buildSpiel(c,p);card.append(c);return card}
+function chatEl(chat,idx){
+ var root=el('section','chat');root.dataset.id=chat.id;
+ var h=el('div','chat-h'),lb=el('b');lb.textContent='Chat '+(idx+1)+':';
+ var nm=el('input','chat-name');nm.type='text';nm.placeholder='Customer name';nm.value=chat.name;nm.maxLength=80;nm.spellcheck=false;nm.autocomplete='off';nm.setAttribute('aria-label','Customer name for chat '+(idx+1));
+ nm.oninput=function(){chatSet(chat,root,'name',nm.value.trim());root._flag()};
+ var fld=function(key,ph,cls,fmt){var i=el('input','chat-name chat-fld '+cls);i.type='text';i.placeholder=ph;i.value=chat[key]||'';i.maxLength=40;i.spellcheck=false;i.autocomplete='off';i.setAttribute('aria-label',ph+' for chat '+(idx+1));
+  i.oninput=function(){if(i.selectionStart===i.value.length){var f=fmt(i.value);if(f!==i.value)i.value=f}chatSet(chat,root,key,i.value.trim());root._flag()};
+  i.onblur=function(){var f=fmt(i.value);if(f!==i.value){i.value=f;chatSet(chat,root,key,f.trim())}};return i};
+ var pol=fld('policy','Policy no.','pol',fmtPolicy),eff=fld('eff','Eff. date','eff',fmtEff);
+ var flag=el('span','chat-flag');flag.textContent='Notation not yet written';flag.title='Copy a Notations or What if template to clear this';
+ root._flag=function(){flag.hidden=!((chat.name||chat.pages.length)&&!chat.noted)};
+ root.addEventListener('focusin',function(){lastChatId=chat.id});root.addEventListener('pointerdown',function(){lastChatId=chat.id});
+ var x=el('button','ib sm',CHAT_X);x.title='Close this chat (copies the opening spiel the first time)';x.setAttribute('aria-label','Close chat '+(idx+1));x.onclick=function(){openingOnce(chat);closeChat(chat)};
+ var tr=el('button','ib sm',ic('trash'));tr.title='Clear this chat (copies the opening spiel the first time)';tr.setAttribute('aria-label','Clear chat '+(idx+1));tr.onclick=function(){openingOnce(chat);clearChat(chat)};
+ var acts=el('div','chat-acts');acts.append(tr,x);var br=el('span','chat-br');
+ h.append(lb,nm,pol,eff,flag,br,acts);
+ var s=el('div','chat-s'),si=el('input');si.type='text';si.autocomplete='off';si.spellcheck=false;si.placeholder='Search templates (e.g. vehicle, payment)';si.setAttribute('aria-label','Search documentation for chat '+(idx+1));s.append(si);
+ var res=el('div','chat-res');res.hidden=true;
+ var body=el('div','chat-body'),ui=chatUI[chat.id]||(chatUI[chat.id]={sel:0,list:[]});
+ var paintBody=function(){body.innerHTML='';
+  if(!chat.pages.length){var em=el('div','chat-empty');em.textContent='Input customer name then pick a template.';body.append(em);return}
+  chat.pages.forEach(function(p){body.append(chatCard(chat,p,root))})};
+ root._body=paintBody;
+ var paintRes=function(){var q=si.value;res.innerHTML='';if(!q.trim()){res.hidden=true;ui.list=[];return}
+  ui.list=docSearch(q).slice(0,40);res.hidden=false;ui.sel=Math.min(ui.sel,Math.max(0,ui.list.length-1));
+  if(!ui.list.length){var n=el('div','chat-none');n.textContent='No template matches that.';res.append(n);return}
+  ui.list.forEach(function(e,i){var b=el('button',i===ui.sel?'sel':'');b.type='button';var a=el('span','rt'),c=el('span','rs');a.textContent=e.title;c.textContent=e.chap+' \u203a '+(e.board||'Other');b.append(a,c);b.onclick=function(){pick(e)};res.append(b)})};
+ var pick=function(e){chatOpenPage(chat,e);si.value='';ui.sel=0;paintRes();paintBody();body.scrollTop=0;root._flag()};
+ si.oninput=function(){ui.sel=0;paintRes()};
+ si.onkeydown=function(e){
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){if(!ui.list.length)return;e.preventDefault();ui.sel=(ui.sel+(e.key==='ArrowDown'?1:-1)+ui.list.length)%ui.list.length;paintRes();var b=res.children[ui.sel];if(b&&b.scrollIntoView)b.scrollIntoView({block:'nearest'})}
+  else if(e.key==='Enter'){if(ui.list[ui.sel]){e.preventDefault();pick(ui.list[ui.sel])}}
+  else if(e.key==='Escape'){si.value='';paintRes()}};
+ root.append(h,s,res,body);paintBody();root._flag();
+ var pad=el('div','chat-pad'),pdh=el('div','chat-pad-h'),pdt=el('b');pdt.textContent='Scratch pad';
+ var pcl=el('button','ib sm',ic('trash')),pta=el('textarea');
+ pcl.type='button';pcl.title='Clear the scratch pad';pcl.setAttribute('aria-label','Clear scratch pad for chat '+(idx+1));
+ pta.placeholder='';pta.spellcheck=false;pta.value=chat.note||'';pta.setAttribute('aria-label','Scratch pad for chat '+(idx+1));
+ var paintNote=function(){pdt.classList.toggle('has',!!pta.value.trim())};
+ var paintMin=function(){pad.classList.toggle('min',!!chat.padMin);pdh.title=chat.padMin?'Click to expand the scratch pad':'Click to minimize the scratch pad'};
+ pdh.addEventListener('click',function(e){if(!e.target.closest('button')){chat.padMin=!chat.padMin;paintMin();chatSave()}});
+ pta.addEventListener('input',function(){chat.note=pta.value;paintNote();chatSaveSoon()});
+ pcl.onclick=function(){var old=pta.value;if(!old.trim()){showToast('The scratch pad is already empty.');return}
+  pta.value='';chat.note='';paintNote();chatSave();
+  showUndo('Scratch pad cleared',function(){if(chats.indexOf(chat)<0)return false;chat.note=old;chatSave();var t=document.querySelector('.chat[data-id="'+chat.id+'"] .chat-pad textarea');if(t){t.value=old;t.dispatchEvent(new Event('input'))}})};
+ pdh.append(pdt,pcl);pad.append(pdh,pta);root.append(pad);paintMin();paintNote();return root}
+function isNotation(p){return!!findTpl(p.src)}
+function renderChats(){var box=$('chats');box.innerHTML='';
+ if(!chats.length){var e=el('div','chats-none'),m=el('div');m.textContent='No chats open.';var b=el('button','btn fill','+ New chat');b.onclick=function(){addChat()};e.append(m,b);box.append(e);return}
+ chats.forEach(function(c,i){box.append(chatEl(c,i))})}
+/* ---- template browser ---- */
+function planChat(){var free=chats.filter(function(c){return!(c.name||c.policy||c.eff||c.prem)})[0];if(free)return free;if(chats.length<CHAT_MAX)return null;return chats.filter(function(x){return x.id===lastChatId})[0]||chats[0]}
+function addToChat(e){var chat=planChat()||newChat(),dup=chat.pages.some(function(p){return p.src===e.page.id&&(p.activeVariant||0)===e.vi});lastChatId=chat.id;
+ if(!dup)chatOpenPage(chat,e);chatSave();var n=chats.indexOf(chat)+1;setView('chats');showToast(dup?'\u201c'+e.title+'\u201d is already in Chat '+n+'.':'Added \u201c'+e.title+'\u201d to Chat '+n+'.')}
+function renderTpl(ci){var ch=D.chapters[ci],box=$('tpl');box.textContent='';if(!ch)return;
+ var top=el('div');top.style.cssText='display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 14px';
+ var hd=el('div','hint');hd.style.cssText='margin:0;flex:1;min-width:200px';hd.textContent=ch.desc||'';
+ var add=el('button','btn tone sm','+ Template');add.type='button';add.onclick=function(){openAdd(ci,'')};top.append(hd,add);box.append(top);
+ var known=function(p){return ch.boards.some(function(b){return b.id===p.board})};
+ var secs=ch.boards.map(function(b){return{b:b,id:b.id,name:b.name}});if(ch.pages.some(function(p){return!known(p)}))secs.push({b:{},id:'',name:'Other'});
+ var wrap=el('div');wrap.style.cssText='display:flex;flex-direction:column;gap:16px';
+ secs.forEach(function(s){var list=ch.pages.filter(function(p){return s.id?p.board===s.id:!known(p)});
+  var sec=el('section','cbox'),bar=el('div','cbar'),body=el('div','cin'),grid=el('div','dsa-grid');applyColors(sec,s.b.border||'',s.b.bg||'');
+  var nm=el('span','cname');nm.textContent=s.name;var cn=el('span','ccount',list.length+(list.length===1?' template':' templates'));
+  var pb=el('button','ib sm',ic('plus'));pb.type='button';pb.title='Add a template here';pb.setAttribute('aria-label','Add a template to '+s.name);pb.onclick=function(){openAdd(ci,s.id)};
+  bar.append(nm,cn,pb);
+  list.forEach(function(p){var card=el('div','cp'),hh=el('div','cp-h'),t=el('div','cp-t'),n=p.variants&&p.variants.length?p.variants.length:1,vi=Math.min(shown[p.id]||0,n-1),cur=n>1?p.variants[vi]:p;
+   t.textContent=cur.title;
+   var use=el('button','btn tone',ic('plus')+'<span>Add to chat</span>');use.type='button';use.onclick=function(){addToChat({page:p,vi:vi,title:cur.title})};
+   var ed=el('button','ib sm',ic('pen'));ed.type='button';ed.title='Edit the template';ed.setAttribute('aria-label','Edit template '+cur.title);ed.onclick=function(){openEdit(p.id)};
+   hh.append(t,use,ed);card.append(hh);
+   if(n>1){var vb=el('div','cp-v');p.variants.forEach(function(v,i){var b=el('button',i===vi?'on':'');b.type='button';b.textContent=v.title;b.onclick=function(){shown[p.id]=i;renderTpl(ci)};vb.append(b)});card.append(vb)}
+   var c=el('div','cp-c');c.textContent=cur.content;card.append(c);grid.append(card)});
+  if(!list.length){var em=el('div','empty');em.textContent='No templates here yet.';grid.append(em)}
+  body.append(grid);sec.append(bar,body);wrap.append(sec)});
+ box.append(wrap)}
+/* ---- template editor: one tab per variant ---- */
+function openModal(id){$(id).classList.add('open');document.querySelectorAll('#'+id+' textarea').forEach(autosize)}
+function closeModal(id){$(id).classList.remove('open')}
+function blankVariant(){return{title:'',content:''}}
+function vsCapture(){if(vs[vcur])vs[vcur]={title:$('page-title-input').value,content:$('page-content-input').value}}
+function vsLoad(i){vcur=i;var v=vs[i]||blankVariant();$('page-title-input').value=v.title;$('page-content-input').value=v.content;autosize($('page-content-input'));renderVTabs()}
+function renderVTabs(){var box=$('vt-scroll');box.textContent='';
+ vs.forEach(function(_,i){var b=el('button',i===vcur?'on':'');b.type='button';b.textContent=String(i+1);b.setAttribute('role','tab');b.setAttribute('aria-selected',i===vcur?'true':'false');b.title='Variant '+(i+1);b.onclick=function(){if(i===vcur)return;vsCapture();vsLoad(i)};box.append(b)});
+ var add=el('button','vt-add');add.type='button';add.textContent='+';add.title='Add a variant';add.setAttribute('aria-label','Add a variant');add.onclick=function(){vsCapture();vs.push(blankVariant());vsLoad(vs.length-1);box.scrollLeft=box.scrollWidth;$('page-title-input').focus()};box.append(add);
+ var d=$('vt-del');d.innerHTML=ic('trash');d.hidden=vs.length<2;d.title='Delete variant '+(vcur+1)}
+$('vt-del').onclick=function(){if(vs.length<2)return;vsCapture();vs.splice(vcur,1);vsLoad(Math.min(vcur,vs.length-1))};
+function resetDel(){clearTimeout(delArm);delArm=0;$('tpl-del').textContent='Delete'}
+function openEdit(id){var f=findTpl(id);if(!f)return;editCtx={id:id};$('page-modal-title').textContent='Edit template';
+ vs=f.p.variants&&f.p.variants.length?f.p.variants.map(function(v){return{title:v.title,content:v.content}}):[{title:f.p.title,content:f.p.content}];
+ $('tpl-del').hidden=false;resetDel();openModal('page-modal');vsLoad(0)}
+function openAdd(ci,board){editCtx={ci:ci,board:board||''};$('page-modal-title').textContent='Add template to '+D.chapters[ci].name;vs=[blankVariant()];$('tpl-del').hidden=true;resetDel();openModal('page-modal');vsLoad(0)}
+function saveTpl(){vsCapture();var list=vs.map(function(v){return{title:v.title.trim(),content:v.content}});
+ if(list.length>1){list=list.filter(function(v){return v.title||v.content.trim()});list.forEach(function(v,i){if(!v.title)v.title='Variant '+(i+1)})}
+ if(!list.length||!list[0].title){showToast('Add a title first.');return}
+ var variants=list.length>1?list:null;
+ if(editCtx.id){var f=findTpl(editCtx.id);if(!f){closeModal('page-modal');return}var av=f.p.av||0;if(variants&&av>=variants.length)av=0;var a=variants?variants[av]:list[0];
+  f.p.variants=variants;f.p.av=av;f.p.title=a.title;f.p.content=a.content;delete shown[f.p.id]}
+ else D.chapters[editCtx.ci].pages.push({id:'p_'+rid(),board:editCtx.board||'',title:list[0].title,content:list[0].content,variants:variants,av:0});
+ saveD();closeModal('page-modal');if(typeof view==='number')renderTpl(view);showToast('Template saved.')}
+$('tpl-save').onclick=saveTpl;$('tpl-cancel').onclick=function(){closeModal('page-modal')};
+$('tpl-del').onclick=function(){if(!delArm){delArm=setTimeout(resetDel,3000);this.textContent='Click again to delete';return}
+ resetDel();var f=editCtx&&findTpl(editCtx.id);if(!f)return;f.ch.pages.splice(f.ch.pages.indexOf(f.p),1);saveD();closeModal('page-modal');if(typeof view==='number')renderTpl(view);showToast('Template deleted.')};
+document.querySelectorAll('#page-modal [data-v]').forEach(function(b){b.onmousedown=function(e){e.preventDefault()};b.onclick=function(e){insertVar(b.dataset.v,e)}});
+$('page-modal').addEventListener('mousedown',function(e){if(e.target===this)closeModal('page-modal')});
+document.querySelectorAll('textarea').forEach(function(t){t.addEventListener('input',function(){autosize(t)})});
+/* ---- save: rebuilds this very file with your template edits baked in ---- */
+var fileH=null;
+function dsHash(s){var h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return (h>>>0).toString(36)+'.'+s.length}
+function buildFile(){
+ var sig=dsHash(JSON.stringify(D)),c=document.documentElement.cloneNode(true);
+ ['nav','chats','tpl','vt-scroll'].forEach(function(id){var n=c.querySelector('#'+id);if(n)n.innerHTML=''});
+ ['undo','toast'].forEach(function(id){var n=c.querySelector('#'+id);if(n){n.innerHTML='';n.className=''}});
+ Array.prototype.forEach.call(c.querySelectorAll('.ov.open'),function(o){o.classList.remove('open')});
+ Array.prototype.forEach.call(c.querySelectorAll('.menu.show'),function(m){m.classList.remove('show')});
+ var s=c.querySelector('#ds-main');if(!s)throw new Error('script not found');
+ var json=JSON.stringify({sig:sig,opening:EMBED.opening||'',data:D}).replace(/</g,'\\u003c');
+ s.textContent=s.textContent.replace(/\/\*EMBED_START\*\/[\s\S]*?\/\*EMBED_END\*\//,function(){return '/*EMBED_START*/'+json+'/*EMBED_END*/'});
+ return {html:'<!DOCTYPE html>\n'+c.outerHTML,sig:sig}}
+function dlFile(html){var u=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='documentation.html';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1000)}
+async function saveFile(){
+ var b;try{b=buildFile()}catch(e){showToast('Could not build the file.');return}
+ try{
+  if(window.showSaveFilePicker){
+   if(!fileH)fileH=await window.showSaveFilePicker({suggestedName:'documentation.html',types:[{description:'HTML file',accept:{'text/html':['.html']}}]});
+   var w=await fileH.createWritable();await w.write(b.html);await w.close();showToast('Saved to '+fileH.name+'.')
+  }else{dlFile(b.html);showToast('Downloaded the updated file.')}
+  EMBED.sig=b.sig;saveD()
+ }catch(e){if(e&&e.name==='AbortError')return;fileH=null;dlFile(b.html);EMBED.sig=b.sig;saveD();showToast('Could not write to that file, so it was downloaded instead.')}}
+/* ---- navigation ---- */
+function buildNav(){var n=$('nav');n.textContent='';[['chats','Chats']].concat(D.chapters.map(function(c,i){return[i,c.name]})).forEach(function(x){var b=el('button',x[0]===view?'on':'');b.type='button';b.textContent=x[1];b.setAttribute('role','tab');b.onclick=function(){setView(x[0])};n.append(b)})}
+function setView(v){view=v;var c=v==='chats';$('chats').hidden=!c;$('tpl').hidden=c;$('undo-chat').hidden=!c;$('add-chat').hidden=!c;buildNav();if(c)renderChats();else renderTpl(v)}
+$('undo-chat').onclick=undoLast;$('add-chat').onclick=function(){addChat()};$('save-file').onclick=saveFile;
+document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&!e.altKey&&!e.shiftKey&&e.key.toLowerCase()==='s'){e.preventDefault();saveFile()}});
+/* ---- variables (same behaviour as the app) ---- */
+(function(){var M=document.body;
+ function vOf(e){return e.target&&e.target.closest?e.target.closest('.var:not(.bool):not(.opt)'):null}
+ function bOf(e){return e.target&&e.target.closest?e.target.closest('.var.bool'):null}
+ M.addEventListener('focusin',function(e){var v=vOf(e);if(v)setTimeout(function(){selectAllIn(v)},0)});
+ M.addEventListener('focusout',function(e){var v=vOf(e);if(v)finishVar(v)});
+ M.addEventListener('click',function(e){var b=bOf(e);if(b)toggleBool(b)});
+ M.addEventListener('keydown',function(e){var b=bOf(e);if(b){if(e.key===' '){e.preventDefault();toggleBool(b)}else if(e.key==='Enter')e.preventDefault();return}
+  var v=vOf(e);if(v&&(e.key==='Enter'||e.key==='Escape')){e.preventDefault();v.blur()}});
+ M.addEventListener('paste',function(e){var v=vOf(e);if(!v)return;e.preventDefault();pasteIntoVar(v,(e.clipboardData||window.clipboardData).getData('text'))});
+ M.addEventListener('input',function(e){var v=vOf(e);if(v)onVarInput(v,e)});
+ document.addEventListener('click',closeMenus);
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeMenus();closeModal('page-modal')}})})();
+addEventListener('pagehide',chatSave);document.addEventListener('visibilitychange',function(){if(document.hidden)chatSave()});
+loadD();chatRestore();trashRestore();paintTrash();setView('chats');`;
+function docsStandaloneHtml(){
+ const root=document.documentElement,cls=['dark','black'].filter(c=>root.classList.contains(c)).join(' '),sty=root.getAttribute('style')||'';
+ let css='';document.querySelectorAll('style').forEach(s=>{if(s.textContent.length>css.length)css=s.textContent});/* the app's own stylesheet: the file looks exactly like the app and follows your current theme */
+ const consts='var IC='+JSON.stringify(IC)+';const ic='+ic.toString()+';const clamp='+clamp.toString()+';const phOf='+phOf.toString()+';var TOK='+JSON.stringify(TOK)+';var VKIND='+JSON.stringify(VKIND)+';var VLABEL='+JSON.stringify(VLABEL)+';var SIMPLE_VAR='+SIMPLE_VAR.toString()+';var VOPT_RE='+VOPT_RE.toString()+';';
+ const fns=[el,placeMenu,closeMenus,toggleDropdown,getVarKind,scanVars,splitTop,parseOpts,boolDef,setBool,toggleBool,makeBool,makePlainOpt,makeInlineOpt,makeMultiOpt,makeOpt,makeVar,buildSpiel,composeSpiel,
+  fmtDate,caretOff,setCaret,selectAllIn,commitVar,finishVar,insertIntoVar,pasteIntoVar,onVarInput,writeClipboard,fallbackCopy,copyText,showToast,autosize,insertVar,
+  fmtPolicy,fmtEff,fieldIdx,chatFill,chatSet,inkFor,applyColors,showUndo,paintUndo].map(f=>f.toString()).join('\n');
+ const embed={sig:docSig(),opening:(()=>{try{return openingText()}catch(e){return''}})(),data:docBundle()};
+ const js=consts+'\n'+fns+'\n'+DS_JS.replace('/*EMBED_START*/null/*EMBED_END*/',()=>'/*EMBED_START*/'+JSON.stringify(embed).replace(/</g,'\\u003c')+'/*EMBED_END*/');
+ return '<!DOCTYPE html>\n<html lang="en" class="'+cls+'" style="'+escAttr(sty)+'"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Documentation</title><style>'+css+'\n'+DS_CSS+'</style></head><body>'+DS_BODY+'<scr'+'ipt id="ds-main">'+js+'</scr'+'ipt></body></html>'}
 load();applyTheme();applySiteName(true);renderAll();setEdit(false,true);$('ws').addEventListener('pointerdown',layoutDown);
 $('site-name-input').addEventListener('input',e=>{appData.settings.title=e.target.value;persistLocal();applySiteName(false)});
 $('agent-name-input').addEventListener('input',e=>{appData.settings.agentName=e.target.value;persistLocal()});
