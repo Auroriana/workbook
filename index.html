@@ -80,35 +80,20 @@ main{flex:1;min-width:0;min-height:0;overflow-y:auto;padding:8px 24px 40px;scrol
 .chat-name:focus{border-bottom-style:solid}
 .chat-h .ib{color:inherit}
 .chat{container-type:inline-size}
-/* the global input[type=text] rule (box look, width:100%) is more specific than a plain class, so these use input.chat-name to win.
-   One row whenever it fits: label, name (takes all spare room), policy, date, trash/close at the far right. The flag gets its own thin line under it. */
+/* header: "Chat N:" + customer name (+ the notation flag on its own line). Search, trash and close live in the search row, policy and date below it,
+   so one Tab from the name lands in the template search. */
 .chat-h{flex-wrap:wrap;gap:6px;padding:6px 8px 6px 14px}
 .chat-h b{order:0}
 .chat-h input.chat-name{width:auto;flex:1 1 110px;min-width:90px;height:30px;padding:0 10px;font-size:14px;border-radius:10px}
-.chat-h input.chat-name:not(.chat-fld){order:1}
-.chat-h input.chat-fld{flex:0 1 auto;min-width:86px}/* shrinks a little before anything wraps */
-.chat-h input.chat-fld.pol{order:2;width:108px}/* 00 0000 000 */
-.chat-h input.chat-fld.eff{order:3;width:100px}/* XX/XX/XXXX */
-.chat-acts{order:4;display:flex;flex:none;margin-left:auto}
-.chat-br{display:none}
+.chat-acts{display:flex;flex:none}
 .chat-flag{order:9;flex:0 0 100%;font-size:11.5px;font-weight:600;opacity:.85;padding:0 2px;white-space:nowrap}
 .chat-flag::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:1px}
-@container (max-width:440px){/* too narrow for one row: a small grid. Row 1 = label + name, row 2 = policy + trash, row 3 = date + close */
- .chat-h{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:6px 6px}
- .chat-acts{display:contents}
- .chat-h b{grid-area:1/1}
- .chat-h input.chat-name:not(.chat-fld){grid-area:1/2/2/4}
- .chat-h input.chat-fld.pol{grid-area:2/1/3/3;width:auto;min-width:0}
- .chat-h input.chat-fld.eff{grid-area:3/1/4/3;width:auto;min-width:0}
- .chat-acts .ib:first-child{grid-area:2/3;justify-self:center}
- .chat-acts .ib:last-child{grid-area:3/3;justify-self:center}
- .chat-flag{grid-area:4/1/5/4}}
 .chat-flag[hidden]{display:none}
 .nice-pop.long{animation-duration:2.2s}
 .nice-pop{white-space:nowrap;max-width:80vw;overflow:hidden;text-overflow:ellipsis;position:fixed;z-index:200;pointer-events:none;background:var(--p);color:var(--on-p);padding:4px 13px;border-radius:999px;font-size:13px;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.18);animation:nicePop .95s ease-out forwards}
 @keyframes nicePop{0%{opacity:0;transform:translate(-50%,-80%) scale(.8)}15%{opacity:1;transform:translate(-50%,-150%) scale(1)}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-230%)}}
-.chat-s{padding:10px 12px 6px;flex:none}
-.chat-s input{width:100%;height:36px;border-radius:999px;border:1px solid var(--line);background:var(--card);padding:0 14px;outline:none;font-size:14px}
+.chat-s{display:flex;align-items:center;gap:4px;padding:10px 8px 6px 12px;flex:none}
+.chat-s input{flex:1 1 0;min-width:0;width:100%;height:36px;border-radius:999px;border:1px solid var(--line);background:var(--card);padding:0 14px;outline:none;font-size:14px}
 .chat-s input:focus{border-color:var(--p)}
 .chat-res{margin:0 12px 4px;max-height:40%;flex:none;overflow-y:auto;border:1px solid var(--line);border-radius:14px;background:var(--card);scrollbar-width:thin;scrollbar-color:var(--line) transparent}
 .chat-res[hidden]{display:none}
@@ -118,6 +103,8 @@ main{flex:1;min-width:0;min-height:0;overflow-y:auto;padding:8px 24px 40px;scrol
 .chat-res .rt{font-size:14px;font-weight:600;overflow-wrap:anywhere}
 .chat-res .rs{font-size:12px;opacity:.7;overflow-wrap:anywhere}
 .chat-none{padding:10px 12px;font-size:13.5px;color:var(--mut)}
+.chat-meta{display:flex;gap:8px;padding:0 12px 6px;flex:none}
+.chat .chat-meta input{flex:1 1 0;min-width:0;width:auto;height:32px;padding:0 14px;border-radius:999px;background:var(--card);font-size:13.5px}
 .chat-body{flex:1;min-height:0;overflow-y:auto;padding:8px 12px 14px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
 .chat-empty{margin:auto;max-width:260px;color:var(--mut);font-size:14px;text-align:center;padding:20px 8px}
 .cp{flex:none;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px 8px 12px 14px}
@@ -987,7 +974,15 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
  <div class="mb">
   <div class="tp on" data-t="general">
    <section class="sec"><div><label for="site-name-input">Website name</label><input type="text" id="site-name-input" maxlength="40" autocomplete="off"><p class="hint">Shown at the top left and used as the file name when you save.</p></div></section>
-   <section class="sec"><div><label for="agent-name-input">Your name</label><input type="text" id="agent-name-input" maxlength="40" autocomplete="off" placeholder="Ataraxia"><p class="hint">Used in the opening spiel that is copied when you close or clear a chat. Leave it empty to use the name already written in the Opening page of General ("This is ...").</p></div></section>
+   <section class="sec"><div><label for="agent-name-input">Your name</label><input type="text" id="agent-name-input" maxlength="40" autocomplete="off" placeholder="Ataraxia"><p class="hint">Used in the opening spiel ("Thank you for contacting Allstate, where you're in good hands. My name is ..., and I'll be assisting you today.") that is copied when you start a new chat and when you close or clear one. Leave it empty to use the name already written in the Opening page of General.</p></div></section>
+   <section class="sec"><div><label for="newchat-key-input">New chat keybind</label><input type="text" id="newchat-key-input" readonly placeholder="Click here, then press your keys (e.g. Alt + N)" aria-label="Keybind for a new chat" autocomplete="off"><div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="newchat-key-clear" hidden>Clear</button></div><p class="hint" id="newchat-key-hint"></p></div></section>
+   <section class="sec"><div><label>Navigation keybinds</label><p class="hint">Jump between Workspace, Tools and Documentation by pressing a key anywhere you are not typing.</p>
+    <div class="set-grid">
+     <div><label for="nav-key-ws">Workspace</label><input type="text" id="nav-key-ws" readonly placeholder="Click, then press a key" aria-label="Keybind for Workspace" autocomplete="off"></div>
+     <div><label for="nav-key-tools">Tools</label><input type="text" id="nav-key-tools" readonly placeholder="Click, then press a key" aria-label="Keybind for Tools" autocomplete="off"></div>
+     <div><label for="nav-key-docs">Documentation</label><input type="text" id="nav-key-docs" readonly placeholder="Click, then press a key" aria-label="Keybind for Documentation" autocomplete="off"></div>
+    </div>
+    <div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="nav-key-reset">Reset to 1 / 2 / 3</button></div><p class="hint" id="nav-key-hint"></p></div></section>
     <section class="sec"><div><label>Break reminders</label><p class="hint">Used by the live clock island at the bottom right. Breaks are 15 min and lunch is 1 hour, so you only enter when each one starts. Reminders are automatic: 10 min before a break or lunch starts, and 2 min (break) / 5 min (lunch) before it ends.</p>
      <div class="set-grid">
       <div><label for="set-early">Allow taking a break early up to (minutes before)</label><input type="number" id="set-early" min="0" max="180"></div>
@@ -1475,7 +1470,7 @@ function load(data){let s=null;if(data===undefined)try{s=localStorage.getItem('p
 /* website name */
 function siteName(){return String(appData.settings.title||'').trim()||DEF_NAME}
 function fileName(){return siteName().replace(/[\\/:*?"<>|]/g,'').replace(/\s+/g,' ').trim().replace(/[. ]+$/,'')||'paano_ba_yan'}
-function applySiteName(fill){const n=siteName();$('brand').textContent=n;$('brand').title=n;document.title=n;if(fill){$('site-name-input').value=n;const a=$('agent-name-input');if(a){a.value=(appData.settings&&appData.settings.agentName)||'';a.placeholder='Ataraxia'}}}
+function applySiteName(fill){const n=siteName();$('brand').textContent=n;$('brand').title=n;document.title=n;if(fill){$('site-name-input').value=n;const a=$('agent-name-input');if(a){a.value=(appData.settings&&appData.settings.agentName)||'';a.placeholder='Ataraxia'}if(window.paintNewChatKey)window.paintNewChatKey();if(window.paintNavKeys)window.paintNavKeys()}}
 /* theme */
 function applyTheme(){const s=appData.settings,r=document.documentElement;
  const dark=s.mode==='dark'||s.mode==='black'||(s.mode==='auto'&&matchMedia('(prefers-color-scheme:dark)').matches);
@@ -1906,6 +1901,7 @@ window.SmartScheduleManager = {
 
   /* ---- build the view-model (what the island should show right now) ---- */
   evaluate() {
+    if (typeof appData === 'undefined' || !appData) return; // data not loaded yet
     this.sync(); const now = Date.now(); if (this.weekInfo(now).done && !this.loadState().tagged && !this.loadState().shiftStart) this.finishWeek(); // every imported day is over (and the shift is ended, overtime included) -> ask for the next week
     if (!this._looking && !this.cfg().days.length && !(this.cfg().items || []).length && now - (this._lk || 0) > 5000) { /* before asking: does the Schedule Import widget already hold a schedule? */
       this._lk = now; const SI = window.ScheduleImporter, sv = SI && SI.findSaved(); if (sv) { this._looking = true; try { SI.sendToIsland(sv.blocks, sv.tz); } finally { this._looking = false; } return; } }
@@ -3478,7 +3474,7 @@ const CHAT_X='<svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>';
 function chatSave(){clearTimeout(_chatT);try{sessionStorage.setItem(CHAT_KEY,JSON.stringify(chats))}catch(e){}}
 function chatSaveSoon(){clearTimeout(_chatT);_chatT=setTimeout(chatSave,300)}
 function chatRestore(){let s=null;try{s=JSON.parse(sessionStorage.getItem(CHAT_KEY)||'null')}catch(e){}
- chats=(Array.isArray(s)?s:[]).slice(0,CHAT_MAX).filter(c=>c&&typeof c==='object').map(c=>({id:String(c.id||'c'+rid()),name:String(c.name||''),policy:String(c.policy||''),eff:String(c.eff||''),prem:String(c.prem||''),noted:!!c.noted,note:String(c.note||''),padMin:c.padMin===undefined?true:!!c.padMin,opened:!!c.opened,t0:+c.t0||0,hs:+c.hs||0,
+ chats=(Array.isArray(s)?s:[]).slice(0,CHAT_MAX).filter(c=>c&&typeof c==='object').map(c=>({id:String(c.id||'c'+rid()),name:String(c.name||''),policy:'',eff:'',prem:String(c.prem||''),noted:!!c.noted,note:String(c.note||''),padMin:c.padMin===undefined?true:!!c.padMin,opened:!!c.opened,t0:+c.t0||0,hs:+c.hs||0,
   pages:(Array.isArray(c.pages)?c.pages:[]).filter(p=>p&&typeof p.content==='string').map(p=>({id:String(p.id||'cp_'+rid()),src:p.src||'',title:String(p.title||''),content:p.content,
    variants:Array.isArray(p.variants)&&p.variants.length?p.variants:null,activeVariant:+p.activeVariant||0,vv:p.vv&&typeof p.vv==='object'?p.vv:{}}))}));
  chats.forEach(c=>c.pages.forEach(p=>{const a=p.activeVariant||0;varVals[p.id]=p.vv[a]||(p.vv[a]={})}))}/* a page's live values ARE p.vv[its active variant], so saving the chat saves them */
@@ -3491,8 +3487,6 @@ const NAME_LBL=/^\s*(?:customer[\u2019']?s?\s+name|name)\s*:\s*$/i;
 /* session fields: each one fills the template variables whose label matches (the variable must sit right after its label on the same line) */
 const CHAT_FIELDS={
  name:{re:NAME_LBL,toks:['XXX']},
- policy:{re:/^\s*policy(?:\s+(?:number|no\.?|#))?\s*:\s*$/i,toks:['XXX','[00 0000 000]']},
- eff:{re:/^\s*effective\s+date\s*:\s*$/i,toks:['XX/XX/XXXX']},
  prem:{re:/^\s*updated\s+premium\s*:\s*$/i,toks:['$XXX']}};/* prem comes from the Quote Formatter */
 function fieldIdx(content,key){const f=CHAT_FIELDS[key],out=[];let i=0;
  for(const m of scanVars(content)){if(f.toks.includes(m.tok)){const ls=content.lastIndexOf('\n',m.index-1)+1;if(f.re.test(content.slice(ls,m.index)))out.push(i)}i++}
@@ -3528,7 +3522,7 @@ function openChatDocs(id,pad,name){const c=chats.find(x=>x.id===id);if(!c)return
 function pillNewChat(e){let c=chats.find(x=>!x.t0&&chatEmpty(x));
  if(!c){if(chats.length>=CHAT_MAX){showToast('Up to '+CHAT_MAX+' chats at once. Close one first.');return}
   c={id:'c'+rid(),name:'',policy:'',eff:'',prem:'',noted:false,note:'',padMin:true,pages:[],t0:0,hs:0};chats.push(c)}
- c.t0=Date.now();c.hs=0;copyOpening(e);chatSave();/* stays where you are: the arrow next to Hold in the island opens the scratch pad & docs */
+ c.t0=trackOn()?Date.now():0;c.hs=0;copyOpening(e);chatSave();/* stays where you are: the arrow next to Hold in the island opens the scratch pad & docs */
  if(appData.activeChapterId===DOC_CHATS_ID){renderHero();renderChats()}
  if(window.SmartScheduleManager)SmartScheduleManager.evaluate()}
 function fmtPolicy(v){const d=v.replace(/\D/g,'');if(!/^[\d\s]*$/.test(v)||d.length>9)return v.trim();return[d.slice(0,2),d.slice(2,6),d.slice(6)].filter(Boolean).join(' ')}
@@ -3546,13 +3540,11 @@ function findOpening(){const cs=appData.chapters||[],ab=appData.activeBookId,cha
  const all=appData.pages.filter(p=>!p.isWidget&&/^\s*opening\s*$/i.test(p.title||'')&&chap(p)),inBook=all.filter(p=>chap(p).bookId===ab);
  const gen=l=>l.find(p=>/^\s*general\s*$/i.test(chap(p).name||''));
  return gen(inBook)||inBook[0]||gen(all)||all[0]||null}
-const OPEN_NAME_RE=/(\bThis is\s+)(.+?)(?=\s+and\b|[.,!;\n]|$)/i;/* the name after "This is" */
-const OPEN_DEFAULT="Thank you for contacting Allstate where you're in good hands. This is {name} and I'll be assisting you for today.";
+const OPEN_NAME_RE=/(\b(?:This is|My name is)\s+)(.+?)(?=\s+and\b|[.,!;\n]|$)/i;/* the name after "This is" / "My name is" (only used when "Your name" is empty) */
+const OPEN_DEFAULT="Thank you for contacting Allstate, where you're in good hands. My name is XXX, and I'll be assisting you today.";/* XXX = Settings > Your name */
 function openingName(){const p=findOpening();if(!p)return'';const m=OPEN_NAME_RE.exec(composeSpiel(p).text),n=m?m[2].trim():'';return/^(XXX|\[.*\])$/.test(n)?'':n}
-/* the page's own text; if you set your name in Settings, that name replaces the one after "This is" */
-function openingText(){const p=findOpening(),me=String((appData.settings||{}).agentName||'').trim();let t=p?composeSpiel(p).text:'';
- if(!t.trim())return me?OPEN_DEFAULT.replace('{name}',me):'';
- if(me&&OPEN_NAME_RE.test(t))t=t.replace(OPEN_NAME_RE,(m,a)=>a+me);return t}
+/* the opening spiel: the fixed wording above with the name from Settings > Your name. If that is empty, the name already written in the Opening page of General is used */
+function openingText(){const me=String((appData.settings||{}).agentName||'').trim()||openingName();return me?OPEN_DEFAULT.replace('XXX',()=>me):''}
 const _mouse={x:0,y:0,on:false};addEventListener('pointermove',e=>{_mouse.x=e.clientX;_mouse.y=e.clientY;_mouse.on=true},{passive:true});
 function nicePop(e,text){let x,y;/* above the click, or above the mouse when there is no click (e.g. a keyboard paste) */
  if(e&&(e.clientX||e.clientY)){x=e.clientX;y=e.clientY}
@@ -3561,7 +3553,7 @@ function nicePop(e,text){let x,y;/* above the click, or above the mouse when the
  const d=document.createElement('div');d.className='nice-pop'+(text?' long':'');d.textContent=text||'Nice';
  d.style.left=Math.max(40,Math.min(innerWidth-40,x))+'px';d.style.top=Math.max(50,y)+'px';document.body.append(d);setTimeout(()=>d.remove(),text?2300:1000)}
 function openingOnce(chat,e){if(chatEmpty(chat)||chat.opened)return;chat.opened=true;chatSave();copyOpening(e)}/* the opening spiel is copied only the first time a chat with content is closed or cleared (an undo does not re-arm it) */
-function copyOpening(e){const t=openingText();if(!t){showToast('No Opening found in General. Add one, or set your name in Settings.');return}return copyText(t,false,()=>nicePop(e))}
+function copyOpening(e){const t=openingText();if(!t){showToast('Set your name in Settings (General > Your name) to copy the opening spiel.');return}return copyText(t,false,()=>nicePop(e))}
 
 /* search every template (board name + template or variant title + Notations / What if), one row per variant */
 function docIndex(){const cn={};appData.containers.forEach(k=>{cn[k.id]=k.name});const out=[];
@@ -3594,18 +3586,14 @@ function chatEl(chat,idx){
  const h=el('div','chat-h'),lb=el('b');lb.textContent='Chat '+(idx+1)+':';
  const nm=el('input','chat-name');nm.type='text';nm.placeholder='Customer name';nm.value=chat.name;nm.maxLength=80;nm.spellcheck=false;nm.autocomplete='off';nm.setAttribute('aria-label','Customer name for chat '+(idx+1));
  nm.oninput=()=>{chatStart(chat);chatRename(chat,root,nm.value.trim());root._flag()};
- const fld=(key,ph,cls,fmt)=>{const i=el('input','chat-name chat-fld '+cls);i.type='text';i.placeholder=ph;i.value=chat[key]||'';i.maxLength=40;i.spellcheck=false;i.autocomplete='off';i.setAttribute('aria-label',ph+' for chat '+(idx+1));
-  i.oninput=()=>{if(i.selectionStart===i.value.length){const f=fmt(i.value);if(f!==i.value)i.value=f}chatSet(chat,root,key,i.value.trim());root._flag()};
-  i.onblur=()=>{const f=fmt(i.value);if(f!==i.value){i.value=f;chatSet(chat,root,key,f.trim())}};return i};
- const pol=fld('policy','Policy no.','pol',fmtPolicy),eff=fld('eff','Eff. date','eff',fmtEff);
  const flag=el('span','chat-flag');flag.textContent='Notation not yet written';flag.title='Copy a Notations or What if template to clear this';
  root._flag=()=>{flag.hidden=!((chat.name||chat.pages.length)&&!chat.noted)};
  root.addEventListener('focusin',()=>{lastChatId=chat.id});root.addEventListener('pointerdown',()=>{lastChatId=chat.id});
  const x=el('button','ib sm',CHAT_X);x.title='Close this chat (copies the opening spiel the first time)';x.setAttribute('aria-label','Close chat '+(idx+1));x.onclick=e=>{openingOnce(chat,e);closeChat(chat)};
  const tr=el('button','ib sm',ic('trash'));tr.title='Clear this chat (copies the opening spiel the first time)';tr.setAttribute('aria-label','Clear chat '+(idx+1));tr.onclick=e=>{openingOnce(chat,e);clearChat(chat)};
  const acts=el('div','chat-acts');acts.append(tr,x);const br=el('span','chat-br');
- h.append(lb,nm,pol,eff,flag,br,acts);
- const s=el('div','chat-s'),si=el('input');si.type='text';si.autocomplete='off';si.spellcheck=false;si.placeholder='Search templates (e.g. vehicle, payment)';si.setAttribute('aria-label','Search documentation for chat '+(idx+1));s.append(si);
+ h.append(lb,nm,flag);
+ const s=el('div','chat-s'),si=el('input');si.type='text';si.autocomplete='off';si.spellcheck=false;si.placeholder='Search templates (e.g. vehicle, payment)';si.setAttribute('aria-label','Search documentation for chat '+(idx+1));s.append(si,acts);
  const res=el('div','chat-res');res.hidden=true;
  const body=el('div','chat-body'),ui=chatUI[chat.id]||(chatUI[chat.id]={sel:0,list:[]});
  const paintBody=()=>{body.innerHTML='';
@@ -3672,7 +3660,9 @@ trashRestore();
 function fmtDate(d){return d.length>4?d.slice(0,2)+'/'+d.slice(2,4)+'/'+d.slice(4):d.length>2?d.slice(0,2)+'/'+d.slice(2):d}
 function caretOff(v){const s=getSelection();if(!s.rangeCount||!v.contains(s.anchorNode))return null;const r=s.getRangeAt(0).cloneRange();r.selectNodeContents(v);r.setEnd(s.anchorNode,s.anchorOffset);return r.toString().length}
 function setCaret(v,n){const tn=v.firstChild;if(!tn)return;const r=document.createRange();r.setStart(tn,Math.min(n,tn.length));r.collapse(true);const s=getSelection();s.removeAllRanges();s.addRange(r)}
-function selectAllIn(v){if(document.activeElement!==v)return;const r=document.createRange();r.selectNodeContents(v);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+function selectAllIn(v){if(document.activeElement!==v)return;
+ if(!v.classList.contains('filled')&&v.textContent!=='')v.textContent='';/* still showing its placeholder: empty it, so no piece of XXX is left behind. It comes back on its own if you leave it blank */
+ const r=document.createRange();r.selectNodeContents(v);const s=getSelection();s.removeAllRanges();s.addRange(r)}
 function commitVar(v){const k=v.dataset.k,t=v.textContent.trim();
  const filled=t!==''&&t!==v.dataset.ph&&!(k==='amt'&&/^\$?$/.test(t));
  const m=varVals[v.dataset.pid]||(varVals[v.dataset.pid]={});
@@ -3932,6 +3922,7 @@ document.addEventListener('keydown',e=>{
  if(e.repeat)return;clearTimeout(keyT);
  if(isMod(e)||e.isComposing||!document.documentElement.classList.contains('unlocked')||document.querySelector('.ov.open')||editingTarget(e.target))return;
  const c=comboOf(e);if(!c)return;
+ {const nk=(appData.settings||{}).newChatKey;if(nk&&canon(nk)===canon(c))return}/* the New chat keybind wins over a page that uses the same keys */
  const cn=canon(c),all=[];
  appData.pages.forEach(p=>{if(p.isWidget)return;if(p.variants&&p.variants.length)p.variants.forEach((v,i)=>{if(v&&v.key)all.push({p,vi:i,key:v.key})});else if(p.key)all.push({p,vi:0,key:p.key})});
  const hits=all.filter(b=>canon(b.key)===cn);if(!hits.length)return;
@@ -3945,6 +3936,55 @@ function copyKeyHit(p,vi){const n=p.variants&&p.variants.length?p.variants.lengt
  if(!n||vi===act)return copyPage(p.id);const v=p.variants[vi];if(!v)return;
  const prev=varVals[p.id];varVals[p.id]=(variantVals[p.id]||{})[vi]||{};
  try{return window.copyHit({id:p.id,title:v.title,content:v.content})}finally{if(prev===undefined)delete varVals[p.id];else varVals[p.id]=prev}}
+/* ---------- New chat keybind (Settings > General): starts a new chat and copies the opening spiel, same as the + under the island ---------- */
+function pageKeyList(){const a=[];appData.pages.forEach(p=>{if(p.isWidget)return;if(p.variants&&p.variants.length)p.variants.forEach(v=>{if(v&&v.key)a.push(v.key)});else if(p.key)a.push(p.key)});return a}
+(function(){const inp=$('newchat-key-input'),clr=$('newchat-key-clear'),hint=$('newchat-key-hint');if(!inp)return;
+ const H='Click the box, then hold Ctrl, Alt or Meta and press your keys together (for example Alt + N, or Ctrl + Alt + N). Pressing them anywhere in the app starts a new chat and copies your opening spiel. Backspace clears it. Browsers keep Ctrl + N, T and W for themselves, so pick something else.';
+ const paint=()=>{const k=(typeof appData==='object'&&appData&&appData.settings&&appData.settings.newChatKey)||'';inp.value=k?k.split('+').join(' + '):'';clr.hidden=!k;hint.textContent=H};
+ window.paintNewChatKey=paint;
+ const set=v=>{if(v)appData.settings.newChatKey=v;else delete appData.settings.newChatKey;persistLocal();paint()};
+ inp.addEventListener('keydown',e=>{if(e.key==='Tab'||e.key==='Escape')return;e.preventDefault();e.stopPropagation();
+  if(e.key==='Backspace'||e.key==='Delete'){set('');return}
+  if(isMod(e))return;
+  const c=comboOf(e);
+  if(!c){hint.textContent='That combination cannot be used. Hold Ctrl, Alt or Meta while pressing a letter, number or other key (Ctrl + C, V, X, A, Z, Y and S are reserved).';return}
+  set(c);if(pageKeyList().some(k=>canon(k)===canon(c)))hint.textContent='Saved. A page uses the same keys, so this keybind takes priority over it.'});
+ clr.onclick=()=>set('');
+ document.addEventListener('keydown',e=>{
+  if(e.repeat||isMod(e)||e.isComposing||!document.documentElement.classList.contains('unlocked')||document.querySelector('.ov.open'))return;
+  const k=(appData.settings||{}).newChatKey;if(!k)return;
+  const r=$('isl-root');if(r&&r.classList.contains('srch'))return;/* not while the global search is open */
+  const c=comboOf(e);if(!c||canon(c)!==canon(k))return;
+  e.preventDefault();e.stopPropagation();clearTimeout(keyT);
+  const longer=pageKeyList().some(x=>canon(x)!==canon(k)&&subset(canon(k),canon(x)));/* e.g. Alt + C is also the start of Alt + C + 1 */
+  if(longer)keyT=setTimeout(()=>pillNewChat(null),300);else pillNewChat(null)},true);
+ paint()})();
+/* ---------- Navigation keybinds (Settings > General): Workspace / Tools / Documentation ---------- */
+(function(){
+ const DEF={ws:'1',tools:'2',docs:'3'},NAME={ws:'Workspace',tools:'Tools',docs:'Documentation'},ids=Object.keys(DEF),hint=$('nav-key-hint');if(!hint)return;
+ const H='Click a box, then press the key you want (or hold Ctrl, Alt or Meta with it). Backspace turns that shortcut off. Plain keys only work when you are not typing in a box.';
+ const get=k=>{const n=(typeof appData==='object'&&appData&&appData.settings&&appData.settings.navKeys)||{};return k in n?String(n[k]||''):DEF[k]};
+ const paint=()=>{if(typeof appData!=='object'||!appData)return;ids.forEach(k=>{const v=get(k);$('nav-key-'+k).value=v?v.split('+').join(' + '):''});hint.textContent=H};
+ window.paintNavKeys=paint;
+ const set=(k,v)=>{appData.settings.navKeys=Object.assign({},appData.settings.navKeys||{},{[k]:v});persistLocal();paint()};
+ ids.forEach(k=>$('nav-key-'+k).addEventListener('keydown',e=>{if(e.key==='Tab'||e.key==='Escape')return;e.preventDefault();e.stopPropagation();
+  if(e.key==='Backspace'||e.key==='Delete'){set(k,'');return}
+  if(isMod(e))return;
+  let c='';if(e.ctrlKey||e.altKey||e.metaKey)c=comboOf(e);else if(!e.shiftKey){c=keyName(e);if(c==='Space'||c==='/')c=''}
+  if(!c){hint.textContent='That key cannot be used. Press a letter, number or other key by itself, or hold Ctrl, Alt or Meta with it ("/" opens search).';return}
+  const o=ids.find(x=>x!==k&&get(x)&&canon(get(x))===canon(c));
+  if(o){hint.textContent='Already used by '+NAME[o]+'. Change or clear that one first.';return}
+  set(k,c)}));
+ $('nav-key-reset').onclick=()=>{delete appData.settings.navKeys;persistLocal();paint()};
+ document.addEventListener('keydown',e=>{
+  if(e.repeat||isMod(e)||e.isComposing||ps||!document.documentElement.classList.contains('unlocked')||document.querySelector('.ov.open')||editingTarget(e.target))return;
+  const r=$('isl-root');if(r&&r.classList.contains('srch'))return;
+  let c='';if(e.ctrlKey||e.altKey||e.metaKey)c=comboOf(e);else if(!e.shiftKey)c=keyName(e);
+  if(!c)return;
+  const k=ids.find(x=>get(x)&&canon(get(x))===canon(c));if(!k)return;
+  e.preventDefault();e.stopPropagation();
+  if(k==='ws')closeTools();else if(k==='tools')openTools();else if(!isDoc(appData.activeChapterId))openDocs()},true);
+ paint()})();
 /* save */
 function generateUpdatedHtmlString(){const c=document.documentElement.cloneNode(true);if(window.lockClean)window.lockClean(c);/* strip transient UI so the saved file reopens clean */
  c.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));c.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show'));c.querySelectorAll('.ghost,.copy-pop,#menu-context').forEach(n=>n.remove());c.querySelector('body').classList.remove('edit','dragging-page','rszing');c.classList.remove('lite','flat-isl');['books','chs','wsc','hacts','chats','isl-fx','isl-chats','thwheel'].forEach(i=>{const n=c.querySelector('#'+i);if(n)n.innerHTML=''});
@@ -4016,7 +4056,7 @@ var CHAT_MAX=3,chats=[],chatUI={},_ct=0,lastChatId='',chatTrash=[];
 var SKEY='ataraxia_docs_standalone',CKEY='ataraxia_docs_chats',TKEY='ataraxia_docs_chat_trash';
 var varVals={},_undo=[],_undoT=0;
 var NAME_LBL=/^\s*(?:customer[\u2019']?s?\s+name|name)\s*:\s*$/i;
-var CHAT_FIELDS={name:{re:NAME_LBL,toks:['XXX']},policy:{re:/^\s*policy(?:\s+(?:number|no\.?|#))?\s*:\s*$/i,toks:['XXX','[00 0000 000]']},eff:{re:/^\s*effective\s+date\s*:\s*$/i,toks:['XX/XX/XXXX']},prem:{re:/^\s*updated\s+premium\s*:\s*$/i,toks:['$XXX']}};
+var CHAT_FIELDS={name:{re:NAME_LBL,toks:['XXX']},prem:{re:/^\s*updated\s+premium\s*:\s*$/i,toks:['$XXX']}};
 var CHAT_X='<svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>';
 function $(i){return document.getElementById(i)}
 function rid(){return Date.now()+'_'+Math.random().toString(36).slice(2,6)}
@@ -4035,7 +4075,7 @@ function docSearch(q){var t=q.toLowerCase().split(/\s+/).filter(Boolean);if(!t.l
 function chatSave(){clearTimeout(_ct);try{sessionStorage.setItem(CKEY,JSON.stringify(chats))}catch(e){}}
 function chatSaveSoon(){clearTimeout(_ct);_ct=setTimeout(chatSave,300)}
 function chatRestore(){var s=null;try{s=JSON.parse(sessionStorage.getItem(CKEY)||'null')}catch(e){}
- chats=(Array.isArray(s)?s:[]).slice(0,CHAT_MAX).filter(function(c){return c&&typeof c==='object'}).map(function(c){return{id:String(c.id||'c'+rid()),name:String(c.name||''),policy:String(c.policy||''),eff:String(c.eff||''),prem:String(c.prem||''),noted:!!c.noted,note:String(c.note||''),padMin:c.padMin===undefined?true:!!c.padMin,opened:!!c.opened,
+ chats=(Array.isArray(s)?s:[]).slice(0,CHAT_MAX).filter(function(c){return c&&typeof c==='object'}).map(function(c){return{id:String(c.id||'c'+rid()),name:String(c.name||''),policy:'',eff:'',prem:String(c.prem||''),noted:!!c.noted,note:String(c.note||''),padMin:c.padMin===undefined?true:!!c.padMin,opened:!!c.opened,
   pages:(Array.isArray(c.pages)?c.pages:[]).filter(function(p){return p&&typeof p.content==='string'}).map(function(p){return{id:String(p.id||'cp_'+rid()),src:p.src||'',title:String(p.title||''),content:p.content,variants:Array.isArray(p.variants)&&p.variants.length?p.variants:null,activeVariant:+p.activeVariant||0,vv:p.vv&&typeof p.vv==='object'?p.vv:{}}})}});
  chats.forEach(function(c){c.pages.forEach(function(p){var a=p.activeVariant||0;varVals[p.id]=p.vv[a]||(p.vv[a]={})})})}
 function chatEmpty(c){return!c.name&&!c.policy&&!c.eff&&!c.prem&&!c.note&&!c.pages.length}
@@ -4046,8 +4086,6 @@ function chatVariant(chat,p,vi){p.activeVariant=vi;p.title=p.variants[vi].title;
 function newChat(){var c={id:'c'+rid(),name:'',policy:'',eff:'',prem:'',noted:false,note:'',padMin:true,opened:false,pages:[]};lastChatId=c.id;chats.push(c);return c}
 function addChat(silent){if(chats.length>=CHAT_MAX){showToast('Up to '+CHAT_MAX+' chats at once. Close one first.');return}
  var c=newChat();chatSave();renderChats();if(!silent){var n=document.querySelector('.chat[data-id="'+c.id+'"] .chat-name');if(n)n.focus()}}
-/* the opening spiel is copied only the first time a chat with content is closed or cleared */
-function openingOnce(chat){if(chatEmpty(chat)||chat.opened)return;chat.opened=true;chatSave();if(EMBED.opening)copyText(EMBED.opening,'Opening spiel copied.')}
 /* cleared / closed chats can be restored with Undo (this tab only) */
 function trashSave(){try{sessionStorage.setItem(TKEY,JSON.stringify(chatTrash))}catch(e){}}
 function trashRestore(){try{var s=JSON.parse(sessionStorage.getItem(TKEY)||'null');chatTrash=(Array.isArray(s)?s:[]).filter(function(x){return x&&x.chat&&Array.isArray(x.chat.pages)}).slice(-10)}catch(e){chatTrash=[]}}
@@ -4086,18 +4124,14 @@ function chatEl(chat,idx){
  var h=el('div','chat-h'),lb=el('b');lb.textContent='Chat '+(idx+1)+':';
  var nm=el('input','chat-name');nm.type='text';nm.placeholder='Customer name';nm.value=chat.name;nm.maxLength=80;nm.spellcheck=false;nm.autocomplete='off';nm.setAttribute('aria-label','Customer name for chat '+(idx+1));
  nm.oninput=function(){chatSet(chat,root,'name',nm.value.trim());root._flag()};
- var fld=function(key,ph,cls,fmt){var i=el('input','chat-name chat-fld '+cls);i.type='text';i.placeholder=ph;i.value=chat[key]||'';i.maxLength=40;i.spellcheck=false;i.autocomplete='off';i.setAttribute('aria-label',ph+' for chat '+(idx+1));
-  i.oninput=function(){if(i.selectionStart===i.value.length){var f=fmt(i.value);if(f!==i.value)i.value=f}chatSet(chat,root,key,i.value.trim());root._flag()};
-  i.onblur=function(){var f=fmt(i.value);if(f!==i.value){i.value=f;chatSet(chat,root,key,f.trim())}};return i};
- var pol=fld('policy','Policy no.','pol',fmtPolicy),eff=fld('eff','Eff. date','eff',fmtEff);
  var flag=el('span','chat-flag');flag.textContent='Notation not yet written';flag.title='Copy a Notations or What if template to clear this';
  root._flag=function(){flag.hidden=!((chat.name||chat.pages.length)&&!chat.noted)};
  root.addEventListener('focusin',function(){lastChatId=chat.id});root.addEventListener('pointerdown',function(){lastChatId=chat.id});
- var x=el('button','ib sm',CHAT_X);x.title='Close this chat (copies the opening spiel the first time)';x.setAttribute('aria-label','Close chat '+(idx+1));x.onclick=function(){openingOnce(chat);closeChat(chat)};
- var tr=el('button','ib sm',ic('trash'));tr.title='Clear this chat (copies the opening spiel the first time)';tr.setAttribute('aria-label','Clear chat '+(idx+1));tr.onclick=function(){openingOnce(chat);clearChat(chat)};
+ var x=el('button','ib sm',CHAT_X);x.title='Close this chat';x.setAttribute('aria-label','Close chat '+(idx+1));x.onclick=function(){closeChat(chat)};
+ var tr=el('button','ib sm',ic('trash'));tr.title='Clear this chat';tr.setAttribute('aria-label','Clear chat '+(idx+1));tr.onclick=function(){clearChat(chat)};
  var acts=el('div','chat-acts');acts.append(tr,x);var br=el('span','chat-br');
- h.append(lb,nm,pol,eff,flag,br,acts);
- var s=el('div','chat-s'),si=el('input');si.type='text';si.autocomplete='off';si.spellcheck=false;si.placeholder='Search templates (e.g. vehicle, payment)';si.setAttribute('aria-label','Search documentation for chat '+(idx+1));s.append(si);
+ h.append(lb,nm,flag);
+ var s=el('div','chat-s'),si=el('input');si.type='text';si.autocomplete='off';si.spellcheck=false;si.placeholder='Search templates (e.g. vehicle, payment)';si.setAttribute('aria-label','Search documentation for chat '+(idx+1));s.append(si,acts);
  var res=el('div','chat-res');res.hidden=true;
  var body=el('div','chat-body'),ui=chatUI[chat.id]||(chatUI[chat.id]={sel:0,list:[]});
  var paintBody=function(){body.innerHTML='';
@@ -4231,7 +4265,7 @@ document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&!e.al
 addEventListener('pagehide',chatSave);document.addEventListener('visibilitychange',function(){if(document.hidden)chatSave()});
 loadD();chatRestore();trashRestore();paintTrash();setView('chats');`;
 function docsStandaloneHtml(){
- const root=document.documentElement,cls=['dark','black'].filter(c=>root.classList.contains(c)).join(' '),sty=root.getAttribute('style')||'';
+ const root=document.documentElement,cls=['dark','black','pad-glass','pad-color'].filter(c=>root.classList.contains(c)).join(' '),sty=root.getAttribute('style')||'';
  let css='';document.querySelectorAll('style').forEach(s=>{if(s.textContent.length>css.length)css=s.textContent});/* the app's own stylesheet: the file looks exactly like the app and follows your current theme */
  const consts='var IC='+JSON.stringify(IC)+';const ic='+ic.toString()+';const clamp='+clamp.toString()+';const phOf='+phOf.toString()+';var TOK='+JSON.stringify(TOK)+';var VKIND='+JSON.stringify(VKIND)+';var VLABEL='+JSON.stringify(VLABEL)+';var SIMPLE_VAR='+SIMPLE_VAR.toString()+';var VOPT_RE='+VOPT_RE.toString()+';';
  const fns=[el,placeMenu,closeMenus,toggleDropdown,getVarKind,scanVars,splitTop,parseOpts,boolDef,setBool,toggleBool,makeBool,makePlainOpt,makeInlineOpt,makeMultiOpt,makeOpt,makeVar,buildSpiel,composeSpiel,
