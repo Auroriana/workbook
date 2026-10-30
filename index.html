@@ -899,6 +899,26 @@ html.pad-glass .chat:has(.chat-pad.min) .chat-body{padding-bottom:40px}
 .isl-plus:disabled{cursor:default}.isl-plus:disabled svg{opacity:.35}
 @media(hover:none){.isl-plus{opacity:1;transform:translate(-50%,0);pointer-events:auto}}
 html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--card);transition:none}
+
+.help-btn{font-weight:700;font-size:17px;line-height:1}
+.hlp{gap:8px}
+.hlp details{background:var(--surf);border-radius:14px;padding:10px 14px}
+.hlp summary{cursor:pointer;font-weight:600;font-size:14.5px}
+.hlp p,.hlp li{font-size:13.5px;color:var(--mut);margin-top:6px;line-height:1.5}
+.hlp ul{padding-left:18px}.hlp b{color:var(--txt)}
+.hlp kbd{font:600 11px ui-monospace,Consolas,monospace;padding:1px 6px;border-radius:6px;background:var(--pc);color:var(--on-pc)}
+/* settings: collapsible sections */
+.acc{padding:0;overflow:hidden}
+.acc>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:13px 16px;user-select:none;-webkit-user-select:none;transition:background .15s}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary:hover{background:color-mix(in srgb,var(--pc) 55%,transparent)}
+.acc>summary:focus-visible{outline:2px solid var(--p);outline-offset:-2px;border-radius:18px}
+.acc>summary::after{content:"";flex:none;width:8px;height:8px;margin:0 4px 3px 0;border-right:2px solid var(--mut);border-bottom:2px solid var(--mut);transform:rotate(45deg);transition:transform .2s}
+.acc[open]>summary::after{transform:rotate(-135deg);margin-bottom:-3px}
+.acc-t{flex:1;min-width:0;font-size:14px;font-weight:600;color:var(--txt)}
+.acc-t small{display:block;margin-top:1px;font-size:12px;font-weight:400;color:var(--mut)}
+.acc-b{display:flex;flex-direction:column;gap:14px;padding:4px 16px 16px;border-top:1px solid var(--line)}
+.acc-b>div:first-child{margin-top:10px}
 </style>
 <body class="" style="--rc: nwse-resize;">
 <div id="lock" role="dialog" aria-modal="true" aria-label="Login">
@@ -969,80 +989,113 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
 </div>
 
 <div class="ov" id="settings-modal"><div class="modal">
- <div class="mh"><span>Settings</span><button class="ib" onclick="closeModal('settings-modal')" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"></path></svg></button></div>
- <div class="stabs" id="stabs" role="tablist"><button type="button" class="on" data-t="general">General</button><button type="button" data-t="look">Appearance</button><button type="button" data-t="account">Account</button><button type="button" data-t="data">Data &amp; files</button></div>
+ <div class="mh"><span>Settings</span><button class="ib help-btn" type="button" style="background:var(--pc);color:var(--on-pc)" onclick="openModal('help-modal')" title="How this website works" aria-label="Help">?</button><button class="ib" onclick="closeModal('settings-modal')" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"></path></svg></button></div>
+ <div class="stabs" id="stabs" role="tablist"><button type="button" class="on" data-t="general">General</button><button type="button" data-t="island">Island &amp; breaks</button><button type="button" data-t="look">Appearance</button><button type="button" data-t="account">Account</button><button type="button" data-t="data">Data &amp; files</button></div>
  <div class="mb">
   <div class="tp on" data-t="general">
-   <section class="sec"><div><label for="site-name-input">Website name</label><input type="text" id="site-name-input" maxlength="40" autocomplete="off"><p class="hint">Shown at the top left and used as the file name when you save.</p></div></section>
-   <section class="sec"><div><label for="agent-name-input">Your name</label><input type="text" id="agent-name-input" maxlength="40" autocomplete="off" placeholder="Ataraxia"><p class="hint">Used in the opening spiel ("Thank you for contacting Allstate, where you're in good hands. My name is ..., and I'll be assisting you today.") that is copied when you start a new chat and when you close or clear one. Leave it empty to use the name already written in the Opening page of General.</p></div></section>
-   <section class="sec"><div><label for="newchat-key-input">New chat keybind</label><input type="text" id="newchat-key-input" readonly placeholder="Click here, then press your keys (e.g. Alt + N)" aria-label="Keybind for a new chat" autocomplete="off"><div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="newchat-key-clear" hidden>Clear</button></div><p class="hint" id="newchat-key-hint"></p></div></section>
-   <section class="sec"><div><label>Navigation keybinds</label><p class="hint">Jump between Workspace, Tools and Documentation by pressing a key anywhere you are not typing.</p>
-    <div class="set-grid">
-     <div><label for="nav-key-ws">Workspace</label><input type="text" id="nav-key-ws" readonly placeholder="Click, then press a key" aria-label="Keybind for Workspace" autocomplete="off"></div>
-     <div><label for="nav-key-tools">Tools</label><input type="text" id="nav-key-tools" readonly placeholder="Click, then press a key" aria-label="Keybind for Tools" autocomplete="off"></div>
-     <div><label for="nav-key-docs">Documentation</label><input type="text" id="nav-key-docs" readonly placeholder="Click, then press a key" aria-label="Keybind for Documentation" autocomplete="off"></div>
-    </div>
-    <div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="nav-key-reset">Reset to 1 / 2 / 3</button></div><p class="hint" id="nav-key-hint"></p></div></section>
-    <section class="sec"><div><label>Break reminders</label><p class="hint">Used by the live clock island at the bottom right. Breaks are 15 min and lunch is 1 hour, so you only enter when each one starts. Reminders are automatic: 10 min before a break or lunch starts, and 2 min (break) / 5 min (lunch) before it ends.</p>
+   <details class="sec acc" data-k="profile" open><summary><span class="acc-t">Profile<small>Website name and your name</small></span></summary><div class="acc-b">
+    <div><label for="site-name-input">Website name</label><input type="text" id="site-name-input" maxlength="40" autocomplete="off"><p class="hint">Shown at the top left and used as the file name when you save.</p></div>
+    <div><label for="agent-name-input">Your name</label><input type="text" id="agent-name-input" maxlength="40" autocomplete="off" placeholder="Ataraxia"><p class="hint">Used in the opening spiel ("Thank you for contacting Allstate, where you're in good hands. My name is ..., and I'll be assisting you today.") that is copied when you start a new chat and when you close or clear one. Leave it empty to use the name already written in the Opening page of General.</p></div>
+   </div></details>
+   <details class="sec acc" data-k="keys"><summary><span class="acc-t">Keybinds<small>New chat, and jumping between Workspace, Tools and Documentation</small></span></summary><div class="acc-b">
+    <div><label for="newchat-key-input">New chat keybind</label><input type="text" id="newchat-key-input" readonly placeholder="Click here, then press your keys (e.g. Alt + N)" aria-label="Keybind for a new chat" autocomplete="off"><div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="newchat-key-clear" hidden>Clear</button></div><p class="hint" id="newchat-key-hint"></p></div>
+    <div><label>Navigation keybinds</label><p class="hint">Jump between Workspace, Tools and Documentation by pressing a key anywhere you are not typing.</p>
      <div class="set-grid">
-      <div><label for="set-early">Allow taking a break early up to (minutes before)</label><input type="number" id="set-early" min="0" max="180"></div>
-     </div><div class="seg" style="margin-top:14px;flex-direction:column;align-items:flex-start;gap:6px">
-      <button type="button" class="snapsw" id="auto-tag" role="switch" aria-checked="false" aria-controls="auto-sub"><span class="tr"></span><span class="lbl">Automatic tagging</span></button>
-      <p class="hint" style="margin:0">Island will tag for you. - Specifically for Ali</p>
-      <div class="auto-sub" id="auto-sub" hidden>
-       <button type="button" class="snapsw" id="auto-start" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Incoming break</span></button>
-       <p class="hint" style="margin:0 0 6px">Tags you out automatically the moment a scheduled break or lunch starts.</p>
-       <button type="button" class="snapsw" id="auto-end" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Breaks almost over</span></button>
-       <p class="hint" style="margin:0">Tags you back in automatically when the "be back by" reminder begins (2 min before a break ends, 5 min before lunch ends).</p>
-      </div>
+      <div><label for="nav-key-ws">Workspace</label><input type="text" id="nav-key-ws" readonly placeholder="Click, then press a key" aria-label="Keybind for Workspace" autocomplete="off"></div>
+      <div><label for="nav-key-tools">Tools</label><input type="text" id="nav-key-tools" readonly placeholder="Click, then press a key" aria-label="Keybind for Tools" autocomplete="off"></div>
+      <div><label for="nav-key-docs">Documentation</label><input type="text" id="nav-key-docs" readonly placeholder="Click, then press a key" aria-label="Keybind for Documentation" autocomplete="off"></div>
      </div>
-     <div class="seg" style="margin-top:10px"><button class="btn tone sm" type="button" id="isl-reset">Reset island position</button></div></div></section>
-   <section class="sec"><div><label>Chat tracker</label><p class="hint">The + tab under the island, the customer rows with handling and hold timers, and the Average Handling Time history in the Daily Summary (Tools). Turning it off hides all of it and stops new timers. Your saved history is kept.</p><div class="seg" style="margin-top:8px"><button type="button" class="snapsw on" id="chat-trk" role="switch" aria-checked="true"><span class="tr"></span><span class="lbl">Chat tracker</span></button></div></div></section>
-   <section class="sec"><div><label>Performance</label><p class="hint">For slow computers. These are saved on this device only.</p>
-   <div class="seg" style="margin-top:8px;flex-direction:column;align-items:flex-start;gap:6px">
-    <button type="button" class="snapsw" id="perf-lite" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Light mode</span></button>
-    <p class="hint" style="margin:0 0 8px">Turns off blur, animations and glow everywhere. Alerts still show, just without the pulsing.</p>
-    <button type="button" class="snapsw" id="perf-flat" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Flat island</span></button>
-    <p class="hint" style="margin:0">The clock island becomes a plain solid panel in your theme colors instead of frosted glass.</p>
-   </div></div></section>
-   <section class="sec"><div><label>Page menus</label><p class="hint">Right-click a page for its menu. These are saved on this device only.</p>
-   <div class="seg" style="margin-top:8px;flex-direction:column;align-items:flex-start;gap:6px">
-    <button type="button" class="snapsw" id="ui-hold" role="switch" aria-checked="true"><span class="tr"></span><span class="lbl">Hold to open menu</span></button>
-    <p class="hint" style="margin:0 0 8px">On touch screens, press and hold a page, board or the empty workspace to open the same menu as right-click.</p>
-    <button type="button" class="snapsw" id="ui-dots" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Show 3-dots button on pages</span></button>
-    <p class="hint" style="margin:0">Off by default. Adds the ⋮ menu button back to the top right of each page.</p>
-   </div></div></section>
-   <section class="sec"><div><label>Lock</label><p class="hint">Covers the screen until you type your password again. You stay signed in and syncing keeps running.</p><div class="seg" style="margin-top:8px"><button class="btn tone sm" type="button" id="set-lock">Lock now</button></div></div></section>
+     <div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="nav-key-reset">Reset to 1 / 2 / 3</button></div><p class="hint" id="nav-key-hint"></p></div>
+   </div></details>
+   <details class="sec acc" data-k="menus"><summary><span class="acc-t">Page menus<small>Right-click, hold and 3-dots behavior (this device only)</small></span></summary><div class="acc-b">
+    <div class="seg" style="flex-direction:column;align-items:flex-start;gap:6px">
+     <button type="button" class="snapsw" id="ui-hold" role="switch" aria-checked="true"><span class="tr"></span><span class="lbl">Hold to open menu</span></button>
+     <p class="hint" style="margin:0 0 8px">On touch screens, press and hold a page, board or the empty workspace to open the same menu as right-click.</p>
+     <button type="button" class="snapsw" id="ui-dots" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Show 3-dots button on pages</span></button>
+     <p class="hint" style="margin:0">Off by default. Adds the ⋮ menu button back to the top right of each page.</p>
+    </div>
+   </div></details>
+  </div>
+  <div class="tp" data-t="island">
+   <details class="sec acc" data-k="breaks" open><summary><span class="acc-t">Break reminders<small>Early-break limit for the live clock island</small></span></summary><div class="acc-b">
+    <div><p class="hint" style="margin-top:0">Used by the live clock island at the bottom right. Breaks are 15 min and lunch is 1 hour, so you only enter when each one starts. Reminders are automatic: 10 min before a break or lunch starts, and 2 min (break) / 5 min (lunch) before it ends.</p>
+     <div class="set-grid"><div><label for="set-early">Allow taking a break early up to (minutes before)</label><input type="number" id="set-early" min="0" max="180"></div></div></div>
+   </div></details>
+   <details class="sec acc" data-k="autotag"><summary><span class="acc-t">Automatic tagging<small>Let the island tag you out and back in</small></span></summary><div class="acc-b">
+    <div class="seg" style="flex-direction:column;align-items:flex-start;gap:6px">
+     <button type="button" class="snapsw" id="auto-tag" role="switch" aria-checked="false" aria-controls="auto-sub"><span class="tr"></span><span class="lbl">Automatic tagging</span></button>
+     <p class="hint" style="margin:0">Island will tag for you. - Specifically for Ali</p>
+     <div class="auto-sub" id="auto-sub" hidden>
+      <button type="button" class="snapsw" id="auto-start" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Incoming break</span></button>
+      <p class="hint" style="margin:0 0 6px">Tags you out automatically the moment a scheduled break or lunch starts.</p>
+      <button type="button" class="snapsw" id="auto-end" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Breaks almost over</span></button>
+      <p class="hint" style="margin:0">Tags you back in automatically when the "be back by" reminder begins (2 min before a break ends, 5 min before lunch ends).</p>
+     </div>
+    </div>
+   </div></details>
+   <details class="sec acc" data-k="tracker"><summary><span class="acc-t">Chat tracker<small>The + tab, hold timers and handling-time history</small></span></summary><div class="acc-b">
+    <div><p class="hint" style="margin-top:0">The + tab under the island, the customer rows with handling and hold timers, and the Average Handling Time history in the Daily Summary (Tools). Turning it off hides all of it and stops new timers. Your saved history is kept.</p><div class="seg" style="margin-top:8px"><button type="button" class="snapsw on" id="chat-trk" role="switch" aria-checked="true"><span class="tr"></span><span class="lbl">Chat tracker</span></button></div></div>
+   </div></details>
+   <details class="sec acc" data-k="islpos"><summary><span class="acc-t">Island position<small>Put the clock island back in its default spot</small></span></summary><div class="acc-b">
+    <div class="seg"><button class="btn tone sm" type="button" id="isl-reset">Reset island position</button></div>
+   </div></details>
   </div>
   <div class="tp" data-t="look">
-   <section class="sec"><div><label>Appearance</label><div class="seg" id="modes"><button>Auto</button><button class="on">Light</button><button>Dark</button><button>Black</button></div></div></section>
-   <section class="sec"><div><label>Accent color</label><div class="sw" id="accents"><button style="--c: 358;" title="Red" aria-label="Red"></button><button style="--c: 8;" title="Coral" aria-label="Coral"></button><button style="--c: 18;" title="Orange" aria-label="Orange"></button><button style="--c: 30;" title="Amber" aria-label="Amber"></button><button style="--c: 42;" title="Gold" aria-label="Gold"></button><button style="--c: 56;" title="Yellow" aria-label="Yellow"></button><button style="--c: 75;" title="Olive" aria-label="Olive"></button><button style="--c: 100;" title="Lime" aria-label="Lime"></button><button style="--c: 140;" title="Green" aria-label="Green"></button><button style="--c: 158;" title="Mint" aria-label="Mint"></button><button style="--c: 174;" title="Teal" aria-label="Teal"></button><button style="--c: 188;" title="Cyan" aria-label="Cyan"></button><button style="--c: 198;" title="Sky" aria-label="Sky"></button><button style="--c: 207;" title="Blue" aria-label="Blue"></button><button class="on" style="--c: 232;" title="Indigo" aria-label="Indigo"></button><button style="--c: 257;" title="Purple" aria-label="Purple"></button><button style="--c: 275;" title="Violet" aria-label="Violet"></button><button style="--c: 300;" title="Magenta" aria-label="Magenta"></button><button style="--c: 322;" title="Pink" aria-label="Pink"></button><button style="--c: 340;" title="Rose" aria-label="Rose"></button></div></div></section>
-   <section class="sec"><div><label>Custom theme colors</label><p class="hint">One prime color builds the whole theme (Light, Dark or Black), plus presets, lock screen, corners and font. This overrides Appearance while on.</p><div class="seg" style="margin-top:8px"><button class="btn tone sm" type="button" id="th-open">Open theme editor</button><button class="btn out sm" type="button" id="th-reset">Turn off</button></div></div></section>
+   <details class="sec acc" data-k="theme" open><summary><span class="acc-t">Mode &amp; accent color<small>Light, dark or black, and the main color</small></span></summary><div class="acc-b">
+    <div><label>Appearance</label><div class="seg" id="modes"><button>Auto</button><button class="on">Light</button><button>Dark</button><button>Black</button></div></div>
+    <div><label>Accent color</label><div class="sw" id="accents"></div></div>
+   </div></details>
+   <details class="sec acc" data-k="custom"><summary><span class="acc-t">Custom theme<small>Prime color, presets, lock screen, corners, font and island glass</small></span></summary><div class="acc-b">
+    <div><p class="hint" style="margin-top:0">One prime color builds the whole theme (Light, Dark or Black), plus presets, lock screen, corners and font. This overrides Appearance while on.</p><div class="seg" style="margin-top:8px"><button class="btn tone sm" type="button" id="th-open">Open theme editor</button><button class="btn out sm" type="button" id="th-reset">Turn off</button></div></div>
+   </div></details>
+   <details class="sec acc" data-k="perf"><summary><span class="acc-t">Performance<small>For slow computers (this device only)</small></span></summary><div class="acc-b">
+    <div class="seg" style="flex-direction:column;align-items:flex-start;gap:6px">
+     <button type="button" class="snapsw" id="perf-lite" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Light mode</span></button>
+     <p class="hint" style="margin:0 0 8px">Turns off blur, animations and glow everywhere. Alerts still show, just without the pulsing.</p>
+     <button type="button" class="snapsw" id="perf-flat" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Flat island</span></button>
+     <p class="hint" style="margin:0">The clock island becomes a plain solid panel in your theme colors instead of frosted glass.</p>
+    </div>
+   </div></details>
   </div>
   <div class="tp" data-t="account">
-   <section class="sec"><div><label>Account</label><div class="lk-row"><div class="lk-av sm" id="set-av"></div><div class="seg"><button class="btn tone sm" id="av-up" type="button">Upload</button><button class="btn out sm" id="av-rm" type="button">Remove</button></div><input type="file" id="av-file" accept="image/*" hidden=""></div><p class="hint" id="acct-st">Not signed in.</p><p class="hint">Your profile picture is saved to your account (shrunk to 256 px) and shows on the login screen of the device you last used.</p><div class="seg" style="margin-top:6px"><button class="btn tone sm" id="recov" type="button" hidden>New recovery code</button><button class="btn out danger sm" id="logout" type="button" hidden>Log out</button></div><p class="hint">The recovery code lets you reset a forgotten password yourself. Making a new one replaces the old one.</p></div></section>
+   <details class="sec acc" data-k="acct" open><summary><span class="acc-t">Account<small>Profile picture, recovery code and log out</small></span></summary><div class="acc-b">
+    <div><div class="lk-row"><div class="lk-av sm" id="set-av"></div><div class="seg"><button class="btn tone sm" id="av-up" type="button">Upload</button><button class="btn out sm" id="av-rm" type="button">Remove</button></div><input type="file" id="av-file" accept="image/*" hidden></div><p class="hint" id="acct-st">Not signed in.</p><p class="hint">Your profile picture is saved to your account (shrunk to 256 px) and shows on the login screen of the device you last used.</p><div class="seg" style="margin-top:6px"><button class="btn tone sm" id="recov" type="button" hidden>New recovery code</button><button class="btn out danger sm" id="logout" type="button" hidden>Log out</button></div><p class="hint">The recovery code lets you reset a forgotten password yourself. Making a new one replaces the old one.</p></div>
+   </div></details>
+   <details class="sec acc" data-k="lock"><summary><span class="acc-t">Lock<small>Cover the screen until you type your password again</small></span></summary><div class="acc-b">
+    <div><p class="hint" style="margin-top:0">You stay signed in and syncing keeps running.</p><div class="seg" style="margin-top:8px"><button class="btn tone sm" type="button" id="set-lock">Lock now</button></div></div>
+   </div></details>
   </div>
   <div class="tp" data-t="data">
-   <section class="sec"><div>
-    <label>Backup &amp; Sync Data</label>
-    <div class="seg">
+   <details class="sec acc" data-k="backup" open><summary><span class="acc-t">Backup &amp; sync data<small>Export and import your workspace</small></span></summary><div class="acc-b">
+    <div><div class="seg">
       <button class="btn tone" onclick="exportAppData()">Export Data</button>
       <button class="btn out" onclick="document.getElementById('import-data-file').click()">Import Data</button>
-    </div>
-    <input type="file" id="import-data-file" accept=".txt,.json" style="display: none;" onchange="importAppData(event)">
-    <p class="hint">Export your workspace data to continue on another device, then import it back. For easy transferring of your JSON, you can use rentry.co to save your json there and access it later.</p>
-  </div></section>
-   <section class="sec"><div><label>Auto-save to this computer</label>
-   <div class="fs-row"><b class="fs-n">App file (.html)</b><p class="hint" id="fs-html-st"></p><div class="seg"><button class="btn tone sm" id="fs-html-pick" type="button">Choose file</button><button class="btn fill sm" id="fs-html-go" type="button" hidden>Reconnect</button><button class="btn out danger sm" id="fs-html-off" type="button" hidden>Stop</button></div></div>
-   <div class="fs-row"><b class="fs-n">Backup (.json)</b><p class="hint" id="fs-json-st"></p><div class="seg"><button class="btn tone sm" id="fs-json-pick" type="button">Choose file</button><button class="btn fill sm" id="fs-json-go" type="button" hidden>Reconnect</button><button class="btn out danger sm" id="fs-json-off" type="button" hidden>Stop</button></div></div>
-   <p class="hint">Pick each file once. It is then rewritten a few seconds after every change. Browsers cannot accept a typed path, and after restarting the browser you may need to press Reconnect. Chrome and Edge only.</p>
-   <div class="seg" style="margin-top:6px"><button class="btn fill sm" type="button" onclick="saveDirectToFile()">Save app file now</button></div></div></section>
+      <button class="btn out" onclick="saveDirectToFile()" title="Download or overwrite this app as one HTML file">Save app file</button>
+     </div>
+     <input type="file" id="import-data-file" accept=".txt,.json" style="display: none;" onchange="importAppData(event)">
+     <p class="hint">Export your workspace data to continue on another device, then import it back. For easy transferring of your JSON, you can use rentry.co to save your json there and access it later.</p></div>
+   </div></details>
   </div>
   <p class="credit">ataraxia</p>
  </div>
  <div class="mf"><button class="btn tone" onclick="closeModal('settings-modal')">Close</button></div>
 </div></div>
 
+<div class="ov" id="help-modal"><div class="modal">
+ <div class="mh"><span>How this website works</span></div>
+ <div class="mb hlp">
+  <details open><summary>Books, chapters, pages</summary><p>Top tabs are <b>books</b>. The left list holds the book's <b>chapters</b>. A chapter holds <b>pages</b> (one spiel each) and <b>boards</b> (boxes that group pages). Use <b>+ Book</b>, <b>+ Chapter</b>, <b>+ Add</b>, <b>+ Board</b>. Drag a chapter's grip to reorder, drag a book tab to reorder.</p><p>Copy a page with its copy button, by double-clicking it (when it has no variables), <kbd>Ctrl</kbd>+<kbd>C</kbd> on a focused page, or <kbd>Enter</kbd> inside a variable. Right-click (or press and hold on touch) a page, board, chapter, book or empty space for copy / duplicate / paste / delete.</p></details>
+  <details><summary>Variables and variants</summary><ul><li><b>XXX</b> any text. <b>XX/XX/XXXX</b> date (slashes added as you type). <b>$XXX</b> amount.</li><li><b>[00 0000 000]</b> number that formats itself.</li><li><b>[Yes]</b> / <b>[No]</b> click to flip.</li><li><b>[A|B|C]</b> pick one. <b>[N/A|[XXX]]</b> gives N/A or lets you type your own.</li><li><kbd>Enter</kbd> jumps to the next variable; <kbd>Enter</kbd> on the last one copies the page.</li><li><b>Variants</b>: a page can hold several versions. Add them with the numbered tabs in the page editor, then click the page title to switch.</li></ul></details>
+  <details><summary>Move mode, boards, zoom</summary><p>The cross-arrows button turns on move mode: drag pages and boards, drag their edges to resize, drop a page onto a board. <b>Snapping</b> keeps a fixed gap and grows boards to fit. Press <b>Save</b> to keep the layout; turning move mode off without Save discards it. The slider at the bottom right zooms the chapter.</p></details>
+  <details><summary>Tools</summary><ul><li><b>Time Calculator</b>: 12:01 AM effective-date rule, US to PH time.</li><li><b>Quote Formatter</b>: cleans a pasted quote and copies it; the new premium goes to your last-used chat.</li><li><b>Schedule Import</b>: paste the weekly schedule, get a clean PH-time view that also feeds the island.</li><li><b>Daily Summary</b>: CSAT calculator, average handling time, monthly archive.</li><li><b>Scratch Pad</b> and <b>Image</b> widgets. Download icon saves Quote Formatter + CSAT as one HTML file.</li></ul></details>
+  <details><summary>Documentation</summary><p><b>Chats</b>: up to 3 customers at once. Type the customer name, search a template, and its Name / Updated Premium fields fill in. Each chat has a scratch pad; clearing or closing a chat can be undone. <b>Notations</b> and <b>What if</b> hold the templates (edit them like any page). The download icon makes a stand-alone Documentation HTML file you can open anywhere. In it you can add your own categories and sections, and pick a message to copy when you clear or close a chat.</p></details>
+  <details><summary>The island (bottom right)</summary><p>Live PH clock. Dots = break, lunch, break. <b>Start shift</b> in its panel, then it warns before breaks (yellow), alerts when due, counts your break and flags overbreak (red). <b>Upcoming</b> shows imported days. <b>Other Tag</b> logs custom time away. <b>Automatic tagging</b> and chat tracker are in Settings. The <b>+</b> tab under it starts a new chat and copies your opening spiel. Drag it anywhere.</p></details>
+  <details><summary>Search and keybinds</summary><ul><li><kbd>/</kbd> opens global search across every book. Type <b>doc vehicle</b> to drop a template straight into a chat.</li><li>Page keybind: set it in the page editor.</li><li>New chat keybind and the 1 / 2 / 3 jump keys for Workspace, Tools, Documentation: Settings &gt; General.</li></ul></details>
+  <details><summary>Account, sync, backup</summary><p>Log in to sync across devices. Settings &gt; Data &amp; files has Export / Import and a manual Save app file button. <b>Lock now</b> covers the screen until you retype your password.</p></details>
+  <details><summary>Settings</summary><p>Open Settings with the gear at the top left. It has tabs (General, Island &amp; breaks, Appearance, Account, Data &amp; files) and each tab is split into sections you can open or close; the app remembers which ones you left open. The <b>?</b> button for this help is at the top right of Settings.</p></details><details><summary>Look and feel</summary><p>Settings &gt; Appearance has Light / Dark / Black and accent colors. The theme editor changes colors, corners, font, lock screen and island glass. Light mode and Flat island in Settings help slow computers.</p></details>
+ </div>
+ <div class="mf"><button class="btn tone" onclick="closeModal('help-modal')">Close</button></div>
+</div></div>
 <div class="ov" id="book-modal"><div class="modal">
  <div class="mh"><span id="book-modal-title">Edit Book</span></div>
  <div class="mb"><input type="hidden" id="book-id-input"><div><label for="book-title-input">Book title</label><input type="text" id="book-title-input" placeholder="e.g. ASC, Legacy..."></div>
@@ -1844,9 +1897,9 @@ window.SmartScheduleManager = {
   },
   dayEntry(ts) { return (this.cfg().days || []).find(x => ts >= x.start - 6 * 3600000 && ts < x.end) || null; }, /* the imported shift this moment belongs to (started up to 6 h early is fine) */
   shiftEndOf(t0) { const d = this.dayEntry(t0); return d ? d.end : t0 + ISLAND_UI.shiftHours * 3600000; }, /* imported shifts use their real end; hand-typed schedules fall back to shiftHours */
-  trackOT(now, st) { /* overtime = time past the scheduled end. Kept per day so the Schedule Import widget can list it under that (finished) day */
+  trackOT(now, st, final) { /* overtime = time past the scheduled end. Kept per day so the Schedule Import widget can list it under that (finished) day */
     const e = st && st.shiftStart ? this.dayEntry(st.shiftStart) : null; if (!e) return; const end = Math.floor(now / 60000) * 60000; if (end <= e.end) return;
-    const c = this.cfg(); c.ot = c.ot || {}; const o = c.ot[e.iso]; if (!o || o.end !== end) { c.ot[e.iso] = { start: e.end, end }; persistLocal(); }
+    const c = this.cfg(); c.ot = c.ot || {}; const o = c.ot[e.iso]; if (!o || o.end !== end) { c.ot[e.iso] = { start: e.end, end }; if (final) persistLocal(); else persistView(); }
   },
   returnFor(b, at) { /* tagging at `at`: it ends len minutes later; you must be back `lead` minutes before that */
     const end = at + b.len * 60000; return { end, returnBy: end - b.lead * 60000 };
@@ -1870,13 +1923,13 @@ window.SmartScheduleManager = {
     const s = this.loadState(), now = Date.now();
     /* pressing it again mid-shift must not move the start (that would push every break to tomorrow). Once the 9 hours are up it simply begins the next shift */
     if (s.shiftStart && now < this.shiftEndOf(s.shiftStart)) { this.say('Shift already started. End shift first to start a new one.'); return; }
-    if (s.shiftStart) this.trackOT(now, s); s.shiftStart = now; s.done = []; if (s.tagged && !s.tagged.custom) s.tagged = null;
+    if (s.shiftStart) { this.trackOT(now, s, true); persistLocal(); } s.shiftStart = now; s.done = []; if (s.tagged && !s.tagged.custom) s.tagged = null;
     this.saveState(); this.acked = ''; this.autoFor = ''; if (this.cfg().active) { this.open = 'panel'; this.evaluate(); this.warnOutside(); } else this.openEdit();
   },
   endShift() { /* clears the schedule that was typed for this shift. Entries that carry a day belong to a longer schedule (a week, an import) and stay, except dated ones that are now in the past */
     const c = this.cfg(), d = this.shiftDay();
     c.items = (c.items || []).filter(it => { const a = [].concat(it.day == null ? [] : it.day).filter(Boolean); return a.length && !a.every(x => /^\d{4}-/.test(x) && x <= d.iso); });
-    const s0 = this.loadState(); if (s0.shiftStart && Date.now() >= this.shiftEndOf(s0.shiftStart)) this.trackOT(Date.now(), s0); /* closes the overtime */
+    const s0 = this.loadState(); if (s0.shiftStart && Date.now() >= this.shiftEndOf(s0.shiftStart)) this.trackOT(Date.now(), s0, true); /* closes the overtime */
     c.days = (c.days || []).filter(x => x.iso > d.iso); this._dc = null; c.active = c.items.length > 0; this._bl = null; this.draft = null; this.state = { shiftStart: 0, tagged: null, done: [] }; this.saveState(); persistLocal(); this.open = ''; this.acked = ''; this.autoFor = ''; this.evaluate();
   },
   /* ---- schedule editor (a list you can add to / remove from) ---- */
@@ -3999,10 +4052,23 @@ async function saveDirectToFile(){const h=generateUpdatedHtmlString(),fn=fileNam
  catch(e){if(e.name!=='AbortError')exportUpdatedHtmlFile()}}
 function exportUpdatedHtmlFile(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([generateUpdatedHtmlString()],{type:'text/html;charset=utf-8'}));a.download=fileName()+'.html';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);showToast('Downloaded updated file.')}
 /* ---------- Documentation: stand-alone download ---------- */
-function docBundle(){return{chapters:DOC_LIB.map(lc=>{const bs=appData.containers.filter(k=>k.chapterId===lc.id);return{id:lc.id,name:lc.name,desc:lc.description||'',
- boards:bs.map(k=>({id:k.id,name:k.name,border:k.border||'',bg:k.bg||''})),
- pages:appData.pages.filter(p=>p.chapterId===lc.id&&!p.isWidget).map(p=>{const v=p.variants&&p.variants.length?p.variants.map(x=>({title:String(x.title||''),content:String(x.content||'')})):null,av=v?(Number.isInteger(p.activeVariant)&&p.activeVariant>=0&&p.activeVariant<v.length?p.activeVariant:0):0;
-  return{id:p.id,board:bs.some(k=>k.id===p.containerId)?p.containerId:'',title:v?v[av].title:String(p.title||''),content:v?v[av].content:String(p.content||''),variants:v,av}})}})}}
+/* The stand-alone file has its own layout: categories (Notations, What Ifs) that hold sections (General, Billing...).
+   The app's boards are mapped onto those sections by name. A board with a name that is not listed keeps its own section, so nothing is lost. */
+const DOC_MAP={
+ 'Notations':{secs:['General','Billing','Endorsements','Account'],
+  map:{'common':'General','make a payment/payment extension':'Billing','autopay - ezp enrollment/rcc':'Billing','reinstatement':'Billing','address - mailing/all':'Endorsements','account endorsements':'Endorsements','driver & occupant - add/remove':'Endorsements','vehicle - add/remove/update/suspend/restore':'Endorsements','wsr - agent change/refund/mileage':'Account'},
+  loose:{'escalation':'General','discount applied':'Endorsements'}},
+ 'What if':{name:'What Ifs',secs:['Endorsements','Coverages'],
+  map:{'vehicle':'Endorsements','driver / occupant':'Endorsements','address':'Endorsements','coverage':'Coverages'},loose:{}}};
+function docBundle(){const slug=t=>String(t).toLowerCase().replace(/[^a-z0-9]+/g,'-');
+ return{chapters:DOC_LIB.map(lc=>{const cfg=DOC_MAP[lc.name]||{secs:[],map:{},loose:{}},bs=appData.containers.filter(k=>k.chapterId===lc.id),sid=n=>lc.id+':'+slug(n),
+  boards=cfg.secs.map(n=>({id:sid(n),name:n,border:'',bg:''})),to={};
+  bs.forEach(k=>{const low=String(k.name).trim().toLowerCase(),m=cfg.map[low]||cfg.secs.find(n=>n.toLowerCase()===low);
+   if(m)to[k.id]=sid(m);else{to[k.id]=k.id;boards.push({id:k.id,name:k.name,border:k.border||'',bg:k.bg||''})}});
+  return{id:lc.id,name:cfg.name||lc.name,desc:lc.description||'',boards,
+   pages:appData.pages.filter(p=>p.chapterId===lc.id&&!p.isWidget).map(p=>{const v=p.variants&&p.variants.length?p.variants.map(x=>({title:String(x.title||''),content:String(x.content||'')})):null,av=v?(Number.isInteger(p.activeVariant)&&p.activeVariant>=0&&p.activeVariant<v.length?p.activeVariant:0):0,
+    title=v?v[av].title:String(p.title||''),lm=cfg.loose[title.trim().toLowerCase()];
+    return{id:p.id,board:to[p.containerId]||(lm?sid(lm):''),title,content:v?v[av].content:String(p.content||''),variants:v,av}})}})}}
 function docSig(){const s=JSON.stringify(DOC_LIB.map(lc=>[lc.name,appData.containers.filter(k=>k.chapterId===lc.id).map(k=>[k.id,k.name,k.border||'',k.bg||'']),
   appData.pages.filter(p=>p.chapterId===lc.id&&!p.isWidget).map(p=>[p.id,p.containerId||'',p.variants&&p.variants.length?p.variants.map(v=>[v.title,v.content]):[p.title,p.content]])]));/* variant switching and moving things around do not count as changes */
  let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return (h>>>0).toString(36)+'.'+s.length}
@@ -4013,22 +4079,71 @@ function downloadDocsHtml(){let html;try{html=docsStandaloneHtml()}catch(e){cons
 const DS_CSS=String.raw`html,body{height:100%}
 body{display:flex;flex-direction:column;overflow:hidden}
 [hidden]{display:none!important}
-.dsa-h{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 20px;background:var(--bar);box-shadow:0 2px 0 var(--line);flex:none}
+.dsa-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 20px;background:var(--bar);box-shadow:0 2px 0 var(--line);flex:none}
 .dsa-h h1{font-size:20px;font-weight:400;white-space:nowrap}
 .dsa-h .stabs{padding:0;flex:1;min-width:0}
-.dsa-m{flex:1;min-height:0;overflow-y:auto;padding:12px 20px 32px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
-#chats{height:max(440px,calc(100vh - 118px));margin-top:0}
+.dsa-m{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;padding:12px 20px 16px}
+#chats{flex:1 1 0;min-height:0;height:auto;margin-top:0;overflow-y:auto}
 .cp{color:var(--txt)}
-.dsa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;padding:12px;align-items:start}
-.dsa-m .cbox{box-shadow:none}
-.dsa-m .cin{overflow:visible}
-.dsa-m .cp-c{color:var(--mut)}
-.brand-f{text-align:center;font-size:10.5px;letter-spacing:.22em;color:var(--mut);opacity:.75;padding-top:18px}`;
-const DS_BODY=String.raw`<header class="dsa-h"><h1>Documentation</h1><div class="stabs" id="nav" role="tablist"></div>
+.cp-c{font-size:var(--ds-fs,14.5px)}
+#tpl{flex:1;min-height:0;display:grid;grid-template-columns:250px 1fr;gap:16px}
+#tpl-side,#tpl-main{min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+#tpl-side{display:flex;flex-direction:column;gap:6px;padding-right:6px}
+#tpl-q{height:38px;border-radius:999px;padding:0 16px;flex:none}
+#tpl-nav{display:flex;flex-direction:column;gap:2px}
+.sd-g{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);padding:14px 8px 4px}
+.sd-i{display:flex;justify-content:space-between;gap:8px;padding:7px 12px;border-radius:10px;text-align:left;font-size:13.5px}
+.sd-i:hover{background:var(--surf)}.sd-i.on{background:var(--pc);color:var(--on-pc);font-weight:600}
+.sd-i i{font-style:normal;opacity:.6;font-size:12px}
+.sd-i span{min-width:0;overflow-wrap:anywhere}.sd-i i{flex:none}
+.tl-h{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.tl-h h2{flex:1;font-size:18px;font-weight:500}.tl-h small{color:var(--mut)}
+.tl-s{font-size:12.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);margin:18px 0 8px}
+.tl{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;align-items:start}
+@media(max-width:700px){#tpl{grid-template-columns:1fr;grid-template-rows:200px 1fr}}
+.sd-gh{display:flex;align-items:center;gap:2px;margin-top:12px}
+.sd-gt{flex:1;min-width:0;display:flex;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:10px;text-align:left;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.sd-gt:hover{background:var(--surf)}.sd-gt.on{background:var(--pc);color:var(--on-pc)}
+.sd-gt i{font-style:normal;opacity:.65;font-weight:500}
+.sd-gh .ib{opacity:.55}.sd-gh:hover .ib,.sd-gh .ib:focus-visible{opacity:1}
+.sd-r{display:flex;align-items:center;gap:2px}
+.sd-r .sd-i{flex:1;min-width:0;margin-left:10px}
+.sd-e{opacity:0}.sd-r:hover .sd-e,.sd-r:focus-within .sd-e{opacity:1}
+@media(hover:none){.sd-e,.sd-gh .ib{opacity:.7}}
+.tl-h .btn{flex:none}
+.tsel{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tsel select{width:100%;height:42px;border-radius:14px;border:1px solid var(--line);background:var(--surf);color:var(--txt);padding:0 12px;outline:none;font-size:14px}
+.tsel select:focus{border-color:var(--p)}
+.snapsw .lbl{display:inline!important}`;
+const DS_BODY=String.raw`<header class="dsa-h"><h1>Documentation</h1><button type="button" class="ib help-btn" id="help-btn" style="background:var(--pc);color:var(--on-pc)" title="How this works" aria-label="Help">?</button><div class="stabs" id="nav" role="tablist"></div>
 <button type="button" class="btn tone sm" id="undo-chat" disabled title="No cleared chats to restore"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg><span>Undo</span></button>
 <button type="button" class="btn tone sm" id="save-file" title="Save your template edits into this HTML file (Ctrl + S)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span>Save changes</span></button>
+<button type="button" class="ib tone" id="set-btn" title="Settings" aria-label="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg></button>
 <button type="button" class="btn fill sm" id="add-chat">+ Chat</button></header>
-<main class="dsa-m"><div id="chats"></div><div id="tpl" hidden></div><div class="brand-f">ataraxia</div></main>
+<main class="dsa-m"><div id="chats"></div><div id="tpl" hidden><aside id="tpl-side"><input type="text" id="tpl-q" placeholder="Search all templates" autocomplete="off" spellcheck="false" aria-label="Search templates"><div id="tpl-nav"></div></aside><section id="tpl-main"></section></div></main>
+<div class="ov" id="set-modal"><div class="modal">
+ <div class="mh"><span>Settings</span></div>
+ <div class="mb">
+  <section class="sec"><label>Appearance</label><div class="seg" id="set-mode"></div></section>
+  <section class="sec"><label>Accent color</label><div class="sw" id="set-sw"></div></section>
+  <section class="sec"><label for="set-fs">Template text size</label><div style="display:flex;align-items:center;gap:10px"><input type="range" id="set-fs" min="12" max="20" step="1" style="flex:1;accent-color:var(--p)"><span id="set-fsv" class="hint" style="margin:0"></span></div></section>
+  <section class="sec"><label for="set-key">Keybind: new chat</label><input type="text" id="set-key" readonly placeholder="Click here, then press your keys (e.g. Alt + N)" autocomplete="off"><div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="set-key-clear" hidden>Clear</button></div><p class="hint" id="set-key-hint"></p></section>
+  <section class="sec"><label>Copy when clearing or closing a chat</label><div class="seg"><button type="button" class="snapsw" id="set-cc" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Copy this message</span></button></div><textarea id="set-cc-text" placeholder="The message to copy" spellcheck="false" aria-label="Message to copy when clearing or closing a chat" style="margin-top:10px"></textarea><div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="set-cc-reset">Use the opening message</button></div><p class="hint">Copied the first time you clear or close a chat that has something in it. The opening message starts with your name left blank: type it between "My name is" and the comma, or write anything you like.</p></section>
+  <section class="sec"><label>Copy when opening a new chat</label><div class="seg"><button type="button" class="snapsw" id="set-nc" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Copy this message</span></button></div><textarea id="set-nc-text" placeholder="The message to copy" spellcheck="false" aria-label="Message to copy when a new chat is opened" style="margin-top:10px"></textarea><div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="set-nc-reset">Use the opening message</button></div><p class="hint">Copied every time a new chat opens, from the new chat keybind or + Chat. It is separate from the message above, so each can say something different. Nothing is copied when all 3 chats are already open.</p></section>
+ </div>
+ <div class="mf"><button class="btn out" type="button" id="set-reset" style="margin-right:auto">Reset</button><button class="btn tone" type="button" id="set-close">Close</button></div>
+</div></div>
+<div class="ov" id="help-modal"><div class="modal">
+ <div class="mh"><span>How Documentation works</span></div>
+ <div class="mb hlp">
+  <details open><summary>Chats</summary><p>Up to 3 customers at once. Type the customer name (it fills every Name field), search a template in that chat, and click a result to add it. Fill the variables, then press Copy. Each chat has its own scratch pad. Clearing or closing a chat can be restored with Undo.</p></details>
+  <details><summary>Templates</summary><p>The left list is split into <b>categories</b> (like Notations and What Ifs) and each category into <b>sections</b> (like Billing or Endorsements). Click a category name to see everything in it, or a section to see just that one. Search everything at the top. <b>Add to chat</b> puts a copy into a chat, so the original is never changed. The pencil on a template edits it, and there you can also move it to another category or section.</p><p>Use the <b>+</b> next to a category to add a section, the pencil to rename or delete it, and <b>+ Category</b> at the bottom of the list to add a new category. Deleting a section keeps its templates (they move to Other); deleting a category deletes its templates.</p></details>
+  <details><summary>Variables</summary><ul><li><b>XXX</b> text, <b>XX/XX/XXXX</b> date, <b>$XXX</b> amount, <b>[Yes]</b>/<b>[No]</b> toggle, <b>[A|B]</b> choices.</li><li><kbd>Enter</kbd> inside one leaves it.</li></ul></details>
+  <details><summary>Saving</summary><p>Template edits are kept in this browser. <b>Save changes</b> (or <kbd>Ctrl</kbd>+<kbd>S</kbd>) writes them into the HTML file itself. Chats are kept per tab and are cleared when the tab closes.</p></details>
+  <details><summary>Settings</summary><p>The gear sets Light / Dark / Black or Match app, accent color, text size, a keybind that opens a new chat from anywhere (hold Ctrl, Alt or Meta with almost any key, including Space and the tilde key), an optional message copied every time a new chat opens, and another one copied the first time you clear or close a chat.</p></details>
+ </div>
+ <div class="mf"><button class="btn tone" type="button" onclick="closeModal('help-modal')">Close</button></div>
+</div></div>
 <div class="ov" id="page-modal"><div class="modal">
  <div class="mh"><span id="page-modal-title">Edit template</span></div>
  <div class="mb">
@@ -4041,6 +4156,7 @@ const DS_BODY=String.raw`<header class="dsa-h"><h1>Documentation</h1><div class=
    <button type="button" class="btn xs tone" data-v="YN" title="Yes/No toggle. Hold Shift while clicking to insert [No] instead of [Yes]">Y/N</button>
   </div>
   <div style="display:flex;flex-direction:column;gap:16px">
+   <div class="tsel"><div><label for="tpl-cat">Category</label><select id="tpl-cat"></select></div><div><label for="tpl-sec">Section</label><select id="tpl-sec"></select></div></div>
    <div><label for="page-title-input">Title</label><input type="text" id="page-title-input" placeholder="e.g. Coverage - Renters/Homes"></div>
    <div><label for="page-content-input">Content</label><textarea id="page-content-input" placeholder="Type or paste your text here..." style="min-height:90px"></textarea>
    <p class="hint" style="margin-top:8px">Y/N adds a Yes/No toggle. Type [Opt1|Opt2] for options, or [00 0000 000] to format numbers automatically.</p></div>
@@ -4048,6 +4164,11 @@ const DS_BODY=String.raw`<header class="dsa-h"><h1>Documentation</h1><div class=
  </div>
  <div id="vtabs"><div id="vt-scroll" role="tablist" aria-label="Template variants"></div><button type="button" class="ib sm vt-del" id="vt-del" title="Delete this variant" hidden></button></div>
  <div class="mf"><button class="btn out danger" id="tpl-del" type="button" style="margin-right:auto" hidden>Delete</button><button class="btn out" id="tpl-cancel" type="button">Cancel</button><button class="btn fill" id="tpl-save" type="button">Save</button></div>
+</div></div>
+<div class="ov" id="cat-modal"><div class="modal" style="max-width:440px">
+ <div class="mh"><span id="cat-title">Add category</span></div>
+ <div class="mb"><div><label for="cat-name">Name</label><input type="text" id="cat-name" maxlength="40" autocomplete="off"></div><p class="hint" id="cat-hint" style="margin:0"></p></div>
+ <div class="mf"><button class="btn out danger" id="cat-del" type="button" style="margin-right:auto" hidden>Delete</button><button class="btn out" id="cat-cancel" type="button">Cancel</button><button class="btn fill" id="cat-save" type="button">Save</button></div>
 </div></div>
 <div id="toast" role="status"></div><div id="undo" role="status" aria-live="polite"></div>`;
 const DS_JS=String.raw`var EMBED=/*EMBED_START*/null/*EMBED_END*/;
@@ -4085,7 +4206,7 @@ function chatOpenPage(chat,e){var s=e.page,vi=e.vi,v=s.variants&&s.variants.leng
 function chatVariant(chat,p,vi){p.activeVariant=vi;p.title=p.variants[vi].title;p.content=p.variants[vi].content;varVals[p.id]=chatFill(chat,p,vi);chatSave()}
 function newChat(){var c={id:'c'+rid(),name:'',policy:'',eff:'',prem:'',noted:false,note:'',padMin:true,opened:false,pages:[]};lastChatId=c.id;chats.push(c);return c}
 function addChat(silent){if(chats.length>=CHAT_MAX){showToast('Up to '+CHAT_MAX+' chats at once. Close one first.');return}
- var c=newChat();chatSave();renderChats();if(!silent){var n=document.querySelector('.chat[data-id="'+c.id+'"] .chat-name');if(n)n.focus()}}
+ var c=newChat();copyOnNew();chatSave();renderChats();if(!silent){var n=document.querySelector('.chat[data-id="'+c.id+'"] .chat-name');if(n)n.focus()}}
 /* cleared / closed chats can be restored with Undo (this tab only) */
 function trashSave(){try{sessionStorage.setItem(TKEY,JSON.stringify(chatTrash))}catch(e){}}
 function trashRestore(){try{var s=JSON.parse(sessionStorage.getItem(TKEY)||'null');chatTrash=(Array.isArray(s)?s:[]).filter(function(x){return x&&x.chat&&Array.isArray(x.chat.pages)}).slice(-10)}catch(e){chatTrash=[]}}
@@ -4099,6 +4220,8 @@ function chatUndo(e){var c=e.chat,slot=(chats[e.at]&&chatEmpty(chats[e.at]))?cha
  lastChatId=r.id;chatSave();if(view==='chats')renderChats();return true}
 function chatUndoEntry(e){if(chatTrash.indexOf(e)<0)return true;if(!chatUndo(e))return false;chatTrash.splice(chatTrash.indexOf(e),1);trashSave();paintTrash();return true}
 function undoLast(){var e=chatTrash[chatTrash.length-1];if(!e){showToast('No cleared chats to restore.');return}if(chatUndoEntry(e)){showToast('Chat restored.');setView('chats')}}
+function copyOnNew(){var c=SET.nc;if(!c||!c.on||!String(c.text||'').trim())return;copyText(c.text,'Copied your new chat message.')}
+function copyOnClose(chat){var c=SET.cc;if(!c||!c.on||chatEmpty(chat)||chat.opened)return;chat.opened=true;chatSave();if(!String(c.text||'').trim())return;copyText(c.text,'Copied your message.')}
 function clearChat(chat){if(chatEmpty(chat))return;var ent=trashPush(chat,chats.indexOf(chat));
  chat.name=chat.policy=chat.eff=chat.prem=chat.note='';chat.noted=false;chat.opened=false;chat.pages=[];chatSave();renderChats();
  if(ent)showUndo('Chat cleared',function(){return chatUndoEntry(ent)})}
@@ -4127,8 +4250,8 @@ function chatEl(chat,idx){
  var flag=el('span','chat-flag');flag.textContent='Notation not yet written';flag.title='Copy a Notations or What if template to clear this';
  root._flag=function(){flag.hidden=!((chat.name||chat.pages.length)&&!chat.noted)};
  root.addEventListener('focusin',function(){lastChatId=chat.id});root.addEventListener('pointerdown',function(){lastChatId=chat.id});
- var x=el('button','ib sm',CHAT_X);x.title='Close this chat';x.setAttribute('aria-label','Close chat '+(idx+1));x.onclick=function(){closeChat(chat)};
- var tr=el('button','ib sm',ic('trash'));tr.title='Clear this chat';tr.setAttribute('aria-label','Clear chat '+(idx+1));tr.onclick=function(){clearChat(chat)};
+ var x=el('button','ib sm',CHAT_X);x.title='Close this chat';x.setAttribute('aria-label','Close chat '+(idx+1));x.onclick=function(){copyOnClose(chat);closeChat(chat)};
+ var tr=el('button','ib sm',ic('trash'));tr.title='Clear this chat';tr.setAttribute('aria-label','Clear chat '+(idx+1));tr.onclick=function(){copyOnClose(chat);clearChat(chat)};
  var acts=el('div','chat-acts');acts.append(tr,x);var br=el('span','chat-br');
  h.append(lb,nm,flag);
  var s=el('div','chat-s'),si=el('input');si.type='text';si.autocomplete='off';si.spellcheck=false;si.placeholder='Search templates (e.g. vehicle, payment)';si.setAttribute('aria-label','Search documentation for chat '+(idx+1));s.append(si,acts);
@@ -4169,28 +4292,75 @@ function renderChats(){var box=$('chats');box.innerHTML='';
 function planChat(){var free=chats.filter(function(c){return!(c.name||c.policy||c.eff||c.prem)})[0];if(free)return free;if(chats.length<CHAT_MAX)return null;return chats.filter(function(x){return x.id===lastChatId})[0]||chats[0]}
 function addToChat(e){var chat=planChat()||newChat(),dup=chat.pages.some(function(p){return p.src===e.page.id&&(p.activeVariant||0)===e.vi});lastChatId=chat.id;
  if(!dup)chatOpenPage(chat,e);chatSave();var n=chats.indexOf(chat)+1;setView('chats');showToast(dup?'\u201c'+e.title+'\u201d is already in Chat '+n+'.':'Added \u201c'+e.title+'\u201d to Chat '+n+'.')}
-function renderTpl(ci){var ch=D.chapters[ci],box=$('tpl');box.textContent='';if(!ch)return;
- var top=el('div');top.style.cssText='display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 14px';
- var hd=el('div','hint');hd.style.cssText='margin:0;flex:1;min-width:200px';hd.textContent=ch.desc||'';
- var add=el('button','btn tone sm','+ Template');add.type='button';add.onclick=function(){openAdd(ci,'')};top.append(hd,add);box.append(top);
- var known=function(p){return ch.boards.some(function(b){return b.id===p.board})};
- var secs=ch.boards.map(function(b){return{b:b,id:b.id,name:b.name}});if(ch.pages.some(function(p){return!known(p)}))secs.push({b:{},id:'',name:'Other'});
- var wrap=el('div');wrap.style.cssText='display:flex;flex-direction:column;gap:16px';
- secs.forEach(function(s){var list=ch.pages.filter(function(p){return s.id?p.board===s.id:!known(p)});
-  var sec=el('section','cbox'),bar=el('div','cbar'),body=el('div','cin'),grid=el('div','dsa-grid');applyColors(sec,s.b.border||'',s.b.bg||'');
-  var nm=el('span','cname');nm.textContent=s.name;var cn=el('span','ccount',list.length+(list.length===1?' template':' templates'));
-  var pb=el('button','ib sm',ic('plus'));pb.type='button';pb.title='Add a template here';pb.setAttribute('aria-label','Add a template to '+s.name);pb.onclick=function(){openAdd(ci,s.id)};
-  bar.append(nm,cn,pb);
-  list.forEach(function(p){var card=el('div','cp'),hh=el('div','cp-h'),t=el('div','cp-t'),n=p.variants&&p.variants.length?p.variants.length:1,vi=Math.min(shown[p.id]||0,n-1),cur=n>1?p.variants[vi]:p;
-   t.textContent=cur.title;
-   var use=el('button','btn tone',ic('plus')+'<span>Add to chat</span>');use.type='button';use.onclick=function(){addToChat({page:p,vi:vi,title:cur.title})};
-   var ed=el('button','ib sm',ic('pen'));ed.type='button';ed.title='Edit the template';ed.setAttribute('aria-label','Edit template '+cur.title);ed.onclick=function(){openEdit(p.id)};
-   hh.append(t,use,ed);card.append(hh);
-   if(n>1){var vb=el('div','cp-v');p.variants.forEach(function(v,i){var b=el('button',i===vi?'on':'');b.type='button';b.textContent=v.title;b.onclick=function(){shown[p.id]=i;renderTpl(ci)};vb.append(b)});card.append(vb)}
-   var c=el('div','cp-c');c.textContent=cur.content;card.append(c);grid.append(card)});
-  if(!list.length){var em=el('div','empty');em.textContent='No templates here yet.';grid.append(em)}
-  body.append(grid);sec.append(bar,body);wrap.append(sec)});
- box.append(wrap)}
+function tx(t,c,x){var e=el(t,c);e.textContent=x;return e}
+var tsel={cid:'',b:''},tq='';function chOf(id){for(var i=0;i<D.chapters.length;i++)if(D.chapters[i].id===id)return D.chapters[i];return null}
+function known(ch,p){return ch.boards.some(function(b){return b.id===p.board})}
+function tplCard(p,vi,crumb){var n=p.variants&&p.variants.length?p.variants.length:1;vi=Math.min(vi,n-1);var cur=n>1?p.variants[vi]:p,card=el('div','cp'),hh=el('div','cp-h');
+ if(crumb)card.append(tx('div','hint',crumb));
+ var use=el('button','btn tone',ic('plus')+'<span>Add to chat</span>'),ed=el('button','ib sm',ic('pen'));use.type=ed.type='button';
+ use.onclick=function(){addToChat({page:p,vi:vi,title:cur.title})};
+ ed.title='Edit the template';ed.setAttribute('aria-label','Edit template '+cur.title);ed.onclick=function(){openEdit(p.id)};
+ hh.append(tx('div','cp-t',cur.title),use,ed);card.append(hh);
+ if(n>1&&!crumb){var vb=el('div','cp-v');p.variants.forEach(function(v,i){var b=el('button',i===vi?'on':'');b.type='button';b.textContent=v.title;b.onclick=function(){shown[p.id]=i;renderTpl()};vb.append(b)});card.append(vb)}
+ card.append(tx('div','cp-c',cur.content));return card}
+function tgrid(list){var g=el('div','tl');list.forEach(function(p){g.append(tplCard(p,shown[p.id]||0))});return g}
+function renderTpl(){var nav=$('tpl-nav'),main=$('tpl-main'),q=tq.trim();nav.textContent='';main.textContent='';
+ if(!chOf(tsel.cid))tsel={cid:D.chapters.length?D.chapters[0].id:'',b:''};
+ function pickSel(cid,b){tsel={cid:cid,b:b};tq='';$('tpl-q').value='';renderTpl()}
+ D.chapters.forEach(function(ch){
+  var h=el('div','sd-gh'),all=el('button','sd-gt'+(!q&&tsel.cid===ch.id&&tsel.b===''?' on':'')),ad=el('button','ib sm',ic('plus')),ed=el('button','ib sm',ic('pen'));
+  all.type=ad.type=ed.type='button';all.append(tx('span','',ch.name),tx('i','',ch.pages.length));all.title='Show everything in '+ch.name;
+  all.onclick=function(){pickSel(ch.id,'')};
+  ad.title='Add a section to '+ch.name;ad.setAttribute('aria-label','Add a section to '+ch.name);ad.onclick=function(){openCat({kind:'sec',cid:ch.id})};
+  ed.title='Rename or delete '+ch.name;ed.setAttribute('aria-label','Edit category '+ch.name);ed.onclick=function(){openCat({kind:'cat',cid:ch.id})};
+  h.append(all,ad,ed);nav.append(h);
+  var items=ch.boards.map(function(b){return[b.id,b.name,ch.pages.filter(function(p){return p.board===b.id}).length,true]});
+  var oth=ch.pages.filter(function(p){return!known(ch,p)}).length;if(oth)items.push(['__o','Other',oth,false]);
+  items.forEach(function(x){var r=el('div','sd-r'),b=el('button','sd-i'+(!q&&tsel.cid===ch.id&&tsel.b===x[0]?' on':''));b.type='button';b.append(tx('span','',x[1]),tx('i','',x[2]));
+   b.onclick=function(){pickSel(ch.id,x[0])};r.append(b);
+   if(x[3]){var e2=el('button','ib sm sd-e',ic('pen'));e2.type='button';e2.title='Rename or delete this section';e2.setAttribute('aria-label','Edit section '+x[1]);e2.onclick=function(){openCat({kind:'sec',cid:ch.id,id:x[0]})};r.append(e2)}
+   nav.append(r)})});
+ var ac=el('button','btn tone sm','+ Category');ac.type='button';ac.style.cssText='margin-top:14px;align-self:flex-start';ac.onclick=function(){openCat({kind:'cat'})};nav.append(ac);
+ if(!D.chapters.length){main.append(tx('div','empty','No categories yet. Use + Category to make one, like Notations or What Ifs.'));return}
+ var ch=chOf(tsel.cid),head=el('div','tl-h');
+ if(q){var r=docSearch(q);head.append(tx('h2','','Results for \u201c'+q+'\u201d'),tx('small','',r.length+' found'));main.append(head);
+  if(!r.length){main.append(tx('div','empty','No template matches that.'));return}
+  var g=el('div','tl');r.slice(0,60).forEach(function(e){g.append(tplCard(e.page,e.vi,e.chap+' \u203a '+(e.board||'Other')))});main.append(g);return}
+ var bn=tsel.b,bd=ch.boards.filter(function(b){return b.id===bn})[0];
+ if(bn&&bn!=='__o'&&!bd)bn=tsel.b='';
+ head.append(tx('h2','',bn===''?ch.name:bn==='__o'?ch.name+' \u203a Other':ch.name+' \u203a '+bd.name));
+ if(bn===''){var as=el('button','btn out sm','+ Section');as.type='button';as.onclick=function(){openCat({kind:'sec',cid:ch.id})};head.append(as)}
+ var add=el('button','btn tone sm','+ Template');add.type='button';add.onclick=function(){openAdd(ch.id,bn==='__o'?'':bn)};head.append(add);main.append(head);
+ if(bn===''&&ch.desc)main.append(tx('p','hint',ch.desc));
+ var secs=bn===''?ch.boards.map(function(b){return{n:b.name,l:ch.pages.filter(function(p){return p.board===b.id})}}).concat([{n:'Other',l:ch.pages.filter(function(p){return!known(ch,p)})}]):[{n:'',l:ch.pages.filter(function(p){return bn==='__o'?!known(ch,p):p.board===bn})}];
+ var any=false;secs.forEach(function(s){if(!s.l.length)return;any=true;if(s.n)main.append(tx('h3','tl-s',s.n));main.append(tgrid(s.l))});
+ if(!any)main.append(tx('div','empty',bn===''&&!ch.boards.length?'No sections yet. Use + Section to add one, like Billing or Endorsements.':'No templates here yet. Use + Template.'))}
+/* ---- categories + sections: add, rename, delete ---- */
+var catCtx=null,catArm=0;
+function catReset(){clearTimeout(catArm);catArm=0;$('cat-del').textContent='Delete'}
+function openCat(c){catCtx=c;var ch=c.cid?chOf(c.cid):null,b=(c.id&&ch)?ch.boards.filter(function(x){return x.id===c.id})[0]:null,isCat=c.kind==='cat',edit=isCat?!!ch:!!b;
+ $('cat-title').textContent=isCat?(edit?'Edit category':'Add category'):(edit?'Edit section':'Add section'+(ch?' to '+ch.name:''));
+ $('cat-name').value=edit?(isCat?ch.name:b.name):'';
+ $('cat-name').placeholder=isCat?'e.g. Notations, What Ifs':'e.g. Billing, Endorsements';
+ $('cat-hint').textContent=edit?(isCat?'Deleting a category also deletes every template in it.':'Deleting a section keeps its templates. They move to Other.'):(isCat?'A category groups sections, like Notations or What Ifs.':'A section groups templates inside a category, like Billing or Endorsements.');
+ $('cat-del').hidden=!edit;catReset();openModal('cat-modal');setTimeout(function(){var n=$('cat-name');n.focus();n.select()},40)}
+function saveCat(){var c=catCtx;if(!c)return;var name=$('cat-name').value.trim(),low=name.toLowerCase();if(!name){showToast('Add a name first.');return}
+ if(c.kind==='cat'){var ch=c.cid?chOf(c.cid):null;
+  if(D.chapters.some(function(x){return x!==ch&&x.name.trim().toLowerCase()===low})){showToast('A category with that name already exists.');return}
+  if(ch)ch.name=name;else{ch={id:'ch_'+rid(),name:name,desc:'',boards:[],pages:[]};D.chapters.push(ch);tsel={cid:ch.id,b:''}}}
+ else{var ch2=chOf(c.cid);if(!ch2)return;var b=c.id?ch2.boards.filter(function(x){return x.id===c.id})[0]:null;
+  if(ch2.boards.some(function(x){return x!==b&&x.name.trim().toLowerCase()===low})){showToast('That category already has a section with that name.');return}
+  if(b)b.name=name;else{b={id:'b_'+rid(),name:name,border:'',bg:''};ch2.boards.push(b);tsel={cid:ch2.id,b:b.id}}}
+ saveD();closeModal('cat-modal');renderTpl();showToast('Saved.')}
+function delCat(){var c=catCtx,ch=c&&chOf(c.cid);if(!ch)return;var isCat=c.kind==='cat',n=isCat?ch.pages.length:0;
+ if(!catArm){catArm=setTimeout(catReset,3000);$('cat-del').textContent=isCat&&n?'Click again: delete '+n+' template'+(n>1?'s':''):'Click again to delete';return}
+ catReset();
+ if(isCat){D.chapters.splice(D.chapters.indexOf(ch),1);if(tsel.cid===ch.id)tsel={cid:'',b:''}}
+ else{var moved=0;ch.boards=ch.boards.filter(function(b){return b.id!==c.id});ch.pages.forEach(function(p){if(p.board===c.id){p.board='';moved++}});
+  if(tsel.cid===ch.id&&tsel.b===c.id)tsel={cid:ch.id,b:moved?'__o':''}}
+ saveD();closeModal('cat-modal');renderTpl();showToast(isCat?'Category deleted.':'Section deleted.')}
+$('cat-save').onclick=saveCat;$('cat-del').onclick=delCat;$('cat-cancel').onclick=function(){closeModal('cat-modal')};
+$('cat-name').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();saveCat()}});
 /* ---- template editor: one tab per variant ---- */
 function openModal(id){$(id).classList.add('open');document.querySelectorAll('#'+id+' textarea').forEach(autosize)}
 function closeModal(id){$(id).classList.remove('open')}
@@ -4203,21 +4373,32 @@ function renderVTabs(){var box=$('vt-scroll');box.textContent='';
  var d=$('vt-del');d.innerHTML=ic('trash');d.hidden=vs.length<2;d.title='Delete variant '+(vcur+1)}
 $('vt-del').onclick=function(){if(vs.length<2)return;vsCapture();vs.splice(vcur,1);vsLoad(Math.min(vcur,vs.length-1))};
 function resetDel(){clearTimeout(delArm);delArm=0;$('tpl-del').textContent='Delete'}
+function fillSec(board){var ss=$('tpl-sec'),ch=chOf($('tpl-cat').value);ss.textContent='';
+ var o0=el('option');o0.value='';o0.textContent='Other (no section)';ss.append(o0);
+ if(ch)ch.boards.forEach(function(b){var o=el('option');o.value=b.id;o.textContent=b.name;ss.append(o)});
+ ss.value=board||'';if(ss.selectedIndex<0)ss.selectedIndex=0}
+function fillSel(cid,board){var cs=$('tpl-cat');cs.textContent='';
+ D.chapters.forEach(function(ch){var o=el('option');o.value=ch.id;o.textContent=ch.name;cs.append(o)});
+ cs.value=cid;if(cs.selectedIndex<0)cs.selectedIndex=0;fillSec(board)}
+$('tpl-cat').onchange=function(){fillSec('')};
 function openEdit(id){var f=findTpl(id);if(!f)return;editCtx={id:id};$('page-modal-title').textContent='Edit template';
  vs=f.p.variants&&f.p.variants.length?f.p.variants.map(function(v){return{title:v.title,content:v.content}}):[{title:f.p.title,content:f.p.content}];
- $('tpl-del').hidden=false;resetDel();openModal('page-modal');vsLoad(0)}
-function openAdd(ci,board){editCtx={ci:ci,board:board||''};$('page-modal-title').textContent='Add template to '+D.chapters[ci].name;vs=[blankVariant()];$('tpl-del').hidden=true;resetDel();openModal('page-modal');vsLoad(0)}
+ fillSel(f.ch.id,f.p.board);$('tpl-del').hidden=false;resetDel();openModal('page-modal');vsLoad(0)}
+function openAdd(cid,board){var ch=chOf(cid);if(!ch)return;editCtx={cid:cid,board:board||''};$('page-modal-title').textContent='Add template';vs=[blankVariant()];
+ fillSel(cid,board||'');$('tpl-del').hidden=true;resetDel();openModal('page-modal');vsLoad(0)}
 function saveTpl(){vsCapture();var list=vs.map(function(v){return{title:v.title.trim(),content:v.content}});
  if(list.length>1){list=list.filter(function(v){return v.title||v.content.trim()});list.forEach(function(v,i){if(!v.title)v.title='Variant '+(i+1)})}
  if(!list.length||!list[0].title){showToast('Add a title first.');return}
- var variants=list.length>1?list:null;
+ var variants=list.length>1?list:null,dest=chOf($('tpl-cat').value),board=$('tpl-sec').value;
+ if(!dest){showToast('Pick a category first.');return}
  if(editCtx.id){var f=findTpl(editCtx.id);if(!f){closeModal('page-modal');return}var av=f.p.av||0;if(variants&&av>=variants.length)av=0;var a=variants?variants[av]:list[0];
-  f.p.variants=variants;f.p.av=av;f.p.title=a.title;f.p.content=a.content;delete shown[f.p.id]}
- else D.chapters[editCtx.ci].pages.push({id:'p_'+rid(),board:editCtx.board||'',title:list[0].title,content:list[0].content,variants:variants,av:0});
- saveD();closeModal('page-modal');if(typeof view==='number')renderTpl(view);showToast('Template saved.')}
+  f.p.variants=variants;f.p.av=av;f.p.title=a.title;f.p.content=a.content;f.p.board=board;delete shown[f.p.id];
+  if(f.ch!==dest){f.ch.pages.splice(f.ch.pages.indexOf(f.p),1);dest.pages.push(f.p)}}
+ else dest.pages.push({id:'p_'+rid(),board:board,title:list[0].title,content:list[0].content,variants:variants,av:0});
+ saveD();closeModal('page-modal');if(view==='tpl')renderTpl();showToast('Template saved.')}
 $('tpl-save').onclick=saveTpl;$('tpl-cancel').onclick=function(){closeModal('page-modal')};
 $('tpl-del').onclick=function(){if(!delArm){delArm=setTimeout(resetDel,3000);this.textContent='Click again to delete';return}
- resetDel();var f=editCtx&&findTpl(editCtx.id);if(!f)return;f.ch.pages.splice(f.ch.pages.indexOf(f.p),1);saveD();closeModal('page-modal');if(typeof view==='number')renderTpl(view);showToast('Template deleted.')};
+ resetDel();var f=editCtx&&editCtx.id&&findTpl(editCtx.id);if(!f)return;f.ch.pages.splice(f.ch.pages.indexOf(f.p),1);saveD();closeModal('page-modal');if(view==='tpl')renderTpl();showToast('Template deleted.')};
 document.querySelectorAll('#page-modal [data-v]').forEach(function(b){b.onmousedown=function(e){e.preventDefault()};b.onclick=function(e){insertVar(b.dataset.v,e)}});
 $('page-modal').addEventListener('mousedown',function(e){if(e.target===this)closeModal('page-modal')});
 document.querySelectorAll('textarea').forEach(function(t){t.addEventListener('input',function(){autosize(t)})});
@@ -4226,11 +4407,11 @@ var fileH=null;
 function dsHash(s){var h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return (h>>>0).toString(36)+'.'+s.length}
 function buildFile(){
  var sig=dsHash(JSON.stringify(D)),c=document.documentElement.cloneNode(true);
- ['nav','chats','tpl','vt-scroll'].forEach(function(id){var n=c.querySelector('#'+id);if(n)n.innerHTML=''});
+ ['nav','chats','tpl-nav','tpl-main','vt-scroll','set-mode','set-sw'].forEach(function(id){var n=c.querySelector('#'+id);if(n)n.innerHTML=''});
  ['undo','toast'].forEach(function(id){var n=c.querySelector('#'+id);if(n){n.innerHTML='';n.className=''}});
  Array.prototype.forEach.call(c.querySelectorAll('.ov.open'),function(o){o.classList.remove('open')});
  Array.prototype.forEach.call(c.querySelectorAll('.menu.show'),function(m){m.classList.remove('show')});
- var s=c.querySelector('#ds-main');if(!s)throw new Error('script not found');
+ c.className=BASE.cls;c.setAttribute('style',BASE.sty);var s=c.querySelector('#ds-main');if(!s)throw new Error('script not found');
  var json=JSON.stringify({sig:sig,opening:EMBED.opening||'',data:D}).replace(/</g,'\\u003c');
  s.textContent=s.textContent.replace(/\/\*EMBED_START\*\/[\s\S]*?\/\*EMBED_END\*\//,function(){return '/*EMBED_START*/'+json+'/*EMBED_END*/'});
  return {html:'<!DOCTYPE html>\n'+c.outerHTML,sig:sig}}
@@ -4244,9 +4425,35 @@ async function saveFile(){
   }else{dlFile(b.html);showToast('Downloaded the updated file.')}
   EMBED.sig=b.sig;saveD()
  }catch(e){if(e&&e.name==='AbortError')return;fileH=null;dlFile(b.html);EMBED.sig=b.sig;saveD();showToast('Could not write to that file, so it was downloaded instead.')}}
-/* ---- navigation ---- */
-function buildNav(){var n=$('nav');n.textContent='';[['chats','Chats']].concat(D.chapters.map(function(c,i){return[i,c.name]})).forEach(function(x){var b=el('button',x[0]===view?'on':'');b.type='button';b.textContent=x[1];b.setAttribute('role','tab');b.onclick=function(){setView(x[0])};n.append(b)})}
-function setView(v){view=v;var c=v==='chats';$('chats').hidden=!c;$('tpl').hidden=c;$('undo-chat').hidden=!c;$('add-chat').hidden=!c;buildNav();if(c)renderChats();else renderTpl(v)}
+/* ---- navigation + settings ---- */
+var DEFCC="Thank you for contacting Allstate, where you're in good hands. My name is , and I'll be assisting you today.",DEFNC=(EMBED&&EMBED.opening&&String(EMBED.opening).trim())||DEFCC,SETK='ataraxia_docs_settings',SET={mode:'app',hue:null,fs:15,key:'',cc:{on:false,text:DEFCC},nc:{on:false,text:DEFNC}},ACC=[358,18,42,100,140,174,198,232,257,300,340],
+ RES=['Ctrl+C','Ctrl+V','Ctrl+X','Ctrl+A','Ctrl+Z','Ctrl+Y','Ctrl+S','Ctrl+N','Ctrl+T','Ctrl+W'],
+ KH='Click the box, then hold Ctrl, Alt or Meta and press almost any key: a letter, number, F-key, Space, the tilde key, an arrow, a symbol (for example Ctrl + Space or Ctrl + Tilde). It starts a new chat from anywhere on this page. Backspace clears it.',
+ BASE={cls:document.documentElement.className,sty:document.documentElement.getAttribute('style')||''};
+function buildNav(){var n=$('nav');n.textContent='';[['chats','Chats'],['tpl','Templates']].forEach(function(x){var b=el('button',x[0]===view?'on':'');b.type='button';b.textContent=x[1];b.setAttribute('role','tab');b.onclick=function(){setView(x[0])};n.append(b)})}
+function setView(v){view=v;var c=v==='chats';$('chats').hidden=!c;$('tpl').hidden=c;$('undo-chat').hidden=!c;$('add-chat').hidden=!c;buildNav();if(c)renderChats();else renderTpl()}
+function fixCC(){if(!SET.cc||typeof SET.cc!=='object')SET.cc={on:false,text:DEFCC};SET.cc.on=!!SET.cc.on;if(typeof SET.cc.text!=='string')SET.cc.text=DEFCC;
+ if(!SET.nc||typeof SET.nc!=='object')SET.nc={on:false,text:DEFNC};SET.nc.on=!!SET.nc.on;if(typeof SET.nc.text!=='string')SET.nc.text=DEFNC}
+function loadSet(){try{var s=JSON.parse(localStorage.getItem(SETK)||'null');if(s&&typeof s==='object')Object.assign(SET,s)}catch(e){}}
+function saveSet(){try{localStorage.setItem(SETK,JSON.stringify(SET))}catch(e){}}
+function applySet(){var r=document.documentElement,m=SET.mode;
+ if(m==='app'){r.className=BASE.cls;r.setAttribute('style',BASE.sty)}
+ else{r.className='';r.setAttribute('style','--h:'+(SET.hue==null?232:SET.hue)+';');r.classList.toggle('dark',m!=='light');r.classList.toggle('black',m==='black')}
+ r.style.setProperty('--ds-fs',SET.fs+'px')}
+function paintSet(){var m=$('set-mode');m.textContent='';
+ [['app','Match app'],['light','Light'],['dark','Dark'],['black','Black']].forEach(function(x){var b=el('button',SET.mode===x[0]?'on':'');b.type='button';b.textContent=x[1];b.onclick=function(){SET.mode=x[0];saveSet();applySet();paintSet()};m.append(b)});
+ var w=$('set-sw');w.textContent='';
+ ACC.forEach(function(h){var b=el('button',SET.mode!=='app'&&SET.hue===h?'on':'');b.type='button';b.style.setProperty('--c',h);b.title='Accent color';b.setAttribute('aria-label','Accent color');
+  b.onclick=function(){if(SET.mode==='app')SET.mode=/\bblack\b/.test(BASE.cls)?'black':/\bdark\b/.test(BASE.cls)?'dark':'light';SET.hue=h;saveSet();applySet();paintSet()};w.append(b)});
+ $('set-fs').value=SET.fs;$('set-fsv').textContent=SET.fs+' px';
+ $('set-key').value=SET.key?SET.key.split('+').join(' + '):'';$('set-key-clear').hidden=!SET.key;$('set-key-hint').textContent=KH;var cc=SET.cc;$('set-cc').classList.toggle('on',!!cc.on);$('set-cc').setAttribute('aria-checked',cc.on?'true':'false');$('set-cc-text').value=cc.text;var nc=SET.nc;$('set-nc').classList.toggle('on',!!nc.on);$('set-nc').setAttribute('aria-checked',nc.on?'true':'false');$('set-nc-text').value=nc.text}
+var KPUN={Space:'Space',Backquote:'Tilde',Minus:'-',Equal:'=',Comma:',',Period:'.',Slash:'/',Semicolon:';',Quote:"'",BracketLeft:'[',BracketRight:']',Backslash:'\\'};
+function keyName(e){var k=e.code||'';
+ if(/^Key[A-Z]$/.test(k))return k.slice(3);if(/^Digit\d$/.test(k))return k.slice(5);if(/^Numpad\d$/.test(k))return 'Num'+k.slice(6);
+ if(/^F([1-9]|1[0-2])$/.test(k)||/^(Arrow(Up|Down|Left|Right)|Home|End|PageUp|PageDown|Insert)$/.test(k))return k;
+ return KPUN[k]||''}
+function comboOf(e){var n=keyName(e);if(!n||(!(e.ctrlKey||e.altKey||e.metaKey)&&!/^F\d/.test(n)))return'';
+ var m=[];if(e.ctrlKey)m.push('Ctrl');if(e.altKey)m.push('Alt');if(e.shiftKey)m.push('Shift');if(e.metaKey)m.push('Meta');return m.concat(n).join('+')}
 $('undo-chat').onclick=undoLast;$('add-chat').onclick=function(){addChat()};$('save-file').onclick=saveFile;
 document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&!e.altKey&&!e.shiftKey&&e.key.toLowerCase()==='s'){e.preventDefault();saveFile()}});
 /* ---- variables (same behaviour as the app) ---- */
@@ -4263,7 +4470,30 @@ document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&!e.al
  document.addEventListener('click',closeMenus);
  document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeMenus();closeModal('page-modal')}})})();
 addEventListener('pagehide',chatSave);document.addEventListener('visibilitychange',function(){if(document.hidden)chatSave()});
-loadD();chatRestore();trashRestore();paintTrash();setView('chats');`;
+loadD();loadSet();fixCC();applySet();chatRestore();trashRestore();paintTrash();
+$('tpl-q').oninput=function(){tq=this.value;renderTpl()};
+$('help-btn').onclick=function(){openModal('help-modal')};
+$('set-btn').onclick=function(){paintSet();openModal('set-modal')};
+$('set-close').onclick=function(){closeModal('set-modal')};
+$('set-reset').onclick=function(){SET={mode:'app',hue:null,fs:15,key:'',cc:{on:false,text:DEFCC},nc:{on:false,text:DEFNC}};saveSet();applySet();paintSet()};
+$('set-fs').oninput=function(){SET.fs=+this.value;saveSet();applySet();$('set-fsv').textContent=SET.fs+' px'};
+$('set-key-clear').onclick=function(){SET.key='';saveSet();paintSet()};
+$('set-cc').onclick=function(){SET.cc.on=!SET.cc.on;saveSet();paintSet()};
+$('set-cc-text').oninput=function(){SET.cc.text=this.value;saveSet()};
+$('set-cc-reset').onclick=function(){SET.cc.text=DEFCC;saveSet();paintSet();autosize($('set-cc-text'))};
+$('set-nc').onclick=function(){SET.nc.on=!SET.nc.on;saveSet();paintSet()};
+$('set-nc-text').oninput=function(){SET.nc.text=this.value;saveSet()};
+$('set-nc-reset').onclick=function(){SET.nc.text=DEFNC;saveSet();paintSet();autosize($('set-nc-text'))};
+$('set-key').addEventListener('keydown',function(e){if(e.key==='Tab'||e.key==='Escape')return;e.preventDefault();e.stopPropagation();
+ if(e.key==='Backspace'||e.key==='Delete'){SET.key='';saveSet();paintSet();return}
+ if(['Control','Alt','Shift','Meta'].indexOf(e.key)>-1)return;
+ var c=comboOf(e);if(!c||RES.indexOf(c)>-1){$('set-key-hint').textContent='That combination cannot be used. Hold Ctrl, Alt or Meta with a letter, number, F-key, Space, Tilde, arrow or symbol (the browser keeps Ctrl + C, V, X, A, Z, Y, S, N, T, W).';return}
+ SET.key=c;saveSet();paintSet()});
+['set-modal','help-modal','cat-modal'].forEach(function(id){$(id).addEventListener('mousedown',function(e){if(e.target===this)closeModal(id)})});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeModal('set-modal');closeModal('help-modal');closeModal('cat-modal')}});
+document.addEventListener('keydown',function(e){if(e.repeat||!SET.key||e.target===$('set-key')||document.querySelector('.ov.open'))return;
+ if(comboOf(e)!==SET.key)return;e.preventDefault();setView('chats');addChat()},true);
+setView('chats');`;
 function docsStandaloneHtml(){
  const root=document.documentElement,cls=['dark','black','pad-glass','pad-color'].filter(c=>root.classList.contains(c)).join(' '),sty=root.getAttribute('style')||'';
  let css='';document.querySelectorAll('style').forEach(s=>{if(s.textContent.length>css.length)css=s.textContent});/* the app's own stylesheet: the file looks exactly like the app and follows your current theme */
@@ -4271,7 +4501,7 @@ function docsStandaloneHtml(){
  const fns=[el,placeMenu,closeMenus,toggleDropdown,getVarKind,scanVars,splitTop,parseOpts,boolDef,setBool,toggleBool,makeBool,makePlainOpt,makeInlineOpt,makeMultiOpt,makeOpt,makeVar,buildSpiel,composeSpiel,
   fmtDate,caretOff,setCaret,selectAllIn,commitVar,finishVar,insertIntoVar,pasteIntoVar,onVarInput,writeClipboard,fallbackCopy,copyText,showToast,autosize,insertVar,
   fmtPolicy,fmtEff,fieldIdx,chatFill,chatSet,inkFor,applyColors,showUndo,paintUndo].map(f=>f.toString()).join('\n');
- const embed={sig:docSig(),opening:(()=>{try{return openingText()}catch(e){return''}})(),data:docBundle()};
+ const embed={sig:docSig()+'~s2',opening:(()=>{try{return openingText()}catch(e){return''}})(),data:docBundle()};
  const js=consts+'\n'+fns+'\n'+DS_JS.replace('/*EMBED_START*/null/*EMBED_END*/',()=>'/*EMBED_START*/'+JSON.stringify(embed).replace(/</g,'\\u003c')+'/*EMBED_END*/');
  return '<!DOCTYPE html>\n<html lang="en" class="'+cls+'" style="'+escAttr(sty)+'"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Documentation</title><style>'+css+'\n'+DS_CSS+'</style></head><body>'+DS_BODY+'<scr'+'ipt id="ds-main">'+js+'</scr'+'ipt></body></html>'}
 load();applyTheme();applySiteName(true);renderAll();setEdit(false,true);$('ws').addEventListener('pointerdown',layoutDown);
@@ -4497,6 +4727,7 @@ const CFG={apiKey:"AIzaSyDxEgrANR-Ccbz58hx3JzhLX-rcp2Soe2I",authDomain:"ataraxia
 const FB='https://www.gstatic.com/firebasejs/10.14.1/';
 const DEV=Math.random().toString(36).slice(2,10);
 const BLANK=()=>({books:[],chapters:[],pages:[],containers:[],settings:{}});
+const srv=()=>Date.now()+(window.__srvSkew||0);/* server time: a device with a wrong clock can no longer win or lose a sync */
 const rd=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
 const wr=(k,v)=>{try{localStorage.setItem(k,v);return true}catch(e){return false}};
 const rm=k=>{try{localStorage.removeItem(k)}catch(e){}};
@@ -4506,7 +4737,7 @@ const mail=u=>u+'@ataraxia.app';
 const normUser=s=>{s=s.trim().toLowerCase();return /^[a-z0-9_-]{3,24}$/.test(s)?s:''};
 const pwCheck=(p,p2)=>p.length<4?'Password must be at least 4 characters':p!==p2?"Passwords don't match":'';
 let invKey='',pend=null,AU=null,DB=null,auth=null,db=null,uid=null,entered=null,name='',mode='login',purpose='signup',busy=false,manual=false,fresh=null,timer=0,offline=false,syncTxt='',softLock=false;
-let pushT=0,edits=0,lastSeen=0,pendV=null,applying=false,unsub=null,fsT=0;
+let pushT=0,edits=0,lastSeen=0,pendV=null,applying=false,unsub=null;
 
 /* ---------- crypto: the Firebase password is derived from the real one, and a copy is sealed with the master key so it can be reset ---------- */
 const te=new TextEncoder();
@@ -4598,13 +4829,20 @@ function paintInd(){let t='';/* sync status now only surfaces as an error on the
  if(window.SmartScheduleManager)SmartScheduleManager.syncNote(t)}
 function paintAcct(){paintInd();G('acct-st').textContent=uid?'Signed in as '+name+'. '+syncTxt:offline?'Offline mode. Changes are saved on this device only.':'Not signed in.';G('logout').hidden=!uid;G('recov').hidden=!uid}
 function setSync(t){syncTxt=t;paintAcct()}
-function adopt(o){if(!validAppData(o))throw new Error('Invalid workspace data');applying=true;try{_undo.length=0;paintUndo();Object.keys(varVals).filter(id=>!chats.some(c=>c.pages.some(p=>p.id===id))).forEach(id=>delete varVals[id]);Object.keys(variantVals).forEach(id=>delete variantVals[id]);appClipboard=null;load(o);persistView();flushLocal();applyTheme();applySiteName(true);renderAll()}finally{applying=false}fsSoon()}
+function adopt(o,keep){if(!validAppData(o))throw new Error('Invalid workspace data');applying=true;try{
+ const sig=p=>JSON.stringify([p.variants&&p.variants.length?p.variants.map(v=>v.content):p.content,p.activeVariant||0]),was=new Map(appData.pages.map(p=>[p.id,sig(p)]));
+ if(!keep){_undo.length=0;paintUndo();appClipboard=null}
+ load(o);
+ const is=new Map(appData.pages.map(p=>[p.id,sig(p)])),gone=id=>!keep||!is.has(id)||was.get(id)!==is.get(id);/* from the cloud: only pages whose text changed lose what was typed into them */
+ Object.keys(varVals).filter(id=>!chats.some(c=>c.pages.some(p=>p.id===id))).forEach(id=>{if(gone(id))delete varVals[id]});
+ Object.keys(variantVals).forEach(id=>{if(gone(id))delete variantVals[id]});
+ persistView();flushLocal();applyTheme();applySiteName(true);renderAll()}finally{applying=false}}
 window.adoptData=adopt;
 function keepView(o){if(typeof appData!=='object'||!appData)return;const bs=o.books||[],cs=o.chapters||[],ab=appData.activeBookId,ac=appData.activeChapterId;
  if(!bs.some(b=>b.id===ab))return;o.activeBookId=ab;
  if(ac===TOOLS_ID||isDoc(ac)||cs.some(c=>c.id===ac&&c.bookId===ab))o.activeChapterId=ac;else{const f=cs.find(c=>c.bookId===ab);o.activeChapterId=f?f.id:''}}
-function apply(v){try{const o=JSON.parse(v.data);keepView(o);adopt(o)}catch(e){return}lastSeen=v.updatedAt||Date.now();rm(KD);if(typeof v.avatar==='string'){wr(KA,v.avatar);paint()}}
-async function push(){clearTimeout(pushT);if(!uid)return;const at=edits,ts=Date.now();lastSeen=ts;setSync('Syncing…');
+function apply(v){try{const o=JSON.parse(v.data);keepView(o);adopt(o,true)}catch(e){return}lastSeen=v.updatedAt||srv();rm(KD);if(typeof v.avatar==='string'){wr(KA,v.avatar);paint()}}
+async function push(){clearTimeout(pushT);if(!uid)return;const at=edits,ts=srv();lastSeen=ts;setSync('Syncing…');
  try{await DB.update(uref(),{data:JSON.stringify(appData),updatedAt:ts,dev:DEV});if(edits===at)rm(KD);setSync('Synced')}
  catch(e){setSync('Could not sync yet. Will retry.');if(/PERMISSION/i.test((e.code||'')+(e.message||'')))toast('Sync was blocked by your Firebase database rules.');pushT=setTimeout(push,15000)}}
 async function reconcile(){const v=(await DB.get(uref())).val()||{};
@@ -4620,10 +4858,9 @@ function lockNow(){if(!uid||softLock)return;document.querySelectorAll('.ov.open'
 window.lockNow=lockNow;
 async function enter(user){if(entered===user.uid){unsoft();setLocked(false);return}entered=user.uid;
  uid=user.uid;name=(user.email||'').split('@')[0];wr(KS,'1');wr(KL,name);lastSeen=0;setSync('Syncing…');msg('Syncing…');
- try{await reconcile()}catch(e){setSync('Offline. Will sync when you are back online.')}
+ await skewInit();try{await reconcile()}catch(e){setSync('Offline. Will sync when you are back online.')}
  listen();brkListen();
- await fsInit().catch(()=>{});paint();paintAcct();setLocked(false);
- if(fsPending())toast('Auto-save to file is paused. Open Settings and press Reconnect.')}
+ paint();paintAcct();setLocked(false)}
 async function logout(){if(!uid)return;if(rd(KD)===uid)await push();
  if(rd(KD)===uid){toast('Your latest changes have not synced yet. Check your connection first.');return}
  try{await AU.signOut(auth)}catch(e){}
@@ -4644,42 +4881,19 @@ function brkHandle(r){const M=window.SmartScheduleManager;if(!M)return;const L=M
  if(+r.t>(L.t||0))M.applyRemote(r);
  else if((L.t||0)>+r.t&&r.dev!==DEV)M.pushState()}/* this device has a newer change the cloud missed (made offline) */
 let skewUnsub=null;
+function skewInit(){/* learn the server clock offset before the first compare (waits at most 2.5 s) */
+ return new Promise(res=>{let done=false;const fin=()=>{if(!done){done=true;res()}};setTimeout(fin,2500);
+  try{if(skewUnsub)skewUnsub();skewUnsub=DB.onValue(DB.ref(db,'.info/serverTimeOffset'),s=>{window.__srvSkew=+s.val()||0;fin()})}catch(e){fin()}})}
 function brkListen(){if(brkUnsub)brkUnsub();if(skewUnsub)skewUnsub();
  try{skewUnsub=DB.onValue(DB.ref(db,'.info/serverTimeOffset'),s=>{window.__srvSkew=+s.val()||0})}catch(e){}/* server clock minus this device's clock */
  brkUnsub=DB.onValue(brkRef(),s=>brkHandle(s.val()),brkFail)}
 function brkRefresh(){if(uid&&DB)DB.get(brkRef()).then(s=>brkHandle(s.val())).catch(()=>{})}/* when the phone wakes up or comes back online */
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)brkRefresh()});addEventListener('online',brkRefresh);
-window.onPersist=()=>{if(uid&&!applying){edits++;wr(KD,uid);setSync('Waiting to sync…');clearTimeout(pushT);pushT=setTimeout(push,1500)}fsSoon()};
+window.onPersist=()=>{if(uid&&!applying){edits++;wr(KD,uid);setSync('Waiting to sync…');clearTimeout(pushT);pushT=setTimeout(push,1500)}};
 addEventListener('beforeunload',e=>{if(uid&&rd(KD)===uid){e.preventDefault();e.returnValue=''}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&uid&&rd(KD)===uid)push()});
 addEventListener('online',()=>{if(uid&&rd(KD)===uid)push()});
 setInterval(()=>{if(pendV&&calm()&&rd(KD)!==uid){const v=pendV;pendV=null;apply(v)}},3000);
-
-/* ---------- auto-save to files on this computer (File System Access API, Chrome / Edge) ---------- */
-const FS={html:{},json:{}},FK=k=>(uid||'local')+':'+k;
-const idb=()=>new Promise((res,rej)=>{const r=indexedDB.open('ataraxia_fs',1);r.onupgradeneeded=()=>r.result.createObjectStore('h');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
-const hget=async k=>{const d=await idb();return new Promise(r=>{const q=d.transaction('h').objectStore('h').get(k);q.onsuccess=()=>r(q.result||null);q.onerror=()=>r(null)})};
-const hset=async(k,v)=>{const d=await idb();return new Promise(r=>{const t=d.transaction('h','readwrite');if(v)t.objectStore('h').put(v,k);else t.objectStore('h').delete(k);t.oncomplete=()=>r();t.onerror=()=>r()})};
-async function perm(h,ask){try{let p=await h.queryPermission({mode:'readwrite'});if(p!=='granted'&&ask)p=await h.requestPermission({mode:'readwrite'});return p==='granted'}catch(e){return false}}
-const fsPending=()=>['html','json'].some(k=>FS[k].h&&!FS[k].ok);
-function fsPaint(){const sup=!!window.showSaveFilePicker;
- ['html','json'].forEach(k=>{const f=FS[k],st=G('fs-'+k+'-st'),pk=G('fs-'+k+'-pick');
-  pk.disabled=!sup;pk.textContent=f.h?'Change file':'Choose file';G('fs-'+k+'-go').hidden=!(f.h&&!f.ok);G('fs-'+k+'-off').hidden=!f.h;
-  st.textContent=!sup?'Not supported in this browser. Use Chrome or Edge.':!f.h?'Not set':f.ok?'Auto-saving to '+f.h.name+(f.t?' (last saved '+new Date(f.t).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+')':''):f.h.name+' is paused. Press Reconnect.'})}
-async function fsInit(){if(window.showSaveFilePicker){for(const k of['html','json']){let h=null;try{h=await hget(FK(k))}catch(e){}FS[k]={h,ok:h?await perm(h,false):false}}
-  if(FS.html.ok){fileHandle=FS.html.h;handleName=fileName()+'.html'}}
- fsPaint()}
-async function fsWrite(k){const f=FS[k];if(!f.h||!f.ok)return;if(f.busy){f.again=true;return}f.busy=true;
- try{do{f.again=false;const w=await f.h.createWritable();await w.write(k==='html'?generateUpdatedHtmlString():backupJSON());await w.close();f.t=Date.now()}while(f.again)}
- catch(e){f.ok=false;toast('Auto-save paused. Press Reconnect in Settings.')}
- f.busy=false;fsPaint()}
-function fsSoon(){clearTimeout(fsT);fsT=setTimeout(()=>{fsWrite('html');fsWrite('json')},2500)}
-async function fsPick(k){const isH=k==='html',h=await showSaveFilePicker({suggestedName:fileName()+(isH?'.html':'_backup.json'),types:[isH?{description:'HTML file',accept:{'text/html':['.html']}}:{description:'JSON backup',accept:{'application/json':['.json']}}]});
- FS[k]={h,ok:true};await hset(FK(k),h);if(isH){fileHandle=h;handleName=fileName()+'.html'}await fsWrite(k);fsPaint()}
-['html','json'].forEach(k=>{
- G('fs-'+k+'-pick').onclick=()=>{fsPick(k).catch(e=>{if(e&&e.name!=='AbortError')toast('Could not use that file.')})};
- G('fs-'+k+'-go').onclick=async()=>{const f=FS[k];if(f.h&&await perm(f.h,true)){f.ok=true;await fsWrite(k)}else toast('Permission was not granted.');fsPaint()};
- G('fs-'+k+'-off').onclick=async()=>{FS[k]={};await hset(FK(k),null);fsPaint()}});
 
 /* ---------- wiring ---------- */
 window.lockClean=c=>{c.classList.remove('unlocked');c.querySelectorAll('[inert]').forEach(n=>n.removeAttribute('inert'));
@@ -4687,7 +4901,7 @@ window.lockClean=c=>{c.classList.remove('unlocked');c.querySelectorAll('[inert]'
  const k=c.querySelector('#lk-card');if(k){k.dataset.m='login';k.classList.remove('err','busy','soft')}
  const m=c.querySelector('#lk-msg');if(m){m.textContent='';m.className='lk-msg'}
   const cb=c.querySelector('#lk-codebox');if(cb)cb.textContent='';
- ['acct-st','fs-html-st','fs-json-st'].forEach(id=>{const n=c.querySelector('#'+id);if(n)n.textContent=''});
+ ['acct-st'].forEach(id=>{const n=c.querySelector('#'+id);if(n)n.textContent=''});
  c.querySelectorAll('#lk-card input').forEach(n=>{n.removeAttribute('value');n.removeAttribute('checked')})};
 G('lk-card').addEventListener('submit',attempt);
 G('lk-copy').onclick=()=>{const t=G('lk-codebox').textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>msg('Copied.')).catch(()=>msg('Select the code and copy it by hand.',true))};
@@ -4698,7 +4912,7 @@ G('recov').onclick=async()=>{if(!uid||!auth.currentUser)return;
 G('lk-card').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;unsoft();const[m,p]=b.dataset.go.split(':');setMode(m,p)});
 G('lk-switch').onclick = () => {unsoft();G('lk-user').value = '';setMode('login');};
 G('lk-user').addEventListener('input',paint);
-G('lk-off').onclick=async()=>{await fsInit().catch(()=>{});paintAcct();setLocked(false)};
+G('lk-off').onclick=()=>{paintAcct();setLocked(false)};
 G('av-up').onclick=()=>G('av-file').click();
 G('av-file').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
  try{await saveAvatar(await fit(f));toast('Profile picture updated.')}catch(x){toast('That file could not be read as an image.')}};
@@ -4706,7 +4920,7 @@ G('av-rm').onclick=async()=>{await saveAvatar('');toast('Profile picture removed
 G('set-lock').onclick=()=>{closeModal('settings-modal');lockNow()};
 G('logout').onclick=()=>{if(typeof closeModal==='function')closeModal('settings-modal');logout()};
 
-G('lk-stay').checked=rd(KP)==='1';setMode(rd(KS)?'login':'key','signup');setLocked(true);paintAcct();fsPaint();
+G('lk-stay').checked=rd(KP)==='1';setMode(rd(KS)?'login':'key','signup');setLocked(true);paintAcct();
 (async()=>{
  try{const[fa,au,dbm]=await Promise.all([import(FB+'firebase-app.js'),import(FB+'firebase-auth.js'),import(FB+'firebase-database.js')]);
   const app=fa.initializeApp(CFG);AU=au;DB=dbm;auth=au.getAuth(app);db=dbm.getDatabase(app)}
@@ -5110,6 +5324,12 @@ box.addEventListener('keydown',e=>{if(!e.altKey||(e.key!=='ArrowLeft'&&e.key!=='
  const tab=e.target.closest('.tab');if(!tab)return;e.preventDefault();
  const id=tab.dataset.id;if(moveBookTo(id,bookIdx(id)+(e.key==='ArrowLeft'?-1:1))){const n=box.querySelector('.tab[data-id="'+id+'"]');if(n)n.focus()}});
 })();
+</script>
+<script id="settings-acc-script">
+/* Settings sections remember whether you left them open (this device only) */
+(function(){const K='ataraxia_set_open';let m={};try{m=JSON.parse(localStorage.getItem(K)||'{}')||{}}catch(e){}
+document.querySelectorAll('#settings-modal details.acc').forEach(d=>{const k=d.dataset.k;if(k in m)d.open=!!m[k];
+ d.addEventListener('toggle',()=>{m[k]=d.open;try{localStorage.setItem(K,JSON.stringify(m))}catch(e){}})})})();
 </script>
 <script id="perf-script">
 (function(){const K='ataraxia_perf',root=document.documentElement,L=document.getElementById('perf-lite'),F=document.getElementById('perf-flat');let q={};
