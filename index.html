@@ -487,6 +487,25 @@ html.unlocked #lock{opacity:0;visibility:hidden;pointer-events:none;transform:sc
 .widget-ui .cs-btns .btn{width:44px;height:34px;padding:0;font-size:19px;line-height:1}
 .widget-ui .cs-plan{font-size:13px;line-height:1.45;color:var(--mut)}
 .widget-ui input[readonly].w-input{opacity:.8;cursor:default}
+/* Calculator widget (iPhone-style) + history lists */
+.widget-ui.kc{outline:none}
+.widget-ui .kc-disp{background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:10px 16px 12px;text-align:right;display:flex;flex-direction:column;justify-content:flex-end;min-height:88px;overflow:hidden}
+.widget-ui .kc-ex{font-size:12.5px;color:var(--mut);min-height:18px;overflow-wrap:anywhere;line-height:1.3;max-height:34px;overflow:hidden}
+.widget-ui .kc-n{font-size:44px;font-weight:300;line-height:1.15;font-variant-numeric:tabular-nums;color:var(--txt);white-space:nowrap;overflow:hidden}
+.widget-ui .kc-pad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.widget-ui .kc-k{height:48px;border-radius:999px;border:1px solid var(--line);font-size:20px;font-weight:500;cursor:pointer;background:var(--surf);color:var(--txt);transition:filter .12s,transform .06s;padding:0;font-family:inherit}
+.widget-ui .kc-k:active{transform:scale(.96);filter:brightness(.92)}
+.widget-ui .kc-k.fn{background:var(--pc);color:var(--on-pc);border-color:transparent}
+.widget-ui .kc-k.op{background:var(--p);color:var(--on-p);border-color:transparent;font-size:24px}
+.widget-ui .kc-k.op.on{background:var(--on-p);color:var(--p);box-shadow:inset 0 0 0 2px var(--p)}
+.widget-ui .kc-k.zero{grid-column:span 2;text-align:left;padding-left:22px}
+.widget-ui .kc-hist,.widget-ui .qf-hist{max-height:190px;overflow-y:auto;padding-right:2px}
+.widget-ui .kc-h,.widget-ui .qf-h{gap:6px;cursor:pointer}
+.widget-ui .kc-h>span{flex:1;min-width:0;overflow-wrap:anywhere}
+.widget-ui .kc-h .ib,.widget-ui .qf-h .ib{flex:none}
+.widget-ui .qf-h .qf-t{flex:none;white-space:nowrap;font-size:12px}
+.widget-ui .qf-h b.qf-p{flex:1;min-width:0;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.widget-ui .kc-h:focus-visible,.widget-ui .qf-h:focus-visible{outline:2px solid var(--p);outline-offset:1px}
 /* Documentation chats: scratch pad in the lower third of every chat */
 .chat-pad{flex:0 0 30%;min-height:132px;display:flex;flex-direction:column;border-top:1px solid var(--line)}
 .chat-pad.min{flex:none;min-height:0}
@@ -1087,7 +1106,7 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
   <details open><summary>Books, chapters, pages</summary><p>Top tabs are <b>books</b>. The left list holds the book's <b>chapters</b>. A chapter holds <b>pages</b> (one spiel each) and <b>boards</b> (boxes that group pages). Use <b>+ Book</b>, <b>+ Chapter</b>, <b>+ Add</b>, <b>+ Board</b>. Drag a chapter's grip to reorder, drag a book tab to reorder.</p><p>Copy a page with its copy button, by double-clicking it (when it has no variables), <kbd>Ctrl</kbd>+<kbd>C</kbd> on a focused page, or <kbd>Enter</kbd> inside a variable. Right-click (or press and hold on touch) a page, board, chapter, book or empty space for copy / duplicate / paste / delete.</p></details>
   <details><summary>Variables and variants</summary><ul><li><b>XXX</b> any text. <b>XX/XX/XXXX</b> date (slashes added as you type). <b>$XXX</b> amount.</li><li><b>[00 0000 000]</b> number that formats itself.</li><li><b>[Yes]</b> / <b>[No]</b> click to flip.</li><li><b>[A|B|C]</b> pick one. <b>[N/A|[XXX]]</b> gives N/A or lets you type your own.</li><li><kbd>Enter</kbd> jumps to the next variable; <kbd>Enter</kbd> on the last one copies the page.</li><li><b>Variants</b>: a page can hold several versions. Add them with the numbered tabs in the page editor, then click the page title to switch.</li></ul></details>
   <details><summary>Move mode, boards, zoom</summary><p>The cross-arrows button turns on move mode: drag pages and boards, drag their edges to resize, drop a page onto a board. <b>Snapping</b> keeps a fixed gap and grows boards to fit. Press <b>Save</b> to keep the layout; turning move mode off without Save discards it. The slider at the bottom right zooms the chapter.</p></details>
-  <details><summary>Tools</summary><ul><li><b>Time Calculator</b>: 12:01 AM effective-date rule, US to PH time.</li><li><b>Quote Formatter</b>: cleans a pasted quote and copies it; the new premium goes to your last-used chat.</li><li><b>Schedule Import</b>: paste the weekly schedule, get a clean PH-time view that also feeds the island.</li><li><b>Daily Summary</b>: CSAT calculator, average handling time, monthly archive.</li><li><b>Scratch Pad</b> and <b>Image</b> widgets. Download icon saves Quote Formatter + CSAT as one HTML file.</li></ul></details>
+  <details><summary>Tools</summary><ul><li><b>Time Calculator</b>: 12:01 AM effective-date rule, US to PH time.</li><li><b>Calculator</b>: a simple phone-style calculator. Every result is kept in its history: tap one to reuse it.</li><li><b>Quote Formatter</b>: cleans a pasted quote and copies it; the new premium goes to your last-used chat. Its history keeps your last 30 quotes.</li><li><b>Schedule Import</b>: paste the weekly schedule, get a clean PH-time view that also feeds the island.</li><li><b>Daily Summary</b>: CSAT calculator, average handling time, monthly archive.</li><li><b>Scratch Pad</b> and <b>Image</b> widgets. Download icon saves Quote Formatter + CSAT as one HTML file.</li></ul></details>
   <details><summary>Documentation</summary><p><b>Chats</b>: up to 3 customers at once. Type the customer name, search a template, and its Name / Updated Premium fields fill in. Each chat has a scratch pad; clearing or closing a chat can be undone. <b>Notations</b> and <b>What if</b> hold the templates (edit them like any page). The download icon makes a stand-alone Documentation HTML file you can open anywhere. In it you can add your own categories and sections, and pick a message to copy when you clear or close a chat.</p></details>
   <details><summary>The island (bottom right)</summary><p>Live PH clock. Dots = break, lunch, break. <b>Start shift</b> in its panel, then it warns before breaks (yellow), alerts when due, counts your break and flags overbreak (red). <b>Upcoming</b> shows imported days. <b>Other Tag</b> logs custom time away. <b>Automatic tagging</b> and chat tracker are in Settings. The <b>+</b> tab under it starts a new chat and copies your opening spiel. Drag it anywhere.</p></details>
   <details><summary>Search and keybinds</summary><ul><li><kbd>/</kbd> opens global search across every book. Type <b>doc vehicle</b> to drop a template straight into a chat.</li><li>Page keybind: set it in the page editor.</li><li>New chat keybind and the 1 / 2 / 3 jump keys for Workspace, Tools, Documentation: Settings &gt; General.</li></ul></details>
@@ -1260,6 +1279,10 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
       <svg viewBox="0 0 24 24"><path d="M19 5L5 19"></path><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
       <b>Daily Summary</b><p>CSAT calculator, average handling time and a monthly archive</p>
     </div>
+    <div class="feat-thumb" onclick="addWidget('calculator')">
+      <svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"></rect><path d="M8 6h8M8 11h2M14 11h2M8 15h2M14 15h2M8 19h2M14 19h2"></path></svg>
+      <b>Calculator</b><p>A simple phone-style calculator with history</p>
+    </div>
     <div class="feat-thumb" onclick="addWidget('scratchpad')">
       <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>
       <b>Scratch Pad</b><p>Quick notes you can clear in one click</p>
@@ -1431,7 +1454,7 @@ const GRID=8;/* px per grid unit. Positions and sizes are stored in grid units *
 /* Tools: one fixed chapter, shared by every book, that only holds widgets. It is never in appData.chapters, so it cannot be renamed, copied or deleted */
 const TOOLS_ID='__tools__';
 const TOOLS_CHAP={id:TOOLS_ID,bookId:null,name:'Tools',description:'Your widgets in one place. Move, resize or remove them, and add more with + Add.'};
-const WIDGET_DEFS={calc:{title:'Time Calculator',w:45},schedule:{title:'Smart Schedule',w:36},formatter:{title:'Quote Formatter',w:55,h:48},scheduleimport:{title:'Schedule Import',w:60},image:{title:'Image',w:40},csat:{title:'Daily Summary',w:60},scratchpad:{title:'Scratch Pad',w:40,h:32}};
+const WIDGET_DEFS={calc:{title:'Time Calculator',w:45},schedule:{title:'Smart Schedule',w:36},formatter:{title:'Quote Formatter',w:55,h:62},scheduleimport:{title:'Schedule Import',w:60},image:{title:'Image',w:40},csat:{title:'Daily Summary',w:60},scratchpad:{title:'Scratch Pad',w:40,h:32},calculator:{title:'Calculator',w:36}};
 const DEFAULT_TOOLS=['calc','formatter','scheduleimport'];
 function newWidgetPage(type,chapterId){const d=WIDGET_DEFS[type]||{title:'Widget',w:45};
  return {id:'p_'+rid(),chapterId:chapterId,containerId:'',title:d.title,content:'',isWidget:true,widgetType:type,w:d.w,h:d.h}}
@@ -2253,7 +2276,7 @@ function buildImageCard(p){
 
 /* ---------- widgets: calculator, smart schedule, quote formatter ---------- */
 const escAttr = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
-const WIDGET_KEYS = ['isWidget', 'widgetType', 'calcMode', 'scheduleSettings', 'importData', 'aspect', 'csat', 'scratch'];
+const WIDGET_KEYS = ['isWidget', 'widgetType', 'calcMode', 'scheduleSettings', 'importData', 'aspect', 'csat', 'scratch', 'calcHistory', 'qfHistory'];
 function applyVariantImage(p,vi){/* a page's own image field always mirrors the variant on show */
  const im=p.variants&&p.variants[vi]?pageImageProps(p.variants[vi]).image:null;if(im)p.image=im;else delete p.image}
 function syncVariantImage(p){/* older pages kept one image for the whole page: hand it to every variant once, then follow the active variant */
@@ -2544,18 +2567,49 @@ function buildScheduleWidget(ui, p) {
 }
 
 function buildFormatterWidget(ui, p) {
+  const H = p.qfHistory = Array.isArray(p.qfHistory) ? p.qfHistory : [];
+  const OPEN = window.qfOpen || (window.qfOpen = {}); if (OPEN[p.id] === undefined) OPEN[p.id] = true;
   ui.innerHTML = '<textarea class="w-input w-in" placeholder="Paste raw messy quote here..." spellcheck="false"></textarea>' +
     '<textarea class="w-input w-out" placeholder="Cleaned output..." readonly></textarea>' +
-    '<button type="button" class="btn fill sm block w-go">Clean &amp; copy</button>';
-  const inp = ui.querySelector('.w-in'), out = ui.querySelector('.w-out');
+    '<button type="button" class="btn fill sm block w-go">Clean &amp; copy</button>' +
+    '<div class="si-bar"><button type="button" class="btn out xs qf-tog" aria-expanded="true"></button><button type="button" class="btn out xs qf-clr">' + ic('trash') + '<span>Clear</span></button></div>' +
+    '<div class="w-list qf-hist"></div>';
+  const inp = ui.querySelector('.w-in'), out = ui.querySelector('.w-out'), box = ui.querySelector('.qf-hist'), tog = ui.querySelector('.qf-tog'), clr = ui.querySelector('.qf-clr');
   let lastPrem = '';
+  const when = t => new Date(t).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  const draw = () => { /* history: newest first, kept with the workspace */
+    const open = OPEN[p.id];
+    tog.textContent = (open ? 'Hide history' : 'Show history') + ' (' + H.length + ')'; tog.setAttribute('aria-expanded', open ? 'true' : 'false');
+    clr.style.display = open && H.length ? '' : 'none'; box.style.display = open ? '' : 'none';
+    if (!open) return;
+    box.innerHTML = H.length ? H.map((x, i) => { const pr = quotePremium(x.o), first = (x.o.split('\n').find(l => l.trim()) || '').trim();
+      return '<div class="w-time qf-h" data-i="' + i + '" tabindex="0" role="button" title="' + escAttr(x.o) + '"><span class="qf-t">' + escAttr(when(x.t)) + '</span><b class="qf-p">' + escAttr((pr ? pr + ' \u00b7 ' : '') + first) + '</b>' +
+        '<button type="button" class="ib sm qf-cp" title="Copy this quote" aria-label="Copy this quote">' + ic('copy') + '</button><button type="button" class="ib sm qf-rm" title="Remove from history" aria-label="Remove from history">' + ic('trash') + '</button></div>'; }).join('')
+      : '<div class="si-none">Quotes you clean or paste will show up here.</div>';
+    box.querySelectorAll('.qf-h').forEach(r => {
+      const x = H[+r.dataset.i];
+      const load = () => { inp.value = x.o; out.value = x.o; lastPrem = quotePremium(x.o); showToast('Quote loaded from history.'); };
+      r.onclick = e => { if (!e.target.closest('.ib')) load(); };
+      r.onkeydown = e => { if ((e.key === 'Enter' || e.key === ' ') && e.target === r) { e.preventDefault(); load(); } };
+      r.querySelector('.qf-cp').onclick = () => copyText(x.o, 'Copied from history.');
+      r.querySelector('.qf-rm').onclick = () => { const old = H.slice(); H.splice(+r.dataset.i, 1); persistLocal(); draw();
+        showUndo('Removed from quote history', () => { if (!appData.pages.includes(p)) return false; p.qfHistory = old; persistLocal(); refreshCard(p.id); }); };
+    });
+  };
+  const record = o => { o = String(o || '').trim(); if (!o) return; const k = H.findIndex(x => x.o === o); if (k >= 0) H.splice(k, 1); H.unshift({ o, t: Date.now() }); if (H.length > 30) H.length = 30; persistLocal(); draw(); };
+  tog.onclick = () => { OPEN[p.id] = !OPEN[p.id]; draw(); };
+  clr.onclick = () => { if (!H.length) return; const old = H.slice(); H.length = 0; persistLocal(); draw();
+    showUndo('Quote history cleared', () => { if (!appData.pages.includes(p)) return false; p.qfHistory = old; persistLocal(); refreshCard(p.id); }); };
   inp.addEventListener('input', () => { out.value = cleanQuote(inp.value); const pr = quotePremium(out.value); if (pr && pr !== lastPrem) quotePremiumToChat(pr); lastPrem = pr; });
+  inp.addEventListener('paste', () => setTimeout(() => { out.value = cleanQuote(inp.value); record(out.value); }, 0)); /* a pasted quote is saved right away */
   ui.querySelector('.w-go').onclick = () => {
     out.value = cleanQuote(inp.value);
     if (!out.value) { showToast('Paste a quote first.'); return; }
     const pr = quotePremium(out.value); if (pr) quotePremiumToChat(pr); lastPrem = pr;
+    record(out.value);
     copyText(out.value, 'Cleaned & copied to clipboard!');
   };
+  draw();
 }
 
 /* ---------- Schedule Import widget ----------
@@ -2769,6 +2823,71 @@ function buildCsatWidget(ui,p){
   showUndo('CSAT counts reset',()=>{if(!appData.pages.includes(p))return false;p.csat.total=o.total;p.csat.good=o.good;persistLocal();refreshCard(p.id)})};
  aht();paint()}
 
+/* ---------- Calculator widget: phone-style keypad with a history ---------- */
+function buildCalculatorWidget(ui,p){
+ const SS=window.kcState||(window.kcState={}),S=SS[p.id]||(SS[p.id]={cur:'0',acc:null,op:null,expr:'',fresh:true,pend:false,eq:false,last:null,err:false});/* the sum in progress survives a redraw */
+ const H=p.calcHistory=Array.isArray(p.calcHistory)?p.calcHistory:[];
+ const SYM={'+':'+','-':'\u2212','*':'\u00d7','/':'\u00f7'};
+ const KEYS=[['ac','AC','fn'],['neg','\u00b1','fn'],['pct','%','fn'],['/','\u00f7','op'],['7','7'],['8','8'],['9','9'],['*','\u00d7','op'],['4','4'],['5','5'],['6','6'],['-','\u2212','op'],['1','1'],['2','2'],['3','3'],['+','+','op'],['0','0','zero'],['.','.'],['=','=','op']];
+ ui.classList.add('kc');ui.tabIndex=0;
+ ui.innerHTML='<div class="kc-disp" aria-live="polite"><div class="kc-ex"></div><div class="kc-n">0</div></div>'+
+  '<div class="kc-pad">'+KEYS.map(k=>'<button type="button" class="kc-k'+(k[2]?' '+k[2]:'')+'" data-k="'+k[0]+'">'+k[1]+'</button>').join('')+'</div>'+
+  '<div class="si-bar"><div class="w-label">History</div><button type="button" class="btn out xs kc-clr">'+ic('trash')+'<span>Clear</span></button></div>'+
+  '<div class="w-list kc-hist"></div>';
+ const q=s=>ui.querySelector(s),nEl=q('.kc-n'),eEl=q('.kc-ex'),acB=q('[data-k="ac"]');
+ const fmtN=n=>isFinite(n)?String(+n.toPrecision(12)):'Error';
+ const num=s=>parseFloat(s);
+ const disp=s=>{if(s==='Error'||/e/.test(s))return s;const neg=s[0]==='-',t=neg?s.slice(1):s,i=t.indexOf('.'),a=i<0?t:t.slice(0,i),b=i<0?'':t.slice(i);return(neg?'-':'')+a.replace(/\B(?=(\d{3})+(?!\d))/g,',')+b};
+ const apply=(a,o,b)=>o==='+'?a+b:o==='-'?a-b:o==='*'?a*b:b===0?NaN:a/b;
+ const reset=()=>Object.assign(S,{cur:'0',acc:null,op:null,expr:'',fresh:true,pend:false,eq:false,last:null,err:false});
+ function paint(){const t=disp(S.cur),L=t.length;nEl.textContent=t;eEl.textContent=S.expr;eEl.title=S.expr;
+  nEl.style.fontSize=L>15?'22px':L>12?'28px':L>9?'34px':'44px';
+  acB.textContent=!S.fresh&&S.cur!=='0'&&!S.err?'C':'AC';
+  ui.querySelectorAll('.kc-k.op').forEach(b=>b.classList.toggle('on',!!S.op&&S.pend&&b.dataset.k===S.op))}
+ function fail(){reset();S.err=true;S.cur='Error';paint()}
+ function digit(d){if(S.err||S.eq)reset();
+  if(S.fresh){S.cur=d;S.fresh=false;S.pend=false}else if(S.cur.replace(/[-.]/g,'').length<12)S.cur=S.cur==='0'?d:S.cur==='-0'?'-'+d:S.cur+d;paint()}
+ function dot(){if(S.err||S.eq)reset();if(S.fresh){S.cur='0.';S.fresh=false;S.pend=false}else if(!S.cur.includes('.'))S.cur+='.';paint()}
+ function neg(){if(S.err)return;if(S.cur==='0'&&S.fresh){S.cur='-0';S.fresh=false;S.pend=false}else S.cur=S.cur[0]==='-'?S.cur.slice(1):'-'+S.cur;paint()}
+ function pct(){if(S.err)return;const v=num(S.cur);S.cur=fmtN(S.op&&S.acc!=null&&(S.op==='+'||S.op==='-')?S.acc*v/100:v/100);S.fresh=true;S.pend=false;paint()}
+ function setOp(o){if(S.err)return;
+  if(S.eq){S.acc=num(S.cur);S.expr=disp(fmtN(S.acc))+' '+SYM[o];S.op=o;S.eq=false;S.pend=true;S.fresh=true;S.last=null;paint();return}/* carry on from the result */
+  if(S.op&&S.pend){S.op=o;S.expr=S.expr.slice(0,-1)+SYM[o];paint();return}/* changed my mind about the operator */
+  const v=num(S.cur);
+  if(S.op){const r=apply(S.acc,S.op,v);if(!isFinite(r)){fail();return}S.expr+=' '+disp(fmtN(v))+' '+SYM[o];S.acc=r;S.cur=fmtN(r)}
+  else{S.acc=v;S.expr=disp(fmtN(v))+' '+SYM[o]}
+  S.op=o;S.pend=true;S.fresh=true;paint()}
+ function equals(){if(S.err)return;let a,o,b,full;
+  if(S.op){a=S.acc;o=S.op;b=num(S.cur);full=S.expr+' '+disp(fmtN(b))}
+  else if(S.last){a=num(S.cur);o=S.last.o;b=S.last.b;full=disp(fmtN(a))+' '+SYM[o]+' '+disp(fmtN(b))}/* pressing = again repeats the last step */
+  else return;
+  const r=apply(a,o,b);if(!isFinite(r)){fail();return}
+  const res=fmtN(r);S.last={o,b};addHist(full,res);
+  S.cur=res;S.acc=null;S.op=null;S.pend=false;S.fresh=true;S.eq=true;S.expr=full+' =';paint()}
+ function clr(){if(!S.fresh&&S.cur!=='0'&&!S.err){S.cur='0';S.fresh=true;paint()}else{reset();paint()}}
+ function back(){if(S.fresh||S.err||S.eq)return;S.cur=S.cur.length>1&&!(S.cur.length===2&&S.cur[0]==='-')?S.cur.slice(0,-1):'0';if(S.cur==='0')S.fresh=true;paint()}
+ function addHist(e,r){H.unshift({e,r,t:Date.now()});if(H.length>100)H.length=100;persistLocal();drawHist()}
+ function drawHist(){const box=q('.kc-hist');
+  box.innerHTML=H.length?H.map((x,i)=>'<div class="w-time kc-h" data-i="'+i+'" tabindex="0" role="button" title="Tap to use this result"><span>'+escAttr(x.e)+' =</span><b>'+escAttr(disp(x.r))+'</b>'+
+   '<button type="button" class="ib sm kc-cp" title="Copy result" aria-label="Copy result">'+ic('copy')+'</button><button type="button" class="ib sm kc-rm" title="Remove from history" aria-label="Remove from history">'+ic('trash')+'</button></div>').join(''):'<div class="si-none">Your calculations will show up here.</div>';
+  box.querySelectorAll('.kc-h').forEach(r=>{const i=+r.dataset.i,x=H[i];
+   const use=()=>{reset();S.cur=x.r;paint()};
+   r.onclick=e=>{if(!e.target.closest('.ib'))use()};
+   r.onkeydown=e=>{if((e.key==='Enter'||e.key===' ')&&e.target===r){e.preventDefault();use()}};
+   r.querySelector('.kc-cp').onclick=()=>copyText(x.r,'Copied '+disp(x.r));
+   r.querySelector('.kc-rm').onclick=()=>{const old=H.slice();H.splice(i,1);persistLocal();drawHist();
+    showUndo('Removed from calculator history',()=>{if(!appData.pages.includes(p))return false;p.calcHistory=old;persistLocal();refreshCard(p.id)})}})}
+ q('.kc-clr').onclick=()=>{if(!H.length){showToast('The history is already empty.');return}const old=H.slice();H.length=0;persistLocal();drawHist();
+  showUndo('Calculator history cleared',()=>{if(!appData.pages.includes(p))return false;p.calcHistory=old;persistLocal();refreshCard(p.id)})};
+ const act=k=>{if(/^\d$/.test(k))digit(k);else if(k==='.')dot();else if(k==='ac')clr();else if(k==='neg')neg();else if(k==='pct')pct();else if(k==='=')equals();else setOp(k)};
+ ui.querySelectorAll('.kc-k').forEach(b=>b.onclick=()=>{act(b.dataset.k);ui.focus({preventScroll:true})});
+ ui.addEventListener('keydown',e=>{/* the keyboard works while the calculator has focus */
+  if(e.ctrlKey||e.metaKey||e.altKey||e.target.closest('.kc-hist,.kc-clr'))return;const k=e.key;let h=true;
+  if(/^\d$/.test(k))digit(k);else if(k==='.'||k===',')dot();else if(k==='+'||k==='-'||k==='*'||k==='/')setOp(k);else if(k==='x'||k==='X')setOp('*');
+  else if(k==='Enter'||k==='=')equals();else if(k==='%')pct();else if(k==='Backspace')back();else if(k==='Delete'||k==='c'||k==='C')clr();else h=false;
+  if(h){e.preventDefault();e.stopPropagation()}});
+ paint();drawHist()}
+
 /* ---------- Scratch Pad widget ---------- */
 function buildScratchWidget(ui,p){
  ui.innerHTML='<textarea class="w-input w-pad" placeholder="Jot anything here..." spellcheck="false" aria-label="Scratch pad"></textarea>'+
@@ -2838,7 +2957,7 @@ function renderWidgetUI(box, p) {
   if (window.widgetIntervals[p.id]) { clearInterval(window.widgetIntervals[p.id]); delete window.widgetIntervals[p.id]; }
   box.innerHTML = '';
   const ui = el('div', 'widget-ui');
-  const build = { calc: buildCalcWidget, schedule: buildScheduleWidget, formatter: buildFormatterWidget, scheduleimport: buildScheduleImportWidget, csat: buildCsatWidget, scratchpad: buildScratchWidget }[p.widgetType];
+  const build = { calc: buildCalcWidget, schedule: buildScheduleWidget, formatter: buildFormatterWidget, scheduleimport: buildScheduleImportWidget, csat: buildCsatWidget, scratchpad: buildScratchWidget, calculator: buildCalculatorWidget }[p.widgetType];
   if (build) build(ui, p); else ui.textContent = 'Unknown widget.';
   box.append(ui);
 }
