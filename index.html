@@ -250,6 +250,7 @@ body.edit .rz{display:block}
 .cp-c .var[data-ph="XXX"],.cp-c .var[data-ph="XXX/NA"],.cp-c .var[data-k="amt"]:not([data-optdef]),.cp-c .var[data-k="fmt"]:not([data-optdef]){min-width:3.2em}
 .var[data-k="date"]:empty:before{content:"\00a0\00a0-\00a0\00a0-\00a0\00a0\00a0\00a0";white-space:pre}
 .var[data-na]:empty:before{content:"N/A";opacity:.4;font-weight:400}
+.na-on .cp-c .var:not(.filled):empty:before{content:"N/A";opacity:.4;font-weight:400}
 .cp-c .var{margin:3px 1px}.cp-c{line-height:1.9}
 .var:hover{background:var(--pc)}
 .var.filled,.var.optdefault{border-style:solid;background:var(--pc);color:var(--on-pc)}
@@ -1012,7 +1013,7 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
      </div>
      <div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="nav-key-reset">Reset to 1 / 2 / 3</button></div><p class="hint" id="nav-key-hint"></p></div>
    </div></details>
-   <details class="sec acc" data-k="copyfill"><summary><span class="acc-t">Empty variables when copying<small>What a variable left empty turns into in the copied text</small></span></summary><div class="acc-b">
+   <details class="sec acc" data-k="copyfill"><summary><span class="acc-t">Empty variables when copying<small>What an empty variable turns into when copied from Documentation</small></span></summary><div class="acc-b">
     <div class="seg" style="flex-direction:column;align-items:flex-start;gap:6px">
      <button type="button" class="snapsw" id="fill-na" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">N/A</span></button>
      <p class="hint" style="margin:0 0 8px">A variable left empty is copied as N/A. "Name: XXX" is copied as "Name: N/A".</p>
@@ -3521,14 +3522,14 @@ function makeVar(pid,i,tok){
 function buildSpiel(box,p){box.textContent='';const s=p.content||'';let last=0,i=0;
  for(const m of scanVars(s)){if(m.index>last)box.append(s.slice(last,m.index));{const bv=makeVar(p.id,i++,m.tok);if(m.w&&bv.dataset.k!=='bool'){bv.dataset.w=m.w;bv.style.minWidth=m.w+'em'}box.append(bv)}last=m.index+m.len}
  if(last<s.length)box.append(s.slice(last))}
-function unfilledText(k){return (appData.settings&&appData.settings.copyFill)==='na'?'N/A':k==='date'?'  -  -    ':'    '}
-function composeSpiel(p){const vals=varVals[p.id]||{},src=p.content||'';let i=0,blank=0,out='',last=0;
+function unfilledText(k,doc){return doc&&(appData.settings&&appData.settings.copyFill)==='na'?'N/A':k==='date'?'  -  -    ':'    '}
+function composeSpiel(p){const vals=varVals[p.id]||{},src=p.content||'';let i=0,blank=0,out='',last=0;const doc=String(p.id).indexOf('cp_')===0;/* N/A mode is for Documentation chats only */
  for(const m of scanVars(src)){out+=src.slice(last,m.index);last=m.index+m.len;
   const v=vals[i++],k=getVarKind(m.tok);let r;
   if(k==='bool')r=v||boolDef(m.tok);
   else if(k==='opt'){const o=parseOpts(m.tok);
-   if(v)r=v;else if(!o.length){blank++;r=unfilledText()}else if(!o[0].k)r=o[0].t;else{blank++;r=unfilledText()}}
-  else if(v)r=v;else if(m.tok==='XXX/NA')r='N/A';else{blank++;r=unfilledText(k)}
+   if(v)r=v;else if(!o.length){blank++;r=unfilledText(0,doc)}else if(!o[0].k)r=o[0].t;else{blank++;r=unfilledText(0,doc)}}
+  else if(v)r=v;else if(m.tok==='XXX/NA')r='N/A';else{blank++;r=unfilledText(k,doc)}
   out+=r}
  return{text:out+src.slice(last),blank}}
 function copyPage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;if(window.copyHit)return window.copyHit(p,nodes.get(id));/* same "Copied!" pop-up + highlight as Enter in a variable */const r=composeSpiel(p);
@@ -4149,7 +4150,7 @@ const DS_BODY=String.raw`<header class="dsa-h"><h1>Documentation</h1><button typ
   <section class="sec"><label>Accent color</label><div class="sw" id="set-sw"></div></section>
   <section class="sec"><label for="set-fs">Template text size</label><div style="display:flex;align-items:center;gap:10px"><input type="range" id="set-fs" min="12" max="20" step="1" style="flex:1;accent-color:var(--p)"><span id="set-fsv" class="hint" style="margin:0"></span></div></section>
   <section class="sec"><label for="set-zoom">Zoom</label><div style="display:flex;align-items:center;gap:10px"><input type="range" id="set-zoom" min="50" max="150" step="5" style="flex:1;accent-color:var(--p)"><span id="set-zoomv" class="hint" style="margin:0"></span></div></section>
-  <section class="sec"><label>Empty variables when copying</label><div class="seg" style="flex-direction:column;align-items:flex-start;gap:6px"><button type="button" class="snapsw" id="set-na" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">N/A</span></button><p class="hint" style="margin:0 0 8px">A variable left empty is copied as N/A ("Name: XXX" becomes "Name: N/A").</p><button type="button" class="snapsw on" id="set-bl" role="switch" aria-checked="true"><span class="tr"></span><span class="lbl">Blank</span></button><p class="hint" style="margin:0">A variable left empty is copied as blank spaces ("Name: XXX" becomes "Name:     ").</p></div></section>
+  <section class="sec"><label>Empty variables when copying</label><div class="seg" style="flex-direction:column;align-items:flex-start;gap:6px"><button type="button" class="snapsw" id="set-na" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">N/A</span></button><p class="hint" style="margin:0 0 8px">In Documentation, a variable left empty is copied as N/A ("Name: XXX" becomes "Name: N/A"), and empty bubbles show a faded N/A.</p><button type="button" class="snapsw on" id="set-bl" role="switch" aria-checked="true"><span class="tr"></span><span class="lbl">Blank</span></button><p class="hint" style="margin:0">A variable left empty is copied as blank spaces ("Name: XXX" becomes "Name:     ").</p></div></section>
   <section class="sec"><label for="set-key">Keybind: new chat</label><input type="text" id="set-key" readonly placeholder="Click here, then press your keys (e.g. Alt + N)" autocomplete="off"><div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="set-key-clear" hidden>Clear</button></div><p class="hint" id="set-key-hint"></p></section>
   <section class="sec"><label>Copy when clearing or closing a chat</label><div class="seg"><button type="button" class="snapsw" id="set-cc" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Copy this message</span></button></div><textarea id="set-cc-text" placeholder="The message to copy" spellcheck="false" aria-label="Message to copy when clearing or closing a chat" style="margin-top:10px"></textarea><div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="set-cc-reset">Use the opening message</button></div><p class="hint">Copied the first time you clear or close a chat that has something in it. The opening message starts with your name left blank: type it between "My name is" and the comma, or write anything you like.</p></section>
   <section class="sec"><label>Copy when opening a new chat</label><div class="seg"><button type="button" class="snapsw" id="set-nc" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Copy this message</span></button></div><textarea id="set-nc-text" placeholder="The message to copy" spellcheck="false" aria-label="Message to copy when a new chat is opened" style="margin-top:10px"></textarea><div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="set-nc-reset">Use the opening message</button></div><p class="hint">Copied every time a new chat opens, from the new chat keybind or + Chat. It is separate from the message above, so each can say something different. Nothing is copied when all 3 chats are already open.</p></section>
@@ -4468,7 +4469,7 @@ function applySet(){var r=document.documentElement,m=SET.mode;
  if(m==='app'){r.className=BASE.cls;r.setAttribute('style',BASE.sty)}
  else{r.className='';r.setAttribute('style','--h:'+(SET.hue==null?232:SET.hue)+';');r.classList.toggle('dark',m!=='light');r.classList.toggle('black',m==='black')}
  r.style.setProperty('--ds-fs',SET.fs+'px')}
-function paintSet(){var m=$('set-mode');m.textContent='';
+function paintSet(){document.documentElement.classList.toggle('na-on',!!SET.na);var m=$('set-mode');m.textContent='';
  [['app','Match app'],['light','Light'],['dark','Dark'],['black','Black']].forEach(function(x){var b=el('button',SET.mode===x[0]?'on':'');b.type='button';b.textContent=x[1];b.onclick=function(){SET.mode=x[0];saveSet();applySet();paintSet()};m.append(b)});
  var w=$('set-sw');w.textContent='';
  ACC.forEach(function(h){var b=el('button',SET.mode!=='app'&&SET.hue===h?'on':'');b.type='button';b.style.setProperty('--c',h);b.title='Accent color';b.setAttribute('aria-label','Accent color');
@@ -4507,6 +4508,7 @@ $('help-btn').onclick=function(){openModal('help-modal')};
 $('set-btn').onclick=function(){paintSet();openModal('set-modal')};
 $('set-close').onclick=function(){closeModal('set-modal')};
 $('set-reset').onclick=function(){SET={mode:'app',hue:null,fs:15,zoom:100,na:DEFNA,key:'',cc:{on:false,text:DEFCC},nc:{on:false,text:DEFNC}};saveSet();applySet();applyZoom();paintSet()};
+document.documentElement.classList.toggle('na-on',!!SET.na);
 $('set-na').onclick=function(){SET.na=!SET.na;saveSet();paintSet()};$('set-bl').onclick=function(){SET.na=false;saveSet();paintSet()};$('set-zoom').oninput=function(){setZoom(+this.value)};
 $('set-fs').oninput=function(){SET.fs=+this.value;saveSet();applySet();$('set-fsv').textContent=SET.fs+' px'};
 $('set-key-clear').onclick=function(){SET.key='';saveSet();paintSet()};
@@ -5379,7 +5381,7 @@ D.onclick=()=>{UIP.set('dots',!UIP.dots());paint();renderPages();showToast(UIP.d
 paint()})();
 (function(){const N=document.getElementById('fill-na'),B=document.getElementById('fill-blank');if(!N||!B)return;
 const na=()=>(appData.settings||{}).copyFill==='na';
-function paint(){const v=na();[[N,v],[B,!v]].forEach(([b,on])=>{b.classList.toggle('on',on);b.setAttribute('aria-checked',on?'true':'false')})}
+function paint(){const v=na();document.documentElement.classList.toggle('na-on',v);[[N,v],[B,!v]].forEach(([b,on])=>{b.classList.toggle('on',on);b.setAttribute('aria-checked',on?'true':'false')})}
 window.paintCopyFill=paint;
 const set=v=>{appData.settings.copyFill=v;persistLocal();paint();showToast(v==='na'?'Empty variables copy as N/A.':'Empty variables copy as blank spaces.')};
 N.onclick=()=>set(na()?'blank':'na');B.onclick=()=>set('blank');
