@@ -246,9 +246,9 @@ body.edit .rz{display:block}
 /* fill-in variables */
 .var{display:inline-block;max-width:100%;margin:0 1px;padding:0 9px;border:1.5px dashed var(--p);border-radius:12px;color:var(--p);font-weight:600;line-height:1.3;white-space:pre-wrap;overflow-wrap:anywhere;vertical-align:baseline;cursor:text;outline:none;transition:background .12s}
 .var:empty:before{content:"\200b"}
-.var[data-ph="XXX"],.var[data-ph="XXX/NA"]{min-width:12em}
-.cp-c .var[data-ph="XXX"],.cp-c .var[data-ph="XXX/NA"]{min-width:8.5em}
-.var[data-k="date"]:empty:before{content:"\00a0\00a0/\00a0\00a0/\00a0\00a0\00a0\00a0";white-space:pre}
+.var[data-ph="XXX"],.var[data-ph="XXX/NA"],.var[data-k="amt"]:not([data-optdef]),.var[data-k="fmt"]:not([data-optdef]){min-width:12em}
+.cp-c .var[data-ph="XXX"],.cp-c .var[data-ph="XXX/NA"],.cp-c .var[data-k="amt"]:not([data-optdef]),.cp-c .var[data-k="fmt"]:not([data-optdef]){min-width:3.2em}
+.var[data-k="date"]:empty:before{content:"\00a0\00a0-\00a0\00a0-\00a0\00a0\00a0\00a0";white-space:pre}
 .var[data-na]:empty:before{content:"N/A";opacity:.4;font-weight:400}
 .cp-c .var{margin:3px 1px}.cp-c{line-height:1.9}
 .var:hover{background:var(--pc)}
@@ -3515,13 +3515,13 @@ function makeVar(pid,i,tok){
  v.setAttribute('role','textbox');v.setAttribute('aria-label',VLABEL[k]||'Fill in');v.setAttribute('autocapitalize','off');v.setAttribute('autocorrect','off');
  if(k==='amt'||k==='fmt')v.setAttribute('inputmode','decimal');
  const saved=(varVals[pid]||{})[i];
- if(saved){v.textContent=saved;v.classList.add('filled')}else v.textContent=(tok==='XXX'||tok==='XXX/NA'||tok==='XX/XX/XXXX')?'':tok;
+ if(saved){v.textContent=saved;v.classList.add('filled')}else v.textContent=(tok==='XXX'||tok==='XXX/NA'||tok==='XX/XX/XXXX'||k==='amt'||k==='fmt')?'':tok;
  if(tok==='XXX/NA')v.dataset.na='1';
  return v}
 function buildSpiel(box,p){box.textContent='';const s=p.content||'';let last=0,i=0;
  for(const m of scanVars(s)){if(m.index>last)box.append(s.slice(last,m.index));{const bv=makeVar(p.id,i++,m.tok);if(m.w&&bv.dataset.k!=='bool'){bv.dataset.w=m.w;bv.style.minWidth=m.w+'em'}box.append(bv)}last=m.index+m.len}
  if(last<s.length)box.append(s.slice(last))}
-function unfilledText(k){return (appData.settings&&appData.settings.copyFill)==='na'?'N/A':k==='date'?'  /  /    ':'    '}
+function unfilledText(k){return (appData.settings&&appData.settings.copyFill)==='na'?'N/A':k==='date'?'  -  -    ':'    '}
 function composeSpiel(p){const vals=varVals[p.id]||{},src=p.content||'';let i=0,blank=0,out='',last=0;
  for(const m of scanVars(src)){out+=src.slice(last,m.index);last=m.index+m.len;
   const v=vals[i++],k=getVarKind(m.tok);let r;
@@ -3729,7 +3729,7 @@ function chatUndoEntry(e){if(!chatTrash.includes(e))return true;if(!chatUndo(e))
 function undoLastChat(){const e=chatTrash[chatTrash.length-1];if(!e){showToast('No cleared chats to restore.');return}if(chatUndoEntry(e))showToast('Chat restored.')}
 trashRestore();
 
-function fmtDate(d){return d.length>4?d.slice(0,2)+'/'+d.slice(2,4)+'/'+d.slice(4):d.length>2?d.slice(0,2)+'/'+d.slice(2):d}
+function fmtDate(d){return d.length>4?d.slice(0,2)+'-'+d.slice(2,4)+'-'+d.slice(4):d.length>2?d.slice(0,2)+'-'+d.slice(2):d}
 function caretOff(v){const s=getSelection();if(!s.rangeCount||!v.contains(s.anchorNode))return null;const r=s.getRangeAt(0).cloneRange();r.selectNodeContents(v);r.setEnd(s.anchorNode,s.anchorOffset);return r.toString().length}
 function setCaret(v,n){const tn=v.firstChild;if(!tn)return;const r=document.createRange();r.setStart(tn,Math.min(n,tn.length));r.collapse(true);const s=getSelection();s.removeAllRanges();s.addRange(r)}
 function selectAllIn(v){if(document.activeElement!==v)return;
@@ -3740,7 +3740,7 @@ function commitVar(v){const k=v.dataset.k,t=v.textContent.trim();
  const m=varVals[v.dataset.pid]||(varVals[v.dataset.pid]={});
  if(filled){m[v.dataset.i]=t;v.classList.add('filled')}else{delete m[v.dataset.i];v.classList.remove('filled')}
  return filled}
-function blankTok(v){return (v.dataset.k==='text'&&(v.dataset.ph==='XXX'||v.dataset.ph==='XXX/NA'))||(v.dataset.k==='date'&&v.dataset.ph==='XX/XX/XXXX')}
+function blankTok(v){return (v.dataset.k==='text'&&(v.dataset.ph==='XXX'||v.dataset.ph==='XXX/NA'))||(v.dataset.k==='date'&&v.dataset.ph==='XX/XX/XXXX')||((v.dataset.k==='amt'||v.dataset.k==='fmt')&&!v.dataset.optdef)}
 function finishVar(v){const f=commitVar(v);if(f)v.textContent=v.textContent.trim();else v.textContent=blankTok(v)?'':v.dataset.ph;
  if(!f&&v.dataset.back&&v.isConnected)v.replaceWith(makeVar(v.dataset.pid,v.dataset.i,v.dataset.tok))}/* a typed choice was cleared: back to the dropdown */
 function insertIntoVar(v,t){v.focus();let ok=false;try{ok=document.execCommand('insertText',false,t)}catch(e){}
@@ -3779,9 +3779,9 @@ function onVarInput(v,e){const k=v.dataset.k;
    setCaret(v,nc);
   }
  }
- else if(k==='date'&&e.inputType&&e.inputType.indexOf('insert')===0&&/^\d+$/.test(e.data||'')&&/^[\d/]*$/.test(t)&&caretOff(v)===t.length){
+ else if(k==='date'&&e.inputType&&e.inputType.indexOf('insert')===0&&/^\d+$/.test(e.data||'')&&/^[\d-]*$/.test(t)&&caretOff(v)===t.length){
   const d=t.replace(/\D/g,'');
-  if(d.length<=8&&[...t].every((c,i)=>c!=='/'||i===2||i===5)){const f=fmtDate(d);if(f!==t){v.textContent=f;setCaret(v,f.length)}}}
+  if(d.length<=8&&[...t].every((c,i)=>c!=='-'||i===2||i===5)){const f=fmtDate(d);if(f!==t){v.textContent=f;setCaret(v,f.length)}}}
  commitVar(v)}
 (function(){const M=document.querySelector('main'),
   vOf=e=>e.target&&e.target.closest?e.target.closest('.var:not(.bool):not(.opt)'):null,
@@ -4196,7 +4196,7 @@ const DS_BODY=String.raw`<header class="dsa-h"><h1>Documentation</h1><button typ
 <div id="toast" role="status"></div><div id="undo" role="status" aria-live="polite"></div>`;
 const DS_JS=String.raw`var EMBED=/*EMBED_START*/null/*EMBED_END*/;
 var DEFNA=!!(EMBED&&EMBED.copyFill==='na');
-function unfilledText(k){return SET.na?'N/A':k==='date'?'  /  /    ':'    '}
+function unfilledText(k){return SET.na?'N/A':k==='date'?'  -  -    ':'    '}
 var D=null,view='chats',vs=[],vcur=0,editCtx=null,activeEditor=null,delArm=0,shown={};
 var CHAT_MAX=3,chats=[],chatUI={},_ct=0,lastChatId='',chatTrash=[];
 var SKEY='ataraxia_docs_standalone',CKEY='ataraxia_docs_chats',TKEY='ataraxia_docs_chat_trash';
