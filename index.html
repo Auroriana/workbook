@@ -70,7 +70,7 @@ main{flex:1;min-width:0;min-height:0;overflow-y:auto;padding:8px 24px 40px;scrol
 .ph .pt-sub[hidden]{display:none}
 .ph .pt-sub .pt-sep{margin:0 11px;height:.85em}
 /* Documentation chats: up to 3 customers side by side */
-#chats{display:flex;gap:14px;align-items:stretch;margin-top:4px;height:max(440px,calc(100vh - 300px))}
+#chats{display:flex;gap:14px;align-items:stretch;margin-top:4px;height:calc(max(440px,100vh - 300px)/var(--cz,1))}
 #chats[hidden]{display:none}
 .chat{flex:1 1 0;min-width:0;display:flex;flex-direction:column;background:var(--surf);border:1px solid var(--line);border-radius:22px;overflow:hidden}
 .chat-h{display:flex;align-items:center;gap:8px;padding:8px 8px 8px 16px;background:var(--pc);color:var(--on-pc);flex:none}
@@ -246,6 +246,11 @@ body.edit .rz{display:block}
 /* fill-in variables */
 .var{display:inline-block;max-width:100%;margin:0 1px;padding:0 9px;border:1.5px dashed var(--p);border-radius:12px;color:var(--p);font-weight:600;line-height:1.3;white-space:pre-wrap;overflow-wrap:anywhere;vertical-align:baseline;cursor:text;outline:none;transition:background .12s}
 .var:empty:before{content:"\200b"}
+.var[data-ph="XXX"],.var[data-ph="XXX/NA"]{min-width:12em}
+.cp-c .var[data-ph="XXX"],.cp-c .var[data-ph="XXX/NA"]{min-width:8.5em}
+.var[data-k="date"]:empty:before{content:"\00a0\00a0/\00a0\00a0/\00a0\00a0\00a0\00a0";white-space:pre}
+.var[data-na]:empty:before{content:"N/A";opacity:.4;font-weight:400}
+.cp-c .var{margin:3px 1px}.cp-c{line-height:1.9}
 .var:hover{background:var(--pc)}
 .var.filled,.var.optdefault{border-style:solid;background:var(--pc);color:var(--on-pc)}
 .var:focus{border-style:solid;background:var(--pc);color:var(--on-pc);box-shadow:0 0 0 2px var(--p)}
@@ -1007,6 +1012,14 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
      </div>
      <div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="nav-key-reset">Reset to 1 / 2 / 3</button></div><p class="hint" id="nav-key-hint"></p></div>
    </div></details>
+   <details class="sec acc" data-k="copyfill"><summary><span class="acc-t">Empty variables when copying<small>What a variable left empty turns into in the copied text</small></span></summary><div class="acc-b">
+    <div class="seg" style="flex-direction:column;align-items:flex-start;gap:6px">
+     <button type="button" class="snapsw" id="fill-na" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">N/A</span></button>
+     <p class="hint" style="margin:0 0 8px">A variable left empty is copied as N/A. "Name: XXX" is copied as "Name: N/A".</p>
+     <button type="button" class="snapsw on" id="fill-blank" role="switch" aria-checked="true"><span class="tr"></span><span class="lbl">Blank</span></button>
+     <p class="hint" style="margin:0">A variable left empty is copied as blank spaces. "Name: XXX" is copied as "Name:     ".</p>
+    </div>
+   </div></details>
    <details class="sec acc" data-k="menus"><summary><span class="acc-t">Page menus<small>Right-click, hold and 3-dots behavior (this device only)</small></span></summary><div class="acc-b">
     <div class="seg" style="flex-direction:column;align-items:flex-start;gap:6px">
      <button type="button" class="snapsw" id="ui-hold" role="switch" aria-checked="true"><span class="tr"></span><span class="lbl">Hold to open menu</span></button>
@@ -1085,10 +1098,10 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
  <div class="mh"><span>How this website works</span></div>
  <div class="mb hlp">
   <details open><summary>Books, chapters, pages</summary><p>Top tabs are <b>books</b>. The left list holds the book's <b>chapters</b>. A chapter holds <b>pages</b> (one spiel each) and <b>boards</b> (boxes that group pages). Use <b>+ Book</b>, <b>+ Chapter</b>, <b>+ Add</b>, <b>+ Board</b>. Drag a chapter's grip to reorder, drag a book tab to reorder.</p><p>Copy a page with its copy button, by double-clicking it (when it has no variables), <kbd>Ctrl</kbd>+<kbd>C</kbd> on a focused page, or <kbd>Enter</kbd> inside a variable. Right-click (or press and hold on touch) a page, board, chapter, book or empty space for copy / duplicate / paste / delete.</p></details>
-  <details><summary>Variables and variants</summary><ul><li><b>XXX</b> any text. <b>XX/XX/XXXX</b> date (slashes added as you type). <b>$XXX</b> amount.</li><li><b>[00 0000 000]</b> number that formats itself.</li><li><b>[Yes]</b> / <b>[No]</b> click to flip.</li><li><b>[A|B|C]</b> pick one. <b>[N/A|[XXX]]</b> gives N/A or lets you type your own.</li><li><kbd>Enter</kbd> jumps to the next variable; <kbd>Enter</kbd> on the last one copies the page.</li><li><b>Variants</b>: a page can hold several versions. Add them with the numbered tabs in the page editor, then click the page title to switch.</li></ul></details>
+  <details><summary>Variables and variants</summary><ul><li><b>XXX</b> any text. <b>XX/XX/XXXX</b> date (shows as / / until filled; slashes added as you type). <b>$XXX</b> amount. <b>XXX/NA</b> text that always copies as N/A when empty.</li><li><b>Width</b>: add a number in brackets, like <b>XXX(14)</b>, to set a bubble's width in Documentation.</li><li><b>[00 0000 000]</b> number that formats itself.</li><li><b>[Yes]</b> / <b>[No]</b> click to flip.</li><li><b>[A|B|C]</b> pick one. <b>[N/A|[XXX]]</b> gives N/A or lets you type your own.</li><li><kbd>Enter</kbd> jumps to the next variable; <kbd>Enter</kbd> on the last one copies the page.</li><li><b>Variants</b>: a page can hold several versions. Add them with the numbered tabs in the page editor, then click the page title to switch.</li></ul></details>
   <details><summary>Move mode, boards, zoom</summary><p>The cross-arrows button turns on move mode: drag pages and boards, drag their edges to resize, drop a page onto a board. <b>Snapping</b> keeps a fixed gap and grows boards to fit. Press <b>Save</b> to keep the layout; turning move mode off without Save discards it. The slider at the bottom right zooms the chapter.</p></details>
   <details><summary>Tools</summary><ul><li><b>Time Calculator</b>: 12:01 AM effective-date rule, US to PH time.</li><li><b>Quote Formatter</b>: cleans a pasted quote and copies it; the new premium goes to your last-used chat.</li><li><b>Schedule Import</b>: paste the weekly schedule, get a clean PH-time view that also feeds the island.</li><li><b>Daily Summary</b>: CSAT calculator, average handling time, monthly archive.</li><li><b>Scratch Pad</b> and <b>Image</b> widgets. Download icon saves Quote Formatter + CSAT as one HTML file.</li></ul></details>
-  <details><summary>Documentation</summary><p><b>Chats</b>: up to 3 customers at once. Type the customer name, search a template, and its Name / Updated Premium fields fill in. Each chat has a scratch pad; clearing or closing a chat can be undone. <b>Notations</b> and <b>What if</b> hold the templates (edit them like any page). The download icon makes a stand-alone Documentation HTML file you can open anywhere. In it you can add your own categories and sections, and pick a message to copy when you clear or close a chat.</p></details>
+  <details><summary>Documentation</summary><p><b>Chats</b>: up to 3 customers at once. Type the customer name, search a template, and its Name / Updated Premium fields fill in. Double-click a template in a chat to copy it. Each chat has a scratch pad; clearing or closing a chat can be undone. <b>Notations</b> and <b>What if</b> hold the templates (edit them like any page). The download icon makes a stand-alone Documentation HTML file you can open anywhere. In it you can add your own categories and sections, and pick a message to copy when you clear or close a chat.</p></details>
   <details><summary>The island (bottom right)</summary><p>Live PH clock. Dots = break, lunch, break. <b>Start shift</b> in its panel, then it warns before breaks (yellow), alerts when due, counts your break and flags overbreak (red). <b>Upcoming</b> shows imported days. <b>Other Tag</b> logs custom time away. <b>Automatic tagging</b> and chat tracker are in Settings. The <b>+</b> tab under it starts a new chat and copies your opening spiel. Drag it anywhere.</p></details>
   <details><summary>Search and keybinds</summary><ul><li><kbd>/</kbd> opens global search across every book. Type <b>doc vehicle</b> to drop a template straight into a chat.</li><li>Page keybind: set it in the page editor.</li><li>New chat keybind and the 1 / 2 / 3 jump keys for Workspace, Tools, Documentation: Settings &gt; General.</li></ul></details>
   <details><summary>Account, sync, backup</summary><p>Log in to sync across devices. Settings &gt; Data &amp; files has Export / Import and a manual Save app file button. <b>Lock now</b> covers the screen until you retype your password.</p></details>
@@ -1118,17 +1131,8 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
  <div class="mh"><span id="page-modal-title">Edit Page</span></div>
  <div class="mb"><input type="hidden" id="page-id-input"><input type="hidden" id="page-container-input">
   
-  <div class="vbar" style="background:var(--surf); padding:8px 12px; border-radius:12px; margin-bottom:16px; border:1px solid var(--line); display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
-   <span class="vl" style="margin-right:auto; font-weight:600;">Insert Variable:</span>
-   <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('XXX')" title="Fill in anything">XXX</button>
-   <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('DATE')" title="Date format">DATE</button>
-   <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('AMT')" title="Dollar amount">AMT</button>
-   <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('FMT')" title="Formatted Number (e.g. Account)">[00 0000]</button>
-   <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('YN',event)" title="Yes/No toggle. Hold Shift while clicking to insert [No] instead of [Yes]">Y/N</button>
-  </div>
 
-  <section class="sec pi">
-   <div class="pi-title">Page image<small>optional</small></div>
+  <details class="sec acc" id="page-img-sec"><summary><span class="acc-t">Page image<small>optional</small></span></summary><div class="acc-b"><div class="pi">
    <div class="pi-row">
     <label class="btn out sm ico pi-pick" title="Choose image"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg><input type="file" id="page-image-file" accept="image/jpeg,image/png,image/webp" aria-label="Choose an image"></label>
     <button type="button" class="btn out sm ico" id="page-image-paste" title="Paste screenshot" aria-label="Paste screenshot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg></button>
@@ -1141,22 +1145,30 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
    <p class="hint" id="page-image-status" role="status"></p>
    <div id="page-image-library"></div>
    <p class="hint">Win + Shift + S, then Ctrl + V anywhere in this window.</p>
-  </section>
+  </div></div></details>
+  <div class="vbar" style="background:var(--surf); padding:8px 12px; border-radius:12px; margin:12px 0 16px; border:1px solid var(--line); display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
+   <span class="vl" style="margin-right:auto; font-weight:600;">Insert Variable:</span>
+   <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('XXX',event)" title="Fill in anything. Shift + click for XXX/NA (always copies as N/A when empty)">XXX</button>
+   <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('DATE')" title="Date format">DATE</button>
+   <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('AMT')" title="Dollar amount">AMT</button>
+   <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('FMT')" title="Formatted Number (e.g. Account)">[00 0000]</button>
+   <button type="button" class="btn xs tone" onmousedown="event.preventDefault()" onclick="insertVar('YN',event)" title="Yes/No toggle. Hold Shift while clicking to insert [No] instead of [Yes]">Y/N</button>
+  </div>
   <div id="page-normal-edit" style="display:flex;flex-direction:column;gap:16px">
    <div><label for="page-title-input">Title</label><input type="text" id="page-title-input" placeholder="e.g. Coverage - Renters/Homes"></div>
    <div>
     <label for="page-content-input">Content</label>
     <textarea id="page-content-input" placeholder="Type or paste your text here..." style="min-height:90px;"></textarea>
-    <p class="hint" style="margin-top:8px;">Y/N adds a Yes/No toggle. Type [Opt1|Opt2] for options, or [00 0000 000] to format numbers automatically.</p>
+    <p class="hint" style="margin-top:8px;">Y/N adds a Yes/No toggle. Shift + click XXX for XXX/NA. Type XXX(14) to set a bubble's width in Documentation. Type [Opt1|Opt2] for options.</p>
    </div>
   </div>
  <section class="sec pi" id="page-key-sec">
    <div class="pi-title">Keybind<small>optional</small></div>
    <div class="pi-row">
-    <input type="text" id="page-key-input" class="pi-alt" readonly placeholder="Click here, then press your keys (e.g. Ctrl + 1)" aria-label="Keybind for this page" autocomplete="off">
+    <input type="text" id="page-key-input" class="pi-alt" readonly placeholder="Press keys" aria-label="Keybind for this page" autocomplete="off">
     <button type="button" class="btn out sm" id="page-key-clear" hidden>Clear</button>
    </div>
-   <p class="hint" id="page-key-hint">Click the box, then hold Ctrl, Alt or Meta and press your keys together (for example Ctrl + 1, or Alt + C + 1). Pressing the same keys anywhere in the app copies this page (or the variant you are editing, if there are several). Backspace clears it.</p>
+   <p class="hint" id="page-key-hint">Hold Ctrl, Alt or Meta + a key. Backspace clears.</p>
   </section>
  </div>
  <div id="vtabs"><div id="vt-scroll" role="tablist" aria-label="Page variants"></div><button type="button" class="ib sm vt-del" id="vt-del" title="Delete this variant" aria-label="Delete this variant" onclick="removeEditVariant()" hidden></button></div>
@@ -1523,7 +1535,7 @@ function load(data){let s=null;if(data===undefined)try{s=localStorage.getItem('p
 /* website name */
 function siteName(){return String(appData.settings.title||'').trim()||DEF_NAME}
 function fileName(){return siteName().replace(/[\\/:*?"<>|]/g,'').replace(/\s+/g,' ').trim().replace(/[. ]+$/,'')||'paano_ba_yan'}
-function applySiteName(fill){const n=siteName();$('brand').textContent=n;$('brand').title=n;document.title=n;if(fill){$('site-name-input').value=n;const a=$('agent-name-input');if(a){a.value=(appData.settings&&appData.settings.agentName)||'';a.placeholder='Ataraxia'}if(window.paintNewChatKey)window.paintNewChatKey();if(window.paintNavKeys)window.paintNavKeys()}}
+function applySiteName(fill){const n=siteName();$('brand').textContent=n;$('brand').title=n;document.title=n;if(fill){$('site-name-input').value=n;const a=$('agent-name-input');if(a){a.value=(appData.settings&&appData.settings.agentName)||'';a.placeholder='Ataraxia'}if(window.paintNewChatKey)window.paintNewChatKey();if(window.paintNavKeys)window.paintNavKeys();if(window.paintCopyFill)window.paintCopyFill()}}
 /* theme */
 function applyTheme(){const s=appData.settings,r=document.documentElement;
  const dark=s.mode==='dark'||s.mode==='black'||(s.mode==='auto'&&matchMedia('(prefers-color-scheme:dark)').matches);
@@ -2925,12 +2937,12 @@ function refreshCard(id){/* redraw one page instead of the whole chapter */
 const ZOOM_KEY='ataraxia_workspace_zoom';
 let zoomPrefs={};try{const z=JSON.parse(localStorage.getItem(ZOOM_KEY)||'{}');if(z&&typeof z==='object'&&!Array.isArray(z))zoomPrefs=z}catch(e){}
 function chapterZoomKey(){return appData.activeChapterId===TOOLS_ID?'tools':'chapter:'+appData.activeChapterId}
-function workspaceZoom(){if(appData.activeChapterId===DOC_CHATS_ID)return 1;const n=Number(zoomPrefs[chapterZoomKey()]??(appData.activeChapterId===TOOLS_ID||isDoc(appData.activeChapterId)?100:zoomPrefs.workspace));return Number.isFinite(n)&&n>=50&&n<=150?n/100:1}
-function syncWorkspaceZoom(){const z=workspaceZoom(),doc=!appData.activeChapterId||appData.activeChapterId===DOC_CHATS_ID,input=$('workspace-zoom-range');
+function workspaceZoom(){const n=Number(zoomPrefs[chapterZoomKey()]??(appData.activeChapterId===TOOLS_ID||isDoc(appData.activeChapterId)?100:zoomPrefs.workspace));return Number.isFinite(n)&&n>=50&&n<=150?n/100:1}
+function syncWorkspaceZoom(){const z=workspaceZoom(),doc=!appData.activeChapterId,input=$('workspace-zoom-range');
  $('workspace-zoom').hidden=doc;input.value=String(Math.round(z*100));input.setAttribute('aria-label',appData.activeChapterId===TOOLS_ID?'Tools zoom':'Workspace zoom');input.setAttribute('aria-valuetext',input.value+'%');
  $('chapter-zoom').hidden=doc;$('chapter-zoom').setAttribute('aria-label','Chapter zoom, '+input.value+'%');$('chapter-zoom-out').disabled=z<=.5;$('chapter-zoom-in').disabled=z>=1.5;
- $('workspace-zoom-reset').textContent=input.value+'%';$('wsc').style.zoom=z;$('wsc').style.setProperty('--workspace-zoom',z)}
-function setWorkspaceZoom(value){if(!appData.activeChapterId||appData.activeChapterId===DOC_CHATS_ID)return;const n=Number(value);if(!Number.isFinite(n))return;if(ps)cancelPs();closeMenus();
+ $('workspace-zoom-reset').textContent=input.value+'%';$('wsc').style.zoom=z;$('wsc').style.setProperty('--workspace-zoom',z);{const c=$('chats'),on=appData.activeChapterId===DOC_CHATS_ID;c.style.zoom=on?z:'';c.style.setProperty('--cz',on?z:1)}}
+function setWorkspaceZoom(value){if(!appData.activeChapterId)return;const n=Number(value);if(!Number.isFinite(n))return;if(ps)cancelPs();closeMenus();
  zoomPrefs[chapterZoomKey()]=clamp(Math.round(n/5)*5,50,150);syncWorkspaceZoom();fitAll();
  try{localStorage.setItem(ZOOM_KEY,JSON.stringify(zoomPrefs))}catch(e){showToast('Zoom changed, but device storage is unavailable. It could not be remembered.')}}
 function renderPages(){clearWidgetTimers();closeMenus();syncWorkspaceZoom();const ws=$('ws'),wsc=$('wsc'),em=$('ws-empty'),chOn=appData.activeChapterId===DOC_CHATS_ID;$('chats').hidden=!chOn;
@@ -3372,17 +3384,18 @@ async function deleteContainer(id){const c=appData.containers.find(x=>x.id===id)
  appData.pages.forEach(p=>{if(p.containerId===id){p.containerId='';p.x=c.x+(p.x||0);p.y=c.y+5+(p.y||0)}});appData.containers=appData.containers.filter(x=>x.id!==id);
  persistLocal();closeModal('container-modal');renderPages();showToast('Board deleted.')}
 /* variables: XXX / DATE / AMT / Y/N / FMT / OPT */
-const TOK={XXX:'XXX',DATE:'XX/XX/XXXX',AMT:'$XXX',YN:'[Yes]',FMT:'[00 0000 000]'};
-const VKIND={'XXX':'text','XX/XX/XXXX':'date','$XXX':'amt','[Yes]':'bool','[No]':'bool', '[00 0000 000]':'fmt'};
+const TOK={XXX:'XXX',XXXNA:'XXX/NA',DATE:'XX/XX/XXXX',AMT:'$XXX',YN:'[Yes]',FMT:'[00 0000 000]'};
+const VKIND={'XXX':'text','XXX/NA':'text','XX/XX/XXXX':'date','$XXX':'amt','[Yes]':'bool','[No]':'bool', '[00 0000 000]':'fmt'};
 const VLABEL={text:'Fill in text',date:'Fill in date',amt:'Fill in amount',bool:'Toggle yes or no', fmt:'Fill in number', opt:'Select an option'};
-const SIMPLE_VAR=/(?<![A-Za-z0-9])(?:XX\/XX\/XXXX|\$XXX|XXX)(?![A-Za-z0-9])/y;
+const SIMPLE_VAR=/(?<![A-Za-z0-9])(?:XX\/XX\/XXXX|XXX\/NA|\$XXX|XXX)(?![A-Za-z0-9])/y;
 const VOPT_RE=/^(?:XXX|\[XXX\]|\$XXX|XX\/XX\/XXXX|\[[0-9 ]+\])$/;/* an option that is itself a variable (a stacked variable) */
 /* finds every variable in a spiel. [ ... ] groups may contain other [ ... ] groups, so [N/A|[XXX]] is one variable */
 function scanVars(str){const out=[];let i=0;
+ const add=(idx,tok)=>{const m=/^\((\d{1,2}(?:\.\d)?)\)/.exec(str.slice(idx+tok.length,idx+tok.length+8));const len=tok.length+(m?m[0].length:0);out.push({index:idx,tok,len,w:m?m[1]:''});return len};/* an optional (width) after a variable is its size in em */
  while(i<str.length){const ch=str[i];
   if(ch==='['&&!(i>0&&/[A-Za-z0-9]/.test(str[i-1]))){let d=0,j=i;for(;j<str.length;j++){if(str[j]==='[')d++;else if(str[j]===']'&&--d===0)break}
-   if(j<str.length&&j>i+1&&!/[A-Za-z0-9]/.test(str[j+1]||'')){out.push({index:i,tok:str.slice(i,j+1)});i=j+1;continue}}
-  else if(ch==='X'||ch==='$'){SIMPLE_VAR.lastIndex=i;const m=SIMPLE_VAR.exec(str);if(m){out.push({index:i,tok:m[0]});i+=m[0].length;continue}}
+   if(j<str.length&&j>i+1&&!/[A-Za-z0-9]/.test(str[j+1]||'')){i+=add(i,str.slice(i,j+1));continue}}
+  else if(ch==='X'||ch==='$'){SIMPLE_VAR.lastIndex=i;const m=SIMPLE_VAR.exec(str);if(m){i+=add(i,m[0]);continue}}
   i++}
  return out}
 function splitTop(str){const parts=[];let d=0,cur='';for(const c of str){if(c==='[')d++;else if(c===']')d--;if(c==='|'&&d===0){parts.push(cur);cur=''}else cur+=c}parts.push(cur);return parts}
@@ -3413,6 +3426,7 @@ function insertVar(kind,ev){
  const t = (activeEditor && (activeEditor.id==='page-title-input'||activeEditor.id==='page-content-input'||(activeEditor.closest&&activeEditor.closest('#page-modal')&&activeEditor.id!=='page-image-alt'))) ? activeEditor : $('page-content-input');
  let s = TOK[kind] || kind; if(!s) return;
  if(kind==='YN'&&ev&&ev.shiftKey)s='[No]';/* Shift + click inserts [No] instead of [Yes] */
+ if(kind==='XXX'&&ev&&ev.shiftKey)s='XXX/NA';/* Shift + click inserts XXX/NA: always copies as N/A when empty */
  const v=t.value,a=t.selectionStart,b=t.selectionEnd;
  if(a>0&&/[A-Za-z0-9.,;:!?)\]]/.test(v[a-1]))s=' '+s;
  if(b<v.length&&/[A-Za-z0-9]/.test(v[b]))s+=' ';
@@ -3471,7 +3485,7 @@ function makeInlineOpt(pid,i,tok,o,back){const vo=o.find(x=>x.k)||o[0],def=phOf(
  v.setAttribute('role','textbox');v.setAttribute('aria-label','Type your own, or leave as '+def);v.setAttribute('autocapitalize','off');v.setAttribute('autocorrect','off');
  v.title='Click and type your own, or leave it as '+def;
  if(!o[0].k)v.classList.add('optdefault');
- const saved=(varVals[pid]||{})[i];if(saved){v.textContent=saved;v.classList.add('filled')}else v.textContent=def;
+ const saved=(varVals[pid]||{})[i];if(saved){v.textContent=saved;v.classList.add('filled')}else v.textContent=def==='XXX'?'':def;
  return v}
 /* several plain choices plus a typed one: a dropdown, whose last item turns the variable into a typing box */
 function makeMultiOpt(pid,i,tok,o){const texts=o.filter(x=>!x.k).map(x=>x.t),saved=(varVals[pid]||{})[i];
@@ -3501,18 +3515,20 @@ function makeVar(pid,i,tok){
  v.setAttribute('role','textbox');v.setAttribute('aria-label',VLABEL[k]||'Fill in');v.setAttribute('autocapitalize','off');v.setAttribute('autocorrect','off');
  if(k==='amt'||k==='fmt')v.setAttribute('inputmode','decimal');
  const saved=(varVals[pid]||{})[i];
- if(saved){v.textContent=saved;v.classList.add('filled')}else v.textContent=tok;
+ if(saved){v.textContent=saved;v.classList.add('filled')}else v.textContent=(tok==='XXX'||tok==='XXX/NA'||tok==='XX/XX/XXXX')?'':tok;
+ if(tok==='XXX/NA')v.dataset.na='1';
  return v}
 function buildSpiel(box,p){box.textContent='';const s=p.content||'';let last=0,i=0;
- for(const m of scanVars(s)){if(m.index>last)box.append(s.slice(last,m.index));box.append(makeVar(p.id,i++,m.tok));last=m.index+m.tok.length}
+ for(const m of scanVars(s)){if(m.index>last)box.append(s.slice(last,m.index));{const bv=makeVar(p.id,i++,m.tok);if(m.w&&bv.dataset.k!=='bool'){bv.dataset.w=m.w;bv.style.minWidth=m.w+'em'}box.append(bv)}last=m.index+m.len}
  if(last<s.length)box.append(s.slice(last))}
+function unfilledText(k){return (appData.settings&&appData.settings.copyFill)==='na'?'N/A':k==='date'?'  /  /    ':'    '}
 function composeSpiel(p){const vals=varVals[p.id]||{},src=p.content||'';let i=0,blank=0,out='',last=0;
- for(const m of scanVars(src)){out+=src.slice(last,m.index);last=m.index+m.tok.length;
+ for(const m of scanVars(src)){out+=src.slice(last,m.index);last=m.index+m.len;
   const v=vals[i++],k=getVarKind(m.tok);let r;
   if(k==='bool')r=v||boolDef(m.tok);
   else if(k==='opt'){const o=parseOpts(m.tok);
-   if(v)r=v;else if(!o.length){blank++;r=m.tok}else if(!o[0].k)r=o[0].t;else{blank++;r=phOf(o[0].t)}}
-  else if(v)r=v;else{blank++;r=m.tok}
+   if(v)r=v;else if(!o.length){blank++;r=unfilledText()}else if(!o[0].k)r=o[0].t;else{blank++;r=unfilledText()}}
+  else if(v)r=v;else if(m.tok==='XXX/NA')r='N/A';else{blank++;r=unfilledText(k)}
   out+=r}
  return{text:out+src.slice(last),blank}}
 function copyPage(id){const p=appData.pages.find(x=>x.id===id);if(!p)return;if(window.copyHit)return window.copyHit(p,nodes.get(id));/* same "Copied!" pop-up + highlight as Enter in a variable */const r=composeSpiel(p);
@@ -3539,7 +3555,7 @@ addEventListener('pagehide',chatSave);document.addEventListener('visibilitychang
 const NAME_LBL=/^\s*(?:customer[\u2019']?s?\s+name|name)\s*:\s*$/i;
 /* session fields: each one fills the template variables whose label matches (the variable must sit right after its label on the same line) */
 const CHAT_FIELDS={
- name:{re:NAME_LBL,toks:['XXX']},
+ name:{re:NAME_LBL,toks:['XXX','XXX/NA']},
  prem:{re:/^\s*updated\s+premium\s*:\s*$/i,toks:['$XXX']}};/* prem comes from the Quote Formatter */
 function fieldIdx(content,key){const f=CHAT_FIELDS[key],out=[];let i=0;
  for(const m of scanVars(content)){if(f.toks.includes(m.tok)){const ls=content.lastIndexOf('\n',m.index-1)+1;if(f.re.test(content.slice(ls,m.index)))out.push(i)}i++}
@@ -3559,7 +3575,7 @@ function chatSet(chat,root,key,n){/* changing a session field updates every matc
   const vals=p.vv[vi];if(!vals)return;/* a variant you never opened gets the value when you open it */
   fieldIdx(p.variants?p.variants[vi].content:p.content,key).forEach(i=>{const cur=vals[i];
    if(cur===prev||(cur===undefined&&!prev)){if(n)vals[i]=n;else delete vals[i];
-    if(vi===(p.activeVariant||0)){const sp=root&&root.querySelector('.var[data-pid="'+p.id+'"][data-i="'+i+'"]');if(sp){sp.textContent=n||sp.dataset.ph;sp.classList.toggle('filled',!!n)}}}})}));
+    if(vi===(p.activeVariant||0)){const sp=root&&root.querySelector('.var[data-pid="'+p.id+'"][data-i="'+i+'"]');if(sp){sp.textContent=n||(blankTok(sp)?'':sp.dataset.ph);sp.classList.toggle('filled',!!n)}}}})}));
  chatSaveSoon()}
 function chatRename(chat,root,n){chatSet(chat,root,'name',n)}
 const chatEmpty=c=>!c.name&&!c.policy&&!c.eff&&!c.prem&&!c.note&&!c.pages.length;
@@ -3595,7 +3611,7 @@ function findOpening(){const cs=appData.chapters||[],ab=appData.activeBookId,cha
  return gen(inBook)||inBook[0]||gen(all)||all[0]||null}
 const OPEN_NAME_RE=/(\b(?:This is|My name is)\s+)(.+?)(?=\s+and\b|[.,!;\n]|$)/i;/* the name after "This is" / "My name is" (only used when "Your name" is empty) */
 const OPEN_DEFAULT="Thank you for contacting Allstate, where you're in good hands. My name is XXX, and I'll be assisting you today.";/* XXX = Settings > Your name */
-function openingName(){const p=findOpening();if(!p)return'';const m=OPEN_NAME_RE.exec(composeSpiel(p).text),n=m?m[2].trim():'';return/^(XXX|\[.*\])$/.test(n)?'':n}
+function openingName(){const p=findOpening();if(!p)return'';const m=OPEN_NAME_RE.exec(composeSpiel(p).text),n=m?m[2].trim():'';return/^(XXX|N\/A|\[.*\])$/.test(n.trim())||!n.trim()?'':n}
 /* the opening spiel: the fixed wording above with the name from Settings > Your name. If that is empty, the name already written in the Opening page of General is used */
 function openingText(){const me=String((appData.settings||{}).agentName||'').trim()||openingName();return me?OPEN_DEFAULT.replace('XXX',()=>me):''}
 const _mouse={x:0,y:0,on:false};addEventListener('pointermove',e=>{_mouse.x=e.clientX;_mouse.y=e.clientY;_mouse.on=true},{passive:true});
@@ -3633,6 +3649,9 @@ function chatCard(chat,p,root){
   p.variants.forEach((v,i)=>{const b=el('button',i===(p.activeVariant||0)?'on':'');b.type='button';b.textContent=v.title;
    b.onclick=()=>{if(i===(p.activeVariant||0))return;chatVariant(chat,p,i);card.replaceWith(chatCard(chat,p,root))};vb.append(b)});
   card.append(vb)}
+ const dok=e=>e.button===0&&e.target instanceof Element&&!e.target.closest('button,a,input,textarea,select,img,.var,.cp-v,[contenteditable]:not([contenteditable="false"])');
+ card.addEventListener('mousedown',e=>{if(e.detail>1&&dok(e))e.preventDefault()});
+ card.addEventListener('dblclick',e=>{if(!dok(e))return;e.preventDefault();getSelection()?.removeAllRanges();cp.click()});
  const c=el('div','cp-c');buildSpiel(c,p);window.PageImages?.mount(c,p);card.append(c);return card}
 function chatEl(chat,idx){
  const root=el('section','chat');root.dataset.id=chat.id;
@@ -3721,7 +3740,8 @@ function commitVar(v){const k=v.dataset.k,t=v.textContent.trim();
  const m=varVals[v.dataset.pid]||(varVals[v.dataset.pid]={});
  if(filled){m[v.dataset.i]=t;v.classList.add('filled')}else{delete m[v.dataset.i];v.classList.remove('filled')}
  return filled}
-function finishVar(v){const f=commitVar(v);if(f)v.textContent=v.textContent.trim();else v.textContent=v.dataset.ph;
+function blankTok(v){return (v.dataset.k==='text'&&(v.dataset.ph==='XXX'||v.dataset.ph==='XXX/NA'))||(v.dataset.k==='date'&&v.dataset.ph==='XX/XX/XXXX')}
+function finishVar(v){const f=commitVar(v);if(f)v.textContent=v.textContent.trim();else v.textContent=blankTok(v)?'':v.dataset.ph;
  if(!f&&v.dataset.back&&v.isConnected)v.replaceWith(makeVar(v.dataset.pid,v.dataset.i,v.dataset.tok))}/* a typed choice was cleared: back to the dropdown */
 function insertIntoVar(v,t){v.focus();let ok=false;try{ok=document.execCommand('insertText',false,t)}catch(e){}
  if(!ok){const s=getSelection();if(!s.rangeCount)return;const r=s.getRangeAt(0);r.deleteContents();const n=document.createTextNode(t);r.insertNode(n);r.setStartAfter(n);r.collapse(true);s.removeAllRanges();s.addRange(r);v.dispatchEvent(new Event('input',{bubbles:true}))}}
@@ -4116,6 +4136,7 @@ body{display:flex;flex-direction:column;overflow:hidden}
 .tsel select:focus{border-color:var(--p)}
 .snapsw .lbl{display:inline!important}`;
 const DS_BODY=String.raw`<header class="dsa-h"><h1>Documentation</h1><button type="button" class="ib help-btn" id="help-btn" style="background:var(--pc);color:var(--on-pc)" title="How this works" aria-label="Help">?</button><div class="stabs" id="nav" role="tablist"></div>
+<span class="chapter-zoom" id="zm" role="group" aria-label="Zoom"><button type="button" class="ib" id="zm-out" title="Zoom out" aria-label="Zoom out">−</button><button type="button" class="btn xs out" id="zm-pct" title="Reset zoom to 100%">100%</button><button type="button" class="ib" id="zm-in" title="Zoom in" aria-label="Zoom in">+</button></span>
 <button type="button" class="btn tone sm" id="undo-chat" disabled title="No cleared chats to restore"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg><span>Undo</span></button>
 <button type="button" class="btn tone sm" id="save-file" title="Save your template edits into this HTML file (Ctrl + S)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span>Save changes</span></button>
 <button type="button" class="ib tone" id="set-btn" title="Settings" aria-label="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg></button>
@@ -4127,6 +4148,8 @@ const DS_BODY=String.raw`<header class="dsa-h"><h1>Documentation</h1><button typ
   <section class="sec"><label>Appearance</label><div class="seg" id="set-mode"></div></section>
   <section class="sec"><label>Accent color</label><div class="sw" id="set-sw"></div></section>
   <section class="sec"><label for="set-fs">Template text size</label><div style="display:flex;align-items:center;gap:10px"><input type="range" id="set-fs" min="12" max="20" step="1" style="flex:1;accent-color:var(--p)"><span id="set-fsv" class="hint" style="margin:0"></span></div></section>
+  <section class="sec"><label for="set-zoom">Zoom</label><div style="display:flex;align-items:center;gap:10px"><input type="range" id="set-zoom" min="50" max="150" step="5" style="flex:1;accent-color:var(--p)"><span id="set-zoomv" class="hint" style="margin:0"></span></div></section>
+  <section class="sec"><label>Empty variables when copying</label><div class="seg" style="flex-direction:column;align-items:flex-start;gap:6px"><button type="button" class="snapsw" id="set-na" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">N/A</span></button><p class="hint" style="margin:0 0 8px">A variable left empty is copied as N/A ("Name: XXX" becomes "Name: N/A").</p><button type="button" class="snapsw on" id="set-bl" role="switch" aria-checked="true"><span class="tr"></span><span class="lbl">Blank</span></button><p class="hint" style="margin:0">A variable left empty is copied as blank spaces ("Name: XXX" becomes "Name:     ").</p></div></section>
   <section class="sec"><label for="set-key">Keybind: new chat</label><input type="text" id="set-key" readonly placeholder="Click here, then press your keys (e.g. Alt + N)" autocomplete="off"><div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="set-key-clear" hidden>Clear</button></div><p class="hint" id="set-key-hint"></p></section>
   <section class="sec"><label>Copy when clearing or closing a chat</label><div class="seg"><button type="button" class="snapsw" id="set-cc" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Copy this message</span></button></div><textarea id="set-cc-text" placeholder="The message to copy" spellcheck="false" aria-label="Message to copy when clearing or closing a chat" style="margin-top:10px"></textarea><div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="set-cc-reset">Use the opening message</button></div><p class="hint">Copied the first time you clear or close a chat that has something in it. The opening message starts with your name left blank: type it between "My name is" and the comma, or write anything you like.</p></section>
   <section class="sec"><label>Copy when opening a new chat</label><div class="seg"><button type="button" class="snapsw" id="set-nc" role="switch" aria-checked="false"><span class="tr"></span><span class="lbl">Copy this message</span></button></div><textarea id="set-nc-text" placeholder="The message to copy" spellcheck="false" aria-label="Message to copy when a new chat is opened" style="margin-top:10px"></textarea><div class="seg" style="margin-top:8px"><button class="btn out sm" type="button" id="set-nc-reset">Use the opening message</button></div><p class="hint">Copied every time a new chat opens, from the new chat keybind or + Chat. It is separate from the message above, so each can say something different. Nothing is copied when all 3 chats are already open.</p></section>
@@ -4136,9 +4159,9 @@ const DS_BODY=String.raw`<header class="dsa-h"><h1>Documentation</h1><button typ
 <div class="ov" id="help-modal"><div class="modal">
  <div class="mh"><span>How Documentation works</span></div>
  <div class="mb hlp">
-  <details open><summary>Chats</summary><p>Up to 3 customers at once. Type the customer name (it fills every Name field), search a template in that chat, and click a result to add it. Fill the variables, then press Copy. Each chat has its own scratch pad. Clearing or closing a chat can be restored with Undo.</p></details>
+  <details open><summary>Chats</summary><p>Up to 3 customers at once. Type the customer name (it fills every Name field), search a template in that chat, and click a result to add it. Fill the variables, then press Copy (or double-click the template). Each chat has its own scratch pad. Clearing or closing a chat can be restored with Undo.</p></details>
   <details><summary>Templates</summary><p>The left list is split into <b>categories</b> (like Notations and What Ifs) and each category into <b>sections</b> (like Billing or Endorsements). Click a category name to see everything in it, or a section to see just that one. Search everything at the top. <b>Add to chat</b> puts a copy into a chat, so the original is never changed. The pencil on a template edits it, and there you can also move it to another category or section.</p><p>Use the <b>+</b> next to a category to add a section, the pencil to rename or delete it, and <b>+ Category</b> at the bottom of the list to add a new category. Deleting a section keeps its templates (they move to Other); deleting a category deletes its templates.</p></details>
-  <details><summary>Variables</summary><ul><li><b>XXX</b> text, <b>XX/XX/XXXX</b> date, <b>$XXX</b> amount, <b>[Yes]</b>/<b>[No]</b> toggle, <b>[A|B]</b> choices.</li><li><kbd>Enter</kbd> inside one leaves it.</li></ul></details>
+  <details><summary>Variables</summary><ul><li><b>XXX</b> text, <b>XX/XX/XXXX</b> date, <b>$XXX</b> amount, <b>XXX/NA</b> always N/A when empty (Shift + click XXX in the editor), <b>[Yes]</b>/<b>[No]</b> toggle, <b>[A|B]</b> choices.</li><li><kbd>Enter</kbd> inside one leaves it.</li><li>Type <b>XXX(14)</b> to set a bubble's width.</li></ul></details>
   <details><summary>Saving</summary><p>Template edits are kept in this browser. <b>Save changes</b> (or <kbd>Ctrl</kbd>+<kbd>S</kbd>) writes them into the HTML file itself. Chats are kept per tab and are cleared when the tab closes.</p></details>
   <details><summary>Settings</summary><p>The gear sets Light / Dark / Black or Match app, accent color, text size, a keybind that opens a new chat from anywhere (hold Ctrl, Alt or Meta with almost any key, including Space and the tilde key), an optional message copied every time a new chat opens, and another one copied the first time you clear or close a chat.</p></details>
  </div>
@@ -4149,7 +4172,7 @@ const DS_BODY=String.raw`<header class="dsa-h"><h1>Documentation</h1><button typ
  <div class="mb">
   <div class="vbar" style="background:var(--surf);padding:8px 12px;border-radius:12px;margin-bottom:16px;border:1px solid var(--line);display:flex;align-items:center;flex-wrap:wrap;gap:6px">
    <span class="vl" style="margin-right:auto;font-weight:600">Insert Variable:</span>
-   <button type="button" class="btn xs tone" data-v="XXX" title="Fill in anything">XXX</button>
+   <button type="button" class="btn xs tone" data-v="XXX" title="Fill in anything. Shift + click for XXX/NA (always copies as N/A when empty)">XXX</button>
    <button type="button" class="btn xs tone" data-v="DATE" title="Date format">DATE</button>
    <button type="button" class="btn xs tone" data-v="AMT" title="Dollar amount">AMT</button>
    <button type="button" class="btn xs tone" data-v="FMT" title="Formatted Number (e.g. Account)">[00 0000]</button>
@@ -4159,7 +4182,7 @@ const DS_BODY=String.raw`<header class="dsa-h"><h1>Documentation</h1><button typ
    <div class="tsel"><div><label for="tpl-cat">Category</label><select id="tpl-cat"></select></div><div><label for="tpl-sec">Section</label><select id="tpl-sec"></select></div></div>
    <div><label for="page-title-input">Title</label><input type="text" id="page-title-input" placeholder="e.g. Coverage - Renters/Homes"></div>
    <div><label for="page-content-input">Content</label><textarea id="page-content-input" placeholder="Type or paste your text here..." style="min-height:90px"></textarea>
-   <p class="hint" style="margin-top:8px">Y/N adds a Yes/No toggle. Type [Opt1|Opt2] for options, or [00 0000 000] to format numbers automatically.</p></div>
+   <p class="hint" style="margin-top:8px">Y/N adds a Yes/No toggle. Shift + click XXX for XXX/NA. Type XXX(14) to set a bubble's width in Documentation. Type [Opt1|Opt2] for options.</p></div>
   </div>
  </div>
  <div id="vtabs"><div id="vt-scroll" role="tablist" aria-label="Template variants"></div><button type="button" class="ib sm vt-del" id="vt-del" title="Delete this variant" hidden></button></div>
@@ -4172,12 +4195,14 @@ const DS_BODY=String.raw`<header class="dsa-h"><h1>Documentation</h1><button typ
 </div></div>
 <div id="toast" role="status"></div><div id="undo" role="status" aria-live="polite"></div>`;
 const DS_JS=String.raw`var EMBED=/*EMBED_START*/null/*EMBED_END*/;
+var DEFNA=!!(EMBED&&EMBED.copyFill==='na');
+function unfilledText(k){return SET.na?'N/A':k==='date'?'  /  /    ':'    '}
 var D=null,view='chats',vs=[],vcur=0,editCtx=null,activeEditor=null,delArm=0,shown={};
 var CHAT_MAX=3,chats=[],chatUI={},_ct=0,lastChatId='',chatTrash=[];
 var SKEY='ataraxia_docs_standalone',CKEY='ataraxia_docs_chats',TKEY='ataraxia_docs_chat_trash';
 var varVals={},_undo=[],_undoT=0;
 var NAME_LBL=/^\s*(?:customer[\u2019']?s?\s+name|name)\s*:\s*$/i;
-var CHAT_FIELDS={name:{re:NAME_LBL,toks:['XXX']},prem:{re:/^\s*updated\s+premium\s*:\s*$/i,toks:['$XXX']}};
+var CHAT_FIELDS={name:{re:NAME_LBL,toks:['XXX','XXX/NA']},prem:{re:/^\s*updated\s+premium\s*:\s*$/i,toks:['$XXX']}};
 var CHAT_X='<svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>';
 function $(i){return document.getElementById(i)}
 function rid(){return Date.now()+'_'+Math.random().toString(36).slice(2,6)}
@@ -4241,6 +4266,9 @@ function chatCard(chat,p,root){
  if(p.variants&&p.variants.length>1){var vb=el('div','cp-v');
   p.variants.forEach(function(v,i){var b=el('button',i===(p.activeVariant||0)?'on':'');b.type='button';b.textContent=v.title;
    b.onclick=function(){if(i===(p.activeVariant||0))return;chatVariant(chat,p,i);card.replaceWith(chatCard(chat,p,root))};vb.append(b)});card.append(vb)}
+ const dok=e=>e.button===0&&e.target instanceof Element&&!e.target.closest('button,a,input,textarea,select,img,.var,.cp-v,[contenteditable]:not([contenteditable="false"])');
+ card.addEventListener('mousedown',e=>{if(e.detail>1&&dok(e))e.preventDefault()});
+ card.addEventListener('dblclick',e=>{if(!dok(e))return;e.preventDefault();getSelection()?.removeAllRanges();cp.click()});
  var c=el('div','cp-c');buildSpiel(c,p);card.append(c);return card}
 function chatEl(chat,idx){
  var root=el('section','chat');root.dataset.id=chat.id;
@@ -4412,7 +4440,7 @@ function buildFile(){
  Array.prototype.forEach.call(c.querySelectorAll('.ov.open'),function(o){o.classList.remove('open')});
  Array.prototype.forEach.call(c.querySelectorAll('.menu.show'),function(m){m.classList.remove('show')});
  c.className=BASE.cls;c.setAttribute('style',BASE.sty);var s=c.querySelector('#ds-main');if(!s)throw new Error('script not found');
- var json=JSON.stringify({sig:sig,opening:EMBED.opening||'',data:D}).replace(/</g,'\\u003c');
+ var json=JSON.stringify({sig:sig,copyFill:SET.na?'na':'blank',opening:EMBED.opening||'',data:D}).replace(/</g,'\\u003c');
  s.textContent=s.textContent.replace(/\/\*EMBED_START\*\/[\s\S]*?\/\*EMBED_END\*\//,function(){return '/*EMBED_START*/'+json+'/*EMBED_END*/'});
  return {html:'<!DOCTYPE html>\n'+c.outerHTML,sig:sig}}
 function dlFile(html){var u=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='documentation.html';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1000)}
@@ -4426,7 +4454,7 @@ async function saveFile(){
   EMBED.sig=b.sig;saveD()
  }catch(e){if(e&&e.name==='AbortError')return;fileH=null;dlFile(b.html);EMBED.sig=b.sig;saveD();showToast('Could not write to that file, so it was downloaded instead.')}}
 /* ---- navigation + settings ---- */
-var DEFCC="Thank you for contacting Allstate, where you're in good hands. My name is , and I'll be assisting you today.",DEFNC=(EMBED&&EMBED.opening&&String(EMBED.opening).trim())||DEFCC,SETK='ataraxia_docs_settings',SET={mode:'app',hue:null,fs:15,key:'',cc:{on:false,text:DEFCC},nc:{on:false,text:DEFNC}},ACC=[358,18,42,100,140,174,198,232,257,300,340],
+var DEFCC="Thank you for contacting Allstate, where you're in good hands. My name is , and I'll be assisting you today.",DEFNC=(EMBED&&EMBED.opening&&String(EMBED.opening).trim())||DEFCC,SETK='ataraxia_docs_settings',SET={mode:'app',hue:null,fs:15,zoom:100,na:DEFNA,key:'',cc:{on:false,text:DEFCC},nc:{on:false,text:DEFNC}},ACC=[358,18,42,100,140,174,198,232,257,300,340],
  RES=['Ctrl+C','Ctrl+V','Ctrl+X','Ctrl+A','Ctrl+Z','Ctrl+Y','Ctrl+S','Ctrl+N','Ctrl+T','Ctrl+W'],
  KH='Click the box, then hold Ctrl, Alt or Meta and press almost any key: a letter, number, F-key, Space, the tilde key, an arrow, a symbol (for example Ctrl + Space or Ctrl + Tilde). It starts a new chat from anywhere on this page. Backspace clears it.',
  BASE={cls:document.documentElement.className,sty:document.documentElement.getAttribute('style')||''};
@@ -4445,7 +4473,7 @@ function paintSet(){var m=$('set-mode');m.textContent='';
  var w=$('set-sw');w.textContent='';
  ACC.forEach(function(h){var b=el('button',SET.mode!=='app'&&SET.hue===h?'on':'');b.type='button';b.style.setProperty('--c',h);b.title='Accent color';b.setAttribute('aria-label','Accent color');
   b.onclick=function(){if(SET.mode==='app')SET.mode=/\bblack\b/.test(BASE.cls)?'black':/\bdark\b/.test(BASE.cls)?'dark':'light';SET.hue=h;saveSet();applySet();paintSet()};w.append(b)});
- $('set-fs').value=SET.fs;$('set-fsv').textContent=SET.fs+' px';
+ $('set-fs').value=SET.fs;$('set-fsv').textContent=SET.fs+' px';$('set-zoom').value=SET.zoom||100;$('set-zoomv').textContent=(SET.zoom||100)+'%';$('set-na').classList.toggle('on',!!SET.na);$('set-na').setAttribute('aria-checked',SET.na?'true':'false');$('set-bl').classList.toggle('on',!SET.na);$('set-bl').setAttribute('aria-checked',SET.na?'false':'true');
  $('set-key').value=SET.key?SET.key.split('+').join(' + '):'';$('set-key-clear').hidden=!SET.key;$('set-key-hint').textContent=KH;var cc=SET.cc;$('set-cc').classList.toggle('on',!!cc.on);$('set-cc').setAttribute('aria-checked',cc.on?'true':'false');$('set-cc-text').value=cc.text;var nc=SET.nc;$('set-nc').classList.toggle('on',!!nc.on);$('set-nc').setAttribute('aria-checked',nc.on?'true':'false');$('set-nc-text').value=nc.text}
 var KPUN={Space:'Space',Backquote:'Tilde',Minus:'-',Equal:'=',Comma:',',Period:'.',Slash:'/',Semicolon:';',Quote:"'",BracketLeft:'[',BracketRight:']',Backslash:'\\'};
 function keyName(e){var k=e.code||'';
@@ -4454,6 +4482,9 @@ function keyName(e){var k=e.code||'';
  return KPUN[k]||''}
 function comboOf(e){var n=keyName(e);if(!n||(!(e.ctrlKey||e.altKey||e.metaKey)&&!/^F\d/.test(n)))return'';
  var m=[];if(e.ctrlKey)m.push('Ctrl');if(e.altKey)m.push('Alt');if(e.shiftKey)m.push('Shift');if(e.metaKey)m.push('Meta');return m.concat(n).join('+')}
+function applyZoom(){var z=(+SET.zoom||100)/100,p=Math.round(z*100);['chats','tpl'].forEach(function(id){$(id).style.zoom=z});$('zm-pct').textContent=p+'%';$('zm-out').disabled=z<=.5;$('zm-in').disabled=z>=1.5;var r=$('set-zoom');if(r){r.value=p;$('set-zoomv').textContent=p+'%'}}
+function setZoom(v){SET.zoom=Math.min(150,Math.max(50,Math.round(v/5)*5));saveSet();applyZoom()}
+$('zm-out').onclick=function(){setZoom((+SET.zoom||100)-5)};$('zm-in').onclick=function(){setZoom((+SET.zoom||100)+5)};$('zm-pct').onclick=function(){setZoom(100)};
 $('undo-chat').onclick=undoLast;$('add-chat').onclick=function(){addChat()};$('save-file').onclick=saveFile;
 document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&!e.altKey&&!e.shiftKey&&e.key.toLowerCase()==='s'){e.preventDefault();saveFile()}});
 /* ---- variables (same behaviour as the app) ---- */
@@ -4470,12 +4501,13 @@ document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&!e.al
  document.addEventListener('click',closeMenus);
  document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeMenus();closeModal('page-modal')}})})();
 addEventListener('pagehide',chatSave);document.addEventListener('visibilitychange',function(){if(document.hidden)chatSave()});
-loadD();loadSet();fixCC();applySet();chatRestore();trashRestore();paintTrash();
+loadD();loadSet();fixCC();applySet();applyZoom();chatRestore();trashRestore();paintTrash();
 $('tpl-q').oninput=function(){tq=this.value;renderTpl()};
 $('help-btn').onclick=function(){openModal('help-modal')};
 $('set-btn').onclick=function(){paintSet();openModal('set-modal')};
 $('set-close').onclick=function(){closeModal('set-modal')};
-$('set-reset').onclick=function(){SET={mode:'app',hue:null,fs:15,key:'',cc:{on:false,text:DEFCC},nc:{on:false,text:DEFNC}};saveSet();applySet();paintSet()};
+$('set-reset').onclick=function(){SET={mode:'app',hue:null,fs:15,zoom:100,na:DEFNA,key:'',cc:{on:false,text:DEFCC},nc:{on:false,text:DEFNC}};saveSet();applySet();applyZoom();paintSet()};
+$('set-na').onclick=function(){SET.na=!SET.na;saveSet();paintSet()};$('set-bl').onclick=function(){SET.na=false;saveSet();paintSet()};$('set-zoom').oninput=function(){setZoom(+this.value)};
 $('set-fs').oninput=function(){SET.fs=+this.value;saveSet();applySet();$('set-fsv').textContent=SET.fs+' px'};
 $('set-key-clear').onclick=function(){SET.key='';saveSet();paintSet()};
 $('set-cc').onclick=function(){SET.cc.on=!SET.cc.on;saveSet();paintSet()};
@@ -4500,8 +4532,8 @@ function docsStandaloneHtml(){
  const consts='var IC='+JSON.stringify(IC)+';const ic='+ic.toString()+';const clamp='+clamp.toString()+';const phOf='+phOf.toString()+';var TOK='+JSON.stringify(TOK)+';var VKIND='+JSON.stringify(VKIND)+';var VLABEL='+JSON.stringify(VLABEL)+';var SIMPLE_VAR='+SIMPLE_VAR.toString()+';var VOPT_RE='+VOPT_RE.toString()+';';
  const fns=[el,placeMenu,closeMenus,toggleDropdown,getVarKind,scanVars,splitTop,parseOpts,boolDef,setBool,toggleBool,makeBool,makePlainOpt,makeInlineOpt,makeMultiOpt,makeOpt,makeVar,buildSpiel,composeSpiel,
   fmtDate,caretOff,setCaret,selectAllIn,commitVar,finishVar,insertIntoVar,pasteIntoVar,onVarInput,writeClipboard,fallbackCopy,copyText,showToast,autosize,insertVar,
-  fmtPolicy,fmtEff,fieldIdx,chatFill,chatSet,inkFor,applyColors,showUndo,paintUndo].map(f=>f.toString()).join('\n');
- const embed={sig:docSig()+'~s2',opening:(()=>{try{return openingText()}catch(e){return''}})(),data:docBundle()};
+  fmtPolicy,fmtEff,fieldIdx,blankTok,chatFill,chatSet,inkFor,applyColors,showUndo,paintUndo].map(f=>f.toString()).join('\n');
+ const embed={copyFill:(appData.settings&&appData.settings.copyFill)==='na'?'na':'blank',sig:docSig()+'~s2',opening:(()=>{try{return openingText()}catch(e){return''}})(),data:docBundle()};
  const js=consts+'\n'+fns+'\n'+DS_JS.replace('/*EMBED_START*/null/*EMBED_END*/',()=>'/*EMBED_START*/'+JSON.stringify(embed).replace(/</g,'\\u003c')+'/*EMBED_END*/');
  return '<!DOCTYPE html>\n<html lang="en" class="'+cls+'" style="'+escAttr(sty)+'"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Documentation</title><style>'+css+'\n'+DS_CSS+'</style></head><body>'+DS_BODY+'<scr'+'ipt id="ds-main">'+js+'</scr'+'ipt></body></html>'}
 load();applyTheme();applySiteName(true);renderAll();setEdit(false,true);$('ws').addEventListener('pointerdown',layoutDown);
@@ -4549,7 +4581,7 @@ window.PageImages=(()=>{
  async function refreshUsage(){try{const r=await request({action:'list'});used=r.images.reduce((n,i)=>n+(+i.size||0),0);paintUsage()}catch(e){}}
  function props(p){const i=p?.image;return i&&/^[a-f0-9]{64}\/[a-f0-9]{48}$/.test(i.key)?{image:{key:i.key,position:i.position==='above'?'above':'below',alt:String(i.alt||'').slice(0,200)}}:{}}
  function syncPos(){const b=$('page-image-pos-btn'),v=$('page-image-position').value==='above'?'above':'below',t=v==='above'?'Image above text':'Image below text';b.dataset.pos=v;b.title=t+' (click to switch)';b.setAttribute('aria-label',t+'. Click to switch.')}
- function edit(p){editorGeneration++;draft=props(p).image||null;$('page-image-file').value='';$('page-image-position').value=draft?.position||'below';$('page-image-alt').value=draft?.alt||'';syncPos();$('page-image-preview').replaceChildren();info(draft?'Cloud image attached.':'No image attached.');if(draft)mount($('page-image-preview'),{image:draft});}
+ function edit(p){editorGeneration++;draft=props(p).image||null;{const d=$('page-img-sec');if(d)d.open=!!draft}$('page-image-file').value='';$('page-image-position').value=draft?.position||'below';$('page-image-alt').value=draft?.alt||'';syncPos();$('page-image-preview').replaceChildren();info(draft?'Cloud image attached.':'No image attached.');if(draft)mount($('page-image-preview'),{image:draft});}
  function value(){return draft?{...draft,position:$('page-image-position').value,alt:$('page-image-alt').value.trim().slice(0,200)}:null}
  async function url(key){
   if(cache.has(key))return cache.get(key);const gen=epoch;
@@ -5344,6 +5376,13 @@ paint()})();
 function paint(){[[H,UIP.hold()],[D,UIP.dots()]].forEach(([b,on])=>{b.classList.toggle('on',on);b.setAttribute('aria-checked',on?'true':'false')})}
 H.onclick=()=>{UIP.set('hold',!UIP.hold());paint();showToast(UIP.hold()?'Hold to open menu on.':'Hold to open menu off.')};
 D.onclick=()=>{UIP.set('dots',!UIP.dots());paint();renderPages();showToast(UIP.dots()?'3-dots button shown.':'3-dots button hidden.')};
+paint()})();
+(function(){const N=document.getElementById('fill-na'),B=document.getElementById('fill-blank');if(!N||!B)return;
+const na=()=>(appData.settings||{}).copyFill==='na';
+function paint(){const v=na();[[N,v],[B,!v]].forEach(([b,on])=>{b.classList.toggle('on',on);b.setAttribute('aria-checked',on?'true':'false')})}
+window.paintCopyFill=paint;
+const set=v=>{appData.settings.copyFill=v;persistLocal();paint();showToast(v==='na'?'Empty variables copy as N/A.':'Empty variables copy as blank spaces.')};
+N.onclick=()=>set(na()?'blank':'na');B.onclick=()=>set('blank');
 paint()})();
 /* automatic tagging switches (Settings > General > Break reminders). Saved with the workspace, so they sync like the rest of your data */
 (function(){const M=window.SmartScheduleManager,T=document.getElementById('auto-tag'),S=document.getElementById('auto-start'),E=document.getElementById('auto-end'),sub=document.getElementById('auto-sub');if(!M||!T||!S||!E||!sub)return;
