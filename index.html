@@ -1198,7 +1198,7 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
      <p class="hint">Export your workspace data to continue on another device, then import it back. For easy transferring of your JSON, you can use rentry.co to save your json there and access it later.</p></div>
    </div></details>
    <details class="sec acc" data-k="localcopy" open><summary><span class="acc-t">Legal na copy<small>Encrypted txt file and the offline base HTML</small></span></summary><div class="acc-b">
-    <div><p class="hint" style="margin-top:0">Pick a password for the txt file. The offline base HTML asks for it when you import the file. It is not your account password and is not stored anywhere.</p>
+    <div><p class="hint" style="margin-top:0">Pick a password for the txt file. The offline base HTML asks for it when you import the file. It is not your account password.</p>
     <div style="display:grid;gap:6px"><input type="password" id="bk-pw1" placeholder="File password (8+ characters)" autocomplete="off"><input type="password" id="bk-pw2" placeholder="Confirm file password" autocomplete="off"></div>
     <div class="seg" style="margin-top:8px"><button class="btn tone" id="bk-save" type="button">Save user data (.txt)</button><button class="btn out" id="bk-base" type="button" title="Download the offline app with no data in it">Download base HTML</button></div>
     <p class="hint">Uploaded images are not included in the txt file.</p></div>
@@ -7230,7 +7230,7 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
   <div class="tp" data-t="account">
    <details class="sec acc" data-k="acct" open><summary><span class="acc-t">Account<small>Profile picture and password</small></span></summary><div class="acc-b">
     <div><div class="lk-row"><div class="lk-av sm" id="set-av"></div><div class="seg"><button class="btn tone sm" id="av-up" type="button">Upload</button><button class="btn out sm" id="av-rm" type="button">Remove</button></div><input type="file" id="av-file" accept="image/*" hidden></div><p class="hint" id="acct-st"></p><p class="hint">Your picture is shrunk to 256 px and kept on this device and in your saved data file only.</p>
-    <p class="hint" style="margin-bottom:4px">Change password</p><div style="display:grid;gap:6px"><input type="password" id="st-pw0" placeholder="Current password" autocomplete="off"><input type="password" id="st-pw1" placeholder="New password (8+ characters)" autocomplete="off"><input type="password" id="st-pw2" placeholder="Confirm new password" autocomplete="off"></div><div class="seg" style="margin-top:6px"><button class="btn tone sm" id="st-pwgo" type="button">Change password</button></div><p class="hint">A forgotten password cannot be recovered, because nothing is stored anywhere else.</p></div>
+    <p class="hint" style="margin-bottom:4px">Change password</p><div style="display:grid;gap:6px"><input type="password" id="st-pw0" placeholder="Current password" autocomplete="off"><input type="password" id="st-pw1" placeholder="New password (8+ characters)" autocomplete="off"><input type="password" id="st-pw2" placeholder="Confirm new password" autocomplete="off"></div><div class="seg" style="margin-top:6px"><button class="btn tone sm" id="st-pwgo" type="button">Change password</button></div><p class="hint">A forgotten password can only be recovered with the ataraxia.</p></div>
    </div></details>
    <details class="sec acc" data-k="lock"><summary><span class="acc-t">Lock<small>Cover the screen until you type your password again</small></span></summary><div class="acc-b">
     <div><p class="hint" style="margin-top:0">The app also locks by itself after 10 minutes without activity.</p><div class="seg" style="margin-top:8px"><button class="btn tone sm" type="button" id="set-lock">Lock now</button></div></div>
@@ -7263,7 +7263,7 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
   <details><summary>Documentation</summary><p><b>Chats</b>: up to 3 customers at once. Type the customer name, search a template, and its Name / Updated Premium fields fill in. Double-click a template in a chat to copy it. Each chat has a scratch pad; clearing or closing a chat can be undone. <b>Notations</b> and <b>What if</b> hold the templates (edit them like any page). The download icon makes a stand-alone Documentation HTML file you can open anywhere. In it you can add your own categories and sections, and pick a message to copy when you clear or close a chat.</p></details>
   <details><summary>The island (bottom right)</summary><p>Live PH clock. Dots = break, lunch, break. <b>Start shift</b> in its panel, then it warns before breaks (yellow), alerts when due, counts your break and flags overbreak (red). <b>Upcoming</b> shows imported days. <b>Other Tag</b> logs custom time away. <b>Automatic tagging</b> and chat tracker are in Settings. The <b>+</b> tab under it starts a new chat and copies your opening spiel. Drag it anywhere.</p></details>
   <details><summary>Search and keybinds</summary><ul><li><kbd>/</kbd> opens global search across every book. Type <b>doc vehicle</b> to drop a template straight into a chat.</li><li>Page keybind: set it in the page editor.</li><li>New chat keybind and the 1 / 2 / 3 jump keys for Workspace, Tools, Documentation: Settings &gt; General.</li></ul></details>
-  <details><summary>Password, saving your data</summary><p>Everything stays on this device. Settings &gt; Data &amp; files saves one encrypted txt file with all your data, imports it back (it asks for that file's password) and downloads an empty base HTML. A reminder appears when there are unsaved changes. <b>Lock now</b> covers the screen until you retype your password.</p></details>
+  <details><summary>Password, saving your data</summary><p>Settings &gt; Data &amp; files saves one encrypted txt file with all your data, imports it back (it asks for that file's password) and downloads an empty base HTML. A reminder appears when there are unsaved changes. <b>Lock now</b> covers the screen until you retype your password.</p></details>
   <details><summary>Settings</summary><p>Open Settings with the gear at the top left. It has tabs (General, Island &amp; breaks, Appearance, Account, Data &amp; files) and each tab is split into sections you can open or close; the app remembers which ones you left open. The <b>?</b> button for this help is at the top right of Settings.</p></details><details><summary>Look and feel</summary><p>Settings &gt; Appearance has Light / Dark / Black and accent colors. The theme editor changes colors, corners, font, lock screen and island glass. Light mode and Flat island in Settings help slow computers.</p></details>
  </div>
  <div class="mf"><button class="btn tone" onclick="closeModal('help-modal')">Close</button></div>
@@ -11199,7 +11199,7 @@ function fit(file){return new Promise((res,rej)=>{
 async function saveAvatar(d){if(d){if(!wr(KA,d)){toast('Could not store the picture (browser storage is full or blocked).');return}}else{try{localStorage.removeItem(KA)}catch(e){}}paint();paintDirty()}
 window.setAvatar=saveAvatar;
 window.ChatIdentity={name:()=>rd(KL)||'',avatar};
-function paintAcct(){const a=getAuth();G('acct-st').textContent=a?'Local profile: '+a.u+'. Nothing is sent anywhere.':'No profile yet.'}
+function paintAcct(){const a=getAuth();G('acct-st').textContent=a?'Local profile: '+a.u+'.':'No profile yet.'}
 
 /* ---------- local image store (replaces the old image storage) ---------- */
 const imgs=()=>{try{const o=JSON.parse(rd(IMG)||'{}');return o&&typeof o==='object'&&!Array.isArray(o)?o:{}}catch(e){return{}}};
@@ -11441,6 +11441,7 @@ window.applyCustom=function(t,force){if(window.__themeEdit&&!force)return;if(!fo
   set('--pad-bg',rg(pcol,pa));set('--pad-fg',pfg);set('--pad-in',pfg==='#ffffff'?'rgb(255 255 255/.16)':'rgb(0 0 0/.08)');if(pm==='glass')set('--pad-blur',(U.padb!=null?+U.padb:14)+'px')}
  if(U.sh)set('--sh',{soft:'0 2px 10px rgba(0,0,0,.14)',strong:'0 6px 22px rgba(0,0,0,.32)'}[U.sh])};
 /* starter presets: name : background, background 2, card, accent, highlight [, lock top, lock bottom] */
+const fxOK=()=>{try{return localStorage.getItem('ataraxia_fx_ok')==='1'}catch(e){return false}};/* the offline copy has no master key check, so the lily effect stays off unless this device was already unlocked */
 const ISH={soft:[18,20],sharp:[8,10]};
 window.applyIsland=function(I){I=I||{};const rt=$('isl-root'),r=document.documentElement,set=(k,v)=>r.style.setProperty(k,v);
  ['--isl-near','--isl-late','--isl-ok','--isl-radius','--isl-radius-open','--isl-bg','--isl-blur','--fx-c','--fx-o','--fx-d','--fx-s','--fx-t'].forEach(k=>r.style.removeProperty(k));
