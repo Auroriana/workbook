@@ -11328,12 +11328,14 @@ function applyPayload(p){const a=p&&p.auth;
 function pickImport(file){if(!file)return;if(file.size>40*1048576){toast('That file is too large.');return}
  const r=new FileReader();r.onload=()=>{pendTxt=String(r.result);if(!locked){document.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));PW='';clearTimeout(idleT);setLocked(true)}setMode('import')};r.readAsText(file)}
 
-/* ---------- reminder to save the txt copy ---------- */
+/* ---------- fixed save button (bottom left): one click downloads the txt copy of your user data ---------- */
 const pill=document.createElement('button');pill.type='button';pill.id='bk-pill';pill.hidden=true;
-pill.style.cssText='position:fixed;left:14px;bottom:14px;z-index:70;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surf);color:var(--tx,inherit);font:600 13px/1.2 inherit;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.18)';
-pill.textContent='\u25CF Unsaved changes. Save your data (.txt)';pill.onclick=saveFile;document.body.appendChild(pill);
-function paintDirty(){pill.hidden=!isDirty()}
-window.onPersist=()=>{if(!locked)setTimeout(paintDirty,500)};
+pill.title='Save user data (.txt)';pill.setAttribute('aria-label','Save user data (.txt)');
+pill.style.cssText='position:fixed;left:14px;bottom:14px;z-index:70;width:44px;height:44px;padding:0;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line);background:var(--surf);color:var(--tx,inherit);cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.18)';
+pill.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>';
+pill.onclick=saveFile;document.body.appendChild(pill);
+function paintDirty(){pill.hidden=locked||!getAuth()}
+window.onPersist=()=>{};
 setInterval(paintDirty,15000);addEventListener('storage',paintDirty);
 addEventListener('beforeunload',e=>{if(isDirty()){e.preventDefault();e.returnValue=''}});
 /* warn when something that looks like a card number is typed */
