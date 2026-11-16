@@ -2479,9 +2479,28 @@ button{cursor:pointer;border:0;background:none}
 .brand{text-align:center;font-size:10.5px;letter-spacing:.22em;color:var(--mut);opacity:.75;padding-top:2px}
 #toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,16px);background:var(--txt);color:var(--bg);padding:10px 20px;border-radius:999px;font-size:13.5px;opacity:0;pointer-events:none;transition:.2s;max-width:calc(100% - 32px);text-align:center}
 #toast.show{opacity:1;transform:translate(-50%,0)}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}`;
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.qh{display:flex;align-items:center;gap:4px}
+.qh h1{flex:1}
+.ibq{width:32px;height:32px;display:grid;place-items:center;border-radius:50%;color:var(--mut);transition:background .15s,color .15s}
+.ibq:hover,.ibq[aria-expanded=true]{background:var(--pc);color:var(--p)}
+.hist{border:1px solid var(--line);background:var(--surf);border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:4px}
+.hist[hidden]{display:none}
+.hl{max-height:210px;overflow:auto;display:flex;flex-direction:column;gap:2px}
+.hr{display:flex;align-items:stretch;gap:2px}
+.hi{flex:1;min-width:0;text-align:left;padding:6px 8px;border-radius:8px}
+.hi:hover{background:var(--pc);color:var(--on-pc)}
+.hi span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap;word-break:break-word;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace}
+.hi small{display:block;margin-top:2px;font-size:10.5px;color:var(--mut)}
+.hi:hover small{color:inherit;opacity:.8}
+.hx{width:28px;border-radius:8px;color:var(--mut);font-size:17px;line-height:1}
+.hx:hover{background:var(--pc);color:var(--p)}
+.hf{display:flex;justify-content:space-between;align-items:center;padding:2px 6px;font-size:11.5px;color:var(--mut)}
+.hf button{color:var(--p);font-size:12px}
+.hn{text-align:center;color:var(--mut);padding:10px;font-size:12.5px}`;
 const QF_BODY=String.raw`<main class="qf">
-<h1>Quote Formatter</h1>
+<div class="qh"><h1>Quote Formatter</h1><button type="button" class="ibq" id="qf-hbtn" title="History" aria-label="History" aria-expanded="false" aria-controls="qf-hist"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></button><button type="button" class="ibq" id="qf-trash" title="Clear" aria-label="Clear quote formatter"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg></button></div>
+<div class="hist" id="qf-hist" hidden><div class="hl" id="qf-hl"></div><div class="hf"><span id="qf-hn"></span><button type="button" id="qf-hclr">Clear history</button></div></div>
 <textarea class="in" id="qf-in" placeholder="Paste raw messy quote here..." spellcheck="false" aria-label="Raw quote"></textarea>
 <textarea class="in" id="qf-out" placeholder="Cleaned output..." readonly aria-label="Cleaned quote"></textarea>
 <button type="button" class="go" id="qf-go">Clean &amp; copy</button>
@@ -2527,7 +2546,27 @@ var tt=0;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('sho
 function fb(t){var a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(a);a.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}a.remove();return ok}
 function copy(t){if(navigator.clipboard&&window.isSecureContext){return navigator.clipboard.writeText(t).then(function(){return true},function(){return fb(t)})}return Promise.resolve(fb(t))}
 $('qf-in').addEventListener('input',function(){$('qf-out').value=cleanQuote(this.value)});
-$('qf-go').onclick=function(){var v=cleanQuote($('qf-in').value);$('qf-out').value=v;if(!v){toast('Paste a quote first.');return}copy(v).then(function(ok){toast(ok?'Cleaned & copied to clipboard!':'Copy failed. Select the text and press Ctrl+C.')})};
+$('qf-go').onclick=function(){var v=cleanQuote($('qf-in').value);$('qf-out').value=v;if(!v){toast('Paste a quote first.');return}addHist(v);copy(v).then(function(ok){toast(ok?'Cleaned & copied to clipboard!':'Copy failed. Select the text and press Ctrl+C.')})};
+var HK='ataraxia_quote_formatter_history',H=[],hct=0;
+try{var hv=JSON.parse(localStorage.getItem(HK)||'[]');if(Array.isArray(hv))H=hv.filter(function(x){return x&&typeof x.t==='string'&&x.t}).slice(0,50)}catch(e){}
+function hsave(){try{localStorage.setItem(HK,JSON.stringify(H))}catch(e){}}
+function addHist(t){if(!t)return;H=H.filter(function(x){return x.t!==t});H.unshift({t:t,at:Date.now()});if(H.length>50)H.length=50;hsave();hdraw()}
+function hwhen(ts){try{return new Date(ts).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}catch(e){return ''}}
+function hdraw(){var box=$('qf-hl'),n=$('qf-hn'),cb=$('qf-hclr');box.textContent='';
+ if(!H.length){var e=document.createElement('div');e.className='hn';e.textContent='No history yet. Quotes you clean & copy show up here.';box.appendChild(e);n.textContent='';cb.hidden=true;return}
+ cb.hidden=false;n.textContent=H.length+(H.length===1?' quote':' quotes');
+ H.forEach(function(x,i){var r=document.createElement('div');r.className='hr';
+  var b=document.createElement('button');b.type='button';b.className='hi';b.title='Copy this quote';
+  var sp=document.createElement('span');sp.textContent=x.t;var sm=document.createElement('small');sm.textContent=hwhen(x.at);b.appendChild(sp);b.appendChild(sm);
+  b.onclick=function(){$('qf-out').value=x.t;copy(x.t).then(function(ok){toast(ok?'Copied from history.':'Copy failed. Select the text and press Ctrl+C.')})};
+  var d=document.createElement('button');d.type='button';d.className='hx';d.title='Remove from history';d.setAttribute('aria-label','Remove from history');d.textContent='\u00d7';
+  d.onclick=function(){H.splice(i,1);hsave();hdraw()};
+  r.appendChild(b);r.appendChild(d);box.appendChild(r)})}
+$('qf-hbtn').onclick=function(){var h=$('qf-hist'),o=h.hidden;h.hidden=!o;this.setAttribute('aria-expanded',o?'true':'false')};
+$('qf-hclr').onclick=function(){var b=this;if(!hct){b.textContent='Click again to clear';hct=setTimeout(function(){hct=0;b.textContent='Clear history'},3000);return}
+ clearTimeout(hct);hct=0;b.textContent='Clear history';H=[];hsave();hdraw();toast('History cleared.')};
+$('qf-trash').onclick=function(){var a=$('qf-in'),o=$('qf-out');if(!a.value&&!o.value){toast('Already empty.');return}a.value='';o.value='';a.focus();toast('Cleared.')};
+hdraw();
 build();apply();
 })();`;
 function quoteFormatterHtml(){const cl=document.documentElement.classList,shade=cl.contains('black')?0:cl.contains('dark')?12:98,hue=Math.round(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--h'))||257);
@@ -2562,7 +2601,8 @@ const TB_CSS=String.raw`.bundle{width:100%;max-width:1120px;display:grid;grid-te
 .reset{width:100%;height:30px;border-radius:999px;border:1px solid var(--mut);color:var(--p);font-size:13px}`;
 const TB_BODY=String.raw`<div class="bundle">
 <section class="qf" aria-label="Quote Formatter">
-<h1>Quote Formatter</h1>
+<div class="qh"><h1>Quote Formatter</h1><button type="button" class="ibq" id="qf-hbtn" title="History" aria-label="History" aria-expanded="false" aria-controls="qf-hist"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></button><button type="button" class="ibq" id="qf-trash" title="Clear" aria-label="Clear quote formatter"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg></button></div>
+<div class="hist" id="qf-hist" hidden><div class="hl" id="qf-hl"></div><div class="hf"><span id="qf-hn"></span><button type="button" id="qf-hclr">Clear history</button></div></div>
 <textarea class="in" id="qf-in" placeholder="Paste raw messy quote here..." spellcheck="false" aria-label="Raw quote"></textarea>
 <textarea class="in" id="qf-out" placeholder="Cleaned output..." readonly aria-label="Cleaned quote"></textarea>
 <button type="button" class="go" id="qf-go">Clean &amp; copy</button>
@@ -8438,9 +8478,28 @@ button{cursor:pointer;border:0;background:none}
 .brand{text-align:center;font-size:10.5px;letter-spacing:.22em;color:var(--mut);opacity:.75;padding-top:2px}
 #toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,16px);background:var(--txt);color:var(--bg);padding:10px 20px;border-radius:999px;font-size:13.5px;opacity:0;pointer-events:none;transition:.2s;max-width:calc(100% - 32px);text-align:center}
 #toast.show{opacity:1;transform:translate(-50%,0)}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}`;
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.qh{display:flex;align-items:center;gap:4px}
+.qh h1{flex:1}
+.ibq{width:32px;height:32px;display:grid;place-items:center;border-radius:50%;color:var(--mut);transition:background .15s,color .15s}
+.ibq:hover,.ibq[aria-expanded=true]{background:var(--pc);color:var(--p)}
+.hist{border:1px solid var(--line);background:var(--surf);border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:4px}
+.hist[hidden]{display:none}
+.hl{max-height:210px;overflow:auto;display:flex;flex-direction:column;gap:2px}
+.hr{display:flex;align-items:stretch;gap:2px}
+.hi{flex:1;min-width:0;text-align:left;padding:6px 8px;border-radius:8px}
+.hi:hover{background:var(--pc);color:var(--on-pc)}
+.hi span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap;word-break:break-word;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace}
+.hi small{display:block;margin-top:2px;font-size:10.5px;color:var(--mut)}
+.hi:hover small{color:inherit;opacity:.8}
+.hx{width:28px;border-radius:8px;color:var(--mut);font-size:17px;line-height:1}
+.hx:hover{background:var(--pc);color:var(--p)}
+.hf{display:flex;justify-content:space-between;align-items:center;padding:2px 6px;font-size:11.5px;color:var(--mut)}
+.hf button{color:var(--p);font-size:12px}
+.hn{text-align:center;color:var(--mut);padding:10px;font-size:12.5px}`;
 const QF_BODY=String.raw`<main class="qf">
-<h1>Quote Formatter</h1>
+<div class="qh"><h1>Quote Formatter</h1><button type="button" class="ibq" id="qf-hbtn" title="History" aria-label="History" aria-expanded="false" aria-controls="qf-hist"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></button><button type="button" class="ibq" id="qf-trash" title="Clear" aria-label="Clear quote formatter"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg></button></div>
+<div class="hist" id="qf-hist" hidden><div class="hl" id="qf-hl"></div><div class="hf"><span id="qf-hn"></span><button type="button" id="qf-hclr">Clear history</button></div></div>
 <textarea class="in" id="qf-in" placeholder="Paste raw messy quote here..." spellcheck="false" aria-label="Raw quote"></textarea>
 <textarea class="in" id="qf-out" placeholder="Cleaned output..." readonly aria-label="Cleaned quote"></textarea>
 <button type="button" class="go" id="qf-go">Clean &amp; copy</button>
@@ -8486,7 +8545,27 @@ var tt=0;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('sho
 function fb(t){var a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(a);a.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}a.remove();return ok}
 function copy(t){if(navigator.clipboard&&window.isSecureContext){return navigator.clipboard.writeText(t).then(function(){return true},function(){return fb(t)})}return Promise.resolve(fb(t))}
 $('qf-in').addEventListener('input',function(){$('qf-out').value=cleanQuote(this.value)});
-$('qf-go').onclick=function(){var v=cleanQuote($('qf-in').value);$('qf-out').value=v;if(!v){toast('Paste a quote first.');return}copy(v).then(function(ok){toast(ok?'Cleaned & copied to clipboard!':'Copy failed. Select the text and press Ctrl+C.')})};
+$('qf-go').onclick=function(){var v=cleanQuote($('qf-in').value);$('qf-out').value=v;if(!v){toast('Paste a quote first.');return}addHist(v);copy(v).then(function(ok){toast(ok?'Cleaned & copied to clipboard!':'Copy failed. Select the text and press Ctrl+C.')})};
+var HK='ataraxia_quote_formatter_history',H=[],hct=0;
+try{var hv=JSON.parse(localStorage.getItem(HK)||'[]');if(Array.isArray(hv))H=hv.filter(function(x){return x&&typeof x.t==='string'&&x.t}).slice(0,50)}catch(e){}
+function hsave(){try{localStorage.setItem(HK,JSON.stringify(H))}catch(e){}}
+function addHist(t){if(!t)return;H=H.filter(function(x){return x.t!==t});H.unshift({t:t,at:Date.now()});if(H.length>50)H.length=50;hsave();hdraw()}
+function hwhen(ts){try{return new Date(ts).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}catch(e){return ''}}
+function hdraw(){var box=$('qf-hl'),n=$('qf-hn'),cb=$('qf-hclr');box.textContent='';
+ if(!H.length){var e=document.createElement('div');e.className='hn';e.textContent='No history yet. Quotes you clean & copy show up here.';box.appendChild(e);n.textContent='';cb.hidden=true;return}
+ cb.hidden=false;n.textContent=H.length+(H.length===1?' quote':' quotes');
+ H.forEach(function(x,i){var r=document.createElement('div');r.className='hr';
+  var b=document.createElement('button');b.type='button';b.className='hi';b.title='Copy this quote';
+  var sp=document.createElement('span');sp.textContent=x.t;var sm=document.createElement('small');sm.textContent=hwhen(x.at);b.appendChild(sp);b.appendChild(sm);
+  b.onclick=function(){$('qf-out').value=x.t;copy(x.t).then(function(ok){toast(ok?'Copied from history.':'Copy failed. Select the text and press Ctrl+C.')})};
+  var d=document.createElement('button');d.type='button';d.className='hx';d.title='Remove from history';d.setAttribute('aria-label','Remove from history');d.textContent='\u00d7';
+  d.onclick=function(){H.splice(i,1);hsave();hdraw()};
+  r.appendChild(b);r.appendChild(d);box.appendChild(r)})}
+$('qf-hbtn').onclick=function(){var h=$('qf-hist'),o=h.hidden;h.hidden=!o;this.setAttribute('aria-expanded',o?'true':'false')};
+$('qf-hclr').onclick=function(){var b=this;if(!hct){b.textContent='Click again to clear';hct=setTimeout(function(){hct=0;b.textContent='Clear history'},3000);return}
+ clearTimeout(hct);hct=0;b.textContent='Clear history';H=[];hsave();hdraw();toast('History cleared.')};
+$('qf-trash').onclick=function(){var a=$('qf-in'),o=$('qf-out');if(!a.value&&!o.value){toast('Already empty.');return}a.value='';o.value='';a.focus();toast('Cleared.')};
+hdraw();
 build();apply();
 })();`;
 function quoteFormatterHtml(){const cl=document.documentElement.classList,shade=cl.contains('black')?0:cl.contains('dark')?12:98,hue=Math.round(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--h'))||257);
@@ -8521,7 +8600,8 @@ const TB_CSS=String.raw`.bundle{width:100%;max-width:1120px;display:grid;grid-te
 .reset{width:100%;height:30px;border-radius:999px;border:1px solid var(--mut);color:var(--p);font-size:13px}`;
 const TB_BODY=String.raw`<div class="bundle">
 <section class="qf" aria-label="Quote Formatter">
-<h1>Quote Formatter</h1>
+<div class="qh"><h1>Quote Formatter</h1><button type="button" class="ibq" id="qf-hbtn" title="History" aria-label="History" aria-expanded="false" aria-controls="qf-hist"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></button><button type="button" class="ibq" id="qf-trash" title="Clear" aria-label="Clear quote formatter"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg></button></div>
+<div class="hist" id="qf-hist" hidden><div class="hl" id="qf-hl"></div><div class="hf"><span id="qf-hn"></span><button type="button" id="qf-hclr">Clear history</button></div></div>
 <textarea class="in" id="qf-in" placeholder="Paste raw messy quote here..." spellcheck="false" aria-label="Raw quote"></textarea>
 <textarea class="in" id="qf-out" placeholder="Cleaned output..." readonly aria-label="Cleaned quote"></textarea>
 <button type="button" class="go" id="qf-go">Clean &amp; copy</button>
