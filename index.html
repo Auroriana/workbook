@@ -7273,7 +7273,7 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
     <p class="hint" style="margin-bottom:4px">Change password</p><div style="display:grid;gap:6px"><input type="password" id="st-pw0" placeholder="Current password" autocomplete="off"><input type="password" id="st-pw1" placeholder="New password (8+ characters)" autocomplete="off"><input type="password" id="st-pw2" placeholder="Confirm new password" autocomplete="off"></div><div class="seg" style="margin-top:6px"><button class="btn tone sm" id="st-pwgo" type="button">Change password</button></div><p class="hint">A forgotten password can only be recovered with the ataraxia.</p></div>
    </div></details>
    <details class="sec acc" data-k="lock"><summary><span class="acc-t">Lock<small>Cover the screen until you type your password again</small></span></summary><div class="acc-b">
-    <div><p class="hint" style="margin-top:0">The app also locks by itself after 10 minutes without activity.</p><div class="seg" style="margin-top:8px"><button class="btn tone sm" type="button" id="set-lock">Lock now</button></div></div>
+    <div><p class="hint" style="margin-top:0">The app stays unlocked during inactivity. Use Lock now to lock it manually.</p><div class="seg" style="margin-top:8px"><button class="btn tone sm" type="button" id="set-lock">Lock now</button></div></div>
    </div></details>
   </div>
   <div class="tp" data-t="data">
@@ -11212,7 +11212,7 @@ renderPages();
 const G=id=>document.getElementById(id);
 const AUTH='ataraxia_auth',KA='ataraxia_avatar',KL='ataraxia_last',IMG='ataraxia_images',KDATA='paano_ba_yan_data',KSIG='ataraxia_savedsig';
 const SKIP=new Set([AUTH,KSIG,'ataraxia_chats','ataraxia_chat_trash','ataraxia_fx_ok']);
-const te=new TextEncoder(),td=new TextDecoder(),ITER=310000,IDLE_MS=10*60000;
+const te=new TextEncoder(),td=new TextDecoder(),ITER=310000;
 const rd=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
 const wr=(k,v)=>{try{localStorage.setItem(k,v);return true}catch(e){return false}};
 const toast=m=>{if(typeof showToast==='function')showToast(m)};
@@ -11224,7 +11224,7 @@ const base=pw=>crypto.subtle.importKey('raw',te.encode(pw),'PBKDF2',false,['deri
 async function verif(pw,salt,it){return b64(new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:te.encode('v:'+salt),iterations:it},await base(pw),256)))}
 async function akey(pw,salt,it){return crypto.subtle.deriveKey({name:'PBKDF2',hash:'SHA-256',salt:unb64(salt),iterations:it},await base(pw),{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
 const getAuth=()=>{try{const a=JSON.parse(rd(AUTH)||'null');return a&&a.s&&a.v?a:null}catch(e){return null}};
-let mode='login',PW='',busy=false,fails=0,until=0,pendTxt=null,timer=0,idleT=0,locked=true,nextWarn=0;
+let mode='login',PW='',busy=false,fails=0,until=0,pendTxt=null,timer=0,locked=true,nextWarn=0;
 const MIN_PW=8,DEF={login:'Enter your password',signup:'Create a password for this device. It also protects your saved data file. It cannot be recovered if you forget it.',import:'Enter the password this data file was saved with'};
 
 /* ---------- lock screen ---------- */
@@ -11257,13 +11257,11 @@ async function attempt(e){e.preventDefault();if(busy)return;busy=true;G('lk-card
    try{applyPayload(await decryptFile(pendTxt,pw))}catch(x){fail(typeof x==='string'?x:'Could not import that file.')}
   }
  }finally{busy=false;G('lk-card').classList.remove('busy')}}
-function unlock(){clearFields();setLocked(false);paint();armIdle();
+function unlock(){clearFields();setLocked(false);paint();
  if(sessionStorage.getItem('ataraxia_imp')){sessionStorage.removeItem('ataraxia_imp');wr(KSIG,sig())}paintDirty();paintAcct()}
 function lockNow(){if(locked)return;document.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));if(typeof closeMenus==='function')closeMenus();
- PW='';clearTimeout(idleT);setMode(getAuth()?'login':'signup');setLocked(true)}
+ PW='';setMode(getAuth()?'login':'signup');setLocked(true)}
 window.lockNow=lockNow;
-function armIdle(){clearTimeout(idleT);idleT=setTimeout(lockNow,IDLE_MS)}
-['pointerdown','keydown','wheel','touchstart'].forEach(t=>addEventListener(t,()=>{if(!locked)armIdle()},{passive:true,capture:true}));
 
 /* ---------- avatar ---------- */
 function avatar(){const a=rd(KA);return typeof a==='string'&&/^data:image\/(jpeg|png|webp);base64,/.test(a)?a:''}
@@ -11326,7 +11324,7 @@ function applyPayload(p){const a=p&&p.auth;
  try{sessionStorage.clear();sessionStorage.setItem('ataraxia_imp','1')}catch(e){}
  location.reload()}
 function pickImport(file){if(!file)return;if(file.size>40*1048576){toast('That file is too large.');return}
- const r=new FileReader();r.onload=()=>{pendTxt=String(r.result);if(!locked){document.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));PW='';clearTimeout(idleT);setLocked(true)}setMode('import')};r.readAsText(file)}
+ const r=new FileReader();r.onload=()=>{pendTxt=String(r.result);if(!locked){document.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));PW='';setLocked(true)}setMode('import')};r.readAsText(file)}
 
 /* ---------- fixed save button (bottom left): one click downloads the txt copy of your user data ---------- */
 const pill=document.createElement('button');pill.type='button';pill.id='bk-pill';pill.hidden=true;
