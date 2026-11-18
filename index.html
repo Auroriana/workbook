@@ -1198,8 +1198,8 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
      <p class="hint">Export your workspace data to continue on another device, then import it back. For easy transferring of your JSON, you can use rentry.co to save your json there and access it later.</p></div>
    </div></details>
    <details class="sec acc" data-k="localcopy" open><summary><span class="acc-t">Legal na copy<small>Encrypted txt file and the offline base HTML</small></span></summary><div class="acc-b">
-    <div><p class="hint" style="margin-top:0">Pick a password for the txt file. The offline base HTML asks for it when you import the file. It is not your account password.</p>
-    <div style="display:grid;gap:6px"><input type="password" id="bk-pw1" placeholder="File password (8+ characters)" autocomplete="off"><input type="password" id="bk-pw2" placeholder="Confirm file password" autocomplete="off"></div>
+    <div><p class="hint" style="margin-top:0">Choose an optional password for the txt file, or leave both fields blank for no password. When importing in the offline base HTML, enter the same password or leave it blank and continue. This is separate from your account password.</p>
+    <div style="display:grid;gap:6px"><input type="password" id="bk-pw1" placeholder="File password (optional)" autocomplete="off"><input type="password" id="bk-pw2" placeholder="Confirm file password" autocomplete="off"></div>
     <div class="seg" style="margin-top:8px"><button class="btn tone" id="bk-save" type="button">Save user data (.txt)</button><button class="btn out" id="bk-base" type="button" title="Download the offline app with no data in it">Download base HTML</button></div>
     <p class="hint">Uploaded images are not included in the txt file.</p></div>
    </div></details>
@@ -6072,7 +6072,6 @@ function cards(o,d){if(d>12||o==null)return 0;if(typeof o==='string')return o.le
 function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
 async function saveLocal(){
  const p1=G('bk-pw1').value,p2=G('bk-pw2').value;
- if(p1.length<8){toast('Use at least 8 characters for the file password.');return}
  if(p1!==p2){toast("The file passwords don't match.");return}
  if(typeof flushLocal==='function')flushLocal();
  const store={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^ataraxia_[a-z0-9_]{1,60}$/.test(k)&&!SKIP.has(k))store[k]=localStorage.getItem(k)}
@@ -6082,7 +6081,7 @@ async function saveLocal(){
   const payload={v:1,saved:Date.now(),user,auth,appData,store};
   const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},await akey(p1,fsalt),te.encode(JSON.stringify(payload))));
   download(new Blob([JSON.stringify({app:'ataraxia-userdata',v:1,kdf:'PBKDF2-SHA256',iter:ITER,salt:fsalt,iv:b64(iv),ct:b64(ct)},null,1)],{type:'text/plain;charset=utf-8'}),'Ataraxia_userdata.txt');
-  G('bk-pw1').value='';G('bk-pw2').value='';toast('Saved Ataraxia_userdata.txt, encrypted with your file password.')}
+  G('bk-pw1').value='';G('bk-pw2').value='';toast(p1?'Saved Ataraxia_userdata.txt, encrypted with your file password.':'Saved Ataraxia_userdata.txt without password protection.')}
  catch(e){toast('Could not create the data file.')}}
 function downloadBase(){const el=G('BASE_HTML_EDIT_HERE');if(!el){toast('Base HTML block not found.');return}
  download(new Blob([el.textContent.replace(/^\n/,'').replace(/\n$/,'').replace(/<\\(!--|script|\/script)/g,'<$1')],{type:'text/html;charset=utf-8'}),'Ataraxia_base.html');toast('Downloaded the offline base HTML.')}
@@ -7270,7 +7269,7 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
   <div class="tp" data-t="account">
    <details class="sec acc" data-k="acct" open><summary><span class="acc-t">Account<small>Profile picture and password</small></span></summary><div class="acc-b">
     <div><div class="lk-row"><div class="lk-av sm" id="set-av"></div><div class="seg"><button class="btn tone sm" id="av-up" type="button">Upload</button><button class="btn out sm" id="av-rm" type="button">Remove</button></div><input type="file" id="av-file" accept="image/*" hidden></div><p class="hint" id="acct-st"></p><p class="hint">Your picture is shrunk to 256 px and kept on this device and in your saved data file only.</p>
-    <p class="hint" style="margin-bottom:4px">Change password</p><div style="display:grid;gap:6px"><input type="password" id="st-pw0" placeholder="Current password" autocomplete="off"><input type="password" id="st-pw1" placeholder="New password (8+ characters)" autocomplete="off"><input type="password" id="st-pw2" placeholder="Confirm new password" autocomplete="off"></div><div class="seg" style="margin-top:6px"><button class="btn tone sm" id="st-pwgo" type="button">Change password</button></div><p class="hint">A forgotten password can only be recovered with the ataraxia.</p></div>
+    <p class="hint" style="margin-bottom:4px">Change password</p><div style="display:grid;gap:6px"><input type="password" id="st-pw0" placeholder="Current password" autocomplete="off"><input type="password" id="st-pw1" placeholder="New password (optional)" autocomplete="off"><input type="password" id="st-pw2" placeholder="Confirm new password" autocomplete="off"></div><div class="seg" style="margin-top:6px"><button class="btn tone sm" id="st-pwgo" type="button">Change password</button></div><p class="hint">Leave both new password fields blank to remove the password.</p></div>
    </div></details>
    <details class="sec acc" data-k="lock"><summary><span class="acc-t">Lock<small>Cover the screen until you type your password again</small></span></summary><div class="acc-b">
     <div><p class="hint" style="margin-top:0">The app stays unlocked during inactivity. Use Lock now to lock it manually.</p><div class="seg" style="margin-top:8px"><button class="btn tone sm" type="button" id="set-lock">Lock now</button></div></div>
@@ -7284,7 +7283,7 @@ html.lite .isl-plus,html.flat-isl .isl-plus{-webkit-backdrop-filter:none;backdro
       <button class="btn out" id="bk-base" type="button" title="Download the app with no data in it">Download base HTML</button>
      </div>
      <input type="file" id="bk-file" accept=".txt" style="display:none">
-     <p class="hint">Everything lives on this device. The txt file holds your profile picture, theme, password check, schedule, widget histories and all books, chapters and pages, encrypted with your password. Save it whenever you see the reminder, so nothing is lost if the browser data is cleared. Importing asks for the password that file was saved with. Customer chats are never saved.</p></div>
+     <p class="hint">Everything lives on this device. The txt file holds your profile picture, theme, password check, schedule, widget histories and all books, chapters and pages. A password protects the file only if you set one. Save it whenever you see the reminder, so nothing is lost if the browser data is cleared. When importing, enter the password that file was saved with, or leave it blank if none was set. Customer chats are never saved.</p></div>
    </div></details>
   </div>
   <p class="credit">ataraxia</p>
@@ -11225,7 +11224,7 @@ async function verif(pw,salt,it){return b64(new Uint8Array(await crypto.subtle.d
 async function akey(pw,salt,it){return crypto.subtle.deriveKey({name:'PBKDF2',hash:'SHA-256',salt:unb64(salt),iterations:it},await base(pw),{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
 const getAuth=()=>{try{const a=JSON.parse(rd(AUTH)||'null');return a&&a.s&&a.v?a:null}catch(e){return null}};
 let mode='login',PW='',busy=false,fails=0,until=0,pendTxt=null,timer=0,locked=true,nextWarn=0;
-const MIN_PW=8,DEF={login:'Enter your password',signup:'Create a password for this device. It also protects your saved data file. It cannot be recovered if you forget it.',import:'Enter the password this data file was saved with'};
+const DEF={login:'Enter your password, or leave it blank if none was set',signup:'Choose an optional password for this device and your saved data file. Leave both password fields blank for no password.',import:'Enter the password this data file was saved with, or leave it blank if none was set'};
 
 /* ---------- lock screen ---------- */
 function msg(t,bad){const m=G('lk-msg');m.textContent=t;m.classList.toggle('bad',!!bad)}
@@ -11244,7 +11243,6 @@ async function attempt(e){e.preventDefault();if(busy)return;busy=true;G('lk-card
  try{
   const pw=G('lk-pass').value;
   if(mode==='signup'){
-   if(pw.length<MIN_PW)return fail('Use at least '+MIN_PW+' characters.');
    if(pw!==G('lk-pass2').value)return fail("Passwords don't match.");
    const nm=G('lk-user').value.trim().slice(0,40)||'user',salt=b64(rnd(16));
    wr(AUTH,JSON.stringify({u:nm,s:salt,i:ITER,v:await verif(pw,salt,ITER)}));wr(KL,nm);PW=pw;unlock()
@@ -11306,11 +11304,11 @@ function cardHits(){let n=0,first='';const walk=(o,t,d)=>{if(d>12||o==null)retur
 async function makeFile(){const salt=b64(rnd(16)),iv=rnd(12),key=await akey(PW,salt,ITER),p=Object.assign({v:1,saved:Date.now()},body());
  const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},key,te.encode(JSON.stringify(p))));
  return JSON.stringify({app:'ataraxia-userdata',v:1,kdf:'PBKDF2-SHA256',iter:ITER,salt,iv:b64(iv),ct:b64(ct)},null,1)}
-async function saveFile(){if(locked||!PW){toast('Unlock first.');return}
+async function saveFile(){if(locked){toast('Unlock first.');return}
  if(typeof flushLocal==='function')flushLocal();
  
  try{const txt=await makeFile(),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain;charset=utf-8'}));a.download='Ataraxia_userdata.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-  wr(KSIG,sig());paintDirty();toast('Saved Ataraxia_userdata.txt. It is encrypted with your password.')}catch(e){toast('Could not create the data file.')}}
+  wr(KSIG,sig());paintDirty();toast(PW?'Saved Ataraxia_userdata.txt. It is encrypted with your password.':'Saved Ataraxia_userdata.txt without password protection.')}catch(e){toast('Could not create the data file.')}}
 async function decryptFile(txt,pw){let h;try{h=JSON.parse(txt)}catch(e){throw 'That is not an Ataraxia data file.'}
  if(!h||h.app!=='ataraxia-userdata'||typeof h.salt!=='string'||typeof h.iv!=='string'||typeof h.ct!=='string')throw 'That is not an Ataraxia data file.';
  const it=Math.min(Math.max(+h.iter||ITER,100000),2000000);
@@ -11361,7 +11359,7 @@ G('bk-file').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!
 G('bk-base').onclick=()=>{if(typeof exportUpdatedHtmlFile==='function')exportUpdatedHtmlFile()};
 G('st-pwgo').onclick=async()=>{const a=getAuth(),o=G('st-pw0').value,n=G('st-pw1').value,n2=G('st-pw2').value;
  if(!a||!(await verif(o,a.s,a.i||ITER)===a.v)){toast('Current password is incorrect.');return}
- if(n.length<MIN_PW){toast('Use at least '+MIN_PW+' characters.');return}if(n!==n2){toast("New passwords don't match.");return}
+ if(n!==n2){toast("New passwords don't match.");return}
  const salt=b64(rnd(16));wr(AUTH,JSON.stringify({u:a.u,s:salt,i:ITER,v:await verif(n,salt,ITER)}));PW=n;['st-pw0','st-pw1','st-pw2'].forEach(i=>G(i).value='');paintDirty();toast('Password changed. Save your data (.txt) again so the file uses the new password.')};
 setMode(getAuth()?'login':'signup');setLocked(true);paintAcct();
 })();
